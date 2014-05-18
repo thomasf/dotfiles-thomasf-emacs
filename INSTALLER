@@ -1,0 +1,15 @@
+#!bash
+#
+# This file might be sourced during installation with hsadmin
+#
+
+(
+  rev=$(git rev-parse HEAD)
+  compiled="$(cat .compiled 2>/dev/null || true)"
+  if ! [[ $rev == $compiled ]]; then
+    cd emacs.d
+    emacs --no-site -batch -l makeup.el  || true
+    cd ..
+    echo $rev > .compiled
+  fi
+)

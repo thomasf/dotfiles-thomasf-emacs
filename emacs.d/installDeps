@@ -1,0 +1,111 @@
+#!/bin/sh
+
+arg=$1
+
+set -e
+
+get_emacs() {
+    set -e
+    mkdir -p ~/.opt
+    cd ~/.opt
+    if [ -d emacs-24 ]; then
+        cd emacs-24
+        bzr pull bzr://bzr.savannah.gnu.org/emacs/emacs-24
+        make
+        make info
+    else
+        bzr branch bzr://bzr.savannah.gnu.org/emacs/emacs-24
+        cd emacs-24
+        ./autogen.sh
+        ./configure --with-x-toolkit=gtk2
+        make bootstrap
+        make info
+    fi
+}
+
+# Clone or update a git repository
+getGit() {
+    repo="${REPOS}/${name}"
+    if [ -d "$repo" ]; then
+        (
+            cd ${repo}
+            git pull
+        )
+    else
+        git clone "$url" "${repo}"
+    fi
+    cd ${repo}
+}
+
+# Clone or update a bzr repository
+getBzr() {
+    repo="${REPOS}/${name}"
+    if [ -d "$repo" ]; then
+        (
+            cd ${repo}
+            bzr update
+        )
+    else
+        bzr checkout "$url" "${repo}"
+    fi
+    cd ${repo}
+}
+
+get_python() {
+    REPOS="${HOME}/.opt"
+    vsrc="${VIRTUAL_ENV}/src"
+    (
+        name=pymacs
+        url=https://github.com/pinard/Pymacs
+        getGit
+    )
+    (
+        name=traad
+        url=https://github.com/abingham/traad
+        getGit
+    )
+    # (
+    #     name=jedi
+    #     url=https://github.com/davidhalter/jedi
+    #     getGit
+    # )
+
+    (
+      cd ~/.opt/pymacs
+      make  && make install
+    )
+
+    (
+      cd ~/.opt/traad
+      python setup.py install
+    )
+
+    pip install ropemacs==0.7
+    # pip install flake8==2.1.0
+    # pip install pylint==1.0.0
+    pip install ipython==2.0.0
+    pip install ipdb==0.8
+    pip install pudb==2014.1
+    pip install sphinx==1.2.2
+    # pip install wdb==0.9.3
+    cd "${vsrc}/pymacs"
+    make || true
+    emacs -batch -f batch-byte-compile `find ${vsrc} -name \*.el` || true
+}
+
+
+case $arg in
+    emacs)
+        get_emacs
+        ;;
+    python)
+        get_python
+        ;;
+    all)
+        get_emacs
+        get_python
+        ;;
+    *)
+        echo "usage $0 ..."
+        ;;
+esac

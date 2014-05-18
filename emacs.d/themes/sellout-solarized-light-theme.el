@@ -1,0 +1,13 @@
+(require 'solarized-definitions)
+(defmacro create-solarized-theme (mode)
+  (let* ((theme-name (intern (concat "sellout-solarized-" (symbol-name mode))))
+         (defs (solarized-color-definitions mode))
+         (theme-vars (mapcar (lambda (def) (list (car def) (cdr def)))
+                             (second defs)))
+         (theme-faces (first defs)))
+    `(progn
+       (deftheme ,theme-name ,solarized-description)
+       (apply 'custom-theme-set-variables ',theme-name ',theme-vars)
+       (apply 'custom-theme-set-faces ',theme-name ',theme-faces)
+       (provide-theme ',theme-name))))
+(create-solarized-theme light)

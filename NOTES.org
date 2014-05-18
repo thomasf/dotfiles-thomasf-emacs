@@ -1,0 +1,17 @@
+#+TITLE:                My emacs configurations notes
+#+AUTHOR:               Thomas Frössman
+#+EMAIL:                thomasf@jossystem.se
+#+DATE:                 2012-11-27 tis
+
+* NOTE Welcome                                                         :note:
+This is my description/todo/bug document for my emacs configuration.
+
+* NOTE External resources                                              :note:
+** Some well written emacs configuration
+It's alwaws nice to keep an eye open on these from time to time
+
+- [[https://github.com/jwiegley/dot-emacs][John Wiegley's dot-emacs]]
+- [[https://github.com/rdallasgray/graphene][Graphene]]
+- [[https://github.com/overtone/emacs-live][emacs-live]]
+- [[https://github.com/magnars/.emacs.d/][Magnar Sveen]]
+

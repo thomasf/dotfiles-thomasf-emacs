@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# Opens emacs in batch mode and evalutes all arguments
+#
+# Author: Thomas Frössman  ( thomasf@jossystem.se / http://thomas.jossystem.se )
+#
+
+set -e
+set -u
+
+exec emacs --quick -Q -q --batch -l ~/.emacs.d/init-batch.el -eval "$1"

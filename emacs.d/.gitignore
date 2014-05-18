@@ -1,0 +1,8 @@
+url/
+.yas-compiled-snippets.el
+*.elc
+tags
+**/qt_color_picker/qt_color_picker
+.python-environments/
+elpa/
+packages/

@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# Opens an emacs session where all features are enabled
+#
+# Author: Thomas Frössman  ( thomasf@jossystem.se / http://thomas.jossystem.se )
+#
+
+exec emacs $*

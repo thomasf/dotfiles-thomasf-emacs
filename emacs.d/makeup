@@ -1,0 +1,2 @@
+#!/bin/sh
+exec emacs --no-site -batch -l makeup.el
