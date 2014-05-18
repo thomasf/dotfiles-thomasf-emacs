@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: load
+# key: load
+# --
+{% load ${1:template_lib} %}$0

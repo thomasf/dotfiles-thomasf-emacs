@@ -1,0 +1,6 @@
+# name: public static function ...
+# key: pub.sta
+# --
+public static function ${1:name}(${2:param}):${3:ret_type}{
+    $0
+}

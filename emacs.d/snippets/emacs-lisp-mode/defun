@@ -1,0 +1,9 @@
+# contributor: Xah Lee (XahLee.org)
+# name: defun
+# key: defun
+# key: d
+# --
+(defun $1 ()
+  "TODO"
+   $0
+)

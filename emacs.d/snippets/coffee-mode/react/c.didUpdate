@@ -1,0 +1,5 @@
+# name: componentDidUpdate
+# expand-env: ((yas-indent-line 'fixed))
+# --
+componentDidUpdate: (prevProps, prevState) ->
+$>$0

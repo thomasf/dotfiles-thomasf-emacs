@@ -1,0 +1,4 @@
+# name: pudb break point.
+# key: pudb
+# --
+import pudb; pudb.set_trace() #### FIXME: REMOVE BREAK POINT ####`(save-buffer)`

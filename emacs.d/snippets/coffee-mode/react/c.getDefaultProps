@@ -1,0 +1,7 @@
+# name: component getDefaultProps
+# expand-env: ((yas-indent-line 'fixed))
+# --
+getDefaultProps: () ->
+$>{
+$>$>$0
+$>}

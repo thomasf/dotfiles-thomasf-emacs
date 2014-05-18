@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : {% spaceless %} ... {% endspaceless %}
+# key: spaceless
+# --
+{% spaceless %} 
+$0
+{% endspaceless %}

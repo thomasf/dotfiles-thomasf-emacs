@@ -1,0 +1,4 @@
+# name: public static const ...
+# key: pub.con
+# --
+public static const ${1:name}:${2:type} = ${3:value};

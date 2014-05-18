@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name : logdrawer
+# key: log
+# --
+:LOGBOOK:
+$0
+:END:

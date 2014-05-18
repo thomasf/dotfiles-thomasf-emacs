@@ -1,0 +1,5 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: console.log "> function >> "
+# key: lol
+# --
+console.log "> `(progn (imenu--make-index-alist) (which-function))` >> $0"

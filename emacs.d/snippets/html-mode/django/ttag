@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name : {% ... %}
+# key: tag
+# --
+{% $0 %}

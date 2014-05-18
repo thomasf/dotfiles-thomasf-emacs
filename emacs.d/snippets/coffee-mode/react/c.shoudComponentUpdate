@@ -1,0 +1,5 @@
+# name: shouldComponentUpdate
+# expand-env: ((yas-indent-line 'fixed))
+# --
+shouldComponentUpdate: (nextProps, nextState) ->
+$>$0

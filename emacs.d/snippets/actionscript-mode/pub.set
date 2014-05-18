@@ -1,0 +1,6 @@
+# name: public function set ...
+# key: pub.set
+# --
+public function set ${1:name}(${2:param}):void {
+    $0
+}

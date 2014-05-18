@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: TODO
+# key: todo
+# binding: C-c i t
+# --
+`(org-insert-heading)` TODO ${1:title}
+:PROPERTIES:
+:ID:       `(shell-command-to-string "uuidgen")`:CREATED: `(with-temp-buffer (org-insert-time-stamp (current-time) t t))`
+:END:
+$0

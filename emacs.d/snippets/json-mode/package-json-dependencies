@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: dependencies (package.json)
+# key: dep
+# condition: (and buffer-file-name (string= (file-name-nondirectory buffer-file-name) "package.json"))
+# --
+"dependencies": {
+  "${1:name}": "${2:version *=any}"
+} ,
+$0

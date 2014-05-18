@@ -1,0 +1,8 @@
+# name: function
+# key: fn
+# binding: 
+# expand-env: ()
+# --
+${1:name}() {
+	$0
+}

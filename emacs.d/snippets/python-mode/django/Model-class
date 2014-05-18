@@ -1,0 +1,12 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: Django Model class
+# key: django.model
+# --
+class ${1:ClassName}(models.Model):
+    """
+    $2
+    """
+    $3
+
+    def __unicode__(self):
+        return self

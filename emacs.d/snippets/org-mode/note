@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: NOTE
+# key: note
+# binding: C-c i n
+# --
+`(org-insert-subheading t)` $0  :note:
+:PROPERTIES:
+:ID:       `(shell-command-to-string "uuidgen")`:CREATED: `(with-temp-buffer (org-insert-time-stamp (current-time) t t))`
+:END:

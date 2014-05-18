@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: contributors (package.json)
+# key: contrib
+# condition: (and buffer-file-name (string= (file-name-nondirectory buffer-file-name) "package.json"))
+# --
+"contributors": [ 
+  {
+    "name": "$1",
+    "email": "$2"
+  } 
+],
+$0

@@ -1,0 +1,8 @@
+# name: advice-after
+# key: adv-after
+# binding: 
+# expand-env: ()
+# --
+(defadvice ${1:advised-function} (after ${2:advice-name} activate)
+   $0
+)

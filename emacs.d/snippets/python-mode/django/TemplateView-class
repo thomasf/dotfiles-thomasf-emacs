@@ -1,0 +1,15 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: Django TemplateView class
+# key: django.templateView
+# --
+class ${1:Some}View(TemplateView):
+      """
+      A $1view
+      """
+
+      template_name = "${2:template-name.html}"
+
+      def get_context_data(self, **kwargs):
+          context = super($1View, self).get_context_data(**kwargs)
+          $0
+          return context

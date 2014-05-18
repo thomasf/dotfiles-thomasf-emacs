@@ -1,0 +1,6 @@
+# name: public interface
+# key: pub.int
+# --
+public interface ${1:name} {
+    $0
+}

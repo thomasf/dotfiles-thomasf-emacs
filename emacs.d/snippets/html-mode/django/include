@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# group: django
+# name: template include
+# key: include
+# --
+{% include '${1:included.html}' %}$0

@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: habit body
+# key: hb
+# --
+
+- [ ] $0
+
+SCHEDULED: <${1:0000-00-00} .+${2:2d}/${3:1w}>
+:PROPERTIES: 
+:STYLE: habit
+:REPEAT_TO_STATE: NEXT
+:RESET_CHECK_BOXES: t
+:END:
+
+
+ 

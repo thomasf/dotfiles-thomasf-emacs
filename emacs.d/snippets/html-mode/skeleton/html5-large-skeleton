@@ -1,0 +1,33 @@
+# name: Html5 large skeleton (see html5boilerplate for explanations)
+# key: html5-large-skeleton
+# --
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>${1:Untitled document}</title>
+    <meta name="description" content="${2:description}">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <section id="contentWrapper">
+      <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+      ${7:<article>
+        <h1>${8:Hello!}</h1>
+        <p>${9:Hello again.}</p>
+      $0</article>}
+    </section> <!-- end contentWrapper -->
+    ${3:<script src="${4:app.js}"></script>}
+    ${5:<script>
+      var _gaq=[['_setAccount','${6:UA-XXXXX-X}'],['_trackPageview']];
+      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+      s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>}
+  </body>
+</html>

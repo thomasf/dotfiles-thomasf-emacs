@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: 23c veckomötesmall
+# key: 23w
+# --
+** NOTE 23c veckomöte `(with-temp-buffer (org-insert-time-stamp (current-time) nil t))` :note:
+:PROPERTIES:
+:ID:       `(shell-command-to-string "uuidgen")`:CREATED: `(with-temp-buffer (org-insert-time-stamp (current-time) t t))`
+:OVERLAY: (face (:background "#e8f9e8"))
+:END: `(org-clock-in)`
+*** Deltagare
+- [$0 ] Thomas Kunambi
+- [ ] Kristoffer Smedlund
+- [ ] Björn Eriksson
+- [ ] Mircea Petza
+- [ ] Mathias Tervo
+- [ ] Johan Aguren
+- [ ] Lotta Andersson
+- [ ] Erik Pettru
+- [ ] Thomas Frössman
+*** Förra veckan
+*** Kommande vecka

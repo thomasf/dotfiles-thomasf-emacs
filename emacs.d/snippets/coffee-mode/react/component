@@ -1,0 +1,7 @@
+# name: component
+# expand-env: ((yas-indent-line 'fixed))
+# --
+$1 = React.createClass
+$>displayName: '$1'
+$>render: ->
+$>$>$0

@@ -1,0 +1,4 @@
+# name: private var ...
+# key: pri.var
+# --
+private var ${1:name}:${2:type};

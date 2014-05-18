@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: unbind-key
+# key: unbind-key
+# --
+(unbind-key "${1:key-name}" ${2:keymap})

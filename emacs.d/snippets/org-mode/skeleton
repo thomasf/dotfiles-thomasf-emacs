@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: org mode file header
+# key: fileheader
+# --
+#+TITLE:                `(s-titleize (f-base (f-this-file)))`
+#+AUTHOR:               `user-full-name`
+#+EMAIL:                `user-mail-address`
+#+DATE:                 `(format-time-string (substring (car org-time-stamp-formats) 1 -1))`
+#+DESCRIPTION:          
+#+KEYWORDS:             
+#+FILETAGS:             
+#+EXPORT_EXCLUDE_TAGS:  noexport
+#+CATEGORY:             
+#+OPTIONS:              H:3 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:              TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT:           view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.com/solarized-css/org-info.min.js
+#+HTML_HEAD:            <link rel="stylesheet" type="text/css" href="http://thomasf.github.com/solarized-css/solarized-light.min.css" />
+
+$0

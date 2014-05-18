@@ -1,0 +1,31 @@
+# -*- mode: snippet -*-
+# name: Django models.field
+# key: modelsField
+# --
+models.${1:$$(yas-choose-value '(
+"BooleanField"
+"CharField"
+"CommaSeparatedIntegerField"
+"DateField"
+"DateTimeField"
+"DecimalField"
+"EmailField"
+"FilePathField"
+"FloatField"
+"IntegerField"
+"BigIntegerField"
+"IPAddressField"
+"GenericIPAddressField"
+"NullBooleanField"
+"PositiveIntegerField"
+"PositiveSmallIntegerField"
+"SlugField"
+"SmallIntegerField"
+"TextField"
+"TimeField"
+"URLField"
+"ForeignKey"
+"ManyToManyField"
+"OneToOneField"
+"ImageField"
+))}($0)

@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: case..esac
+# key: case
+# --
+case ${1:$pattern} in
+${2:this|that})
+$3
+;;
+*)
+${4:echo "Nothing to do for $1"}
+;;
+esac

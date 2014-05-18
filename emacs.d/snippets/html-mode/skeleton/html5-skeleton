@@ -1,0 +1,12 @@
+# name: Html5 basic skeleton
+# key: html5-skeleton
+# --
+<!doctype html>
+<html>
+  <head>
+    <title>${1:Title of the document}</title>
+  </head>
+  <body>
+  $0
+  </body>
+</html>

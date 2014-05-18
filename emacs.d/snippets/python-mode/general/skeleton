@@ -1,0 +1,10 @@
+# name: Python skeleton
+# --
+# -*- coding: utf-8 -*-
+""" `(if  (s-equals? "__init__" (f-base (f-this-file)))
+            (s-titleize (f-base (f-dirname (f-this-file))))
+          (s-titleize (f-base (f-this-file)))) `
+
+Author: `user-full-name`
+"""
+$0

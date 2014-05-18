@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: static url template var
+# key: staticurl
+# --
+{{ STATIC_URL }}$0

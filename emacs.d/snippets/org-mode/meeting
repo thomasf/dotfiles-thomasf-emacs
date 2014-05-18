@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: meeing
+# key: meeting
+# binding: C-c i m
+# expand-env: ((meetingdate (with-temp-buffer (org-time-stamp 1))))
+# --
+`(org-insert-heading)` ${1:title} ${2:$$(yas-choose-value '(":@office:" ":@errand:" ":@home:"))}
+`meetingdate`
+:PROPERTIES:
+:ID:       `(shell-command-to-string "uuidgen")`:CREATED: `(with-temp-buffer (org-insert-time-stamp (current-time) t t))`
+:END:
+$0

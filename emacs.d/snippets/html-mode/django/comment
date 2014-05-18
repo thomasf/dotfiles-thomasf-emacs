@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: {% comment ... %} ... {% endcomment %}
+# key: comment
+# --
+{% comment %}
+   $0
+{% endcomment %}

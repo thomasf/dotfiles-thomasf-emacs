@@ -1,0 +1,8 @@
+# name: advice-before
+# key: adv-before
+# binding: 
+# expand-env: ()
+# --
+(defadvice ${1:advised-function} (before ${2:advice-name} activate)
+   $0
+)

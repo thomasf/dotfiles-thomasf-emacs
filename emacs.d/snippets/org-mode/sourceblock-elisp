@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: el (emacs-lisp)
+# key: el
+# condition: (= (current-column) 2)
+# --
+#+begin_src emacs-lisp
+$0
+#+end_src

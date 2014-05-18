@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: bin (package.json)
+# key: bin
+# condition: (and buffer-file-name (string= (file-name-nondirectory buffer-file-name) "package.json"))
+# --
+"bin": {
+  "${1:binary_name}": "./bin/$1"
+} ,
+$0

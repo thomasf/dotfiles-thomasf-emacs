@@ -1,0 +1,6 @@
+# name: protected function ...
+# key: pro
+# --
+protected function ${1:name}(${2:params}):${3:ret_type} {
+    $0
+}

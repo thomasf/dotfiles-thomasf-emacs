@@ -1,0 +1,4 @@
+# name: public var ...
+# key: pub.var
+# --
+public var ${1:name}:${2:type};

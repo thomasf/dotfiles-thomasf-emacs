@@ -1,0 +1,4 @@
+# name insert skewer 
+# key: skewer
+# --
+%script{:charset => "utf-8", :src => "http://localhost:`(if (boundp 'httpd-port) httpd-port "8080")`/skewer", :type => "text/javascript"}

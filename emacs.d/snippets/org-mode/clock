@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: clockentry
+# key: clock
+# --
+CLOCK: `(progn (org-time-stamp 2 t) nil)`--`(progn (org-time-stamp 2 t) nil)`

@@ -1,0 +1,7 @@
+# name: component getInitialState
+# expand-env: ((yas-indent-line 'fixed))
+# --
+getInitialState: () ->
+$>{
+$>$>$0
+$>}

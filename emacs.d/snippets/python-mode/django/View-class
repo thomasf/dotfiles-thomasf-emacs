@@ -1,0 +1,12 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: Django View class
+# key: django.view
+# --
+class ${1:Some}View(View):
+      """
+      A $1view
+      """
+      
+      def ${2:$$(yas-choose-value '("get" "post" "put" "delete" "head" "options" "trace"))}(self, request, *args, **kwargs):
+          $0
+          return http.HttpResponseRedirect("/")

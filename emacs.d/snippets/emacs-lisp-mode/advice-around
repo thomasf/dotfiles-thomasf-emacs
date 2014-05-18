@@ -1,0 +1,9 @@
+# name: advice-around
+# key: adv-around
+# binding: 
+# expand-env: ()
+# --
+(defadvice ${1:advised-function} (around ${2:advice-name} activate)
+   $0
+   ad-do-it
+)

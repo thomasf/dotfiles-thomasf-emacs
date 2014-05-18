@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# contributor: David Miller <david@deadpansincerity.com>
+# group: django
+# name: template extends
+# key: extends
+# --
+{% extends '${1:base.html}' %}$0

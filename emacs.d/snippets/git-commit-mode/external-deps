@@ -1,0 +1,6 @@
+# name: External dependencies update
+# key: ext
+# binding: 
+# expand-env: ()
+# --
+Update external dependencies

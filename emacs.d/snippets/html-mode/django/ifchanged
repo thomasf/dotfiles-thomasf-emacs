@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name : {% ifchanged %} ... {% endifchanged %}
+# key: ifchanged
+# --
+{% ifchanged %} $0 {% endifchanged %}

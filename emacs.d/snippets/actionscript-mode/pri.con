@@ -1,0 +1,4 @@
+# name: private static const ...
+# key: pri.con
+# --
+private static const ${1:name}:${2:type} = ${3:value};

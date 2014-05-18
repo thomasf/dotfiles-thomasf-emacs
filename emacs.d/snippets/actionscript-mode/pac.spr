@@ -1,0 +1,10 @@
+# name: package {...}
+# key: pac.spr
+# --
+package {
+    import flash.display.Sprite;
+    public class ${1:name} extends Sprite {
+        public function ${2:name}() {
+        }
+    }
+}

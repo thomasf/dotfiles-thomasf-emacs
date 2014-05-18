@@ -1,0 +1,6 @@
+# name: lint
+# key: lint
+# binding:
+# expand-env: ()
+# --
+Change code according to style verification tools

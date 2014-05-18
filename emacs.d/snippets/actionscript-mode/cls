@@ -1,0 +1,5 @@
+# name: class ...
+# key: cls
+# --
+class ${1:name} {
+}

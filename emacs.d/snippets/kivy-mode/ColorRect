@@ -1,0 +1,9 @@
+# name: canvas.rectr...
+# key: canvasrect
+# --
+canvas:
+    Color:
+        rgb: `(format "0.%s" (+ 30 (random 50)))`, `(format "0.%s" (+ 30 (random 50)))`, `(format "0.%s" (+ 30 (random 50)))`, 0.4
+    Rectangle:
+        pos: self.pos
+        size: self.size

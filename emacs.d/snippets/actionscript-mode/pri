@@ -1,0 +1,6 @@
+# name: private function ...
+# key: pri
+# --
+private function ${1:name}(${2:params}):${3:ret_type} {
+    $0
+}

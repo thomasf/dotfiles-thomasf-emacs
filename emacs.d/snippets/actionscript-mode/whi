@@ -1,0 +1,6 @@
+# name: while
+# key: whi
+# --
+while(${1:condition}) {
+    $0
+}

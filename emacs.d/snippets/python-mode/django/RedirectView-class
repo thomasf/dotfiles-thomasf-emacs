@@ -1,0 +1,16 @@
+# -*- coding: utf-8; mode: snippet -*-
+# name: Django RedirectView class
+# key: django.redirectview
+# --
+class $1RedirectView(RedirectView):
+      """
+      A Redirect view
+      """
+      
+      permanent = False
+
+      def get_redirect_url(self, **kwargs):
+          request = self.request
+          url = None
+          $0
+          return url

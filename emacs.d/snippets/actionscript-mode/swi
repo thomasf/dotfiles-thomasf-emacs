@@ -1,0 +1,9 @@
+# name: switch
+# key: swi
+# --
+switch(${1:condition}) {
+    case ${2:match} :
+        $0
+        break;
+    default:
+}

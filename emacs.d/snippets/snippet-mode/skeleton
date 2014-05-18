@@ -1,0 +1,8 @@
+# name: Snippet skeleton
+# key: skeleton
+# --
+# name: $0
+# key: 
+# binding: 
+# expand-env: ()
+# --

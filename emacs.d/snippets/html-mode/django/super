@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: super block
+# key: super
+# --
+{{ block.super }}$0

@@ -1,0 +1,6 @@
+# name: public function get ...
+# key: pub.get
+# --
+public function get ${1:name}():${2:ret_type}{
+    $0
+}
