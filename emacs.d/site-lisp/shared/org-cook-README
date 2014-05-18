@@ -1,0 +1,77 @@
+====================================================
+ org-cook: Emacs extensions for recipes in org-mode
+====================================================
+
+Getting started.
+----------------
+
+Find a recipe that you enjoy. For the purpose of this I will use a
+"Molasses cookies" recipe from Here in America’s test kitchen,
+p. 275. Open a new ``.org`` file in Emacs, e.g. ``recipes.org``.
+
+Enter your recipe title::
+
+  * Molasses spice cookies
+
+Now we want to add the ingredients and description. I like to mix the
+two up. Here is an example::
+
+  Whisk together:
+  - 2.25 cup ($11.25 oz$) flour
+  - 1 tsp baking soda
+  - 1.5 tsp ground cinnamon
+  - 1.5 tsp ground ginger
+  - .5 tsp ground cloves
+  - .25 tsp ground allspice
+  - .25 tsp ground pepper
+  -. 25 tsp salt
+
+  Beat at med high until light and fluffy (~3 min):
+  - 12 tbsp butter, softened
+  - 1/2 cup sugar
+
+  Reduce speed to med low, add:
+  - 1 egg yolk
+  - 1 tsp vanilla extract
+
+  Increase speed to med, beat until incorporated (~20 sec). Reduce speed
+  to med low, add:
+
+  - 2/3 cup molasses
+
+  Beat ~20 sec. Reduce speed to low, add:
+  - flour mixture (above)
+
+  Roll into 1.25 in balls. Roll balls in:
+  - turbinado sugar
+
+  Bake for 11 min at 375 degF.
+
+When writing ingredients, use the form::
+
+  - n unit ingredient
+
+Note that fractional (1/4) ingredients must be entered using as n:m
+(e.g. ``1:4``, not ``1/4``). Keep units singular (``2 cup``) rather than plural (``2
+cups``).
+
+With the cursor inside the recipe, we can convert to metric
+units. Type::
+
+  M-x org-cook-toggle-recipe-units
+
+All the units in the recipe should be converted to metric. Repeat the
+operation to convert back. Notice that while we attempt to get the
+best unit possible, sometimes it does not work as well as it might. To
+convert an individual line to your preferred unit, navigate to the
+line and type::
+
+  M-x org-cook-convert-ingedient-units-at-point
+
+Then select your preferred unit from the list. Note also that we may
+end up with funny numbers (.248 rather than .25) due to rounding
+problems.
+
+To view only the ingredients, use::
+
+  M-x org-cook-show-ingredients-only
