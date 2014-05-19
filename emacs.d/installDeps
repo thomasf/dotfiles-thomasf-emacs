@@ -17,7 +17,7 @@ get_emacs() {
         bzr branch bzr://bzr.savannah.gnu.org/emacs/emacs-24
         cd emacs-24
         ./autogen.sh
-        ./configure --with-x-toolkit=gtk2
+        ./configure --with-x-toolkit=gtk3 --with-file-notification=inotify --without-pop --enable-link-time-optimization --without-toolkit-scroll-bars
         make bootstrap
         make info
     fi

@@ -410,6 +410,8 @@ buffer-local wherever it is set."
  delete-by-moving-to-trash t)
 (setq-default ;; filelock.c
  create-lockfiles nil)
+(setq-default ;; lread.c
+ load-prefer-newer t)
 (setq-default ;; dired.c
  completion-ignored-extensions
  '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
