@@ -173,6 +173,25 @@ re-downloaded in order to locate PACKAGE."
 ;;                 ''     ''
 
 ")
+;;; some early compat functions
+(eval-and-compile
+  ;; Provide `defvar-local' and `setq-local' for Emacs 24.2 and below
+  (unless (fboundp 'defvar-local)
+
+    (defmacro defvar-local (var val &optional docstring)
+      "Define VAR as a buffer-local variable with default value VAL.
+Like `defvar' but additionally marks the variable as being automatically
+buffer-local wherever it is set."
+      (declare (debug defvar) (doc-string 3))
+      ;; Can't use backquote here, it's too early in the bootstrap.
+      (list 'progn (list 'defvar var val docstring)
+            (list 'make-variable-buffer-local (list 'quote var)))))
+
+  (unless (fboundp 'setq-local)
+    (defmacro setq-local (var val)
+      "Set variable VAR to value VAL in current buffer."
+      ;; Can't use backquote here, it's too early in the bootstrap.
+      (list 'set (list 'make-local-variable (list 'quote var)) val))))
 
 ;;; initial mode.
 ;;
@@ -214,22 +233,6 @@ re-downloaded in order to locate PACKAGE."
 (add-to-list 'load-suffixes ".el.gpg")
 
 ;; emacs backport/compat
-(eval-and-compile
-  ;; Provide `defvar-local' and `setq-local' for Emacs 24.2 and below
-  (unless (fboundp 'defvar-local)
-    (defmacro defvar-local (var val &optional docstring)
-      "Define VAR as a buffer-local variable with default value VAL.
-Like `defvar' but additionally marks the variable as being automatically
-buffer-local wherever it is set."
-      (declare (debug defvar) (doc-string 3))
-      `(progn
-         (defvar ,var ,val ,docstring)
-         (make-variable-buffer-local ',var))))
-
-  (unless (fboundp 'setq-local)
-    (defmacro setq-local (var val)
-      "Set variable VAR to value VAL in current buffer."
-      `(setq-local ,var) ,val)))
 
 (when degrade-p-old-emacs
   (require 'thomasf-emacs23-compat))
