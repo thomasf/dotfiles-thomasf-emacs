@@ -286,8 +286,8 @@ customize the resulting theme."
      `(cursor ((,class (:foreground ,base03 :background ,base0
                                     :inverse-video t))))
      `(mouse ((,class (:foreground ,base03 :background ,base0
-                   :inverse-video t))))
-     `(escape-glyph-face ((,class (:foreground ,red))))
+                                   :inverse-video t))))
+     `(escape-glyph ((,class (:foreground ,violet))))     
      `(fringe ((,class (:foreground ,s-fringe-fg :background ,s-fringe-bg))))
      `(highlight ((,class (:background ,base02))))
      `(link ((,class (:foreground ,yellow :underline t :weight bold))))
@@ -297,7 +297,7 @@ customize the resulting theme."
      `(error ((,class (:foreground ,orange))))
      `(lazy-highlight ((,class (:foreground ,base03 :background ,yellow
                                             :weight normal))))
-     `(escape-glyph ((,class (:foreground ,violet))))
+     
 
      ;; compilation
      `(compilation-column-face ((,class (:foreground ,cyan :underline nil))))
@@ -610,14 +610,21 @@ customize the resulting theme."
 
      ;; custom
      `(custom-face-tag ((,class (:inherit ,s-variable-pitch :height ,solarized-height-plus-3
-                                          :foreground ,violet :weight bold))))
+                                          :foreground ,violet :weight normal))))
      `(custom-variable-tag ((,class (:inherit ,s-variable-pitch
                                               :foreground ,cyan :height ,solarized-height-plus-3))))
      `(custom-comment-tag ((,class (:foreground ,base01))))
      `(custom-group-tag ((,class (:inherit ,s-variable-pitch :foreground ,blue :height ,solarized-height-plus-3))))
      `(custom-group-tag-1 ((,class (:inherit ,s-variable-pitch :foreground ,red :height ,solarized-height-plus-3))))
      `(custom-state ((,class (:foreground ,green))))
-
+     `(custom-button ((,class (:background ,base02 :foreground ,base1
+                                           :box (:line-width 2 :style released-button)))))
+     `(custom-button-mouse ((,class (:background ,base01 :foreground ,base02
+                                                 :box (:line-width 2 :style released-button)))))
+     `(custom-button-pressed ((,class (:background ,base01 :foreground ,base1
+                                                   :box (:line-width 2 :style pressed-button)))))
+     `(custom-button-unraised ((,class (:inherit underline))))
+     `(custom-button-pressed-unraised ((,class (:inherit custom-button-unraised :foreground ,magenta))))
      ;; diff
      `(diff-added ((,class (:foreground ,green :background nil))))
      `(diff-changed ((,class (:foreground ,blue :background nil))))
@@ -1668,26 +1675,25 @@ customize the resulting theme."
      `(table-cell ((,class (:foreground ,base0 :background ,base02))))
 
      ;; term
-     `(term-color-black ((t (:foreground ,base03
+     `(term ((t ( :background ,base03
+                              :foreground ,base0))))
+     `(term-color-black ((t (:foreground ,base02
                                          :background ,base02))))
      `(term-color-red ((t (:foreground ,red
-                                       :background ,red-d))))
+                                       :background ,red))))
      `(term-color-green ((t (:foreground ,green
-                                         :background ,green-d))))
+                                         :background ,green))))
      `(term-color-yellow ((t (:foreground ,yellow
-                                          :background ,yellow-d))))
+                                          :background ,yellow))))
      `(term-color-blue ((t (:foreground ,blue
-                                        :background ,blue-d))))
+                                        :background ,blue))))
      `(term-color-magenta ((t (:foreground ,magenta
-                                           :background ,magenta-d))))
+                                           :background ,magenta))))
      `(term-color-cyan ((t (:foreground ,cyan
-                                        :background ,cyan-d))))
-     `(term-color-white ((t (:foreground ,base00
-                                         :background ,base0))))
-     '(term-default-fg-color ((t (:inherit term-color-white))))
-     '(term-default-bg-color ((t (:inherit term-color-black))))
-
-
+                                        :background ,cyan))))
+     `(term-color-white ((t (:foreground ,base2
+                                         :background ,base2))))
+     
      ;; tooltip. (NOTE: This setting has no effect on the os widgets for me
      ;; zencoding uses this)
      `(tooltip ((,class (:background ,yellow-lc :foreground ,yellow-hc
@@ -1744,7 +1750,7 @@ customize the resulting theme."
      `(w3m-tab-unselected-unseen ((,class (:background ,base02 :foreground ,violet))))
 
      ;; web-mode
-     `(web-mode-builtin-face ((,class (:foreground ,red))))
+     `(web-mode-builtin-face ((,class (:inherit font-lock-builtin-face))))
      `(web-mode-comment-face ((,class (:foreground ,base01))))
      `(web-mode-constant-face ((,class (:foreground ,blue :weight bold))))
      `(web-mode-current-element-highlight-face ((,class
@@ -1789,6 +1795,17 @@ customize the resulting theme."
      `(web-mode-symbol-face ((,class (:foreground ,yellow))))
      `(web-mode-whitespace-face ((,class (:background ,red))))
      `(web-mode-html-tag-bracket-face ((,class (:foreground ,base01))))
+     `(web-mode-block-delimiter-face ((,class (:inherit font-lock-preprocessor-face))))
+     `(web-mode-css-comment-face ((,class (:inherit web-mode-comment-face))))
+     `(web-mode-css-variable-face ((,class (:inherit web-mode-variable-name-face :slant italic))))
+     `(web-mode-error-face ((,class (:background ,red))))
+     `(web-mode-function-call-face ((,class (:inherit font-lock-function-name-face))))
+     `(web-mode-html-attr-custom-face ((,class (:inherit web-mode-html-attr-name-face))))
+     `(web-mode-html-attr-engine-face ((,class (:inherit web-mode-html-attr-custom-face))))
+     `(web-mode-html-attr-equal-face ((,class (:inherit web-mode-html-attr-name-face))))
+     `(web-mode-html-tag-custom-face ((,class (:inherit web-mode-html-tag-face))))
+     `(web-mode-javascript-comment-face ((,class (:inherit web-mode-comment-face))))
+     `(web-mode-json-comment-face ((,class (:inherit web-mode-comment-face))))
 
      ;; weather-metno
      `(weather-metno-date ((,class (:foreground ,yellow :height ,solarized-height-plus-3))))
@@ -1874,6 +1891,9 @@ customize the resulting theme."
      `(yascroll:thumb-fringe
        ((,class (:foreground ,base01 :background ,base01))))
 
+     ;; yasnippet
+     `(yas-field-highlight-face ((,class (:inherit secondary-selection))))
+
      ;; zencoding
      `(zencoding-preview-input ((,class (:background ,base02 :box ,base1))))
 
@@ -1894,8 +1914,8 @@ customize the resulting theme."
 
     (custom-theme-set-variables
      theme-name
-     `(ansi-color-names-vector [,base03 ,red ,green ,yellow
-                                              ,blue ,magenta ,cyan ,base0])
+     `(ansi-color-names-vector [,base02 ,red ,green ,yellow
+                                              ,blue ,magenta ,cyan ,base00])
 
      ;; compilation
      `(compilation-message-face 'default)
@@ -1928,7 +1948,11 @@ customize the resulting theme."
 
      ;; smartrep
      `(smartrep-mode-line-active-bg (solarized-color-blend ,green ,s-mode-line-bg 0.2))
-     
+
+     ;; term 
+     `(term-default-fg-color ,base0) ;; @deprecated24.3
+     `(term-default-bg-color ,base03) ;; @deprecated24.3
+
      ;; vc
      `(vc-annotate-color-map
        '((20 . ,red)
@@ -1962,6 +1986,11 @@ customize the resulting theme."
                      ,magenta-d ,magenta
                      ,cyan-d ,cyan
                      ,base0 ,base00)))
+     ;; xterm-color
+     `(xterm-color-names [,base02 ,red ,green ,yellow
+                                  ,blue ,magenta ,cyan ,base2])
+     `(xterm-color-names-bright [,base03 ,orange ,base01 ,base00
+                                         ,base0 ,violet ,base1 ,base3])
 
     ;; call chained theme function
     (when childtheme (funcall childtheme))))
