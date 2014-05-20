@@ -120,7 +120,7 @@ re-downloaded in order to locate PACKAGE."
   (progn
     (dash-enable-font-lock)))
 
-(when (not degrade-p-old-emacs) 
+(when (not degrade-p-old-emacs)
     (use-package dash-functional :ensure t)
     (use-package req-package :ensure t :defer t)
     (use-package memoize :ensure t :defer t)
@@ -143,8 +143,10 @@ re-downloaded in order to locate PACKAGE."
 (use-package button-lock :ensure t :defer t :diminish "")
 (use-package fakir :ensure t :defer t)
 (use-package fuzzy :ensure t :defer t)
-(use-package python-environment :ensure t :defer t)
-
+(use-package python-environment :ensure t :defer t
+  :init
+  (progn
+    (setq python-environment-default-root-name "emacs-default")))
 
 ;; Try to load private el env
 (require 'private-init nil t)
@@ -498,25 +500,15 @@ buffer-local wherever it is set."
                   (when (not dark-theme-on) (dark-theme))
                 (when dark-theme-on (bright-theme)))))
 
-
-
 ;;;; smart-mode-line
 (use-package smart-mode-line
   :ensure t
-  :disabled degrade-p-emacs-pre24.3
   :if (and
        (not degrade-p-noninteractive)
        (not degrade-p-terminal)
        (not degrade-p-minimalism))
   :commands (sml/setup)
   :init
-  (progn
-    (setq sml/shorten-modes nil)
-    (defun my-sml-setup  ()
-      (sml/setup)
-      (sml/apply-theme nil))
-    (add-hook 'after-init-hook 'my-sml-setup t))
-  :config
   (progn
     (defface sml/my-face-1
       '((t (:foreground "#2aa198" :weight bold))) "sml/my-faces")
@@ -525,11 +517,28 @@ buffer-local wherever it is set."
     (defface sml/my-face-3
       '((t (:foreground "#6c71c4" :weight bold))) "sml/my-faces")
     (defface sml/my-face-4
-      '((t (:foreground "#d33682" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-5
       '((t (:foreground "#b58900" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-6
-      '((t (:foreground "#dc322f" :weight bold))) "sml/my-faces")))
+    (defface sml/my-face-5
+      '((t (:foreground "#dc322f" :weight bold))) "sml/my-faces")
+    (setq
+     sml/shorten-modes nil
+     sml/projectile-replacement-format ":p/%s:"
+     sml/replacer-regexp-list
+     '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
+       ("^/sudo:.*:" ":SU")
+       ("^~/dropbox/" ":db:"))
+     sml/prefix-face-list
+     '((":SU:" sml/my-face-5)
+       (":e/" sml/my-face-4)
+       (":p/" sml/my-face-3)
+       (":nt:" sml/my-face-2)
+       (":dc:" sml/my-face-2)
+       (":db:" sml/my-face-2)
+       ("" sml/my-face-1)))
+    (defun my-sml-setup  ()
+      (sml/setup)
+      (sml/apply-theme nil))
+    (add-hook 'after-init-hook 'my-sml-setup t)))
 
 ;;;; dynamic-fonts
 (use-package dynamic-fonts
@@ -2581,11 +2590,19 @@ for the current buffer's file name, and the line number at point."
   :diminish ""
   :init
   (progn
-    (defun my-projectile-root-function (dir &optional list)
+    (setq projectile-project-root-files-child-of
+          '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            "~/\.virtualenvs/[^/]+/?$"))
+
+    (defun projectile-root-child-of (dir &optional list)
       (projectile-locate-dominating-file
        dir
        (lambda (dir)
-         (f-child-of? dir "~/.virtualenvs/"))))
+         (--first
+          (if (string-match-p (expand-file-name it) (expand-file-name dir))
+              dir)
+          (or list projectile-project-root-files-child-of (list))))))
+
     (setq
      projectile-completion-system 'ido
      projectile-require-project-root t
@@ -2602,7 +2619,7 @@ for the current buffer's file name, and the line number at point."
      '(projectile-root-bottom-up
        projectile-root-top-down
        projectile-root-top-down-recurring
-       my-projectile-root-function))
+       projectile-root-child-of))
     (bind-key "A" 'projectile-ag region-bindings-mode-map)
 
     (use-package helm-projectile
@@ -3042,6 +3059,16 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq xkcd-cache-dir
           (expand-file-name "xkcd/" user-cache-directory))))
+
+(use-package xterm-color
+  :ensure t
+  :disabled t
+  :commands (xterm-color-filter xterm-color-unfontify-region)
+  :init
+  (progn
+    (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
+    (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
+    (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region)))
 
 (use-package ztree
   :disabled t
@@ -7051,6 +7078,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;;;; rotate
 (use-package rotate
+  :ensure t
   :commands rotate-layout
   :bind (("M-o M-c" . rotate-layout)))
 
@@ -7619,6 +7647,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        "/test_output/"
        "~/\\.cabal/"
        "~/\\.config/dotfiles/emacs/emacs\\.d/elpa/"
+       "~/\\.config/dotfiles/emacs/emacs\\.d/packages/"
        "~/\\.config/dotfiles/emacs/emacs\\.d/lib/"
        "~/\\.config/dotfiles/emacs/emacs\\.d/override/"
        "~/\\.config/dotfiles/emacs/emacs\\.d/site-lisp/"
@@ -8589,7 +8618,7 @@ to weechat."
   :config
   (progn
     (setq tramp-completion-function-alist-ssh
-          (-difference 
+          (-difference
            tramp-completion-function-alist-ssh
            '((tramp-parse-shosts "~/.ssh/known_hosts"))))))
 
