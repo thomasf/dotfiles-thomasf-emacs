@@ -1359,7 +1359,8 @@ buffer-local wherever it is set."
                    magit-log-mode-hook
                    magit-status-mode-hook
                    vc-annotate-mode-hook
-                   pt-search-mode-hook))
+                   pt-search-mode-hook
+                   direx:direx-mode-hook))
 
 (use-package helm
   :defer t
@@ -4795,8 +4796,7 @@ See URL `http://pypi.python.org/pypi/flake8'."
           (interactive)
           (condition-case error
               (progn
-                (direx-project:jump-to-project-root-other-window)
-                (my-set-text-scale-smaller))
+                (direx-project:jump-to-project-root-other-window))
             ('error
              (let ((message (error-message-string error)))
                (if (equal "Project root not found" message)
@@ -6366,7 +6366,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (indent-for-tab-command)
         (insert (format "super(%s, %s).%s(%s"
                                class-name self-name method-name method-args))
-        (newline-and-indent)))
+        (newline-and-indent))))
+  :config
+  (progn
 
     (use-package jedi
       :ensure t
@@ -6376,22 +6378,19 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :init
       (progn
         (setq
-         jedi:install-imenu t ;; TODO this will probably work soon
-         jedi:complete-on-dot t
-         ;; jedi:goto-definition-config
-         ;; '((nil definition nil)
-         ;;   (t definition nil)
-         ;;   (nil nil nil)
-         ;;   (t nil nil)
-         ;;   (nil definition t)
-         ;;   (t definition t)
-         ;;   (nil nil t)
-         ;;   (t nil t ))
-         )
+         jedi:install-imenu t
+         jedi:complete-on-dot t)
+        
         (use-package jedi-direx
           :ensure t
           :commands (jedi-direx:pop-to-buffer
-                     jedi-direx:switch-to-buffer))
+                     jedi-direx:switch-to-buffer
+                     jedi-direx:setup)
+          :init
+          (progn
+            ;; (bind-key "C-x C-d" 'jedi-direx:pop-to-buffer python-mode-map)
+            (add-hook 'jedi-mode-hook 'jedi-direx:setup)))
+        
         (add-hook
          'python-mode-hook
          #'(lambda ()
@@ -6402,10 +6401,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (bind-key "M-." 'jedi:goto-definition jedi-mode-map)
         (bind-key "M-," 'jedi:goto-definition-pop-marker jedi-mode-map)
         (bind-key "C-c d" 'jedi:show-doc jedi-mode-map)
-        (bind-key "C-c r" 'helm-jedi-related-names jedi-mode-map)
-        )))
-  :config
-  (progn
+        (bind-key "C-c r" 'helm-jedi-related-names jedi-mode-map)))
+    
     (smartrep-define-key
         python-mode-map
         "C-c"
