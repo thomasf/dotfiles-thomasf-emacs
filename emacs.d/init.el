@@ -4586,7 +4586,8 @@ See URL `http://pypi.python.org/pypi/flake8'."
       (bind-key "C-p" 'ido-prev-match ido-completion-map)
       (bind-key "<down>" 'ido-next-match ido-completion-map)
       (bind-key "<up>" 'ido-prev-match ido-completion-map)
-      (bind-key "\C-m" 'ido-smart-select-text  ido-completion-map))
+      ;; (bind-key "\C-m" 'ido-smart-select-text  ido-completion-map)
+      )
     (add-hook 'ido-setup-hook 'my-ido-setup-bindings-hook)))
 
 ;;;; php-mode
