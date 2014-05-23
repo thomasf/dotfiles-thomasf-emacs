@@ -6381,7 +6381,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (setq
          jedi:install-imenu t
          jedi:complete-on-dot t)
-        
+
         (use-package jedi-direx
           :ensure t
           :commands (jedi-direx:pop-to-buffer
@@ -6391,7 +6391,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (progn
             ;; (bind-key "C-x C-d" 'jedi-direx:pop-to-buffer python-mode-map)
             (add-hook 'jedi-mode-hook 'jedi-direx:setup)))
-        
+
         (add-hook
          'python-mode-hook
          #'(lambda ()
@@ -6403,7 +6403,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (bind-key "M-," 'jedi:goto-definition-pop-marker jedi-mode-map)
         (bind-key "C-c d" 'jedi:show-doc jedi-mode-map)
         (bind-key "C-c r" 'helm-jedi-related-names jedi-mode-map)))
-    
+
     (smartrep-define-key
         python-mode-map
         "C-c"
