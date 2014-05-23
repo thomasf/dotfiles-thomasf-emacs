@@ -827,13 +827,21 @@ buffer-local wherever it is set."
 (unless degrade-p-noninteractive (global-subword-mode))
 
 ;;;; compile
-(setq
- compilation-ask-about-save nil)
-(defun my-compilation-mode-hook ()
-  ;; (jit-lock-defer-fontification)
-  (setq truncate-lines t)
-  (setq-local truncate-partial-width-windows nil))
-(add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
+(use-package compile
+  :defer t
+  :init
+  (progn
+    (setq compilation-ask-about-save nil)
+    (defun my-compilation-mode-hook ()
+      ;; (jit-lock-defer-fontification)
+      (setq truncate-lines t)
+      (setq-local truncate-partial-width-windows nil))
+    (add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
+    (defun my-colorize-compilation-buffer ()
+      (when (eq major-mode 'compilation-mode)
+        (use-package ansi-color)
+        (ansi-color-apply-on-region compilation-filter-start (point-max))))
+    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
 
 ;;;; ediff
 (setq
