@@ -5719,10 +5719,7 @@ See URL `http://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (setq ag-highlight-search t
-          ag-arguments (list "--smart-case" "--nogroup" "--column" "-M 190" "--"))
-    (if (not ( executable-find "ag"))
-        (warn "Could not find ag - the silver searcher.")
-      (bind-key "M-o A" 'ag)))
+          ag-arguments (list "--smart-case" "--nogroup" "--column" "-M 190" "--")))
   :config
   (progn
     (use-package wgrep-ag
