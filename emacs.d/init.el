@@ -2613,6 +2613,7 @@ for the current buffer's file name, and the line number at point."
           (or list projectile-project-root-files-child-of (list))))))
 
     (setq
+     projectile-sort-order 'recently-active
      projectile-completion-system 'ido
      projectile-require-project-root t
      projectile-switch-project-action 'projectile-dired
