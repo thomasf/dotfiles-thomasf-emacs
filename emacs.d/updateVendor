@@ -199,9 +199,6 @@ unset category # category folder to put downloads
 # NO melpa/elpa candidates? #
 #############################
 
-( url=http://www.emacswiki.org/emacs/download/linkd.el
-  getFile && installFile ) &
-
 ( url=http://www.emacswiki.org/emacs/download/desktop-menu.el
   getFile && installFile ) &
 
