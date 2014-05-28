@@ -4873,42 +4873,28 @@ See URL `http://pypi.python.org/pypi/flake8'."
          ("M-o p s" . popwin:select-popup-window)
          ("M-o p S" . popwin:stick-popup-window)
          ("M-o p f" . popwin:find-file-tail))
-  :init
-  (progn
-    (setq
-     popwin:special-display-config
-     '(("*identify*" :noselect t)
+  :config
+  (--each
+      '(("*identify*" :noselect t)
        ("*Help*" :stick t)
        (help-mode :noselect t)
-       (completion-list-mode :noselect t)
        ("*Ido Completions*" :noselect t :position bottom)
-       (compilation-mode :noselect t)
-       (grep-mode :noselect t)
-       (occur-mode :noselect t)
        (direx:direx-mode :position left :width .2 :dedicated t)
        ("*Messages*" :height .20)
        ("*Pp Macroexpand Output*" :noselect t)
-       "*Shell Command Output*"
-       "*vc-diff*"
-       "*vc-change-log*"
        "*Personal Keybindings*"
+       (flycheck-error-list-mode :stick t)
        ("*Org Select*" :position right :width 79 :noselect t)
        (" *Agenda Commands*" :position right :width 79)
        ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
-       ("^\\*anything.*\\*$" :regexp t :height 0.85)
        ("*magit-commit*" :noselect t :height 0.40)
        ("*magit-diff*" :noselect t :height 0.40)
        ("*magit-edit-log*" :noselect t :height 0.25)
-       "*git-gutter:diff*"
-       "*slime-apropos*"
-       "*slime-macroexpansion*"
-       "*slime-description*"
-       ("*slime-compilation*" :noselect t)
-       "*slime-xref*"
-       (sldb-mode :stick t)
-       slime-repl-mode
-       slime-connection-list-mode))
-    (popwin-mode)))
+       "*git-gutter:diff*")
+    (push it popwin:special-display-config))
+  :idle-priority 2
+  :idle
+  (popwin-mode))
 
 ;;;; highlight-indentation
 (use-package highlight-indentation
