@@ -4296,7 +4296,10 @@ otherwise use the subtree title."
   :bind (("M-o e" . flycheck-list-errors))
   :init
   (progn
-    (setq flycheck-highlighting-mode 'symbols)
+    (setq
+     flycheck-highlighting-mode 'lines
+     ;; flycheck-highlighting-mode 'symbols
+     flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
       (unless (current-buffer-remote-p)
         (flycheck-mode)))
