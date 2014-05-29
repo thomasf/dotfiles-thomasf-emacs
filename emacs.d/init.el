@@ -5649,9 +5649,10 @@ See URL `http://pypi.python.org/pypi/flake8'."
 
 ;;;; jump-char
 (use-package jump-char
+  :disabled t
   :ensure t
-  :bind (("M-m" . jump-char-forward)
-         ("M-M" . jump-char-backward))
+  ;; :bind (("M-m" . jump-char-forward)
+  ;;        ("M-M" . jump-char-backward))
   :config
   (progn
     (setq jump-char-lazy-highlight-face nil)))
