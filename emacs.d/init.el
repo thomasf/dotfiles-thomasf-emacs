@@ -3303,8 +3303,9 @@ If FILE already exists, signal an error."
        ("/j" . "?")
        ("\\j" . "|")
 
-
        ;; functions
+       ("jj" . ace-jump-word-mode)
+       ;; ("JJ" . projectile-find-file)
        ;; ("dj" . other-window)
        ;; ("dk" . other-frame)
        ;; ("xk" . kill-this-buffer-if-not-modified)
@@ -5660,7 +5661,8 @@ See URL `http://pypi.python.org/pypi/flake8'."
 ;;;; ace-jump-mode
 (use-package ace-jump-mode
   :ensure t
-  :commands ace-jump-mode
+  :commands (ace-jump-word-mode
+             ace-jump-mode)
   :bind ("C-c SPC" . ace-jump-mode)
   :init
   (progn
