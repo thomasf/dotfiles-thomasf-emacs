@@ -923,11 +923,14 @@ buffer-local wherever it is set."
 (bind-key "C-x o" 'save-some-buffers-other-window)
 (bind-key "C-x C-o" 'save-some-buffers-other-frame)
 
-(smartrep-define-key
-    global-map
-    "C-x"
-  '(("o" . save-some-buffers-other-window)
-    ("C-o" . save-some-buffers-other-frame)))
+;; NOTE while being handy using smartrep with other-*
+;;      functions is a bit slow for some reason.
+;;
+;; (smartrep-define-key
+;;     global-map
+;;     "C-x"
+;;   '(("o" . save-some-buffers-other-window)
+;;     ("C-o" . save-some-buffers-other-frame)))
 
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 (bind-key "C-x f f" 'find-file)
