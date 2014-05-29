@@ -8368,7 +8368,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                          google-error google-word google-symbol
                          google-cpp-reference google-maps
                          google-region)
-  :bind (("C-h g" . google-this))
+  :bind (("C-h g" . google-this)) ;; NOTE should probably be magit for consistensy.
   :init
   (progn
         (define-key search-map "G" 'google-region)))
