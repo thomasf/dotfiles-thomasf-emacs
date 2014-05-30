@@ -6052,6 +6052,26 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
     (bind-key "h" 'toggle-ibuffer-filter-groups ibuffer-mode-map)
 
+    
+    (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
+      "TODO"
+      (let ((ibuf (get-buffer "*Ibuffer*")))
+        (when ibuf
+          (with-current-buffer ibuf
+            (let ((selected-buffer (ibuffer-current-buffer)))
+              ad-do-it
+              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+    
+    (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
+      "TODO"
+      (let ((ibuf (get-buffer "*Ibuffer*")))
+        (when ibuf
+          (with-current-buffer ibuf
+            (let ((selected-buffer (ibuffer-current-buffer)))
+              ad-do-it
+              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+    
+    
     (setq
      ibuffer-default-sorting-mode 'recency
      ibuffer-eliding-string "…"
