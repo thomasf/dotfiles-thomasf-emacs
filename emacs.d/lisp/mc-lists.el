@@ -36,6 +36,8 @@
         cua-delete-region
         cua-paste
         cua-replace-region
+        cua-scroll-up
+        cua-scroll-down
         cua-set-mark
         delete-blank-lines
         delete-indentation
@@ -71,6 +73,7 @@
         js2r-var-to-this
         jump-char-forward
         jump-char-process-char
+        keyboard-quit
         kill-and-retry-line
         kill-or-delete-region
         kill-region

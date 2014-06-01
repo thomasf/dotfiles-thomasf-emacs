@@ -22,10 +22,9 @@
 
 (defvar my-log-verbose nil)
 ;; (setq my-log-verbose t)
-(unless my-log-verbose
+(if my-log-verbose
+    (setq byte-compile-verbose t)
   (setq ad-redefinition-action 'accept))
-(when my-log-verbose
-  (setq byte-compile-verbose t))
 
 ;;; Emacs version check and feature inhibitions
 
@@ -123,8 +122,7 @@ re-downloaded in order to locate PACKAGE."
 (when (not degrade-p-old-emacs)
     (use-package dash-functional :ensure t)
     (use-package req-package :ensure t :defer t)
-    (use-package memoize :ensure t :defer t)
-    )
+    (use-package memoize :ensure t :defer t))
 
 (use-package s :ensure t)
 (use-package f :ensure t)
@@ -143,13 +141,16 @@ re-downloaded in order to locate PACKAGE."
 (use-package button-lock :ensure t :defer t :diminish "")
 (use-package fakir :ensure t :defer t)
 (use-package fuzzy :ensure t :defer t)
-(use-package python-environment :ensure t :defer t
+(use-package python-environment
+  :ensure t
+  :defer t
   :init
   (progn
-    (setq python-environment-default-root-name "emacs-default")))
+    (setq python-environment-directory "~/.virtualenvs/"
+          python-environment-default-root-name "emacs-default")))
 
 ;; Try to load private el env
-(require 'private-init nil t)
+(require 'private-init nil (not my-log-verbose))
 
 
 ;;;; startup.el
@@ -899,6 +900,12 @@ buffer-local wherever it is set."
 (bind-key "C-H-p" 'backward-paragraph)
 (bind-key "M-H-n" 'next-error)
 (bind-key "M-H-p" 'previous-error)
+
+(bind-key "C-s-n" 'forward-paragraph)
+(bind-key "C-s-p" 'backward-paragraph)
+(bind-key "M-s-n" 'next-error)
+(bind-key "M-s-p" 'previous-error)
+
 ;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
 ;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
 ;; (bind-key "S-C-<down>" 'shrink-window)
@@ -6430,13 +6437,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         "C-c"
       '((">"   . python-indent-shift-right)
         ("<"   . python-indent-shift-left)))
-    (defun python-goto-definition ()
-      "Tries to go to defintion using best method currently available"
-      (interactive)
-      (cond
-       ((fboundp 'rope-goto-definition) (rope-goto-definition))
-       ((fboundp 'jedi:goto-definition) (jedi:goto-definition))))
-    ;; (bind-key "M-." 'python-goto-definition python-mode-map)
+    
     (unbind-key "C-c C-p" python-mode-map)
     (unbind-key "C-c C-j" python-mode-map)))
 
