@@ -6069,8 +6069,21 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
               (pop-to-buffer ibuf)
               (ibuffer-update nil t)
               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
     (bind-key "h" 'toggle-ibuffer-filter-groups ibuffer-mode-map)
+
+    (defun set-categorized-ibuffer-filter-group ()
+      "DOCSTRING"
+      (interactive)
+      (let ((ibuf (get-buffer "*Ibuffer*")))
+        (when ibuf
+          (with-current-buffer ibuf
+            (let ((selected-buffer (ibuffer-current-buffer)))
+              (pop-to-buffer ibuf)
+              (ibuffer-switch-to-saved-filter-groups "categorized")
+              (ibuffer-update nil t)
+              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+
+    (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
 
     
     (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
@@ -6202,10 +6215,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                                         default-directory)
                                     default-directory))))
          (ido-find-file-in-dir default-directory))))
-    (add-hook 'ibuffer-mode-hook
-              (lambda ()
-                (define-key ibuffer-mode-map "\C-x\C-f"
-                  'ibuffer-ido-find-file)))))
+    (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
 
 ;;;; iflipb
 (use-package iflipb
