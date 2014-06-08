@@ -7935,8 +7935,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
               git-gutter:unchanged-sign nil
               git-gutter:window-width 1)))
     (defun git-gutter-turn-on-maybe ()
-      (unless (current-buffer-remote-p)
-        (git-gutter-mode 1)))
+      (and (buffer-file-name)
+         (not (current-buffer-remote-p))
+         (git-gutter-mode 1)))
     (hook-into-modes 'git-gutter-turn-on-maybe my-prog-mode-hooks))
 
   :config
