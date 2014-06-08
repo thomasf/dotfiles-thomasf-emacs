@@ -520,16 +520,16 @@ buffer-local wherever it is set."
     (defface sml/my-face-4
       '((t (:foreground "#b58900" :weight bold))) "sml/my-faces")
     (defface sml/my-face-5
-      '((t (:foreground "#dc322f" :weight bold))) "sml/my-faces")
+      '((t (:foreground "#dc322f" :weight bold :inverse-video t))) "sml/my-faces")
     (setq
      sml/shorten-modes nil
      sml/projectile-replacement-format ":p/%s:"
      sml/replacer-regexp-list
      '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
-       ("^/sudo:.*:" ":SU")
+       ("^/sudo:.*:" ":su:")
        ("^~/dropbox/" ":db:"))
      sml/prefix-face-list
-     '((":SU:" sml/my-face-5)
+     '((":su:" sml/my-face-5)
        (":e/" sml/my-face-4)
        (":p/" sml/my-face-3)
        (":nt:" sml/my-face-2)
