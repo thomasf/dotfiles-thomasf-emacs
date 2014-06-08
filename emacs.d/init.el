@@ -2983,8 +2983,9 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :bind (("S-<down>" . shift-text-down)
          ("S-<up>" . shift-text-up)
-         ("S-<left>" . shift-text-left)
-         ("S-<right>" . shift-text-right))
+         ;; ("S-<left>" . shift-text-left)
+         ;; ("S-<right>" . shift-text-right)
+         )
   :config
   (progn
     (setq st-indent-step
@@ -3012,6 +3013,12 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :defer t)
 
+;;;; smart-shift
+(use-package smart-shift
+  :ensure t
+  :commands smart-shift-mode
+  :bind (("S-<left>" . smart-shift-left)
+         ("S-<right>" . smart-shift-right)))
 ;;;; sos
 (use-package sos
   :ensure t
@@ -9029,9 +9036,6 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; reddit
 (use-package reddit
   :commands reddit)
-
-
-
 
 ;;;; god-mode
 (use-package god-mode
