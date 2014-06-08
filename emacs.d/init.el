@@ -1212,6 +1212,7 @@ buffer-local wherever it is set."
       (and
        (buffer-live-p it)
        (buffer-modified-p it)
+       (not (eq major-mode 'messages-buffer-mode))
        (not (buffer-base-buffer it))
        (buffer-file-name it)
        (with-current-buffer it
