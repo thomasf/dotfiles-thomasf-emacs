@@ -5237,7 +5237,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
        (title . "Speedbar")))
     (use-package sr-speedbar
       :ensure t
-      ;; :disabled t
+      :disabled t
       :commands (sr-speedbar-toggle
                  sr-speedbar-refresh-toggle
                  sr-speedbar-select-window)
