@@ -120,7 +120,9 @@ This is just a copy of the fully expanded macro from dash."
 (defun no-dot-directories (directories)
   "Exclude the . and .. directory from a list."
   (--remove (or (string= "." (file-name-nondirectory it))
-               (string= ".." (file-name-nondirectory it)))
+               (string= ".." (file-name-nondirectory it))
+               (string= ".git" (file-name-nondirectory it))
+               (string= "archives" (file-name-nondirectory it)))
             directories))
 
 (defun ensure-packages-compiled ()
