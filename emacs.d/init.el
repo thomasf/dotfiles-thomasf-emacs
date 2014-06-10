@@ -805,9 +805,10 @@ buffer-local wherever it is set."
          'x-cut-buffer-or-selection-value))
 
 ;;;; browse-url
-(setq
- browse-url-browser-function 'browse-url-generic
- browse-url-generic-program "sensible-browser")
+(when (eq 'gnu/linux system-type)
+  (setq
+   browse-url-browser-function 'browse-url-generic
+   browse-url-generic-program "sensible-browser"))
 
 ;;;; url
 (setq
