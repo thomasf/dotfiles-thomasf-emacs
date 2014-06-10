@@ -562,16 +562,21 @@ buffer-local wherever it is set."
        "Tahoma" "Verdana" "Helvetica" "Arial Unicode MS" "Arial")
      dynamic-fonts-preferred-proportional-point-size 11)
 
+    (defvar my-monospaced-font "PragmataPro-11.8")
+    (defvar my-variable-pitch-font "Pt Sans-13")
+
+    (when (s-starts-with? "fogskum" system-name)
+      (setq my-monospaced-font "PragmataPro-13.8"
+            my-variable-pitch-font "Pt Sans-14"))
+    
     (defun my-set-fonts  ()
       (interactive)
       (when window-system
         (condition-case nil
             (progn
-              ;; (set-face-attribute 'default nil :font "Consolas-11" )
-              ;; (set-face-attribute 'fixed-pitch nil :font "Consolas-11")
-              (set-face-attribute 'default nil :font "PragmataPro-11.8")
-              (set-face-attribute 'fixed-pitch nil :font "PragmataPro-11.8")
-              (set-face-attribute 'variable-pitch nil :font "Pt Sans-13"))
+              (set-face-attribute 'default nil :font my-monospaced-font)
+              (set-face-attribute 'fixed-pitch nil :font my-monospaced-font)
+              (set-face-attribute 'variable-pitch nil :font my-variable-pitch-font))
           (error
            (progn
              (message
