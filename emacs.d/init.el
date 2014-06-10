@@ -2909,18 +2909,26 @@ for the current buffer's file name, and the line number at point."
     (define-key region-bindings-mode-map "x" 'exchange-dot-and-mark)
     (define-key region-bindings-mode-map "d" 'er/mark-defun)
     (define-key region-bindings-mode-map "g" 'keyboard-quit)
-    (define-key region-bindings-mode-map "s" search-map)
-    )
+    (define-key region-bindings-mode-map "s" search-map))
 
 
-  (defun region-bindings-mode-cursor-update  ()
+  (defun region-bindings-mode-cursor-update-action  ()
     (when (bound-and-true-p cua-normal-cursor-color)
-      (if  region-bindings-mode
+      (if region-bindings-mode
           (progn
-            (set-cursor-color "#d33682")
+            (unless
+                (equal "#d33682"
+                       (cdr (assq 'cursor-color (frame-parameters))))
+              (set-cursor-color "#d33682"))
             (setq cursor-type 'box))
-        (set-cursor-color cua-normal-cursor-color)
+        (unless
+            (equal cua-normal-cursor-color
+                   (cdr (assq 'cursor-color (frame-parameters))))
+          (set-cursor-color cua-normal-cursor-color))
         (setq cursor-type my-normal-cursor-type))))
+
+   (defun region-bindings-mode-cursor-update  ()
+    (run-with-idle-timer 0.1 nil 'region-bindings-mode-cursor-update-action))
 
   (hook-into-modes 'region-bindings-mode-cursor-update
                    '(activate-mark-hook
