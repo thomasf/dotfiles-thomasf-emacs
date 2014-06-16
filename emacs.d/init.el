@@ -540,7 +540,9 @@ buffer-local wherever it is set."
     (defun my-sml-setup  ()
       (sml/setup)
       (sml/apply-theme nil))
-    (add-hook 'after-init-hook 'my-sml-setup t)))
+    (add-hook 'after-init-hook 'my-sml-setup t))
+  :config
+  (load-library "smart-mode-line-autoloads"))
 
 ;;;; dynamic-fonts
 (use-package dynamic-fonts
