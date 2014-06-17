@@ -262,7 +262,7 @@ buffer-local wherever it is set."
 (global-set-key (kbd "C-x d") my-dirs-map)
 (global-set-key (kbd "C-x b") my-buffers-map)
 (global-set-key (kbd "C-c o") my-other-map)
-(bind-key* "C-h s" search-map)
+;; (bind-key* "C-h s" search-map)
 (global-set-key (kbd "M-o") my-other-map)
 (define-key my-other-map (kbd "s") search-map)
 
