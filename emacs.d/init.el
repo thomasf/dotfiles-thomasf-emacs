@@ -8314,6 +8314,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; guide-key
 (use-package guide-key
   :ensure t
+  :disabled t
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
