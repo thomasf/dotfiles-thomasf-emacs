@@ -1,0 +1,4 @@
+# name: dom.div
+# key: div
+# --
+(dom.div {$0})
