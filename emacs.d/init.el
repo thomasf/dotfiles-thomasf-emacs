@@ -3415,7 +3415,9 @@ If FILE already exists, signal an error."
 
 ;;;; ws-butler
 (use-package ws-butler
-  :disabled t ;; FIXME something else prohibits restoring point after save
+  ;; :disabled t ;; FIXME something else prohibits restoring point after save
+  ;; NOTE It seems like ws-butler has started working again
+  :ensure t
   :if (not degrade-p-noninteractive)
   :commands (ws-butler-mode)
   :diminish ws-butler-mode
