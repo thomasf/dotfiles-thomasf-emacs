@@ -5592,27 +5592,49 @@ See URL `https://pypi.python.org/pypi/flake8'."
         
         ;; FIXME this should be niced up and contributed back.
         (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
-          (popup-menu*
-           (mapcar
-            (lambda (choice)
-              (popup-make-item
-               (if (yas--template-p choice)
-                   (format "%10.10s %-10.10s┃ %s"
-                           (if (yas--template-group choice)
-                               (s-join "/" (yas--template-group choice))
-                             "")
-                           (if (yas--template-key choice)
-                               (yas--template-key choice)
-                             "")
-                           (if (yas--template-name choice)
-                               (yas--template-name choice)
-                             ""))
-                 choice)
-               :value choice))
-            choices)
-           :prompt prompt
-           :max-width 80
-           :isearch t))))
+          (let ((group-max-len 0)
+                (key-max-len 0)
+                (fmt "")
+                (popup-items))
+            
+            (mapcar #'(lambda (choice)
+                        (when (yas--template-p choice)
+                          (setq group-max-len (max group-max-len
+                                                   (+ (length (yas--template-group choice) )
+                                                      (apply '+ (mapcar 'length (yas--template-group choice))))))
+                          (setq key-max-len (max key-max-len (length (yas--template-key choice))))))
+                    choices)
+            
+            (setq fmt (format "%s%%%d.%ds%s%%-%d.%ds│ %%s"
+                              (if (> group-max-len 0 ) "" " ")
+                              group-max-len group-max-len
+                              (if (> group-max-len 0 ) " > " "")
+                              key-max-len key-max-len))
+
+            (setq popup-items
+                  (mapcar
+                   #'(lambda (choice)
+                       (popup-make-item
+                        (if (yas--template-p choice)
+                            (format fmt
+                                    (if (yas--template-group choice)
+                                        (s-join "/" (yas--template-group choice))
+                                      "")
+                                    (if (yas--template-key choice)
+                                        (yas--template-key choice)
+                                      "")
+                                    (if (yas--template-name choice)
+                                        (yas--template-name choice)
+                                      ""))
+                          (format " %s" choice))
+                        :value choice))
+                   choices))
+           
+            (popup-menu*
+             popup-items
+             :prompt prompt
+             :max-width 80
+             :isearch t)))))
 
       (defun yas-remove-recompile-reload-all ()
         (interactive)
