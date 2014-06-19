@@ -2300,6 +2300,8 @@ Used to launch magit status from command line."
         (cond
          ((and
            window-system
+           ;; TODO maybe use dbus on osx later, i do not need it now.
+           (not (eq system-type 'darwin))
            (require 'dbus nil t)
            (dbus-ping :session "org.freedesktop.Notifications" 250))
           'my-notify-dbus)
