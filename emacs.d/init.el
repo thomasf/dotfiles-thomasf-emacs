@@ -5568,7 +5568,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (bind-key "C-x i" 'yas-insert-snippet yas-minor-mode-map)
     (use-package popup
       :ensure t
-      :init
+      :commands yas-popup-isearch-prompt
+      :config
       (progn
         ;; ;; advice for whitespace-mode conflict
         ;; (defvar my-prev-whitespace-mode nil)
@@ -5588,62 +5589,62 @@ See URL `https://pypi.python.org/pypi/flake8'."
         ;;       (whitespace-mode 1)))
         ;; (ad-activate 'popup-draw)
         ;; (ad-activate 'popup-delete)
-
+        
+        ;; FIXME this should be niced up and contributed back.
         (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
-          (when (featurep 'popup)
-            (popup-menu*
-             (mapcar
-              (lambda (choice)
-                (popup-make-item
-                 (format "%10.10s %-10.10s┃ %s"
-                         (if (yas--template-group choice)
-                             (s-join "/" (yas--template-group choice))
-                           "")
-                         (if (yas--template-key choice)
-                             (yas--template-key choice)
-                           "")
-                         (if (yas--template-name choice)
-                             (yas--template-name choice)
-                           ""))
-                 :value choice))
-              choices)
-             :prompt prompt
-             :max-width 80
-             :isearch t)))
+          (popup-menu*
+           (mapcar
+            (lambda (choice)
+              (popup-make-item
+               (if (yas--template-p choice)
+                   (format "%10.10s %-10.10s┃ %s"
+                           (if (yas--template-group choice)
+                               (s-join "/" (yas--template-group choice))
+                             "")
+                           (if (yas--template-key choice)
+                               (yas--template-key choice)
+                             "")
+                           (if (yas--template-name choice)
+                               (yas--template-name choice)
+                             ""))
+                 choice)
+               :value choice))
+            choices)
+           :prompt prompt
+           :max-width 80
+           :isearch t))))
 
-    (defun yas-remove-recompile-reload-all ()
-      (interactive)
-      (let ((default-directory my-yas-snippets-dir) )
-        (mapc (lambda (f)
-                (delete-file f))
-              (file-expand-wildcards "*.elc")))
-      (f-files my-yas-snippets-dir
-         (lambda (file)
-           (and
-            (equal (f-no-ext (f-filename file)) ".yas-compiled-snippets")
-            (f-delete file)))
-         t)
-      ;; (yas-recompile-all)
-      (yas-reload-all))
+      (defun yas-remove-recompile-reload-all ()
+        (interactive)
+        (let ((default-directory my-yas-snippets-dir) )
+          (mapc (lambda (f)
+                  (delete-file f))
+                (file-expand-wildcards "*.elc")))
+        (f-files my-yas-snippets-dir
+                 (lambda (file)
+                   (and
+                    (equal (f-no-ext (f-filename file)) ".yas-compiled-snippets")
+                    (f-delete file)))
+                 t)
+        ;; (yas-recompile-all)
+        (yas-reload-all))
 
-    (defun my-snippet-save-hook ()
-      (when (and buffer-file-name
+      (defun my-snippet-save-hook ()
+        (when (and buffer-file-name
                  (eq major-mode 'snippet-mode))
-        (yas-remove-recompile-reload-all)))
-    (defun my-snippet-mode-hook ()
-      (add-hook 'after-save-hook 'my-snippet-save-hook nil t)
+          (yas-remove-recompile-reload-all)))
 
-      )
-    (add-hook 'snippet-mode-hook 'my-snippet-mode-hook)
+      (defun my-snippet-mode-hook ()
+        (add-hook 'after-save-hook 'my-snippet-save-hook nil t))
+      (add-hook 'snippet-mode-hook 'my-snippet-mode-hook)
 
+      (defun dired-snippets-dir ()
+        "Open dired in the yas snippets dir."
+        (interactive)
+        (dired (expand-file-name
+                "snippets" user-emacs-directory)))
 
-    (defun dired-snippets-dir ()
-      "Open dired in the yas snippets dir."
-      (interactive)
-      (dired (expand-file-name
-              "snippets" user-emacs-directory)))
-
-    (yas-reload-all)))))
+      (yas-reload-all)))
 
 ;;;; zencoding-mode
 (use-package zencoding-mode
