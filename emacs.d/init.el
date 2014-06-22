@@ -2683,6 +2683,16 @@ for the current buffer's file name, and the line number at point."
 (defalias 'project-root-function 'projectile-project-root)
 
 
+;;;; exec-path-from-shell
+(when (eq system-type 'darwin)
+  (use-package exec-path-from-shell
+    :ensure t
+    :commands (exec-path-from-shell-initialize)
+    :init
+    (progn
+      (unless (executable-find "hsadmin")
+        (exec-path-from-shell-initialize)))))
+
 ;;; packages: packages sorted alphabetically by name
 ;;;; adaptive-wrap
   (use-package adaptive-wrap
