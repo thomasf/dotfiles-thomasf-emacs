@@ -569,8 +569,8 @@ buffer-local wherever it is set."
     (defvar my-variable-pitch-font "Pt Sans-13")
 
     (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "PragmataPro-13.8"
-            my-variable-pitch-font "Pt Sans-14"))
+      (setq my-monospaced-font "PragmataPro-13"
+            my-variable-pitch-font "Pt Sans-13"))
     
     (defun my-set-fonts  ()
       (interactive)
