@@ -8838,14 +8838,15 @@ declaration in a Python file."
 (use-package helm-css-scss
   :ensure t
   :if (not degrade-p-helm)
-  :commands helm-css-scss
+  :commands (helm-css-scss helm-css-scss-multi)
   :init
   (progn
     (use-package scss-mode
       :defer t
       :config
       (progn
-        (bind-key "C-c C-c" 'helm-css-scss scss-mode-map)))))
+        (bind-key "C-c C-c" 'helm-css-scss scss-mode-map)
+        (bind-key "C-c c" 'helm-css-scss-multi scss-mode-map)))))
 
 ;;;; helm-git-grep
 (use-package helm-git-grep
