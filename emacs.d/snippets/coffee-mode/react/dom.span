@@ -1,0 +1,4 @@
+# name: dom.span
+# key: span
+# --
+(dom.span {$0})

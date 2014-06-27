@@ -1,0 +1,6 @@
+# name: remove unused code
+# key: unused
+# binding: 
+# expand-env: ()
+# --
+Remove unused code
