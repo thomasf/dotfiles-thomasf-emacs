@@ -3690,6 +3690,7 @@ If FILE already exists, signal an error."
         (org-crypt-use-before-save-magic)))
 
     (use-package org-caldav
+      :ensure t
       :commands org-caldav-sync)
 
     (use-package org-annotate-file
