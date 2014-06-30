@@ -36,8 +36,8 @@
         cua-delete-region
         cua-paste
         cua-replace-region
-        cua-scroll-up
         cua-scroll-down
+        cua-scroll-up
         cua-set-mark
         delete-blank-lines
         delete-indentation
@@ -149,6 +149,7 @@
         python-indent-shift-left
         python-indent-shift-right
         quoted-insert
+        reindent-then-newline-and-indent
         save-region-or-current-line
         sgml-delete-tag
         sgml-slash
