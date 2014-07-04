@@ -3174,7 +3174,7 @@ for the current buffer's file name, and the line number at point."
         (bind-key "C-M-o" 'dired-omit-mode dired-mode-map))))
   :config
   (progn
-      (use-package dired-avfs
+    (use-package dired-avfs
       :ensure t
       :if (executable-find "mountavfs"))
 
@@ -3195,14 +3195,16 @@ for the current buffer's file name, and the line number at point."
       (progn
         (bind-key "M-r" 'dired-efap dired-mode-map)))
 
-    (use-package dired-details
-      :ensure t
-      :commands dired-details-install
-      :init
-      (progn
-        (setq
-         dired-details-hidden-string " ⋯ " )
-        (dired-details-install)))
+    (if (boundp 'dired-hide-details-mode)
+        (add-hook 'dired-mode-hook 'dired-hide-details-mode)
+      (use-package dired-details
+        :ensure t
+        :commands dired-details-install
+        :init
+        (progn
+          (setq
+           dired-details-hidden-string " ⋯ " )
+          (dired-details-install))))
 
     (defun dired-sort-size ()
       "Dired sort by size."
