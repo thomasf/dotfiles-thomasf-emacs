@@ -3167,13 +3167,16 @@ for the current buffer's file name, and the line number at point."
          dired-omit-files
          "^\\.?#\\|^\\.\\(DS_Store\\|localized\\|AppleDouble\\|dropbox\\|dropbox\.cache\\)$\\|^\\.\\.$"
          dired-omit-extensions completion-ignored-extensions)
-        (add-hook 'dired-mode-hook #'(lambda () (dired-omit-mode))))
+        ;; (add-hook 'dired-mode-hook #'(lambda () (dired-omit-mode)))
+        )
       :config
       (progn
         (unbind-key "M-o" dired-mode-map)
-        (bind-key "C-M-o" 'dired-omit-mode dired-mode-map))))
+        ;; (bind-key "C-M-o" 'dired-omit-mode dired-mode-map)
+        )))
   :config
   (progn
+
     (use-package dired-avfs
       :ensure t
       :if (executable-find "mountavfs"))
@@ -3186,6 +3189,45 @@ for the current buffer's file name, and the line number at point."
       (progn
         (dired-rainbow-define code "#859900" ("el" "py" "coffee" "js"))
         (dired-rainbow-define doc "#6c71c4" ("org" "html" "md" "txt" "markdown"))))
+
+    (use-package dired-subtree
+      :ensure t
+      :commands (dired-subtree-insert)
+      :init
+      (progn
+        (setq dired-subtree-use-backgrounds nil
+              dired-subtree-line-prefix "  │")
+        (bind-key "i" 'dired-subtree-insert dired-mode-map)))
+
+    (use-package dired-ranger
+      :ensure t
+      :commands (dired-ranger-copy dired-ranger-move dired-ranger-paste))
+
+    (use-package dired-filter
+      :ensure t
+      :commands (dired-filter-by-name
+                 dired-filter-by-regexp
+                 dired-filter-by-extension
+                 dired-filter-by-dot-files
+                 dired-filter-by-omit
+                 dired-filter-by-predicate
+                 dired-filter-by-file
+                 dired-filter-by-directory
+                 dired-filter-by-mode
+                 dired-filter-mode)
+      :init
+      (progn
+        (setq dired-filter-save-with-custom nil
+              dired-filter-verbose nil
+              dired-filter-show-filters t
+              dired-filter-stack '((dot-files) (omit)))
+        (add-hook 'dired-mode-hook 'dired-filter-mode)
+        (bind-key "," 'dired-filter-mode dired-mode-map)))
+
+    (use-package dired-open
+      :ensure t
+      :commands (dired-open-xdg
+                 dired-open-guess-shell-alistv))
 
     (use-package dired-efap
       :ensure t
@@ -3236,28 +3278,15 @@ for the current buffer's file name, and the line number at point."
       (interactive)
       (dired-sort-other (concat dired-listing-switches "")))
 
+    (defun my-dired-goto-home ()
+      (interactive)
+      (dired "~/"))
 
+    (bind-key "~" 'my-dired-goto-home dired-mode-map)
     (bind-key "." 'dired-up-directory dired-mode-map)
-    (bind-key "," 'dired-clean-directory dired-mode-map)
     (bind-key "h" 'ibuffer dired-mode-map)
 
-    (defun dired-back-to-top ()
-      (interactive)
-      (beginning-of-buffer)
-      (dired-next-line (if dired-omit-mode 2 4)))
-
-    (define-key dired-mode-map
-      (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
-
-    (defun dired-jump-to-bottom ()
-      (interactive)
-      (end-of-buffer)
-      (dired-next-line -1))
-
-    (define-key dired-mode-map
-      (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
-
-    (defun my-dired-create-file (file)
+     (defun my-dired-create-file (file)
       "Create a file called FILE.
 If FILE already exists, signal an error."
       (interactive
@@ -3283,9 +3312,7 @@ If FILE already exists, signal an error."
     (defun my-dired-create-__init__py ()
       "Creates an __init__.py in the current directory"
       (interactive)
-      (my-dired-create-file "__init__.py"))
-
-    ))
+      (my-dired-create-file "__init__.py"))))
 
 ;;;; key-chord
 (use-package key-chord
