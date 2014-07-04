@@ -2463,6 +2463,17 @@ Code taken from `hack-dir-local-variables'."
 
 (setq ring-bell-function
       'my-ring-bell-function)
+
+;;;; get-dwim-at-point
+(defun get-dwim-at-point ()
+  "If there's an active selection, return that.
+Otherwise, get the symbol at point, as a string."
+  (cond ((use-region-p)
+         (buffer-substring-no-properties (region-beginning) (region-end)))
+        ((symbol-at-point)
+         (substring-no-properties
+          (symbol-name (symbol-at-point))))))
+
 ;;; functions: ////uncategorized////
 (defun create-temp-selective-display-keymap ()
   (set-temporary-overlay-map
