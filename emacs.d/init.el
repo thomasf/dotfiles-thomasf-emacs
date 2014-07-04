@@ -2714,6 +2714,11 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :defer t)
 
+;;;; butler
+(use-package butler
+  :ensure t
+  :commands (butler-status))
+
 ;;;; cdnjs
 (use-package cdnjs
   :ensure t
