@@ -2743,10 +2743,6 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
-;;;; cucumber-mode
-(use-package feature-mode
-  :ensure t
-  :mode (("\\.feature\'" . feature-mode)))
 
 ;;;; dired-toggle-sudo
 (use-package dired-toggle-sudo
@@ -2783,6 +2779,11 @@ for the current buffer's file name, and the line number at point."
 (use-package fancy-narrow
   :ensure t
   :defer t)
+
+;;;; feature-mode
+(use-package feature-mode
+  :ensure t
+  :mode (("\\.feature\'" . feature-mode)))
 
 ;;;; helm-chrome-bookmarks
 (use-package helm-chrome
