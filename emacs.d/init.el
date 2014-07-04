@@ -3054,10 +3054,19 @@ for the current buffer's file name, and the line number at point."
   :commands smart-shift-mode
   :bind (("S-<left>" . smart-shift-left)
          ("S-<right>" . smart-shift-right)))
+
+;;;; smeergle
+(use-package smeargle
+  :ensure t
+  :commands (smeargle
+             smeargle-commits
+             smeargle-clear))
+
 ;;;; sos
 (use-package sos
   :ensure t
   :commands sos)
+
 ;;;; sqlite
 (use-package sqlite
   :ensure t
