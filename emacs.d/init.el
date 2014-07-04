@@ -2694,15 +2694,15 @@ for the current buffer's file name, and the line number at point."
 
 ;;; packages: packages sorted alphabetically by name
 ;;;; adaptive-wrap
-  (use-package adaptive-wrap
-    :ensure t
-    :disabled t
-    :commands adaptive-wrap-prefix-mode
-    :init
-    (progn
-          (hook-into-modes
-           #'(lambda () (adaptive-wrap-prefix-mode 1))
-           my-prog-mode-hooks)))
+(use-package adaptive-wrap
+  :ensure t
+  :disabled t
+  :commands adaptive-wrap-prefix-mode
+  :init
+  (progn
+    (hook-into-modes
+     #'(lambda () (adaptive-wrap-prefix-mode 1))
+     my-prog-mode-hooks)))
 
 ;;;; amd-mode
 (use-package amd-mode
