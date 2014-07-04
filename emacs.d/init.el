@@ -3194,7 +3194,7 @@ for the current buffer's file name, and the line number at point."
         )))
   :config
   (progn
-
+    (unbind-key "l" dired-mode-map)
     (use-package dired-avfs
       :ensure t
       :if (executable-find "mountavfs"))
