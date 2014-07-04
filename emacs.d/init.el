@@ -3211,12 +3211,17 @@ for the current buffer's file name, and the line number at point."
 
     (use-package dired-subtree
       :ensure t
-      :commands (dired-subtree-insert)
+      :commands (dired-subtree-insert
+                 dired-subreee-remove)
       :init
       (progn
         (setq dired-subtree-use-backgrounds nil
               dired-subtree-line-prefix "  │")
-        (bind-key "i" 'dired-subtree-insert dired-mode-map)))
+        (defadvice dired-subtree-insert (before expand-view activate)
+          (when (bound-and-true-p dired-hide-details-mode)
+            (dired-hide-details-mode -1)))
+        (bind-key "i" 'dired-subtree-insert dired-mode-map)
+        (bind-key "I" 'dired-subtree-remove dired-mode-map)))
 
     (use-package dired-ranger
       :ensure t
