@@ -3184,6 +3184,7 @@ for the current buffer's file name, and the line number at point."
 
     (use-package dired-rainbow
       :ensure t
+      :disabled t
       :commands dired-rainbow-define
       :init
       (progn
