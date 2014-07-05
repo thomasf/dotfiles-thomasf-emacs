@@ -3295,7 +3295,7 @@ for the current buffer's file name, and the line number at point."
               dired-filter-show-filters t
               dired-filter-stack '((dot-files) (omit)))
         (add-hook 'dired-mode-hook 'dired-filter-mode)
-        (bind-key "," 'dired-filter-mode dired-mode-map)))
+        (bind-key ")" 'dired-filter-mode dired-mode-map)))
 
     (use-package dired-open
       :ensure t
