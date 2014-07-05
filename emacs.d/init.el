@@ -571,7 +571,7 @@ buffer-local wherever it is set."
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "PragmataPro-13"
             my-variable-pitch-font "Pt Sans-13"))
-    
+
     (defun my-set-fonts  ()
       (interactive)
       (when window-system
@@ -5672,14 +5672,14 @@ See URL `https://pypi.python.org/pypi/flake8'."
         ;;       (whitespace-mode 1)))
         ;; (ad-activate 'popup-draw)
         ;; (ad-activate 'popup-delete)
-        
+
         ;; FIXME this should be niced up and contributed back.
         (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
           (let ((group-max-len 0)
                 (key-max-len 0)
                 (fmt "")
                 (popup-items))
-            
+
             (mapcar #'(lambda (choice)
                         (when (yas--template-p choice)
                           (setq group-max-len (max group-max-len
@@ -5687,7 +5687,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
                                                       (apply '+ (mapcar 'length (yas--template-group choice))))))
                           (setq key-max-len (max key-max-len (length (yas--template-key choice))))))
                     choices)
-            
+
             (setq fmt (format "%s%%%d.%ds%s%%-%d.%ds│ %%s"
                               (if (> group-max-len 0 ) "" " ")
                               group-max-len group-max-len
@@ -5712,7 +5712,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
                           (format " %s" choice))
                         :value choice))
                    choices))
-           
+
             (popup-menu*
              popup-items
              :prompt prompt
@@ -6209,7 +6209,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
     (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
 
-    
+
     (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
       "TODO"
       (let ((ibuf (get-buffer "*Ibuffer*")))
@@ -6218,7 +6218,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
             (let ((selected-buffer (ibuffer-current-buffer)))
               ad-do-it
               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-    
+
     (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
       "TODO"
       (let ((ibuf (get-buffer "*Ibuffer*")))
@@ -6227,8 +6227,8 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
             (let ((selected-buffer (ibuffer-current-buffer)))
               ad-do-it
               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-    
-    
+
+
     (setq
      ibuffer-default-sorting-mode 'recency
      ibuffer-eliding-string "…"
@@ -6584,7 +6584,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         "C-c"
       '((">"   . python-indent-shift-right)
         ("<"   . python-indent-shift-left)))
-    
+
     (unbind-key "C-c C-p" python-mode-map)
     (unbind-key "C-c C-j" python-mode-map)))
 
