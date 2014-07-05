@@ -3212,6 +3212,38 @@ for the current buffer's file name, and the line number at point."
   :config
   (progn
     (unbind-key "l" dired-mode-map)
+
+    (use-package wdired
+      :defer t
+      :init
+      (progn
+        ;; TODO figure out exactly what is prohibiting wdired mode from allowin
+        ;; the first character to be edited. This is mostly disabling stuff at
+        ;; random.
+        ;; related: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=17541
+        ;; Rhe function that is resposible to do this is wdired-preprocess-files.
+        ;; this is a manual way of fixing it for me in that function:
+        ;;   (put-text-property b-protection (1- (point)) 'read-only t)
+        ;; I cannot reproduce this reliably. If the problem does not happen
+        ;; with some modes disabled I might continue to investigate
+        (defun my-wdired-mode-hook ()
+          (--each '(
+                    dired-filter-mode
+                    dired-omit-mode
+                    dired-hide-details-mode
+                    font-lock-mode
+                    )
+            (and (boundp it)
+               it
+               (funcall it -1))))
+
+        ;; (add-hook 'wdired-mode-hook 'my-wdired-mode-hook)
+        (defadvice wdired-change-to-wdired-mode (before expand-view activate)
+          (my-wdired-mode-hook))
+        (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)
+
+        ))
+
     (use-package dired-avfs
       :ensure t
       :if (executable-find "mountavfs"))
@@ -8075,7 +8107,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (setq git-gutter:verbosity 0
-          git-gutter:disabled-modes '(org-mode))
+          git-gutter:disabled-modes '(org-mode dired-mode wdired-mode))
     (when window-system
       (let ((symbol (char-to-string (if (char-displayable-p ?×) ?× ?*))))
         (setq git-gutter:added-sign symbol
@@ -8363,7 +8395,20 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      "\\(@@@+\\|\\_<\\(?:[Tt][Oo][Dd][Oo]+\\|[Ff][Ii][Xx][Mm][Ee]+\\|NOTE+\\|SHAME+\\|XXX+\\)\\)\\(?:[/:?!. \t\r\n\f\v]+\\|-+\\(?:\\s-\\|[\r\n\f\v]\\)\\|\\_>\\)"
      fixmee-goto-prevmost-urgent-keystrokes nil
      fixmee-goto-nextmost-urgent-keystrokes nil
-     fixmee-view-listing-keystrokes nil))
+     fixmee-view-listing-keystrokes nil
+     fixmee-exclude-modes '(
+                            fundamental-mode
+                            Buffer-menu-mode
+                            bm-show-mode
+                            dired-mode
+                            wdired-mode
+                            eshell-mode
+                            gnus-article-mode
+                            mime/viewer-mode
+                            rmail-mode
+                            term-mode
+                            fixmee--listview-mode
+                            )))
   :config
   (progn
     (global-fixmee-mode 1))
