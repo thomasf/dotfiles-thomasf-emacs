@@ -2754,6 +2754,11 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
+;;;; cuda-mode
+(use-package cuda-mode
+  :ensure t
+  :mode (("\\.cu\\'" . cuda-mode)
+         ("\\.cuh\\'" . cuda-mode)))
 
 ;;;; dired-toggle-sudo
 (use-package dired-toggle-sudo
