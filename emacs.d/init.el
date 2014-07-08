@@ -3226,23 +3226,27 @@ for the current buffer's file name, and the line number at point."
         ;;   (put-text-property b-protection (1- (point)) 'read-only t)
         ;; I cannot reproduce this reliably. If the problem does not happen
         ;; with some modes disabled I might continue to investigate
-        (defun my-wdired-mode-hook ()
-          (--each '(
-                    dired-filter-mode
-                    dired-omit-mode
-                    dired-hide-details-mode
-                    font-lock-mode
-                    )
-            (and (boundp it)
-               it
-               (funcall it -1))))
+        (defvar wdired-forbidden-modes
+          '(dired-filter-mode
+            dired-omit-mode
+            dired-hide-details-mode
+            font-lock-mode))
 
-        ;; (add-hook 'wdired-mode-hook 'my-wdired-mode-hook)
+        (defvar wdired-disabled-modes nil)
+
         (defadvice wdired-change-to-wdired-mode (before expand-view activate)
-          (my-wdired-mode-hook))
-        (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)
+          (setq-local wdired-disabled-modes '())
+          (--each wdired-forbidden-modes
+            (and (boundp it)
+                 (symbol-value it)
+                 (add-to-list 'wdired-disabled-modes it )
+                 (funcall it -1))))
 
-        ))
+        (defadvice wdired-change-to-dired-mode (after collapse-view activate)
+          (--each wdired-disabled-modes
+            (funcall it 1)))
+
+        (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)))
 
     (use-package dired-avfs
       :ensure t
