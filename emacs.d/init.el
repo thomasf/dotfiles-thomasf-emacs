@@ -3278,7 +3278,20 @@ for the current buffer's file name, and the line number at point."
 
     (use-package dired-ranger
       :ensure t
-      :commands (dired-ranger-copy dired-ranger-move dired-ranger-paste))
+      :commands (dired-ranger-copy dired-ranger-move dired-ranger-paste)
+      :init
+      (progn
+        (defvar dired-ranger-map)
+        (define-prefix-command 'dired-ranger-map)
+        (define-key dired-mode-map (kbd "r") dired-ranger-map)
+        (defun dired-ranger-show-ring ()
+          (interactive)
+          (describe-variable 'dired-ranger-copy-ring))
+        (bind-key "c" 'dired-ranger-copy dired-ranger-map)
+        (bind-key "C" 'dired-ranger-copy dired-ranger-map)
+        (bind-key "M" 'dired-ranger-move dired-ranger-map)
+        (bind-key "P" 'dired-ranger-paste dired-ranger-map)
+        (bind-key "<SPC>" 'dired-ranger-show-ring dired-ranger-map)))
 
     (use-package dired-filter
       :ensure t
