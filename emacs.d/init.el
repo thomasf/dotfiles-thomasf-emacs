@@ -3222,6 +3222,11 @@ for the current buffer's file name, and the line number at point."
       :ensure t
       :if (executable-find "mountavfs"))
 
+    (use-package dired-narrow
+      :ensure t
+      :commands (dired-narrow
+                 dired-narrow-regexp
+                 dired-narrow-fuzzy))
 
     (use-package dired-rainbow
       :ensure t
