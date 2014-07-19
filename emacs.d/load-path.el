@@ -41,8 +41,8 @@ This is just a copy of the fully expanded macro from dash."
 
 (defconst my-simplified-emacs-version-number
   (mapconcat 'identity (mapcar
-                        '(lambda (x)
-                           (number-to-string x))
+                        #'(lambda (x)
+                            (number-to-string x))
                         (load-path--take 3 (version-to-list emacs-version)))
              "."))
 
