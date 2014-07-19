@@ -112,7 +112,8 @@ This is just a copy of the fully expanded macro from dash."
         "/usr/local/share/emacs/site-lisp/mu4e/"
         "/opt/local/share/emacs/site-lisp/"
         "/usr/share/emacs/site-lisp/SuperCollider/"
-        "/usr/share/emacs/site-lisp/supercollider/")))
+        "/usr/share/emacs/site-lisp/supercollider/"
+        "/var/lib/gems/1.9.1/gems/trogdoro-el4r-1.0.10/data/emacs/site-lisp/")))
 
 (let ((cl-p load-path))
   (while cl-p
