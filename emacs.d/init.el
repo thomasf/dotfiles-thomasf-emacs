@@ -3225,7 +3225,7 @@ for the current buffer's file name, and the line number at point."
         (setq
          dired-omit-verbose nil
          dired-omit-files
-         "^\\.?#\\|^\\.\\(DS_Store\\|localized\\|AppleDouble\\|dropbox\\|dropbox\.cache\\)$\\|^\\.\\.$"
+         "^\\.?#\\|^\\.\\(DS_Store\\|localized\\|AppleDouble\\|dropbox\\|dropbox\.cache\\)$\\|org_archive$\\|^\\.\\.$"
          dired-omit-extensions completion-ignored-extensions)
         ;; (add-hook 'dired-mode-hook #'(lambda () (dired-omit-mode)))
         )
