@@ -6336,8 +6336,10 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
              ("categorized"
               ;; -------------------------------------------------
               ;; programming languages #1
+              ("elisp" (or
+                        (mode . emacs-lisp-mode)
+                        ))
               ("code" (or
-                       (mode . emacs-lisp-mode)
                        (mode . python-mode)
                        (mode . ruby-mode)
                        (mode . coffee-mode)
@@ -6347,43 +6349,58 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                        (mode . java-mode)
                        (mode . sh-mode)
                        (mode . haskell-mode)
+                       (mode . kivy-mode)
+                       ))
+              ;; -------------------------------------------------
+              ;; programming languages #1
+              ("css pre" (or
+                          (mode . scss-mode)
+                          (mode . sass-mode)
+                          (mode . stylus-mode)
+                          ))
+              ;; -------------------------------------------------
+              ;; programming languages #1
+              ("css" (or
+                      (mode . css-mode)
+                      ))
+              ;; -------------------------------------------------
+              ;; html and similar
+              ("html" (or
                        (mode . html-mode)
                        (mode . web-mode)
                        (mode . haml-mode)
-                       (mode . nxml-mode)
-                       (mode . kivy-mode)
-                       (mode . scss-mode)
-                       (mode . sass-mode)
-                       (mode . stylus-mode)
-                       (mode . css-mode)))
+                       ))
               ;; -------------------------------------------------
               ;; configuration/data files
-              ("conf" (or
-                       (mode . json-mode)
-                       (mode . yaml-mode)
-                       (mode . conf-mode)))
+              ("xml" (or
+                      (mode . nxml-mode)
+                      ))
               ;; -------------------------------------------------
               ;; text/notetaking/org
-              ("org agenda"  (mode . org-agenda-mode))
+              ("org agenda" (mode . org-agenda-mode))
               ("org" (or
                       (mode . org-mode)
                       (name . "^\\*Calendar\\*$")
-                      (name . "^diary$")))
+                      (name . "^diary$")
+                      ))
               ("text misc" (or
                             (mode . text-mode)
                             (mode . rst-mode)
-                            (mode . markdown-mode)))
+                            (mode . markdown-mode)
+                            ))
               ;; -------------------------------------------------
               ;; media
               ("media" (or
-                        (mode . image-mode)))
+                        (mode . image-mode)
+                        ))
               ;; -------------------------------------------------
               ;; misc
               ("w3m" (mode . w3m-mode))
               ("scm" (or
                       (mode . magit-status-mode)
                       (mode . magit-log-mode)
-                      (mode . vc-annotate-mode)))
+                      (mode . vc-annotate-mode)
+                      ))
               ("dired" (mode . dired-mode))
               ("help" (or
                        (mode . Info-mode)
@@ -6391,20 +6408,27 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                        (mode . Man-mode)
                        (name  . "^\\*frequencies\\*$")
                        (name . "^\\*Smex: Unbound Commands\\*$")
-                       (name . "^\\*Personal Keybindings\\*$")))
-              ("weechat" (mode . weechat-mode))
+                       (name . "^\\*Personal Keybindings\\*$")
+                       ))
+              ("weechat" (mode . weechat-mode)
+               )
               ;; -------------------------------------------------
               ;; *buffer* buffers
-              ("*kite*" (name . "^\\*kite.*\\*"))
-              ("MORE" (or (mode . magit-log-edit-mode)
-                             (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
-                             (name . "^\\*Pymacs\\*$")
-                             (name . "^\\*helm.*\\*")
-                             (name . "^\\*Compile-log\\*$")
-                             (name . "^\\*Ido Completions\\*$")
-                             (name . "^\\*magit-\\(process\\|commit\\)\\*$")
-                             (name . "^ ")))
-              ("*buffer*" (name . "\\*.*\\*"))))))
+              ("*kite*" (name . "^\\*kite.*\\*")
+               )
+              ("MORE" (or
+                       (mode . magit-log-edit-mode)
+                       (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
+                       (name . "^\\*Pymacs\\*$")
+                       (name . "^\\*helm.*\\*")
+                       (name . "^\\*Compile-log\\*$")
+                       (name . "^\\*Ido Completions\\*$")
+                       (name . "^\\*magit-\\(process\\|commit\\)\\*$")
+                       (name . "^ ")
+                       ))
+              ("*buffer*" (name . "\\*.*\\*")
+               )
+              ))))
     (add-hook 'ibuffer-mode-hook
               #'(lambda ()
                   (setq ibuffer-hidden-filter-groups '("MORE"))
