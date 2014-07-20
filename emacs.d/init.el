@@ -6988,6 +6988,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (sp-local-pair "<" ">")
       (sp-local-tag  "<" "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
+    (sp-with-modes '(markdown-mode)
+      (sp-local-pair "#" "#" :actions '(wrap))
+      (sp-local-pair "_" "_" :actions '(wrap))
+      (sp-local-pair "*" "*" :actions '(wrap)))
+
     (sp-with-modes '(org-mode)
       (sp-local-pair "=" "=" :actions '(wrap))
       (sp-local-pair "/" "/" :actions '(wrap))
