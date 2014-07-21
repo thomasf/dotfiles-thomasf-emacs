@@ -4949,7 +4949,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (unless degrade-p-minimalism
         (ispell-change-dictionary "english")
         (turn-on-flyspell)
-        (toggle-save-place 0)))
+        (toggle-save-place 0)
+        (git-commit-save-message)
+        (turn-on-auto-fill)))
     (add-hook 'git-commit-mode-hook 'my-git-commit-hook)
     (when (boundp 'session-mode-disable-list)
       (add-to-list 'session-mode-disable-list 'git-commit-mode))))
