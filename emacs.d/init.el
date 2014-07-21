@@ -2661,7 +2661,9 @@ for the current buffer's file name, and the line number at point."
        dir
        (lambda (dir)
          (--first
-          (if (string-match-p (expand-file-name it) (expand-file-name dir))
+          (if (and
+               (s-equals? (file-remote-p it) (file-remote-p dir))
+               (string-match-p (expand-file-name it) (expand-file-name dir)))
               dir)
           (or list projectile-project-root-files-child-of (list))))))
 
