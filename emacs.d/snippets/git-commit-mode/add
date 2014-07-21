@@ -1,0 +1,5 @@
+# name: Add
+# key: a
+# expand-env: ()
+# --
+Add $0

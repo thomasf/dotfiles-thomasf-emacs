@@ -1,6 +1,6 @@
 # name: remove
-# key: rem
+# key: r
 # binding: 
 # expand-env: ()
 # --
-remove 
+Remove $0
