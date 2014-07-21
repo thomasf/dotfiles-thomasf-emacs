@@ -2793,6 +2793,7 @@ for the current buffer's file name, and the line number at point."
   :commands download-region-as-url
   :init
   (setq download-region-max-downloads 5))
+
 ;;;; downplay-mode
 (use-package downplay-mode
   :ensure t
