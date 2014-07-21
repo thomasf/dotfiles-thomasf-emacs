@@ -2824,6 +2824,11 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.feature\'" . feature-mode)))
 
+;;;; git-timemachine
+(use-package git-timemachine
+  :ensure t
+  :commands git-timemachine)
+
 ;;;; helm-chrome-bookmarks
 (use-package helm-chrome
   :ensure t
