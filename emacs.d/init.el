@@ -949,6 +949,7 @@ buffer-local wherever it is set."
 (bind-key "<home>" 'beginning-of-line)
 (bind-key "<end>" 'end-of-line)
 (bind-key "C-h B" 'describe-personal-keybindings)
+(bind-key "C-h I" 'info)
 (bind-key "C-h s" (λ (switch-to-buffer "*scratch*")))
 (bind-key "C-?" 'undo)
 (bind-key "C-_" 'redo)
@@ -6004,7 +6005,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (use-package helm-imenu
       :bind (("M-o M-i" . helm-imenu)
-             ("<f8>" . helm-imenu)))
+             ("<f8>" . helm-imenu)
+             ("C-h i" . helm-imenu)))
 
     (use-package helm-descbinds
       :ensure t
