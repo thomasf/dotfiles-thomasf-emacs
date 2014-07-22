@@ -3960,6 +3960,8 @@ Argument FILENAME File to insert."
 
     (setq
      org-src-fontify-natively t
+     org-src-preserve-indentation t
+     org-adapt-indentation nil
      org-contacts-files (list (f-expand
                                "agenda/contacts.org"
                                user-notes-directory))
