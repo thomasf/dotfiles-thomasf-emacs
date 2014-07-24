@@ -956,11 +956,20 @@ buffer-local wherever it is set."
 (bind-key* "C-." 'undo) ;; NOTE this does not work in terminals
 (bind-key* "C-," 'redo) ;; NOTE this does not work in terminals
 
+(bind-key "<f5>" (λ (jump-to-register ?5)))
+(bind-key "C-<f5>" (λ (window-configuration-to-register ?5)))
+(bind-key "<f6>" (λ (jump-to-register ?6)))
+(bind-key "C-<f6>" (λ (window-configuration-to-register ?6)))
+(bind-key "<f7>" (λ (jump-to-register ?7)))
+(bind-key "C-<f7>" (λ (window-configuration-to-register ?7)))
+(bind-key "<f8>" (λ (jump-to-register ?8)))
+(bind-key "C-<f8>" (λ (window-configuration-to-register ?8)))
+
 ;; (bind-key "<f9>" 'previous-buffer)
 ;; (bind-key "<f10>" 'next-buffer)
 ;; (bind-key "<f11>" 'switch-to-buffer)
 (bind-key "<f12>" 'ibuffer)
-(bind-key "<f5>" 'ibuffer)
+;; (bind-key "<f5>" 'ibuffer)
 (bind-key "C-H-n" 'forward-paragraph)
 (bind-key "C-H-p" 'backward-paragraph)
 (bind-key "M-H-n" 'next-error)
@@ -5974,9 +5983,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ("C-h a" . helm-c-apropos)
          ("M-s b" . helm-occur)
          ;; ("C-x f h" . helm-for-files)
-         ("<f7>" . helm-for-files)
+         ;; ("<f7>" . helm-for-files)
          ("C-x f r" . helm-recentf)
-         ("<f6>" . helm-recentf)
+         ;; ("<f6>" . helm-recentf)
          ("C-x f L" . helm-locate))
   :init
   (progn
@@ -6005,7 +6014,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (use-package helm-imenu
       :bind (("M-o M-i" . helm-imenu)
-             ("<f8>" . helm-imenu)
+             ;; ("<f8>" . helm-imenu)
              ("C-h i" . helm-imenu)))
 
     (use-package helm-descbinds
@@ -7391,6 +7400,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (noflet ((winring-next-name nil "default"))
       (winring-initialize))))
+
 ;;;; workgroups2
 (use-package workgroups2
   :ensure t
