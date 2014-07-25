@@ -9289,10 +9289,16 @@ if submodules exists, grep submodules too."
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
+  :commands (point-undo point-redo)
   :bind (("M-u" . point-undo))
   :init
   (progn
     (define-key region-bindings-mode-map "u" 'point-undo)
+    (smartrep-define-key
+        global-map
+        "C-c"
+      '(("u" . point-undo)
+        ("r" . point-redo)))
     (require 'point-undo)))
 
 ;;;; image-mode
