@@ -1296,12 +1296,14 @@ buffer-local wherever it is set."
   "Save-some-buffers, then other frame."
   (interactive)
   (call-interactively 'other-frame)
+  (nav-flash-show)
   (silent-save-some-buffers))
 
 (defun save-some-buffers-other-window ()
   "Save-some-buffers, then other window."
   (interactive)
   (call-interactively 'other-window)
+  (nav-flash-show)
   (silent-save-some-buffers))
 
 ;;;; touch-file
@@ -2538,7 +2540,6 @@ Otherwise, get the symbol at point, as a string."
 
 (global-set-key (kbd "C-x $") 'inc-selective-display)
 
-
 (defun buffer-line-position ()
   "Current position formatted as file-name:line-number"
   (format "%s:%d" (buffer-file-name) (line-number-at-pos)))
@@ -2610,6 +2611,35 @@ for the current buffer's file name, and the line number at point."
   (save-restriction
     (narrow-to-defun)
     (nav-flash-show (point-min) (point-max))))
+
+(defun recenter-top-bottom-flash ()
+  (interactive)
+  (call-interactively 'recenter-top-bottom)
+  (nav-flash-show))
+
+(bind-key "C-l" 'recenter-top-bottom-flash)
+
+
+(defun move-to-window-line-top-bottom-flash ()
+  (interactive)
+  (call-interactively 'move-to-window-line-top-bottom)
+  (nav-flash-show))
+
+(bind-key "M-r" 'move-to-window-line-top-bottom-flash)
+
+(defun scroll-up-command-flash ()
+  (interactive)
+  (call-interactively 'scroll-up-command)
+  (nav-flash-show))
+
+(bind-key "M-v" 'scroll-down-command-flash)
+
+(defun scroll-down-command-flash ()
+  (interactive)
+  (call-interactively 'scroll-down-command)
+  (nav-flash-show))
+
+(bind-key "C-v" 'scroll-up-command-flash)
 
 
 (defun hsadmin-magit ()
@@ -3723,8 +3753,14 @@ If FILE already exists, signal an error."
 ;;;; goto-chg
 (use-package goto-chg
   ;; :ensure t
-  :commands goto-last-change
-  :bind ("C-c C-SPC" . goto-last-change))
+  :commands (goto-last-change goto-last-change-flash)
+  :bind ("C-c C-SPC" . goto-last-change-flash)
+  :config
+  (progn
+    (defun goto-last-change-flash ()
+      (interactive)
+      (call-interactively 'goto-last-change)
+      (nav-flash-show))))
 
 ;;;; unbound
 (use-package unbound
