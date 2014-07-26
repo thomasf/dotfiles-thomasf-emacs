@@ -4837,7 +4837,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (if (looking-back "/")
           (insert
            (if (looking-back "~/")
-               "//g" "~/"))
+               "//" "~/"))
         (call-interactively 'self-insert-command)))
 
         (defun ido-smart-select-text ()
