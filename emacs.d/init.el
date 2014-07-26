@@ -955,15 +955,18 @@ buffer-local wherever it is set."
 (bind-key "C-_" 'redo)
 (bind-key* "C-." 'undo) ;; NOTE this does not work in terminals
 (bind-key* "C-," 'redo) ;; NOTE this does not work in terminals
-
 (bind-key "<f5>" (λ (jump-to-register ?5)))
-(bind-key "C-<f5>" (λ (window-configuration-to-register ?5)))
 (bind-key "<f6>" (λ (jump-to-register ?6)))
-(bind-key "C-<f6>" (λ (window-configuration-to-register ?6)))
 (bind-key "<f7>" (λ (jump-to-register ?7)))
-(bind-key "C-<f7>" (λ (window-configuration-to-register ?7)))
 (bind-key "<f8>" (λ (jump-to-register ?8)))
+(bind-key "C-<f5>" (λ (window-configuration-to-register ?5)))
+(bind-key "C-<f6>" (λ (window-configuration-to-register ?6)))
+(bind-key "C-<f7>" (λ (window-configuration-to-register ?7)))
 (bind-key "C-<f8>" (λ (window-configuration-to-register ?8)))
+(bind-key "S-<f5>" (λ (window-configuration-to-register ?5)))
+(bind-key "S-<f6>" (λ (window-configuration-to-register ?6)))
+(bind-key "S-<f7>" (λ (window-configuration-to-register ?7)))
+(bind-key "S-<f8>" (λ (window-configuration-to-register ?8)))
 
 ;; (bind-key "<f9>" 'previous-buffer)
 ;; (bind-key "<f10>" 'next-buffer)
