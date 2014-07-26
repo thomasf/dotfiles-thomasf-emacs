@@ -3457,7 +3457,9 @@ for the current buffer's file name, and the line number at point."
 
     (defun my-dired-goto-home ()
       (interactive)
-      (dired "~/"))
+      (dired
+       (if (f-same? (dired-current-directory) "~/")
+           "/" "~/")))
 
     (bind-key "~" 'my-dired-goto-home dired-mode-map)
     (bind-key "." 'dired-up-directory dired-mode-map)
@@ -4830,7 +4832,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (defun my-ido-goto-home ()
       (interactive)
       (if (looking-back "/")
-          (insert "~/")
+          (insert
+           (if (looking-back "~/")
+               "//g" "~/"))
         (call-interactively 'self-insert-command)))
 
         (defun ido-smart-select-text ()
