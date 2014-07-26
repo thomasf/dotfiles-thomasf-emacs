@@ -231,6 +231,7 @@
         shell
         smex
         undo-tree-visualize
+        wdired-finish-edit
         wgrep-change-to-wgrep-mode
         wgrep-finish-edit
         wgrep-save-all-buffers
