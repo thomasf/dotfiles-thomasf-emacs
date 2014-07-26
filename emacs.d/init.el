@@ -3102,6 +3102,13 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands rainbow-blocks-mode)
 
+;;;; shr
+(use-package shr
+  :defer t
+  :init
+  (progn
+    (setq shr-external-browser 'browse-url-generic)))
+
 ;;;; shift-text
 (use-package shift-text
   :ensure t
