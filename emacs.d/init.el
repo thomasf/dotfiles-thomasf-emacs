@@ -2884,8 +2884,10 @@ for the current buffer's file name, and the line number at point."
   :init
   (progn
     ;; (define-key region-bindings-mode-map "d" 'helm-dash-at-point)
+    (when (fboundp 'eww)
+      (setq helm-dash-browser-func 'eww))
     (setq helm-dash-docsets-path (format "%s/.local/share/zeal/docsets"
-                 (getenv "HOME"))
+                                         (getenv "HOME"))
           helm-dash-common-docsets
           '("BackboneJS" "Bootstrap_2" "Bootstrap_3" "Clojure" "CoffeeScript"
             "Django" "Emacs_Lisp" "Foundation" "HTML" "JavaScript" "Lo-Dash"
