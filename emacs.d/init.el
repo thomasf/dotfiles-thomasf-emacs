@@ -2858,6 +2858,13 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands (eval-sexp-fu-flash-mode))
 
+;;;; eww
+(use-package eww
+  :defer t
+  :init
+  (progn
+    (setq eww-search-prefix "http://google.com/search?q=")))
+
 ;;;; fancy-narrow
 (use-package fancy-narrow
   :ensure t
