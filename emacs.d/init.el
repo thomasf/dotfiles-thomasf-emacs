@@ -2897,15 +2897,98 @@ for the current buffer's file name, and the line number at point."
     ;; (define-key region-bindings-mode-map "d" 'helm-dash-at-point)
     (when (fboundp 'eww)
       (setq helm-dash-browser-func 'eww))
-    (setq helm-dash-docsets-path (format "%s/.local/share/zeal/docsets"
-                                         (getenv "HOME"))
-          helm-dash-common-docsets
-          '("BackboneJS" "Bootstrap_2" "Bootstrap_3" "Clojure" "CoffeeScript"
-            "Django" "Emacs_Lisp" "Foundation" "HTML" "JavaScript" "Lo-Dash"
-            "PostgreSQL" "Python_2" "Python_3" "SQLite" "Sass" "UnderscoreJS"
-            "jQuery" "CSS" "D3JS" "Flask" "Processing" "NodeJS" "Vagrant"
-            "jQuery_Mobile" "jQuery_UI" "Nginx" "Markdown" "Twisted" "ZeptoJS"
-            "SVG" "Bash" "Go" "MySQL" "XSLT"))))
+    (when (eq system-type 'gnu/linux)
+      (setq helm-dash-docsets-path (format "%s/.local/share/zeal/docsets"
+                                           (getenv "HOME"))))
+
+        (setq helm-dash-ensure-docsets
+              '(
+                "Android"
+                "Appcelerator Titanium"
+                "BackboneJS"
+                "Bash"
+                "Bootstrap_2"
+                "Bootstrap_3"
+                "C++"
+                "CSS"
+                "Clojure"
+                "CoffeeScript"
+                "D3JS"
+                "Django"
+                "Emacs_Lisp"
+                "Flask"
+                "Foundation"
+                "Go"
+                "HTML"
+                "JavaScript"
+                "Lo-Dash"
+                "Markdown"
+                "MySQL"
+                "Nginx"
+                "NodeJS"
+                "PostgreSQL"
+                "Processing"
+                "Python_2"
+                "Python_3"
+                "SQLite"
+                "SVG"
+                "Sass"
+                "Twisted"
+                "UnderscoreJS"
+                "Vagrant"
+                "XSLT"
+                "ZeptoJS"
+                "jQuery"
+                "jQuery_Mobile"
+                "jQuery_UI"
+            ))
+
+        (setq helm-dash-common-docsets
+              '(
+                ;; "Bootstrap_3"
+                "CSS"
+                ;; "Clojure"
+                "CoffeeScript"
+                ;; "D3JS"
+                "Django"
+                ;; "Flask"
+                ;; "Foundation"
+                "Go"
+                "HTML"
+                "JavaScript"
+                "Lo-Dash"
+                "Markdown"
+                "MomentJS"
+                "Nginx"
+                "NodeJS"
+                "PostgreSQL"
+                ;; "Processing"
+                "Python_2"
+                "SQLite"
+                "SVG"
+                "Sass"
+                ;; "Twisted"
+                ;; "Vagrant"
+                ;; "ZeptoJS"
+                "jQuery"
+                "BackboneJS"
+             )))
+  :config
+  (progn
+    (defun helm-dash-install-all-docsets ()
+      (interactive)
+
+      (when (yes-or-no-p "Install all docsets?")
+        (let ((reinstall (yes-or-no-p "Reinstall/Update all?"))
+              (wanted-docsets  (-uniq (-concat helm-dash-ensure-docsets helm-dash-common-docsets)))
+              (installed-docsets (helm-dash-installed-docsets)))
+
+          (--each wanted-docsets
+            (message "will install %s" it)
+            (if (-contains? installed-docsets it)
+                (if reinstall
+                    (helm-dash-install-docset it))
+              (helm-dash-install-docset it))))))))
 
 ;;;; helm-package
 (use-package helm-package
