@@ -1458,6 +1458,7 @@ buffer-local wherever it is set."
                    magit-status-mode-hook
                    vc-annotate-mode-hook
                    pt-search-mode-hook
+                   grep-mode-hook
                    direx:direx-mode-hook
                    debugger-mode-hook))
 
