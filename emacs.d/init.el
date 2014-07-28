@@ -364,6 +364,7 @@ buffer-local wherever it is set."
 (defvar my-css-like-mode-hooks
   '(css-mode-hook
     stylus-mode-hook
+    scss-mode-hook
     sass-mode-hook))
 
 
@@ -4483,14 +4484,17 @@ otherwise use the subtree title."
     (hook-into-modes #'(lambda () (auto-complete-mode 1)) '(ein:notebook-mode-hook))
 
     (setq-default ac-sources '(ac-source-yasnippet
-                               ac-source-abbrev ac-source-dictionary
+                               ac-source-abbrev
+                               ac-source-dictionary
                                ac-source-words-in-buffer))
 
     (hook-into-modes
      #'(lambda ()
          (setq ac-sources
-               '(ac-source-css-property ac-source-dictionary
-                                        ac-source-words-in-buffer)))
+               '(ac-source-yasnippet
+                 ac-source-css-property
+                 ac-source-dictionary
+                 ac-source-words-in-buffer)))
      my-css-like-mode-hooks)
 
     (add-hook
@@ -4545,12 +4549,12 @@ otherwise use the subtree title."
               'set-auto-complete-as-completion-at-point-function)
 
     (dolist
-        (mode '(magit-log-edit-mode
-                log-edit-mode haml-mode sass-mode yaml-mode csv-mode
-                espresso-mode haskell-mode
-                html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                lisp-mode textile-mode markdown-mode tuareg-mode
-                css-mode less-css-mode coffee-mode stylus-mode json-mode))
+        (mode '(clojure-mode coffee-mode css-mode csv-mode
+                espresso-mode fmagit-log-edit-mode haml-mode
+                haskell-mode html-mode json-mode less-css-mode
+                lisp-mode log-edit-mode markdown-mode nxml-mode
+                sass-mode scss-mode sh-mode smarty-mode
+                stylus-mode textile-mode tuareg-mode yaml-mode))
 
       (add-to-list 'ac-modes mode))
 
@@ -5881,9 +5885,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (hook-into-modes #'yas-minor-mode-on
                      '(org-mode-hook
                        git-commit-mode-hook))
-
     (hook-into-modes #'yas-minor-mode-on my-prog-mode-hooks)
-    (add-hook 'org-mode-hook 'yas-minor-mode-on)
+    (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks)
+
     (use-package autoinsert
       :if (not degrade-p-noninteractive)
       :defer t
