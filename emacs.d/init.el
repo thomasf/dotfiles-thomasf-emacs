@@ -2144,6 +2144,23 @@ sTo this: ")
      ((equal 1 (point))
       (message "beginning of file reached, this was probably a mistake.")))))
 
+;;;; sort-words
+(defun sort-words (reverse beg end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+    Prefixed with negative \\[universal-argument], sorts in reverse.
+
+    The variable `sort-fold-case' determines whether alphabetic case
+    affects the sort order.
+
+    See `sort-regexp-fields'."
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\w+" "\\&" beg end))
+;;;; sort-symbols
+(defun sort-symbols (reverse beg end)
+  "Sort symbols in region alphabetically, in REVERSE if negative.
+    See `sort-words'."
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\(\\sw\\|\\s_\\)+" "\\&" beg end))
 ;;; functions: MISC
 ;;;; cycle ispell languages
 ;; Languages for spellinc cycling
