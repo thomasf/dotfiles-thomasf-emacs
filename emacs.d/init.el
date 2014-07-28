@@ -1928,6 +1928,17 @@ Then move to that line and indent accordning to mode"
   (save-excursion
     (join-line -1)))
 
+;;;; join-region
+(defun join-region (beg end)
+  "Apply join-line over region."
+  (interactive "r")
+  (if mark-active
+      (let ((beg (region-beginning))
+            (end (copy-marker (region-end))))
+        (goto-char beg)
+        (while (< (point) end)
+          (join-line 1)))))
+
 ;;;; character coding conversion
 (defun has-revisit-file-with-coding-windows-1252 ()
   "Re-opens currently visited file with the windows-1252 coding. (By: hassansrc at gmail dot com)
