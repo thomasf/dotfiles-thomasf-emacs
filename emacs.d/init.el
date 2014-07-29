@@ -5281,7 +5281,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
        ("*Help*" :stick t)
        (help-mode :noselect t)
        ("*Ido Completions*" :noselect t :position bottom)
-       (direx:direx-mode :position left :width .2 :dedicated t)
+       (direx:direx-mode :position left :width .25 :dedicated t)
        ("*Messages*" :height .20)
        ("*Pp Macroexpand Output*" :noselect t)
        "*Personal Keybindings*"
