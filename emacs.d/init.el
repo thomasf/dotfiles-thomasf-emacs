@@ -3394,7 +3394,18 @@ for the current buffer's file name, and the line number at point."
       :init
       (progn
         (setq image-dired-dir (expand-file-name
-                               "image-dired" user-cache-directory))))
+                               "image-dired" user-cache-directory)
+              image-dired-thumb-margin 12
+              image-dired-thumb-relief 0
+              image-dired-thumb-width 200))
+      :config
+      (progn
+        (bind-keys
+         :map image-dired-thumbnail-mode-map
+         ("n" . image-dired-forward-image)
+         ("p" . image-dired-backward-image)
+         ("f" . image-dired-forward-image)
+         ("b" . image-dired-backward-image))))
     (use-package dired-x
       :commands (dired-do-find-marked-files
                  dired-omit-mode)
