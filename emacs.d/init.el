@@ -9504,7 +9504,11 @@ drag the viewpoint on the image buffer that the window displays."
                   (setq x-offset (window-hscroll (car now-posn)))
                   (setq y-offset (window-vscroll (car now-posn) t))))))))
     (bind-key "<down-mouse-3>" 'image-mouse-scroll-position image-mode-map)
-    (bind-key "<down-mouse-1>" 'image-mouse-scroll-position image-mode-map)))
+    (bind-key "<down-mouse-1>" 'image-mouse-scroll-position image-mode-map)
+    (defun image-dired-here ()
+      (interactive)
+      (image-dired default-directory))
+    (bind-key "d" 'image-dired-here  image-mode-map)))
 
 ;;;; mouse-drag
 (use-package mouse-drag
