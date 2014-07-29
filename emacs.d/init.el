@@ -9862,7 +9862,18 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; eimp-mode
 (use-package eimp
   :ensure t
-  :commands eimp-mode)
+  :commands (eimp-mode eimp-fit-image-to-window)
+  :config
+  (progn
+    (use-package image-mode
+      :defer t
+      :config
+      (progn
+        (defadvice eimp-mogrify-process-sentinel (around do-not-set-modified activate)
+          (with-buffer-modified-unmodified
+           ad-do-it
+           ))
+        (bind-key "h" 'eimp-fit-image-to-window image-mode-map)))))
 
 ;;;; zeal-at-point
 (use-package zeal-at-point
