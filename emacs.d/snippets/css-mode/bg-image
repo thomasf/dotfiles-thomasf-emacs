@@ -1,4 +1,4 @@
 # name: background-image: ...
 # key: bi
 # --
-background-image: url($1);
+background-image: $0;

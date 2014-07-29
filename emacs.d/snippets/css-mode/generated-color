@@ -1,0 +1,6 @@
+# name: generate (hsla) color.
+# key: gc
+# binding: 
+# expand-env: ()
+# --
+hsla(`(format "%s, %s%%, %s%%, %s" (random 360) (+ 50 (random 10)) 50 0.75)`)
