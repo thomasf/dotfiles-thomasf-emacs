@@ -9874,16 +9874,25 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package eimp
   :ensure t
   :commands (eimp-mode eimp-fit-image-to-window)
-  :config
+  :init
   (progn
+
+    (defmacro eimp-with-buffer-modified-unmodified (&rest body)
+      "Run BODY while preserving the buffer's `buffer-modified-p' state."
+      (let ((was-modified (make-symbol "was-modified")))
+        `(let ((,was-modified (buffer-modified-p)))
+           (unwind-protect
+               (progn ,@body)
+             (set-buffer-modified-p ,was-modified)))))
+
+    (defadvice eimp-mogrify-process-sentinel (around do-not-set-modified activate)
+      (eimp-with-buffer-modified-unmodified
+       ad-do-it
+       ))
     (use-package image-mode
       :defer t
       :config
       (progn
-        (defadvice eimp-mogrify-process-sentinel (around do-not-set-modified activate)
-          (with-buffer-modified-unmodified
-           ad-do-it
-           ))
         (bind-key "h" 'eimp-fit-image-to-window image-mode-map)))))
 
 ;;;; zeal-at-point
