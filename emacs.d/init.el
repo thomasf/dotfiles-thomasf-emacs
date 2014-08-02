@@ -5494,13 +5494,15 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (setq
+     ahs-face-check-include-overlay t
      ahs-inhibit-face-list
      '(font-lock-comment-delimiter-face
        font-lock-comment-face
        font-lock-doc-face
        font-lock-doc-string-face
        font-lock-string-face
-       font-lock-keyword-face)
+       font-lock-keyword-face
+       region)
      ahs-idle-interval 1.1)
     (hook-into-modes #'auto-highlight-symbol-mode
                      my-prog-mode-hooks)))
