@@ -9634,6 +9634,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 ;;;; outshine
 (use-package outshine
+  :disabled t
   :ensure t
   :commands outshine-hook-function
   :diminish ""
