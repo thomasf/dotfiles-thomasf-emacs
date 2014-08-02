@@ -1031,6 +1031,10 @@ buffer-local wherever it is set."
 (bind-key "C-r"  'isearch-backward-regexp)
 (bind-key "C-M-s"  'isearch-forward)
 (bind-key "C-M-r"  'isearch-backward)
+(global-set-key (kbd "C-x C-1") 'delete-other-windows)
+(global-set-key (kbd "C-x C-2") 'split-window-below)
+(global-set-key (kbd "C-x C-3") 'split-window-right)
+(global-set-key (kbd "C-x C-0") 'delete-window)
 
 
 ;;; functions: buffers
@@ -1622,6 +1626,40 @@ buffer-local wherever it is set."
 (defun wash-out-faces ()
   (interactive)
   (wash-out-fontlock-faces 0.9))
+
+;;;;; cursor-style
+
+(defun cursor-style-update-action  ()
+  (when (bound-and-true-p cua-normal-cursor-color)
+    (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
+           (cursor-style (cond
+                          ((bound-and-true-p region-bindings-mode) (cons "#d33682" 'box))
+                          ((bound-and-true-p god-local-mode) (cons "#cb4b16" 'box))
+                          ((bound-and-true-p buffer-read-only) (cons "#2aa198" 'box))
+                          (t (cons cua-normal-cursor-color my-normal-cursor-type)))))
+      (unless (equal (car cursor-style) current-cursor-color)
+        (set-cursor-color (car cursor-style)))
+      (unless (equal (cdr cursor-style) cursor-type)
+        (setq cursor-type (cdr cursor-style))))))
+
+
+
+(defun cursor-style-update  ()
+  (run-with-idle-timer 0.2 nil 'cursor-style-update-action))
+
+(hook-into-modes 'cursor-style-update
+                 '(activate-mark-hook
+                   deactivate-mark-hook
+                   region-bindings-mode-hook
+                   window-configuration-change-hook
+                   minibuffer-setup-hook
+                   minibuffer-exit-hook
+                   god-mode-enabled-hook
+                   god-mode-disabled-hook
+                   god-local-mode-hook
+                   read-only-mode-hook
+                   after-change-major-mode-hook
+                   ))
 
 ;;; functions: windows / frames
 ;;;; windows
@@ -3147,31 +3185,7 @@ for the current buffer's file name, and the line number at point."
     (define-key region-bindings-mode-map "s" search-map))
 
 
-  (defun region-bindings-mode-cursor-update-action  ()
-    (when (bound-and-true-p cua-normal-cursor-color)
-      (if region-bindings-mode
-          (progn
-            (unless
-                (equal "#d33682"
-                       (cdr (assq 'cursor-color (frame-parameters))))
-              (set-cursor-color "#d33682"))
-            (setq cursor-type 'box))
-        (unless
-            (equal cua-normal-cursor-color
-                   (cdr (assq 'cursor-color (frame-parameters))))
-          (set-cursor-color cua-normal-cursor-color))
-        (setq cursor-type my-normal-cursor-type))))
-
-   (defun region-bindings-mode-cursor-update  ()
-    (run-with-idle-timer 0.1 nil 'region-bindings-mode-cursor-update-action))
-
-  (hook-into-modes 'region-bindings-mode-cursor-update
-                   '(activate-mark-hook
-                     deactivate-mark-hook
-                     region-bindings-mode-hook
-                     window-configuration-change-hook
-                     minibuffer-setup-hook
-                     minibuffer-exit-hook)))
+  )
 
 ;;;; rings
 (use-package rings
@@ -6269,6 +6283,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
   :defer t
   :bind (("C-x b n" . ibuffer)
          ("C-h h" . ibuffer)
+         ("C-h C-h" . ibuffer)
          ("<XF86Search>" . ibuffer)
          )
   :init
@@ -8840,7 +8855,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; find-file
 (use-package find-file
   :defer t
-  :bind (("C-h C-h" . cc-other-file))
+  :bind (("C-h C-o" . cc-other-file))
   :init
   (progn
     (defun cc-other-file()
@@ -9550,28 +9565,22 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; god-mode
 (use-package god-mode
   :ensure t
-  :commands (god-mode god-mode-all god-local-mode)
+  :commands (god-mode god-mode-all god-local-mode
+                      god-local-mode-resume god-local-mode-pause)
+  :init
+  (progn
+    (global-set-key (kbd "<escape>") 'god-mode-all))
   :config
   (progn
-    (global-set-key (kbd "<escape>") 'god-mode-all)
-
+    (defun god-toggle-on-region-bindings-mode ()
+      "Toggle god-mode on region-bindings-mode."
+      (if (bound-and-true-p region-bindings-mode)
+          (god-local-mode-pause)
+        (god-local-mode-resume)))
+    (add-hook 'region-bindings-mode-hook 'god-toggle-on-region-bindings-mode)
     (define-key god-local-mode-map (kbd "z") 'repeat)
-
-    ;; ;; TODO does not mix well with other color chagers
-    ;; (defvar god-mode-cursor-color-backup nil)
-    ;; (defvar god-mode-cursor-active nil)
-    ;; (add-hook 'god-mode-disabled-hook
-    ;;           (lambda ()
-    ;;             (when god-mode-cursor-active
-    ;;               (setq god-mode-cursor-active nil)
-    ;;               (set-cursor-color god-mode-cursor-color-backup))))
-    ;; (add-hook 'god-mode-enabled-hook
-    ;;           (lambda ()
-    ;;             (unless god-mode-cursor-active
-    ;;               (setq god-mode-cursor-active t
-    ;;                     god-mode-cursor-color-backup (frame-parameter
-    ;;                                                   nil 'cursor-color))
-    ;;               (set-cursor-color "#268bd2"))))
+    ;; (define-key god-local-mode-map (kbd "i") 'god-local-mode)
+    (define-key god-local-mode-map (kbd "i") 'god-mode-all)
     ))
 
 ;;;; key-combo
