@@ -1629,13 +1629,13 @@ buffer-local wherever it is set."
 
 ;;;;; cursor-style
 
-(defun cursor-style-update-action  ()
+(defun cursor-style-update-action ()
   (when (bound-and-true-p cua-normal-cursor-color)
     (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
            (cursor-style (cond
-                          ((bound-and-true-p region-bindings-mode) (cons "#d33682" 'box))
-                          ((bound-and-true-p god-local-mode) (cons "#cb4b16" 'box))
-                          ((bound-and-true-p buffer-read-only) (cons "#2aa198" 'box))
+                          ((bound-and-true-p region-bindings-mode) (cons "#d33682" '(bar . 8)))
+                          ((bound-and-true-p god-local-mode) (cons "#268bd2" 'box))
+                          ((bound-and-true-p buffer-read-only) (cons "#859900" '(hbar . 4)))
                           (t (cons cua-normal-cursor-color my-normal-cursor-type)))))
       (unless (equal (car cursor-style) current-cursor-color)
         (set-cursor-color (car cursor-style)))
