@@ -4070,9 +4070,8 @@ If FILE already exists, signal an error."
   (progn
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
-    (setq org-modules
-          '(org-bibtex org-bbdb org-docview org-id org-info org-jsinfo org-habit
-                       org-w3m org-man))
+    (setq org-modules '(org-bbdb org-bibtex org-docview org-habit
+          org-id org-info org-man org-w3m))
     ;; org-git-link
     ;; (require 'ox-reveal)
     (use-package ox-reveal
