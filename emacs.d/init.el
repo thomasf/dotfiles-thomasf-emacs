@@ -3057,6 +3057,13 @@ for the current buffer's file name, and the line number at point."
                     (helm-dash-install-docset it))
               (helm-dash-install-docset it))))))))
 
+(use-package helm-go-package
+  :ensure t
+  :commands helm-go-package
+  :config
+  (progn
+    (use-package helm)))
+
 ;;;; helm-package
 (use-package helm-package
   :ensure t
