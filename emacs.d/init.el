@@ -4842,7 +4842,12 @@ See URL `https://pypi.python.org/pypi/flake8'."
 ;;;; go-mode
 (use-package go-mode
   :ensure t
-  :mode "\\.go\\'")
+  :mode "\\.go\\'"
+  :config
+  (progn
+    (bind-key "M-." 'godef-jump go-mode-map)
+    (use-package auto-complete)
+    (use-package go-autocomplete)))
 
 ;;;; slim-mode
 (use-package slim-mode
