@@ -1,0 +1,6 @@
+# name: Set
+# key: s
+# binding: 
+# expand-env: ()
+# --
+Set $0
