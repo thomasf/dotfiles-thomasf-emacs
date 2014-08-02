@@ -8403,7 +8403,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (setq git-gutter:verbosity 0
-          git-gutter:disabled-modes '(org-mode dired-mode wdired-mode))
+          git-gutter:disabled-modes
+          '(org-mode dired-mode wdired-mode ielm-mode))
     (when window-system
       (let ((symbol (char-to-string (if (char-displayable-p ?×) ?× ?*))))
         (setq git-gutter:added-sign symbol
