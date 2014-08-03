@@ -5509,7 +5509,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
        font-lock-doc-string-face
        font-lock-string-face
        font-lock-keyword-face
-       region)
+       region
+       loccur-custom-buffer-grep)
      ahs-idle-interval 1.1)
     (hook-into-modes #'auto-highlight-symbol-mode
                      my-prog-mode-hooks)))
