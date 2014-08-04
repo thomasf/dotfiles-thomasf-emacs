@@ -157,6 +157,7 @@
         shift-text-left
         shift-text-right
         shift-text-up
+        simpleclip-copy
         simpleclip-paste
         skeleton-pair-insert-maybe
         slime-space

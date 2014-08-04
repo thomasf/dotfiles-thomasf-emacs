@@ -704,9 +704,10 @@ buffer-local wherever it is set."
   (progn
     (defun my-semantic-setup ()
       (semantic-mode)
-      (semantic-idle-scheduler-mode)
+      ;; (semantic-idle-scheduler-mode)
       ;; (semantic-decoration-mode)
-      (semantic-idle-breadcrumbs-mode))))
+      ;; (semantic-idle-breadcrumbs-mode)
+      )))
 
 ;;;; bookmark
 (setq
@@ -1635,7 +1636,7 @@ buffer-local wherever it is set."
            (cursor-style (cond
                           ((bound-and-true-p region-bindings-mode) (cons "#d33682" '(bar . 8)))
                           ((bound-and-true-p god-local-mode) (cons "#268bd2" 'box))
-                          ((bound-and-true-p buffer-read-only) (cons "#859900" '(hbar . 4)))
+                          ((bound-and-true-p buffer-read-only) (cons cua-normal-cursor-color '(hbar . 6)))
                           (t (cons cua-normal-cursor-color my-normal-cursor-type)))))
       (unless (equal (car cursor-style) current-cursor-color)
         (set-cursor-color (car cursor-style)))
@@ -1644,8 +1645,14 @@ buffer-local wherever it is set."
 
 
 
-(defun cursor-style-update  ()
-  (run-with-idle-timer 0.2 nil 'cursor-style-update-action))
+
+
+(defvar cursor-style-timer nil)
+(defun cursor-style-update ()
+  (when cursor-style-timer
+    (cancel-timer cursor-style-timer))
+  (setq cursor-style-timer
+        (run-with-idle-timer 0.2 nil 'cursor-style-update-action)))
 
 (hook-into-modes 'cursor-style-update
                  '(activate-mark-hook
@@ -1659,6 +1666,8 @@ buffer-local wherever it is set."
                    god-local-mode-hook
                    read-only-mode-hook
                    after-change-major-mode-hook
+                   focus-in-hook
+                   focus-out-hook
                    ))
 
 ;;; functions: windows / frames
@@ -2683,13 +2692,32 @@ for the current buffer's file name, and the line number at point."
     (narrow-to-defun)
     (nav-flash-show (point-min) (point-max))))
 
+(defvar nav-flash-show-soon-timer nil)
+(defun nav-flash-show-soon-cancel-timer ()
+  (when nav-flash-show-soon-timer
+    (cancel-timer nav-flash-show-soon-timer)
+    (setq nav-flash-show-soon nil)
+    ))
+
+(defun nav-flash-show-soon (&optional later)
+  (nav-flash-show-soon-cancel-timer)
+  (setq nav-flash-show-soon-timer
+        (run-with-timer (if later 0.4 0.25) nil
+                             '(lambda ()
+                                (nav-flash-show)))))
+(defun nav-flash-show-later ()
+  (nav-flash-show-soon t))
+
+(add-hook 'focus-in-hook 'nav-flash-show-later)
+(add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
+
+
 (defun recenter-top-bottom-flash ()
   (interactive)
   (call-interactively 'recenter-top-bottom)
   (nav-flash-show))
 
 (bind-key "C-l" 'recenter-top-bottom-flash)
-
 
 (defun move-to-window-line-top-bottom-flash ()
   (interactive)
@@ -2701,14 +2729,14 @@ for the current buffer's file name, and the line number at point."
 (defun scroll-up-command-flash ()
   (interactive)
   (call-interactively 'scroll-up-command)
-  (nav-flash-show))
+  (nav-flash-show-soon))
 
 (bind-key "M-v" 'scroll-down-command-flash)
 
 (defun scroll-down-command-flash ()
   (interactive)
   (call-interactively 'scroll-down-command)
-  (nav-flash-show))
+  (nav-flash-show-soon))
 
 (bind-key "C-v" 'scroll-up-command-flash)
 
@@ -3926,7 +3954,7 @@ If FILE already exists, signal an error."
     (defun goto-last-change-flash ()
       (interactive)
       (call-interactively 'goto-last-change)
-      (nav-flash-show))))
+      (nav-flash-show-soon))))
 
 ;;;; unbound
 (use-package unbound
@@ -5510,7 +5538,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
        font-lock-string-face
        font-lock-keyword-face
        region
-       loccur-custom-buffer-grep)
+       loccur-custom-buffer-grep
+       isearch)
      ahs-idle-interval 1.1)
     (hook-into-modes #'auto-highlight-symbol-mode
                      my-prog-mode-hooks)))
@@ -7822,6 +7851,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands (nav-flash-show)
   :init
   (progn
+    (setq nav-flash-delay 0.6)
     (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)))
 
 ;;;; groovy-mode
@@ -8242,8 +8272,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; simpleclip
 (use-package simpleclip
   :ensure t
-  :commands (simpleclip-mode simpleclip-set-contents simpleclip-get-contents
-                             simpleclip-cut simpleclip-copy simpleclip-paste)
+  :commands (simpleclip-mode simpleclip-set-contents
+             simpleclip-get-contents simpleclip-cut
+             simpleclip-copy simpleclip-paste)
   :init
   (progn
     (setq
@@ -8258,10 +8289,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (simpleclip-mode 1)))
   :config
   (progn
-    (defadvice dpaste-region (after clipboard activate)
-      (simpleclip-set-contents (current-kill 0)))
-    (defadvice dpaste-buffer (after clipboard activate)
-      (simpleclip-set-contents (current-kill 0)))))
+    (defadvice simpleclip-copy (after clipboard activate)
+      (if (use-region-p)
+          (if (fboundp 'rectangle-mark-mode) ; New in 24.4
+              (with-no-warnings
+                (kill-ring-save (region-beginning) (region-end) t))
+            (kill-ring-save (region-beginning) (region-end)))))))
 
 ;;;; on-blur
 (if (boundp 'focus-out-hook)
@@ -9028,13 +9061,6 @@ already present."
           (lusty--run 'read-file-name default-directory "")))))
   :bind (("C-x C-f" . lusty-file-explorer)
          ("C-x f f" . lusty-file-explorer)))
-
-;;;; dpaste
-(use-package dpaste
-  :ensure t
-  :commands (dpaste-region
-             dpaste-buffer
-             dpaste-region-or-buffer))
 
 ;;;; mouse
 (use-package mouse

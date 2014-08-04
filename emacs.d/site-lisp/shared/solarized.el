@@ -1383,7 +1383,21 @@ customize the resulting theme."
      `(nav-face-hfile ((,class (:foreground ,red))))
 
      ;; nav-flash
-     `(nav-flash-face ((,class (:background ,base02))))
+     `(nav-flash-face ((,class (:foreground ,(apply 'solarized-color-blend
+                                                    (if
+                                                        (eq variant 'light)
+                                                        (list yellow base1 0.2)
+                                                      (list cyan base1 0.1)) ;
+                                                    )
+
+                                            :background ,(apply 'solarized-color-blend
+                                                    (if
+                                                        (eq variant 'light)
+                                                        (list yellow base03 0.2)
+                                                      (list cyan base03 0.3)) ;
+                                                    )))))
+
+
 
 
      ;; org-mode
