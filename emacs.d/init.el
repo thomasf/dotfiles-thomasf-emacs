@@ -6263,7 +6263,14 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (use-package helm-imenu
       :bind (("M-o M-i" . helm-imenu)
              ;; ("<f8>" . helm-imenu)
-             ("C-h i" . helm-imenu)))
+             ("C-h i" . helm-imenu))
+      :config
+      (progn
+        (defadvice helm-imenu (before ensure-semantic-context activate)
+          ;; quickly just try to to sematntic analyse before each imenu call
+          (condition-case nil
+              (semantic-analyze-current-context)
+            (error t)))))
 
     (use-package helm-descbinds
       :ensure t
