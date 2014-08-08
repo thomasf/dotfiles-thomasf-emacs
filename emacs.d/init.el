@@ -1525,7 +1525,7 @@ buffer-local wherever it is set."
   (setq-local scroll-up-aggressively nil)
   (setq-local scroll-conservatively 0))
 
-(add-hook 'magit-mode-hook 'set-browse-scrolling)
+;; (add-hook 'magit-mode-hook 'set-browse-scrolling)
 
 ;;;; hide mode line
 (defvar hidden-mode-line-mode)
