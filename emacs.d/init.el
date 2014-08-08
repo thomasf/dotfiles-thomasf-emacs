@@ -5802,7 +5802,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :commands (magit-log magit-run-gitk magit-run-git-gui
                        magit-status magit-git-repo-p magit-list-repos)
   :bind (("M-o G" . my-magit-status-with-prefix)
-         ("M-o g" . my-magit-status))
+         ("M-o g" . my-magit-status)
+         ("C-h g" . my-magit-status)
+         )
   :init
   (progn
     (setq
@@ -8960,7 +8962,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                          google-error google-word google-symbol
                          google-cpp-reference google-maps
                          google-region)
-  :bind (("C-h g" . google-this)) ;; NOTE should probably be magit for consistensy.
   :init
   (progn
         (define-key search-map "G" 'google-region)))
