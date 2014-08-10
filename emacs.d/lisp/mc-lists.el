@@ -230,6 +230,7 @@
         persp-switch
         picture-mouse-set-point
         projectile-ag
+        recenter-top-bottom-flash
         shell
         smex
         undo-tree-visualize
