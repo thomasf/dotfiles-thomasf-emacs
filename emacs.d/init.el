@@ -568,6 +568,7 @@ buffer-local wherever it is set."
 
     (defvar my-monospaced-font "PragmataPro-11.8")
     (defvar my-variable-pitch-font "Pt Sans-13")
+    ;; (setq my-monospaced-font "Input Narrow-11.8")
 
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "PragmataPro-13"
@@ -5267,6 +5268,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
              ("C-x d D" . my-direx:jump-to-directory-other-window))
       :init
       (progn
+        (add-hook 'direx:direx-mode-hook 'hl-line-mode)
         (setq
          direx-project:project-root-predicate-functions
          #'((lambda (dirname)
