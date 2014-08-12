@@ -5267,6 +5267,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
              ("C-x d D" . my-direx:jump-to-directory-other-window))
       :init
       (progn
+        (add-hook 'direx:direx-mode-hook 'hl-line-mode)
         (setq
          direx-project:project-root-predicate-functions
          #'((lambda (dirname)
