@@ -568,7 +568,8 @@ buffer-local wherever it is set."
 
     (defvar my-monospaced-font "PragmataPro-11.8")
     (defvar my-variable-pitch-font "Pt Sans-13")
-    ;; (setq my-monospaced-font "Input Narrow-11.8")
+    ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
+    ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "PragmataPro-13"
@@ -580,6 +581,7 @@ buffer-local wherever it is set."
         (condition-case nil
             (progn
               (set-face-attribute 'default nil :font my-monospaced-font)
+              ;; (set-face-attribute 'default nil :font my-monospaced-font :width 'ultra-condensed :weight 'normal )
               (set-face-attribute 'fixed-pitch nil :font my-monospaced-font)
               (set-face-attribute 'variable-pitch nil :font my-variable-pitch-font))
           (error
