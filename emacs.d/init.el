@@ -7432,7 +7432,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (sp-local-pair "<" ">")
       (sp-local-tag  "<" "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-    (sp-with-modes '(markdown-mode)
+    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+      (sp-local-pair "*" "*" :bind "C-*")
+      (sp-local-tag "2" "**" "**")
+      ;; (sp-local-tag "s" "```scheme" "```")
+      (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
+
+    (sp-with-modes '(markdown-mode gfm-mode)
       (sp-local-pair "#" "#" :actions '(wrap))
       (sp-local-pair "_" "_" :actions '(wrap))
       (sp-local-pair "*" "*" :actions '(wrap)))
