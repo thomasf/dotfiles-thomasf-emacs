@@ -9530,6 +9530,7 @@ if submodules exists, grep submodules too."
   :defer t
   :config
   (progn
+    (auto-image-file-mode +1)
     (defun image-mouse-scroll-position (start-event)
       "When bound to a down-mouse-X input START-EVENT, will smoothly
 drag the viewpoint on the image buffer that the window displays."
