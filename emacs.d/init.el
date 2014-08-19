@@ -7108,7 +7108,17 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (add-hook
          'python-mode-hook
          #'(lambda ()
-             (jedi-mode 1))))
+             ;; (jedi-mode 1)
+             (jedi:setup)
+             ))
+
+        ;; (add-hook
+        ;;  'python-mode-hook
+        ;;  #'(lambda ()
+        ;;      (jedi:setup)))
+
+
+        )
       :config
       (progn
         (bind-key "M-<SPC>" 'jedi:complete jedi-mode-map)
