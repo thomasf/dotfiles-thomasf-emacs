@@ -6929,10 +6929,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         ;; first comma
         (while (string-match "[ \t]*=[ \t]*?[^,)]+" method-args)
           (setq method-args (replace-match "" t t method-args)))
-        (indent-for-tab-command)
+        ;; (indent-for-tab-command)
         (insert (format "super(%s, %s).%s(%s"
                                class-name self-name method-name method-args))
-        (newline-and-indent))))
+        ;; (newline-and-indent)
+        )))
   :config
   (progn
 
