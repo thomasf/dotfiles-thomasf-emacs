@@ -9642,6 +9642,14 @@ drag the viewpoint on the image buffer that the window displays."
     ;; (global-key-combo-mode t)
     ))
 
+;;;; electic
+(use-package electric
+  :defer t
+  :config
+  (progn
+    (electric-indent-mode -1)))
+
+
 ;;;; elnode
 (use-package elnode
   :ensure t
