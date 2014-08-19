@@ -7039,7 +7039,10 @@ minibuffer."
      )
 
     (defun my-python-mode-hook ()
-      (setq-local idle-update-delay 2))
+      (setq-local idle-update-delay 2)
+      (local-set-key (kbd "<return>") 'newline-and-indent)
+      (if (bound-and-true-p electric-indent-mode)
+          (electric-indent-local-mode -1)))
     (add-hook 'python-mode-hook 'my-python-mode-hook)
 
     (rename-modeline "python" python-mode "py")
@@ -9797,6 +9800,7 @@ drag the viewpoint on the image buffer that the window displays."
     ))
 
 ;;;; key-combo
+
 (use-package key-combo
   :ensure t
   :disabled t ;; seems to not work with pretty-mode and possibly others
@@ -9811,7 +9815,8 @@ drag the viewpoint on the image buffer that the window displays."
   :defer t
   :config
   (progn
-    (electric-indent-mode -1)))
+    ;; (electric-indent-mode -1)
+    ))
 
 
 ;;;; elnode
