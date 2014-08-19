@@ -1449,6 +1449,7 @@ buffer-local wherever it is set."
                    ibuffer-mode-hook
                    magit-commit-mode-hook
                    python-django-mode-hook
+                   magit-diff-mode-hook
                    magit-log-mode-hook
                    magit-status-mode-hook
                    vc-annotate-mode-hook
