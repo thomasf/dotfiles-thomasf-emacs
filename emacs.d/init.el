@@ -4766,7 +4766,11 @@ otherwise use the subtree title."
     (bind-key "C-s" 'ac-isearch ac-completing-map)
 
     (defun set-auto-complete-as-completion-at-point-function ()
-      (setq completion-at-point-functions '(auto-complete)))
+      (setq completion-at-point-functions '(auto-complete))
+      ;; TODO hmm...
+      (ac-set-trigger-key "TAB"))
+
+
     (add-hook 'auto-complete-mode-hook
               'set-auto-complete-as-completion-at-point-function)
 
