@@ -8844,6 +8844,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;;;; ein
 (use-package ein
+  :disabled t
   :ensure t
   :commands (ein:notebooklist-open
              ein:notebooklist-new-notebook
