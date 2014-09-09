@@ -1,6 +1,10 @@
 ;;; init.el --- Thomas Frössman emacs init
 ;;; init
 ;;;; set emacs start time
+
+;;; Commentary:
+;;
+
 ;;; Code:
 
 
@@ -60,7 +64,7 @@ Font-lock, visual indicators and similar.")
   (and (not degrade-p-emacs-pre24.3)
      (not (boundp 'focus-out-hook))))
 (defvar degrade-p-helm degrade-p-old-emacs
-  "Helm does not support emacs23")
+  "Helm does not support emacs23.")
 (and
  (not degrade-p-noninteractive)
  (or degrade-p-old-emacs degrade-p-emacs-pre24.3)
