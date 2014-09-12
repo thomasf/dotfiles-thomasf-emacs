@@ -3415,6 +3415,11 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package org-screenshot
   :commands org-screenshot-take)
 
+(use-package pip-requirements
+  :ensure t
+  :mode (("\\.pip\\'" . pip-requirements-mode)
+         ("requirements\\.txt\\'" . pip-requirements-mode)))
+
 ;;;; pushbullet
 (use-package pushbullet
   :ensure t
