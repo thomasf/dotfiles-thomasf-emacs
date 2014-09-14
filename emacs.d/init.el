@@ -9924,6 +9924,7 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; navi-mode
 (use-package navi-mode
   :ensure t
+  :disabled t
   :commands (navi-search-and-switch))
 
 ;;;; outorg
