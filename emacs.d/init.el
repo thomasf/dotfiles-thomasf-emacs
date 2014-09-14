@@ -2859,6 +2859,21 @@ for the current buffer's file name, and the line number at point."
         (exec-path-from-shell-initialize))))
 
 ;;; packages: packages sorted alphabetically by name
+
+;;;; ac-cider
+(use-package ac-cider
+  :ensure t
+  :commands (ac-cider-setup)
+  :init
+  (progn
+    (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+    (add-hook 'cider-mode-hook 'ac-cider-setup)
+    (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+    (use-package auto-complete
+      :defer t
+      :config
+      (add-to-list 'ac-modes 'cider-mode))))
+
 ;;;; adaptive-wrap
 (use-package adaptive-wrap
   :ensure t
@@ -9677,6 +9692,7 @@ if submodules exists, grep submodules too."
 ;;;; nrepl-eval-sexp-fu
 (use-package nrepl-eval-sexp-fu
   :ensure t
+  :disabled t
   :commands (nrepl-eval-sexp-fu-flash-mode
               turn-on-nrepl-eval-sexp-fu-flash-mode
              nrepl-eval-sexp-fu-eval-sexp-inner-list
@@ -9685,6 +9701,7 @@ if submodules exists, grep submodules too."
 ;;;; ac-nrepl
 (use-package ac-nrepl
   :ensure t
+  :disabled t
   :commands (ac-nrepl-setup)
   :init
   (progn
