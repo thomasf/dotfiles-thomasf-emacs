@@ -9185,6 +9185,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; show-css
 (use-package show-css
   :ensure t
+  :disabled t
   :commands (showcss-mode)
   :init
   (progn
