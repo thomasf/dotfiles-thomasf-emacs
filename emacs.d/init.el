@@ -3310,7 +3310,6 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 ;;;; manage-minor-mode
 (use-package manage-minor-mode
-  :disabled t
   :ensure t
   :commands manage-minor-mode)
 
