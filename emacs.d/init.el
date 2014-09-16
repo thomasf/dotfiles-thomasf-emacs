@@ -604,6 +604,8 @@ buffer-local wherever it is set."
 
 (defvar my-normal-cursor-type 'bar)
 
+
+(setq-default fringes-outside-margins t)
 ;;;; server
 (defun workspace-prefix ()
   (let ((res (if (and
@@ -8685,7 +8687,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           git-gutter:disabled-modes
           '(org-mode dired-mode wdired-mode ielm-mode))
     (when window-system
-      (let ((symbol (char-to-string (if (char-displayable-p ?×) ?× ?*))))
+      (let ((symbol (char-to-string
+                     (if (char-displayable-p ?∎) ?∎ ?*))))
         (setq git-gutter:added-sign symbol
               git-gutter:modified-sign symbol
               ;; git-gutter:deleted-sign "⌞"
