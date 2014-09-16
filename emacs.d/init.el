@@ -4810,11 +4810,11 @@ otherwise use the subtree title."
 
     (dolist
         (mode '(clojure-mode coffee-mode css-mode csv-mode
-                espresso-mode fmagit-log-edit-mode haml-mode
-                haskell-mode html-mode json-mode less-css-mode
-                lisp-mode log-edit-mode markdown-mode nxml-mode
-                sass-mode scss-mode sh-mode smarty-mode
-                stylus-mode textile-mode tuareg-mode yaml-mode))
+                espresso-mode fmagit-log-edit-mode go-mode
+                haml-mode haskell-mode html-mode json-mode
+                less-css-mode lisp-mode log-edit-mode markdown-mode
+                nxml-mode sass-mode scss-mode sh-mode
+                smarty-mode stylus-mode textile-mode tuareg-mode yaml-mode))
 
       (add-to-list 'ac-modes mode))
 
@@ -5072,16 +5072,25 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :ensure t
   :commands highlight-tail-mode)
 
+(use-package go-autocomplete
+  :ensure t
+  :pre-load
+  (progn
+    (use-package auto-complete :ensure t))
+  :init
+  (progn
+    (add-hook 'go-mode-hook
+              #'(lambda ()
+                  (setq ac-sources
+                        '(ac-source-go
+                          ac-source-yasnippet))))))
 ;;;; go-mode
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
   :config
   (progn
-    (bind-key "M-." 'godef-jump go-mode-map)
-    (use-package auto-complete)
-    (use-package go-autocomplete
-      :ensure t)))
+    (bind-key "M-." 'godef-jump go-mode-map)))
 
 ;;;; slim-mode
 (use-package slim-mode
