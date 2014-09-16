@@ -1,0 +1,6 @@
+# name: class=''
+# key: cl
+# binding: 
+# expand-env: ()
+# --
+class='$0'

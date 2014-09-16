@@ -1,0 +1,5 @@
+# name: style=''
+# key: st
+# expand-env: ()
+# --
+style='$0'
