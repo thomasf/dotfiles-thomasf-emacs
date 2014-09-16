@@ -3522,6 +3522,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands (toggle-quotes)
   :bind ("C-'" . toggle-quotes))
 
+(use-package tree-mode
+  :ensure t
+  :defer t)
+
 ;;;; unfill-paragraph
 (use-package unfill
   :ensure t
@@ -3932,6 +3936,7 @@ If FILE already exists, signal an error."
 ;;;; session
 (use-package session
   :disabled t
+  :ensure t
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
@@ -4148,6 +4153,7 @@ If FILE already exists, signal an error."
 
 ;;;; moz
 (use-package moz
+  :ensure t
   :commands moz-minor-mode)
 
 ;;;; gl-conf-mode
@@ -4829,6 +4835,7 @@ otherwise use the subtree title."
 
 ;;;; erlang
 (use-package erlang
+  :ensure t
   :commands (erlang-mode))
 
 ;;;; lfe-mode
@@ -5073,7 +5080,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (bind-key "M-." 'godef-jump go-mode-map)
     (use-package auto-complete)
-    (use-package go-autocomplete)))
+    (use-package go-autocomplete
+      :ensure t)))
 
 ;;;; slim-mode
 (use-package slim-mode
@@ -6068,11 +6076,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :commands git-rebase-mode
   :mode ("git-rebase-todo" . git-rebase-mode))
 
-;;;; virtualenv
-(use-package virtualenv
-  :disabled t ;; replaced by venv?
-  :commands (virtualenv-workon virtualenv-activate virtualenv-deactivate
-                               virtualenv-current virtualenvp))
 ;;;; virtualenvwrapper
 (use-package virtualenvwrapper
   :ensure t
@@ -7221,16 +7224,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
 
-;;;; per-window-point
-(use-package per-window-point
-  :disabled t ;; supported by emacs 24.3
-  :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-minimalism))
-  :init
-  (progn
-    (pwp-mode 1)))
-
 ;;;; winpoint
 (use-package winpoint
   :disabled t
@@ -7934,14 +7927,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                                      hlt-highlight-region
                                      hlt-highlight-regexp-region))
 
-;;;; ioke-mode
-(use-package ioke-mode
-  :mode (("\\.ik\\'" . ioke-mode))
-  :init
-  (progn
-    (use-package inf-ioke
-      :commands (inferior-ioke-mode))))
-
 ;;;; mwe-log-commands
 (use-package mwe-log-commands
   :ensure t
@@ -8567,6 +8552,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;;;; typescript
 (use-package typescript
+  :ensure t
   :commands (typescript-mode))
 
 ;;;; fold-this
@@ -9181,13 +9167,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; google-this
 (use-package google-this
   :ensure t
-  :commands (google-this google-this-mode google-search google-line
-                         google-error google-word google-symbol
-                         google-cpp-reference google-maps
-                         google-region)
+  :commands (google-this
+             google-this-cpp-reference
+             google-this-error google-this-line google-this-maps
+             google-this-mode google-this-region google-this-search
+             google-this-symbol google-this-word)
   :init
   (progn
-        (define-key search-map "G" 'google-region)))
+        (define-key search-map "G" 'google-this-region)))
 
 ;;;; litable
 (use-package litable
@@ -9472,6 +9459,7 @@ declaration in a Python file."
 ;;;; js-comint
 (use-package js-comint
   :commands inferior-js-mode
+  :ensure t
   :init
   (progn
     (setq inferior-js-program-command "nodejs")))
