@@ -6905,6 +6905,12 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
          (ido-find-file-in-dir default-directory))))
     (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
 
+;;; ielm
+(use-package ielm
+  :init
+  (progn
+    (setq ielm-prompt "» ")))
+
 ;;;; iflipb
 (use-package iflipb
   :ensure t
