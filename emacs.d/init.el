@@ -142,7 +142,7 @@ re-downloaded in order to locate PACKAGE."
 (use-package epc :ensure t :defer t)
 (use-package ctable :ensure t :defer t)
 (use-package fringe-helper :ensure t :defer t)
-(use-package button-lock :ensure t :defer t :diminish "")
+;; (use-package button-lock :ensure t :defer t :diminish "")
 (use-package fakir :ensure t :defer t)
 (use-package fuzzy :ensure t :defer t)
 (use-package python-environment
@@ -3652,34 +3652,36 @@ ARG is a prefix argument.  If nil, copy the current difference region."
       :defer t
       :init
       (progn
-        ;; TODO figure out exactly what is prohibiting wdired mode from allowin
-        ;; the first character to be edited. This is mostly disabling stuff at
-        ;; random.
-        ;; related: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=17541
-        ;; Rhe function that is resposible to do this is wdired-preprocess-files.
-        ;; this is a manual way of fixing it for me in that function:
-        ;;   (put-text-property b-protection (1- (point)) 'read-only t)
-        ;; I cannot reproduce this reliably. If the problem does not happen
-        ;; with some modes disabled I might continue to investigate
-        (defvar wdired-forbidden-modes
-          '(dired-filter-mode
-            dired-omit-mode
-            dired-hide-details-mode
-            font-lock-mode))
+        ;; ;; TODO figure out exactly what is prohibiting wdired mode from allowin
+        ;; ;; the first character to be edited. This is mostly disabling stuff at
+        ;; ;; random.
+        ;; ;; related: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=17541
+        ;; ;; Rhe function that is resposible to do this is wdired-preprocess-files.
+        ;; ;; this is a manual way of fixing it for me in that function:
+        ;; ;;   (put-text-property b-protection (1- (point)) 'read-only t)
+        ;; ;; I cannot reproduce this reliably. If the problem does not happen
+        ;; ;; with some modes disabled I might continue to investigate
+        ;; (defvar wdired-forbidden-modes
+        ;;   '(dired-filter-mode
+        ;;     dired-omit-mode
+        ;;     dired-hide-details-mode
+        ;;     font-lock-mode
+        ;;     ))
 
-        (defvar wdired-disabled-modes nil)
+        ;; (defvar wdired-disabled-modes nil)
 
-        (defadvice wdired-change-to-wdired-mode (before expand-view activate)
-          (setq-local wdired-disabled-modes '())
-          (--each wdired-forbidden-modes
-            (and (boundp it)
-                 (symbol-value it)
-                 (add-to-list 'wdired-disabled-modes it )
-                 (funcall it -1))))
+        ;; (defadvice wdired-change-to-wdired-mode (before expand-view activate)
+        ;;   (setq-local wdired-disabled-modes '())
+        ;;   (--each wdired-forbidden-modes
+        ;;     (and (boundp it)
+        ;;          (symbol-value it)
+        ;;          (add-to-list 'wdired-disabled-modes it )
+        ;;          (funcall it -1))))
 
-        (defadvice wdired-change-to-dired-mode (after collapse-view activate)
-          (--each wdired-disabled-modes
-            (funcall it 1)))
+        ;; (defadvice wdired-change-to-dired-mode (after collapse-view activate)
+        ;;   (--each wdired-disabled-modes
+        ;;     (funcall it 1)))
+
 
         (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)))
 
@@ -8959,6 +8961,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; fixmee
 (use-package fixmee
   :ensure t
+  :disabled t
   :commands (fixmee-mode
              global-fixmee-mode)
   :bind (("M-o f" . fixmee-view-listing))
