@@ -188,7 +188,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)")
 (setq pretty-patterns
   (let* ((lispy '(scheme emacs-lisp lisp clojure))
          (mley '(tuareg haskell sml coq))
-         (c-like '(c c++ perl sh python java ess ruby js coffee))
+         (c-like '(c c++ perl sh python java ess ruby js coffee go))
          (all `(,@lispy ,@mley ,@c-like octave latex)))
     (pretty-compile-patterns
      `(
