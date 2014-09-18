@@ -4917,6 +4917,7 @@ otherwise use the subtree title."
     (add-hook 'coffee-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
