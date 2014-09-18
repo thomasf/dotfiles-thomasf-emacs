@@ -5938,9 +5938,12 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (use-package helm-bm
+      :ensure t
       :commands helm-bm
       :if (not degrade-p-helm)
-      :bind (("C-c b b" . helm-bm))
+      :bind (
+             ("C-c b b" . helm-bm)
+             ("C-h u" . helm-bm))
       :config
       (progn
         (use-package helm-config)
@@ -6398,8 +6401,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ;; ("<f7>" . helm-for-files)
          ("C-x f r" . helm-recentf)
          ;; ("<f6>" . helm-recentf)
-         ("C-x f L" . helm-locate)
-         ("C-h u" . helm-bookmarks))
+         ("C-x f L" . helm-locate))
   :init
   (progn
     (defalias 'apt 'helm-apt)
