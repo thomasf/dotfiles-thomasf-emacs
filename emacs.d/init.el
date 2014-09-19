@@ -4200,7 +4200,7 @@ If FILE already exists, signal an error."
   :mode (("\\.plu\\'" . plantuml-mode))
   :pre-load
   (progn
-    (setq plantuml-jar-path "~/.opt/plantuml.jar"
+    (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
           org-plantuml-jar-path plantuml-jar-path))
   :if (file-exists-p plantuml-jar-path))
 
