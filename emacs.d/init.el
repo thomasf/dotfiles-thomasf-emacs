@@ -4588,7 +4588,7 @@ Argument FILENAME File to insert."
              ((todo "NOTE"
                     ((org-agenda-overriding-header "Notes")
                      (org-agenda-todo-ignore-deadlines nil)
-v                     (org-agenda-todo-ignore-with-date nil)
+                     (org-agenda-todo-ignore-with-date nil)
                      (org-agenda-todo-ignore-scheduled nil)))
               (todo "SOMEDAY"
                     ((org-agenda-overriding-header "Someday...")
