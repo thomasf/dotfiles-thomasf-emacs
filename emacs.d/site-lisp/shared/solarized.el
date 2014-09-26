@@ -5,7 +5,7 @@
 ;; Author: Bozhidar Batsov <bozhidar@batsov.com>
 ;; Author: Thomas Frössman <thomasf@jossystem.se>
 ;; URL: http://github.com/bbatsov/solarized-emacs
-;; Version: 1.1.0
+;; Version: 1.2.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -395,7 +395,7 @@ customize the resulting theme."
      `(enh-ruby-string-delimiter-face ((,class (:foreground ,yellow))))
      `(enh-ruby-heredoc-delimiter-face ((,class (:inherit enh-ruby-string-delimiter-face))))
      `(enh-ruby-regexp-delimiter-face ((,class (:inherit enh-ruby-string-delimiter-face))))
-     `(enh-ruby-op-face ((,class (:inherit default))))
+     `(enh-ruby-op-face ((,class (:foreground ,base0))))
      `(erm-syn-errline ((,class (:inherit flymake-errline))))
      `(erm-syn-warnline ((,class (:inherit flymake-warnline))))
 
@@ -637,84 +637,105 @@ customize the resulting theme."
      `(diff-refine-removed ((,class (:foreground ,base03 :background ,red))))
 
      ;; ediff
-     `(ediff-fine-diff-A ((,class (
-                                   :background ,(solarized-color-blend blue base03 0.25))
-                                  )))
-     `(ediff-fine-diff-B ((,class (
-                                   :background ,(solarized-color-blend violet base03 0.25))
-                                  )))
-     `(ediff-fine-diff-C ((,class (
-                                   :background ,(solarized-color-blend yellow base03 0.25))
-                                  )))
+     `(ediff-fine-diff-A ((,class (:background ,orange-lc))))
+     `(ediff-fine-diff-B ((,class (:background ,green-lc))))
+     `(ediff-fine-diff-C ((,class (:background ,yellow-lc))))
 
-     `(ediff-current-diff-A ((,class (
-                                      :background ,(solarized-color-blend blue base03 0.15)
+     `(ediff-current-diff-C ((,class (:background ,blue-lc))))
 
-                                                  ))))
-     `(ediff-current-diff-B ((,class (
-                                       :background ,(solarized-color-blend violet base03 0.15)
-i
-                                                  ))))
-     `(ediff-current-diff-C ((,class (
-                                      :background ,(solarized-color-blend yellow base03 0.15)
-
-                                                  ))))
-
-     `(ediff-even-diff-A ((,class (
-                                    ;; :background ,(solarized-color-blend base0 base03 0.15)
-                                   :background ,base02
-                                   ;; :foreground ,base2
-                                    ;; :background ,(solarized-color-blend green base02 0.15)
-                                               ))))
-     `(ediff-even-diff-B ((,class (
-                                   ;; :background ,base01
-                                   :background ,base02
-                                   ;; :foreground ,base2
-                                               ))))
-     `(ediff-even-diff-C ((,class (
-                                   ;; :background ,base01
-                                   :background ,base02
-                                               ;; :foreground ,base2
-                                               ))))
-
-
-     `(ediff-odd-diff-A ((,class (
-                                  ;; :background ,base01
-                                              :background ,base02
-                                              ))))
-     `(ediff-odd-diff-B ((,class (
-                                  ;; :background ,base01
-                                              :background ,base02
-                                              ))))
-     `(ediff-odd-diff-C ((,class (
-                                  ;; :background ,base01
-                                              :background ,base03
-                                              ))))
-
-     `(ediff-current-diff-Ancestor ((,class (:background "VioletRed" :foreground "Black"))))
-     `(ediff-even-diff-Ancestor ((,class (:background "Grey" :foreground "White"))))
-     `(ediff-fine-diff-Ancestor ((,class (:background "Green" :foreground "Black"))))
-     `(ediff-odd-diff-Ancestor ((,class (:background "gray40" :foreground "cyan3"))))
-
-
-     `(ediff-even-diff-A ((,class (:underline ,base01))))
-     `(ediff-odd-diff-A ((,class (:underline ,base01
-
-                                              ))))
-
+     `(ediff-even-diff-A ((,class (:background ,base01
+                                               :foreground ,base3 ))))
+     `(ediff-odd-diff-A ((,class (:background ,base01
+                                              :foreground ,base03 ))))
      `(ediff-even-diff-B ((,class (:background ,base01
-                                               :foreground ,base03
-                                               ))))
+                                               :foreground ,base03 ))))
      `(ediff-odd-diff-B ((,class (:background ,base01
-                                              :foreground ,base03
-                                              ))))
-
+                                              :foreground ,base03 ))))
      `(ediff-even-diff-C ((,class (:background ,base01
-                                               :foreground ,base0
-                                               ))))
+                                               :foreground ,base0 ))))
      `(ediff-odd-diff-C ((,class (:background ,base01
-                                              :foreground ,base03
-                                              ))))
+                                              :foreground ,base03 ))))
+
+     ;;;; alternative ediiff (not finished)
+     ;; ;; ediff
+     ;; `(ediff-fine-diff-A ((,class (
+     ;;                               :background ,(solarized-color-blend blue base03 0.25))
+     ;;                              )))
+     ;; `(ediff-fine-diff-B ((,class (
+     ;;                               :background ,(solarized-color-blend violet base03 0.25))
+     ;;                              )))
+     ;; `(ediff-fine-diff-C ((,class (
+     ;;                               :background ,(solarized-color-blend yellow base03 0.25))
+     ;;                              )))
+
+     ;; `(ediff-current-diff-A ((,class (
+     ;;                                  :background ,(solarized-color-blend blue base03 0.15)
+
+     ;;                                              ))))
+     ;; `(ediff-current-diff-B ((,class (
+     ;;                                   :background ,(solarized-color-blend violet base03 0.15)
+
+     ;;                                              ))))
+     ;; `(ediff-current-diff-C ((,class (
+     ;;                                  :background ,(solarized-color-blend yellow base03 0.15)
+
+     ;;                                              ))))
+
+     ;; `(ediff-even-diff-A ((,class (
+     ;;                                ;; :background ,(solarized-color-blend base0 base03 0.15)
+     ;;                               :background ,base02
+     ;;                               ;; :foreground ,base2
+     ;;                                ;; :background ,(solarized-color-blend green base02 0.15)
+     ;;                                           ))))
+     ;; `(ediff-even-diff-B ((,class (
+     ;;                               ;; :background ,base01
+     ;;                               :background ,base02
+     ;;                               ;; :foreground ,base2
+     ;;                                           ))))
+     ;; `(ediff-even-diff-C ((,class (
+     ;;                               ;; :background ,base01
+     ;;                               :background ,base02
+     ;;                                           ;; :foreground ,base2
+     ;;                                           ))))
+
+
+     ;; `(ediff-odd-diff-A ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base02
+     ;;                                          ))))
+     ;; `(ediff-odd-diff-B ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base02
+     ;;                                          ))))
+     ;; `(ediff-odd-diff-C ((,class (
+     ;;                              ;; :background ,base01
+     ;;                                          :background ,base03
+     ;;                                          ))))
+
+     ;; `(ediff-current-diff-Ancestor ((,class (:background "VioletRed" :foreground "Black"))))
+     ;; `(ediff-even-diff-Ancestor ((,class (:background "Grey" :foreground "White"))))
+     ;; `(ediff-fine-diff-Ancestor ((,class (:background "Green" :foreground "Black"))))
+     ;; `(ediff-odd-diff-Ancestor ((,class (:background "gray40" :foreground "cyan3"))))
+
+
+     ;; `(ediff-even-diff-A ((,class (:underline ,base01))))
+     ;; `(ediff-odd-diff-A ((,class (:underline ,base01
+
+     ;;                                          ))))
+
+     ;; `(ediff-even-diff-B ((,class (:background ,base01
+     ;;                                           :foreground ,base03
+     ;;                                           ))))
+     ;; `(ediff-odd-diff-B ((,class (:background ,base01
+     ;;                                          :foreground ,base03
+     ;;                                          ))))
+
+     ;; `(ediff-even-diff-C ((,class (:background ,base01
+     ;;                                           :foreground ,base0
+     ;;                                           ))))
+     ;; `(ediff-odd-diff-C ((,class (:background ,base01
+     ;;                                          :foreground ,base03
+     ;;                                          ))))
 
      ;; diff-hl
      `(diff-hl-change ((,class (:background ,blue-lc  :foreground ,blue-hc))))
@@ -1246,6 +1267,25 @@ i
      `(kite-tag-slash-face ((,class (:inherit kite-name-face))))
      `(kite-undefined ((,class (:inherit nxml-char-ref-number))))
 
+     ;; ledger-mode
+     `(ledger-font-payee-uncleared-face ((t (:foreground ,red))))
+     `(ledger-font-payee-cleared-face ((t (:foreground ,green :weight normal))))
+     `(ledger-font-xact-highlight-face ((t (:background ,base02))))
+     `(ledger-font-pending-face ((t (:foreground ,yellow weight: normal))))
+     `(ledger-font-other-face ((t (:foreground ,base0))))
+     `(ledger-font-posting-account-face ((t (:foreground ,cyan))))
+     `(ledger-font-posting-account-cleared-face ((t (:foreground ,base0))))
+     `(ledger-font-posting-account-pending-face ((t (:foreground ,yellow))))
+     `(ledger-font-posting-amount-face ((t (:foreground ,yellow))))
+     `(ledger-font-posting-account-pending-face ((t (:foreground ,yellow))))
+     `(ledger-occur-narrowed-face ((t (:foreground ,base3 :invisible t))))
+     `(ledger-occur-xact-face ((t (:background ,base02))))
+     `(ledger-font-comment-face ((t (:foreground ,base01))))
+     `(ledger-font-reconciler-uncleared-face ((t (:foreground ,red :weight bold))))
+     `(ledger-font-reconciler-cleared-face ((t (:foreground ,base0 :weight normal))))
+     `(ledger-font-reconciler-pending-face ((t (:foreground ,yellow :weight normal))))
+     `(ledger-font-report-clickable-face ((t (:foreground ,yellow :weight normal))))
+
      ;; linum-mode
      `(linum ((,class (:foreground ,s-fringe-fg :background ,s-fringe-bg))))
 
@@ -1441,24 +1481,20 @@ i
      `(nav-face-hdir ((,class (:foreground ,red))))
      `(nav-face-file ((,class (:foreground ,base0))))
      `(nav-face-hfile ((,class (:foreground ,red))))
-
      ;; nav-flash
-     `(nav-flash-face ((,class (:foreground ,(apply 'solarized-color-blend
-                                                    (if
-                                                        (eq variant 'light)
-                                                        (list yellow base1 0.2)
-                                                      (list cyan base1 0.1)) ;
-                                                    )
-
-                                            :background ,(apply 'solarized-color-blend
-                                                    (if
-                                                        (eq variant 'light)
-                                                        (list yellow base03 0.2)
-                                                      (list cyan base03 0.3)) ;
-                                                    )))))
-
-
-
+     ;; `(nav-flash-face ((,class (:background ,base02))))
+     `(nav-flash-face ((,class (:foreground
+                                ,(apply 'solarized-color-blend
+                                        (if
+                                            (eq variant 'light)
+                                            (list yellow base1 0.2)
+                                          (list cyan base1 0.1)))
+                                :background
+                                ,(apply 'solarized-color-blend
+                                        (if
+                                            (eq variant 'light)
+                                            (list yellow base03 0.2)
+                                          (list cyan base03 0.3)))))))
 
      ;; org-mode
      `(org-agenda-structure
@@ -1770,7 +1806,12 @@ i
                                         :background ,cyan))))
      `(term-color-white ((t (:foreground ,base2
                                          :background ,base2))))
-     
+
+     ;; todotxt
+     `(todotxt-priority-a-face ((,class (:foreground ,orange))))
+     `(todotxt-priority-b-face ((,class (:foreground ,yellow))))
+     `(todotxt-priority-c-face ((,class (:foreground ,violet))))
+
      ;; tooltip. (NOTE: This setting has no effect on the os widgets for me
      ;; zencoding uses this)
      `(tooltip ((,class (:background ,yellow-lc :foreground ,yellow-hc
