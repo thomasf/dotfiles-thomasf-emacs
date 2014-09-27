@@ -7127,21 +7127,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (progn
             ;; (bind-key "C-x C-d" 'jedi-direx:pop-to-buffer python-mode-map)
             (add-hook 'jedi-mode-hook 'jedi-direx:setup)))
-
-        (add-hook
-         'python-mode-hook
-         #'(lambda ()
-             ;; (jedi-mode 1)
-             (jedi:setup)
-             ))
-
-        ;; (add-hook
-        ;;  'python-mode-hook
-        ;;  #'(lambda ()
-        ;;      (jedi:setup)))
-
-
-        )
+        (add-hook 'python-mode-hook
+                  #'(lambda ()
+                      (delay-mode-hooks
+                        (jedi:setup)))))
       :config
       (progn
         (bind-key "M-<SPC>" 'jedi:complete jedi-mode-map)
