@@ -1342,6 +1342,7 @@ buffer-local wherever it is set."
    (list
     (read-string "After save shell command:" shell-command-after-save-cmd)))
   (setq-local shell-command-after-save-cmd cmd))
+
 ;;;; make-script-executable
 (defun my-make-script-executable ()
   "If file starts with a shebang, make `buffer-file-name' executable"
@@ -2775,7 +2776,8 @@ for the current buffer's file name, and the line number at point."
 (use-package projectile
   :ensure t
   :commands (projectile-mode
-             projectile-global-mode)
+             projectile-global-mode
+             projectile-project-p)
   :bind (("C-x f <SPC>" . projectile-find-file)
          ("C-x f P" . projectile-find-file-ignored)
          ("C-x d <SPC>" . projectile-find-dir)
