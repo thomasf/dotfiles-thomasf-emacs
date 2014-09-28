@@ -6067,16 +6067,17 @@ See URL `https://pypi.python.org/pypi/flake8'."
              venv-is-valid)
   :init
   (progn
-    (when
-        (and
-         (not (getenv "VIRTUAL_ENV"))
-         (eq window-system 'x))
-      (let ((workspace-prefix (workspace-prefix)))
-        (if (and workspace-prefix
-                 (venv-is-valid workspace-prefix))
-            (venv-workon workspace-prefix))))
-    (if (getenv "VIRTUAL_ENV")
-        (my-notify "emacs" (format "venv: %s" (f-base (getenv "VIRTUAL_ENV")))))))
+    ;; (when
+    ;;     (and
+    ;;      (not (getenv "VIRTUAL_ENV"))
+    ;;      (eq window-system 'x))
+    ;;   (let ((workspace-prefix (workspace-prefix)))
+    ;;     (if (and workspace-prefix
+    ;;              (venv-is-valid workspace-prefix))
+    ;;         (venv-workon workspace-prefix))))
+    ;; (if (getenv "VIRTUAL_ENV")
+    ;;     (my-notify "emacs" (format "venv: %s" (f-base (getenv "VIRTUAL_ENV")))))
+    ))
 
 
 ;;;; volatile-highlights
@@ -7047,18 +7048,7 @@ minibuffer."
                  ("default-python" . python-mode))
   :init
   (progn
-    (setq
-     ;; python-shell-interpreter "ipython"
-     ;; python-shell-interpreter-args ""
-     ;; python-shell-prompt-regexp "In \\[[0-9]+\\]: "
-     ;; python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
-     ;; python-shell-completion-setup-code
-     ;; "from IPython.core.completerlib import module_completion"
-     ;; python-shell-completion-module-string-code
-     ;; "';'.join(module_completion('''%s'''))\n"
-     ;; python-shell-completion-string-code
-     ;; "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"
-     )
+    ;; (setq python-shell-interpreter "ipython")
 
     (defun my-python-mode-hook ()
       (setq-local idle-update-delay 2)
@@ -7068,14 +7058,14 @@ minibuffer."
     (add-hook 'python-mode-hook 'my-python-mode-hook)
 
     (rename-modeline "python" python-mode "py")
-    (defun goto-python-api-doc ()
-      "Opens the django api reference info node"
-      (interactive)
-      (info "(python-2.7.3.info) The Python Standard Library"))
-    (defun goto-django-api-doc ()
-      "Opens the django api reference info node"
-      (interactive)
-      (info "(django.info) API Reference"))
+    ;; (defun goto-python-api-doc ()
+    ;;   "Opens the django api reference info node"
+    ;;   (interactive)
+    ;;   (info "(python-2.7.3.info) The Python Standard Library"))
+    ;; (defun goto-django-api-doc ()
+    ;;   "Opens the django api reference info node"
+    ;;   (interactive)
+    ;;   (info "(django.info) API Reference"))
     (defconst python-class-start-re "^class[ \t]*\\([a-zA-Z_0-9]+\\)"
       "Regular expression for finding a class name.")
     (defconst python-method-start-re

@@ -83,10 +83,10 @@ get_python() {
     pip install ropemacs==0.7
     # pip install flake8==2.1.0
     # pip install pylint==1.0.0
-    pip install ipython==2.0.0
+    pip install ipython==2.2.0
     pip install ipdb==0.8
-    pip install pudb==2014.1
-    pip install sphinx==1.2.2
+    # pip install pudb==2014.1
+    # pip install sphinx==1.2.3
     # pip install wdb==0.9.3
     cd "${vsrc}/pymacs"
     make || true
