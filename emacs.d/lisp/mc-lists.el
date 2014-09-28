@@ -166,6 +166,7 @@
         sp-backward-delete-char
         sp-backward-kill-word
         sp-delete-char
+        sp-kill-hybrid-sexp
         sp-remove-active-pair-overlay
         sp-self-insert-command
         subtract-number-at-point
