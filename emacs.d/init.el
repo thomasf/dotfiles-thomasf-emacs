@@ -2963,6 +2963,7 @@ for the current buffer's file name, and the line number at point."
 
 ;;;; ediff
 (use-package ediff
+  :defer t
   :init
   (progn
     (setq
@@ -5044,24 +5045,24 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :ensure t
   :commands highlight-tail-mode)
 
-(use-package go-autocomplete
-  :ensure t
-  :pre-load
-  (progn
-    (use-package auto-complete :ensure t))
-  :init
-  (progn
-    (add-hook 'go-mode-hook
-              #'(lambda ()
-                  (setq ac-sources
-                        '(ac-source-go
-                          ac-source-yasnippet))))))
 ;;;; go-mode
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
   :config
   (progn
+    (use-package go-autocomplete
+      :ensure t
+      :pre-load
+      (progn
+        (use-package auto-complete :ensure t))
+      :init
+      (progn
+        (add-hook 'go-mode-hook
+                  #'(lambda ()
+                      (setq ac-sources
+                            '(ac-source-go
+                              ac-source-yasnippet))))))
     (bind-key "M-." 'godef-jump go-mode-map)))
 
 ;;;; slim-mode
