@@ -1,6 +1,4 @@
 # name: sh skeleton
-# key: 
-# binding: 
 # expand-env: ()
 # --
 #!/bin/sh
