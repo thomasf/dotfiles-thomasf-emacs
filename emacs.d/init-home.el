@@ -5,7 +5,7 @@
 ;;     (next-frame)
 ;;   (org-agenda nil " "))
 
-(org-agenda nil " ")
+;; (org-agenda nil " ")
 (edit-server-start)
 (server-start)
 ;; (start-elnode-bm)
