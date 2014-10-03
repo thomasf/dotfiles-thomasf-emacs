@@ -150,9 +150,6 @@ unset category # category folder to put downloads
 ( name=org-caldav; url=https://github.com/dengste/org-caldav
   getGit && installRepo ) &
 
-( url=https://raw.github.com/jwiegley/ido-hacks/master/ido-hacks.el
-  getFile && installFile ) &
-
 ( url=http://www.cx4a.org/pub/auto-complete-ruby.el
   getFile && installFile ) &
 
@@ -181,9 +178,6 @@ unset category # category folder to put downloads
   getFile && installFile ) &
 
 ( url=https://raw.github.com/lewang/delim-pad/master/delim-pad.el
-  getFile && installFile ) &
-
-( url=https://raw.github.com/lewang/ws-butler/master/ws-butler.el
   getFile && installFile ) &
 
 ( url=https://raw.github.com/lewang/le_emacs_whole_line_funcs/master/whole-line-funcs.el

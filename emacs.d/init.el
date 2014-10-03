@@ -7059,14 +7059,6 @@ minibuffer."
     (add-hook 'python-mode-hook 'my-python-mode-hook)
 
     (rename-modeline "python" python-mode "py")
-    ;; (defun goto-python-api-doc ()
-    ;;   "Opens the django api reference info node"
-    ;;   (interactive)
-    ;;   (info "(python-2.7.3.info) The Python Standard Library"))
-    ;; (defun goto-django-api-doc ()
-    ;;   "Opens the django api reference info node"
-    ;;   (interactive)
-    ;;   (info "(django.info) API Reference"))
     (defconst python-class-start-re "^class[ \t]*\\([a-zA-Z_0-9]+\\)"
       "Regular expression for finding a class name.")
     (defconst python-method-start-re
