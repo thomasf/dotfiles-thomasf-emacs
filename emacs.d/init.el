@@ -4702,7 +4702,11 @@ otherwise use the subtree title."
      ac-dwim nil
      ac-auto-show-menu 0.7
      ac-menu-height 15
-     tab-always-indent 'complete)
+     ;; NOTE: the combination of (setq tab-always-indent 'complete) and (setq
+     ;; completion-at-point-functions '(auto-complete)) makes auto-complete
+     ;; fall back on itself which is bad
+     tab-always-indent t
+     )
 
     (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-prog-mode-hooks)
     (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-css-like-mode-hooks)
@@ -4765,20 +4769,17 @@ otherwise use the subtree title."
            (or
             degrade-p-terminal
             degrade-p-noninteractive)))
+
     (use-package yasnippet)
     (use-package auto-complete-config)
     (bind-key "C-n" 'ac-next ac-completing-map)
     (bind-key "C-p" 'ac-previous ac-completing-map)
     (bind-key "C-s" 'ac-isearch ac-completing-map)
+    (ac-set-trigger-key "TAB")
 
     (defun set-auto-complete-as-completion-at-point-function ()
-      (setq completion-at-point-functions '(auto-complete))
-      ;; TODO hmm...
-      (ac-set-trigger-key "TAB"))
-
-
-    (add-hook 'auto-complete-mode-hook
-              'set-auto-complete-as-completion-at-point-function)
+      (setq completion-at-point-functions '(auto-complete)))
+    (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
     (dolist
         (mode '(clojure-mode coffee-mode css-mode csv-mode
@@ -6131,11 +6132,17 @@ See URL `https://pypi.python.org/pypi/flake8'."
                                          my-yas-snippets-dir)) ".*\\'")
                   'snippet-mode))
 
-    (defalias 'yas/reload-all 'yas-reload-all)
-    (defalias 'yas/global-mode 'yas-global-mode)
-    (defalias 'yas/minor-mode 'yas-minor-mode)
-    (defalias 'yas/expand 'yas-expand)
-    (defalias 'yas/expand-snippet 'yas-expand-snippet)
+    ;; (defalias 'yas/reload-all 'yas-reload-all)
+    ;; (defalias 'yas/global-mode 'yas-global-mode)
+    ;; (defalias 'yas/minor-mode 'yas-minor-mode)
+    ;; (defalias 'yas/expand 'yas-expand)
+    ;; (defalias 'yas/expand-snippet 'yas-expand-snippet)
+
+    (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
+      (let ((yas-fallback-behavior nil))
+        ad-do-it))
+
+
     (bind-key "C-x i" 'yas-insert-snippet)
     (hook-into-modes #'yas-minor-mode-on
                      '(org-mode-hook
