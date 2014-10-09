@@ -8034,7 +8034,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;;;; groovy-mode
 (use-package groovy-mode-autoloads
-  :disabled t ;; NOTE bug here
   :ensure groovy-mode
   :mode (("\\.groovy\\'" . groovy-mode)
          ("build\\.gradle\\'" . groovy-mode)))
