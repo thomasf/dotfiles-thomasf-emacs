@@ -43,10 +43,13 @@ This is just a copy of the fully expanded macro from dash."
                         (load-path--take 3 (version-to-list emacs-version)))
              "."))
 
-(setq package-user-dir
-  (expand-file-name (format "packages/%s/" my-simplified-emacs-version-number) user-emacs-directory))
+(setq package-user-dir (expand-file-name
+                        (format "packages/%s/" my-simplified-emacs-version-number)
+                        user-emacs-directory)
+      delete-by-moving-to-trash nil)
 
 (mkdir package-user-dir t)
+
 
 (makeup-log "Delete ELPA leftovers and add elpa packages to load path.")
 (let ((default-directory package-user-dir))
