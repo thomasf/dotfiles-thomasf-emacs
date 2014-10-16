@@ -6452,6 +6452,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ;; ("C-x f h" . helm-for-files)
          ;; ("<f7>" . helm-for-files)
          ("C-x f r" . helm-recentf)
+         ("C-h r" . helm-recentf)
          ;; ("<f6>" . helm-recentf)
          ("C-x f L" . helm-locate))
   :init
