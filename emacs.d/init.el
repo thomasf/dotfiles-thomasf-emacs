@@ -3455,7 +3455,20 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :init
   (progn
     (setq
-     scroll-restore-commands '(handle-select-window handle-switch-frame mwheel-scroll scroll-bar-drag scroll-bar-scroll-down scroll-bar-scroll-up scroll-bar-toolkit-scroll scroll-down scroll-down-command scroll-down-command-flash scroll-other-window scroll-other-window-down scroll-up scroll-up-command scroll-up-command-flash)))
+     scroll-restore-recenter nil
+     scroll-restore-commands '(handle-select-window
+                               handle-switch-frame
+                               mwheel-scroll
+                               scroll-bar-drag
+                               scroll-bar-scroll-down
+                               scroll-bar-scroll-up
+                               scroll-bar-toolkit-scroll
+                               scroll-down scroll-down-command
+                               scroll-down-command-flash
+                               scroll-other-window
+                               scroll-other-window-down
+                               scroll-up scroll-up-command
+                               scroll-up-command-flash)))
   ;; :bind (("M-u" . scroll-restore-jump-back))
   :idle-priority 5
   :idle
