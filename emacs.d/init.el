@@ -104,11 +104,12 @@ re-downloaded in order to locate PACKAGE."
       (progn
         (package-refresh-contents)
         (require-package package min-version t)))))
-(when (and
-       (boundp 'emacs-version)
-       (string< "24.4" emacs-version))
-  (require-package 'melpa nil)
-  (require 'melpa))
+
+;; (when (and
+;;        (boundp 'emacs-version)
+;;        (string< "24.4" emacs-version))
+;;   (require-package 'melpa nil)
+;;   (require 'melpa))
 
 (setq use-package-idle-interval 1.5)
 (require-package 'use-package)
