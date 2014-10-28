@@ -1,8 +1,6 @@
-# -*- mode: snippet -*-
-# contributer: Yusuke Tsutsumi <tsutsumi.yusuke@gmail.com>
 # name: for
 # key: for
-# description: for snippet
+# description: for
 # --
 for ${1:elements} {
 	$0

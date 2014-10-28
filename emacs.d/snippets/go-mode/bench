@@ -1,5 +1,3 @@
-# -*- mode: snippet -*-
-# contributer: Yusuke Tsutsumi <tsutsumi.yusuke@gmail.com>
 # name: bench
 # key: bench
 # description: add a benchmark method

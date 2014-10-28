@@ -1,5 +1,3 @@
-# -*- mode: snippet -*-
-# contributer: Yusuke Tsutsumi <tsutsumi.yusuke@gmail.com>
 # name: test {}
 # key: test
 # description: add a test method

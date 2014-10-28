@@ -1,0 +1,4 @@
+# name: append
+# key: append
+# --
+$1 = append($1, $0)
