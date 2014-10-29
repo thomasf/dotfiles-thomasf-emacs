@@ -6701,6 +6701,26 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
     (use-package ibuffer-vc
       :ensure t)
 
+    (defun ibuffer-my-abbrevs (filename)
+      (let ((gopath (getenv "GOPATH"))
+            (directory-abbrev-alist ibuffer-directory-abbrev-alist))
+        (cond
+         ((and gopath (s-starts-with? gopath filename))
+          (concat "gopath"
+                  my-ibufffer-separator
+                  (s-replace gopath "" filename)))
+         (t (abbreviate-file-name filename)))))
+
+    (define-ibuffer-column filename
+      (:summarizer
+       (lambda (strings)
+         (let ((total (length (delete "" strings))))
+           (cond ((zerop total) "No files")
+                 ((= 1 total) "1 file")
+                 (t (format "%d files" total))))))
+      (ibuffer-my-abbrevs (or (ibuffer-buffer-file-name) "")))
+
+
     (define-ibuffer-column name-strip
       (:inline t
                :header-mouse-map ibuffer-name-header-map
