@@ -5123,7 +5123,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (setq gofmt-command (cond
                          ((executable-find "goimports") "goimports")
                          (t "gofmt")))
-    (add-hook 'go-mode-hook 'my-go-mode-hook)
     (use-package go-eldoc
       :ensure t
       :init
