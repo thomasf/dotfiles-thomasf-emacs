@@ -72,22 +72,15 @@ Font-lock, visual indicators and similar.")
 
 ;;;; package.el
 
-(setq package-enable-at-startup nil)
 (setq
+ package-enable-at-startup nil
  package-user-dir user-elpa-directory
  package-archives
  '(("melpa" . "http://melpa.milkbox.net/packages/")
    ("marmalade"   . "http://marmalade-repo.org/packages/")
    ("org"         . "http://orgmode.org/elpa/")
    ("gnu"         . "http://elpa.gnu.org/packages/")
-   ("sc"   . "http://joseito.republika.pl/sunrise-commander/"))
- package-archive-exclude-alist
- '(("melpa" elnode)
-   ("melpa" org-trello)
-   ("melpa" org)
-   ("marmalade" org)
-   ("gnu" org)
-   ("org" org)))
+   ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
 
 (eval-and-compile
   (require 'package)
@@ -105,11 +98,6 @@ re-downloaded in order to locate PACKAGE."
         (package-refresh-contents)
         (require-package package min-version t)))))
 
-;; (when (and
-;;        (boundp 'emacs-version)
-;;        (string< "24.4" emacs-version))
-;;   (require-package 'melpa nil)
-;;   (require 'melpa))
 
 (setq use-package-idle-interval 1.5)
 (require-package 'use-package)
