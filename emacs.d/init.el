@@ -5120,6 +5120,15 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :mode "\\.go\\'"
   :config
   (progn
+    (setq gofmt-command (cond
+                         ((executable-find "goimports") "goimports")
+                         (t "gofmt")))
+    (add-hook 'go-mode-hook 'my-go-mode-hook)
+    (use-package go-eldoc
+      :ensure t
+      :init
+      (progn
+        (add-hook 'go-mode-hook 'go-eldoc-setup)))
     (use-package go-autocomplete
       :ensure t
       :pre-load
