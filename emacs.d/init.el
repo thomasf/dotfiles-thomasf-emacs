@@ -5120,6 +5120,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :mode "\\.go\\'"
   :config
   (progn
+    (defun gopath-set-here ()
+      (interactive)
+      (message (or (buffer-file-name) default-directory))
+      (setenv "GOPATH"
+              (f-expand (or (buffer-file-name) default-directory))))
     (setq gofmt-command (cond
                          ((executable-find "goimports") "goimports")
                          (t "gofmt")))
