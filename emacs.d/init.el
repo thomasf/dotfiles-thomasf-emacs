@@ -1654,6 +1654,9 @@ buffer-local wherever it is set."
                    focus-out-hook
                    ))
 
+(defadvice hardhat-local-hook (after cursor-style-update activate)
+  (cursor-style-update))
+
 ;;; functions: windows / frames
 ;;;; windows
 ;;;;; dedicated-mode
