@@ -2814,6 +2814,15 @@ for the current buffer's file name, and the line number at point."
        projectile-root-child-of))
     (bind-key "A" 'projectile-ag region-bindings-mode-map)
 
+    (defadvice projectile-mode (before maybe-use-cache activate)
+      (when
+          (--any? (and it (file-remote-p it))
+                  (list
+                   (buffer-file-name)
+                   list-buffers-directory
+                   default-directory))
+        (setq-local projectile-enable-caching t)))
+
     (use-package helm-projectile
       :ensure t
       :if (not degrade-p-helm)
