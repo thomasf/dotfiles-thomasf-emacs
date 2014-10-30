@@ -1620,18 +1620,16 @@ buffer-local wherever it is set."
   (when (bound-and-true-p cua-normal-cursor-color)
     (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
            (cursor-style (cond
-                          ((bound-and-true-p region-bindings-mode) (cons "#d33682" '(bar . 8)))
-                          ((bound-and-true-p god-local-mode) (cons "#268bd2" 'box))
-                          ((bound-and-true-p buffer-read-only) (cons cua-normal-cursor-color '(hbar . 6)))
-                          (t (cons cua-normal-cursor-color my-normal-cursor-type)))))
-      (unless (equal (car cursor-style) current-cursor-color)
-        (set-cursor-color (car cursor-style)))
-      (unless (equal (cdr cursor-style) cursor-type)
-        (setq cursor-type (cdr cursor-style))))))
-
-
-
-
+                          ((bound-and-true-p region-bindings-mode) (list "#d33682" '(bar . 8) t))
+                          ((bound-and-true-p god-local-mode) (list "#268bd2" 'box nil))
+                          ((bound-and-true-p buffer-read-only) (list "#859900" 'box nil))
+                          (t (list cua-normal-cursor-color my-normal-cursor-type t)))))
+      (unless (equal (nth 0 cursor-style) current-cursor-color)
+        (set-cursor-color (nth 0 cursor-style)))
+      (unless (equal (nth 1 cursor-style) cursor-type)
+        (setq cursor-type (nth 1 cursor-style)))
+      (unless (equal (nth 2 cursor-style) blink-cursor-mode)
+        (blink-cursor-mode (or (nth 2 cursor-style) -1))))))
 
 (defvar cursor-style-timer nil)
 (defun cursor-style-update ()
