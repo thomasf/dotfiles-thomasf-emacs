@@ -6766,38 +6766,10 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
         (string-match qualifier it)))
 
 
-    (defvar ibuffer-magit-filter-groups nil)
-    (defun ibuffer-magit-define-filter-groups ()
-      (when (and (not ibuffer-magit-filter-groups)
-               (boundp 'magit-repo-dirs))
-        (setq ibuffer-magit-filter-groups
-              (--map (list
-                      (concat "git:: "
-                              (file-name-nondirectory (directory-file-name it)))
-                      `(filename2 . ,it))
-                     (mapcar 'cdr (magit-list-repos magit-repo-dirs))))))
-
-
-    (defvar ibuffer-projectile-filter-groups nil)
-    (defun ibuffer-projectile-define-filter-groups ()
-      (when (boundp 'projectile-known-projects)
-        (setq ibuffer-projectile-filter-groups
-              (-concat
-               (--map (list
-                       (concat "Project: "
-                               (file-name-nondirectory (directory-file-name it)))
-                       `(filename2 . ,it))
-                      projectile-known-projects)))))
-
     (defun ibuffer-set-filter-groups-by-root  ()
       (interactive)
-      ;; (ibuffer-projectile-define-filter-groups)
-      ;; (ibuffer-magit-define-filter-groups)
       (setq ibuffer-filter-groups
             (-concat
-             ;; ibuffer-projectile-filter-groups
-             ;; ibuffer-magit-filter-groups
-
              '(("MORE"
                 (or (mode . magit-log-edit-mode)
                    (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
