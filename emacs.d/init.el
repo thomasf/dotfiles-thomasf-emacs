@@ -8411,6 +8411,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package hardhat
   :ensure t
   :commands (hardhat-mode global-hardhat-mode)
+  :bind (("M-o m h" . hardhat-mode))
   :init
   (progn
     (setq
@@ -8470,6 +8471,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        "~/\\.config/dotfiles/emacs/emacs\\.d/override/"
        "~/\\.config/dotfiles/emacs/emacs\\.d/site-lisp/"
        "~/\\.cpan/"
+       "emacs\\.d/init.el"
        "~/\\.emacs\\.d/elpa/"
        "~/\\.emacs\\.d/lib/"
        "~/\\.emacs\\.d/override/"
