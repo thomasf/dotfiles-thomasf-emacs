@@ -6601,6 +6601,8 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
       :commands
       (ibuffer-vc-set-filter-groups-by-vc-root
        ibuffer-vc-generate-filter-groups-by-vc-root))
+    (use-package ibuffer-projectile
+      :commands ibuffer-projectile-generate-filter-groups-by-projectile-root)
     (use-package ibuffer-tramp
       :ensure t
       :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
@@ -6785,6 +6787,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                  (name . "^\\*Messages")
                  (name . "^\\*Help")
                  )))
+             (ibuffer-projectile-generate-filter-groups-by-projectile-root)
              (ibuffer-vc-generate-filter-groups-by-vc-root)
              (ibuffer-tramp-generate-filter-groups-by-tramp-connection))))
 
