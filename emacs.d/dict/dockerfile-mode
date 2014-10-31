@@ -1,0 +1,13 @@
+from
+maintainer
+run
+cmd
+expose
+env
+add
+copy
+entrypoint
+volume
+user
+workdir
+onbuild
