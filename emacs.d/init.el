@@ -6788,7 +6788,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                  (name . "^\\*Help")
                  )))
              (ibuffer-projectile-generate-filter-groups-by-projectile-root)
-             (ibuffer-vc-generate-filter-groups-by-vc-root)
+             ;; (ibuffer-vc-generate-filter-groups-by-vc-root)
              (ibuffer-tramp-generate-filter-groups-by-tramp-connection))))
 
 
