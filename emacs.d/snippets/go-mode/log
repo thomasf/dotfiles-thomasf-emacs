@@ -1,0 +1,5 @@
+# name: Log.Println
+# key: logln
+# expand-env: ()
+# --
+log.Println("$0")

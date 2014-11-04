@@ -1,0 +1,5 @@
+# name: log string
+# key: logstr
+# expand-env: ()
+# --
+log.Printf("$1: %s", $1$0)

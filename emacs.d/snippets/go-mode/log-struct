@@ -1,0 +1,5 @@
+# name: log struct
+# key: logstruct
+# expand-env: ()
+# --
+log.Printf("$1: %+v", $1$0)
