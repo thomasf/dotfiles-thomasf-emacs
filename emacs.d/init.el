@@ -3450,6 +3450,11 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands rainbow-blocks-mode)
 
+;;;; rainbow-identifiers
+(use-package rainbow-identifiers
+  :ensure t
+  :commands rainbow-identifiers-mode)
+
 (use-package scroll-restore
   :ensure t
   :commands scroll-restore-mode
