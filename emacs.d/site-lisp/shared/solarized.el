@@ -632,9 +632,12 @@ customize the resulting theme."
      `(diff-header ((,class (:background ,base03))))
      `(diff-file-header
        ((,class (:background ,base03 :foreground ,base0 :weight bold))))
-     `(diff-refine-added ((,class :foreground ,base03 :background ,green)))
-     `(diff-refine-change ((,class :foreground ,base03 :background ,blue)))
-     `(diff-refine-removed ((,class (:foreground ,base03 :background ,red))))
+     `(diff-refine-added ((,class (:foreground ,green :background ,base03
+                                               :inverse-video t))))
+     `(diff-refine-change ((,class (:foreground ,blue :background ,base03
+                                                :inverse-video t))))
+     `(diff-refine-removed ((,class (:foreground ,red :background ,base03
+                                                 :inverse-video t))))
 
      ;; ediff
      `(ediff-fine-diff-A ((,class (:background ,orange-lc))))
@@ -1041,6 +1044,9 @@ customize the resulting theme."
      `(helm-css-scss-selector-depth-face-5 ((,class (:foreground ,yellow))))
      `(helm-css-scss-selector-depth-face-6 ((,class (:foreground ,violet))))
      `(helm-css-scss-target-line-face ((,class (:background unspecified :foreground ,magenta))))
+
+     ;; helm-go-package
+     `(helm-source-go-package-godoc-description ((,class (:foreground ,base01))))
 
      ;; helm-swoop
      `(helm-swoop-target-line-face ((,class (:foreground unspecified :background ,base02))))
