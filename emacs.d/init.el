@@ -4078,7 +4078,7 @@ file to write to."
   (progn
     (when my-use-semantic-instead-of-which-func
       (setq
-       which-func-modes '(emacs-lisp-mode coffee-mode)))
+       which-func-modes '(emacs-lisp-mode coffee-mode go-mode)))
     (when (boundp 'mode-line-misc-info)
       (which-func-mode 1)))
   :config
