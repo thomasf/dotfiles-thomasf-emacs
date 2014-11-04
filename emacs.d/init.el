@@ -61,8 +61,8 @@ Font-lock, visual indicators and similar.")
   (or (not (boundp 'emacs-version))
      (string< emacs-version "24.3")))
 (defvar degrade-p-emacs-pre24.4
-  (and (not degrade-p-emacs-pre24.3)
-     (not (boundp 'focus-out-hook))))
+  (or (not (boundp 'emacs-version))
+     (string< emacs-version "24.4")))
 (defvar degrade-p-helm degrade-p-old-emacs
   "Helm does not support emacs23.")
 (and
