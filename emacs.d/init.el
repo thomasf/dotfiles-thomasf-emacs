@@ -4984,7 +4984,11 @@ otherwise use the subtree title."
      ;; flycheck-highlighting-mode 'symbols
      flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
-      (unless (current-buffer-remote-p)
+      (unless
+          (or
+           (hardhat-buffer-included-p (current-buffer))
+           (current-buffer-remote-p)
+           buffer-read-only)
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
@@ -8402,7 +8406,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; hardhat
 (use-package hardhat
   :ensure t
-  :commands (hardhat-mode global-hardhat-mode)
+  :commands (hardhat-mode
+             global-hardhat-mode
+             hardhat-buffer-included-p)
   :bind (("M-o m h" . hardhat-mode))
   :init
   (progn
