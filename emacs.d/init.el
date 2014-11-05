@@ -702,9 +702,9 @@ buffer-local wherever it is set."
   (progn
     (defun my-semantic-setup ()
       (semantic-mode)
-      ;; (semantic-idle-scheduler-mode)
+      (semantic-idle-scheduler-mode)
       ;; (semantic-decoration-mode)
-      ;; (semantic-idle-breadcrumbs-mode)
+      (semantic-idle-breadcrumbs-mode)
       )))
 
 ;;;; bookmark
