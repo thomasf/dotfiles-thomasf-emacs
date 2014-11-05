@@ -4283,6 +4283,9 @@ file to write to."
   :ensure t
   :commands (plantuml-mode)
   :mode (("\\.plu\\'" . plantuml-mode))
+  :config
+  (progn
+    (require 'cl-lib))
   :pre-load
   (progn
     (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
