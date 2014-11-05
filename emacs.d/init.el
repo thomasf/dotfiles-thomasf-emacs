@@ -3453,7 +3453,16 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 ;;;; rainbow-identifiers
 (use-package rainbow-identifiers
   :ensure t
-  :commands rainbow-identifiers-mode)
+  :commands rainbow-identifiers-mode
+  :init
+  (progn
+    (defun rainbow-identifiers-turn-on-maybe ()
+      (when
+          (or
+           (hardhat-buffer-included-p (current-buffer)))
+        (rainbow-identifiers-mode)))
+    ;; (add-hook 'prog-mode-hook 'rainbow-identifiers-turn-on-maybe)
+    ))
 
 (use-package scroll-restore
   :ensure t
