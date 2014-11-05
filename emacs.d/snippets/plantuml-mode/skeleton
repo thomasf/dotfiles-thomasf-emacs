@@ -1,0 +1,8 @@
+# name: plantuml skeleton
+# key: pluskeleton
+# binding: 
+# expand-env: ()
+# --
+@startuml
+    $0
+@enduml

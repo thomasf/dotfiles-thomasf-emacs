@@ -6268,7 +6268,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
             . ["python-mode/general/skeleton" autoinsert-yas-expand])
            (snippet-mode . ["snippet-mode/skeleton" autoinsert-yas-expand])
            (("\\.org\\'" . "Org mode")
-            . ["org-mode/skeleton" autoinsert-yas-expand]))
+            . ["org-mode/skeleton" autoinsert-yas-expand])
+           (("\\.plu\\'" . "Plant UML mode")
+            . ["plantuml-mode/skeleton" autoinsert-yas-expand]))
          auto-insert 'other
          auto-insert-query nil)
         (auto-insert-mode))))
