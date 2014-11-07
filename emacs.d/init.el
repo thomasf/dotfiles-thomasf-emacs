@@ -3260,6 +3260,13 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package helm-go-package
   :ensure t
   :commands helm-go-package
+  :init
+  (progn
+    (use-package go-mode
+      :defer t
+      :config
+      (progn
+        (define-key go-mode-map (kbd "C-c C-a") 'helm-go-package))))
   :config
   (progn
     (use-package helm)))
