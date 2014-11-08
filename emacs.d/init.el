@@ -5131,7 +5131,13 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (defun my-edit-server-start-hook ()
       "My edit-server mode hook."
       ;; TODO: support enabling org-mode, markdown-mode, rest-mode
-      (when (s-starts-with? "www.facebook.com" edit-server-url t)
+      (when
+          (string-match
+           (rx
+            (and line-start
+               (* "www.")
+               (or "skunk.cc" "facebook.com")))
+           edit-server-url )
         (ispell-change-dictionary "svenska"))
       (flyspell-mode 1)
       (flyspell-buffer))
