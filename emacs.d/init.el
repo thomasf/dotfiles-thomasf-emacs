@@ -9397,6 +9397,7 @@ already present."
           weechat-auto-monitor-new-buffers 'silent
           weechat-initial-lines 200
           weechat-auto-close-buffers t
+          weechat-modules '(weechat-button weechat-complete)
           weechat-time-format "%a %H:%M"
           weechat-strip-formatting t ;; FIXME remove when weechat colors is using its color settings properly
           weechat-tracking-faces-priorities '(weechat-highlight-face))
@@ -9411,69 +9412,11 @@ already present."
       (let ((weechat-auto-monitor-buffers t))
         (weechat-auto-monitor)))
 
-    (use-package weechat-tracking
-      :defer t
-      :config
-      (progn
-        (defun weechat-buffer-plugin (&optional buffer-ptr)
-          (let* ((buffer-ptr (or buffer-ptr weechat-buffer-ptr))
-                 (plugin (weechat->> buffer-ptr
-                                     (weechat-buffer-hash)
-                                     (gethash "local_variables")
-                                     (assoc-string "plugin")
-                                     (cdr)) ))
-            (when (stringp plugin)
-              (intern (format ":%s" plugin)))))
-
-        (defun weechat-tracking-handle-query ()
-          (and
-           (cl-find :query weechat-tracking-types)
-           (string= ":private" (weechat-buffer-type))
-           (string= ":irc" (weechat-buffer-plugin))
-           (tracking-add-buffer (current-buffer) '(weechat-highlight-face))))
-        (add-hook 'weechat-buffer-background-message-hook
-                  'weechat-tracking-handle-query)))
-
-    (defun weechat-dedicated-emacs ()
-      "Makes changes to emacs to become more weechat centric"
-      (interactive)
-      (require 'private-weechat nil t)
-      (setq-default weechat-auto-monitor-new-buffers t
-                    weechat-notification-mode t
-                    weechat-initial-lines 200
-                    ;; weechat-auto-monitor-buffers t
-                    weechat-tracking-types '(:highlight :query))
-      (require 'weechat-tracking)
-      (unless (weechat-connected-p)
-        (my-weechat-connect))
-      (windmove-default-keybindings)
-      (setq-default
-       ido-decorations '( "{" "}" " | " " | ..." "[" "]"
-                          " [No match]" " [Matched]"
-                          " [Not readable]" " [Too big]" " [Confirm]")
-
-       max-mini-window-height 1)
-      (unbind-key "C-x C-c")
-      (bind-key* "C-x <SPC>" 'weechat-monitor-buffer))
-
     (defun weechat ()
-      "Read ~/.emacs-weechat.el.gpg which is supposed to connect
-to weechat."
+      "Load private-weechat which is supposed to connect to weechat."
       (interactive)
       (require 'private-weechat nil t)
-      (my-weechat-connect)))
-  :config
-  (progn
-    (use-package weechat-spelling)
-
-    (defadvice tracking-shorten (around component-length activate)
-      (let ((shorten-validate-component-function
-             '(lambda (str)
-                (and (string-match-p "\\w" str)
-                   (> (length str) 2)))))
-        ad-do-it))
-
-    ))
+      (my-weechat-connect))))
 
 ;;;; mouse-slider-mode
 (use-package mouse-slider-mode
