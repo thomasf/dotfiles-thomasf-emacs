@@ -83,6 +83,7 @@ This option can be used to exclude certain files from the grouping mechanism."
   (and file
        (or (null ibuffer-projectile-skip-if-remote)
            (not (file-remote-p file)))
+       (file-readable-p file)
        (funcall ibuffer-projectile-include-function file)))
 
 
@@ -144,6 +145,54 @@ If the file is not under a project root, nil is returned instead."
         (with-current-buffer ibuf
           (pop-to-buffer ibuf)
           (ibuffer-update nil t)))))
+
+
+;;;; ADDIOTIONAL UTILITY FUNCTIONS
+
+
+;; example usage: I use RET to find file under point i ibuffer, f instead
+;; brings up projectile-find-file for project of buffer under point.
+;;
+;; NOTE: Currently this is straight from my init.el, was written as quick as
+;; possible and the implementation will be rewritten in a better way.
+;;
+;;  (bind-key "f" 'ibuffer-projectile-find-file ibuffer-mode-map)
+(defun ibuffer-projectile-find-file ()
+  "projectile-find-file using item under point in ibuffer"
+  (interactive)
+  (--when-let (get-buffer "*Ibuffer*")
+    (with-current-buffer it
+      (let* ((selected-buffer (ibuffer-current-buffer))
+             (buffer-path (with-current-buffer
+                              selected-buffer
+                            (or (buffer-file-name)
+                               list-buffers-directory
+                               default-directory)))
+             (default-directory
+               (if (file-regular-p buffer-path)
+                   (file-name-directory buffer-path)
+                 buffer-path)))
+        (projectile-find-file)))))
+
+
+;; example usage: Open project without leaving ibuffer which means that the
+;; project root directory is inserted under point while not leaving ibuffer.
+;;
+;; NOTE: Currently this is straight from my init.el, was written as quick as
+;; possible and the implementation will be rewritten in a better way.
+;;
+;; (bind-key "o" 'ibuffer-projectile-dired-known-projects-root ibuffer-mode-map)
+;;
+(defun ibuffer-projectile-dired-known-projects-root (&optional arg)
+  "Insert projectile project root dir under point in ibuffer"
+  (interactive "P")
+  (use-package projectile)
+  (let ((project-to-switch
+         (projectile-completing-read "Switch to project: "
+                                     projectile-known-projects)))
+    (dired project-to-switch)
+    (ibuffer)))
+
 
 
 (provide 'ibuffer-projectile)
