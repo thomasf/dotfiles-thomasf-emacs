@@ -3574,6 +3574,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands (toggle-quotes)
   :bind ("C-'" . toggle-quotes))
 
+(use-package toml-mode
+  :ensure t
+  :mode (("\\.toml\\'" . toml-mode)))
+
 (use-package tree-mode
   :ensure t
   :defer t)
