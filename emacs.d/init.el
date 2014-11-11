@@ -2802,6 +2802,7 @@ for the current buffer's file name, and the line number at point."
      projectile-require-project-root t
      projectile-switch-project-action 'projectile-dired
      projectile-enable-caching nil
+     projectile-verbose nil
      projectile-known-projects-file (expand-file-name
                                      "projectile-bookmarks.eld"
                                      user-data-directory)
