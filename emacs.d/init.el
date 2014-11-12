@@ -7022,6 +7022,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
 ;;; ielm
 (use-package ielm
+  :defer t
   :init
   (progn
     (setq ielm-prompt "» ")))
