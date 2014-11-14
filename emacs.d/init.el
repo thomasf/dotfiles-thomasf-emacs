@@ -7683,7 +7683,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      desktop-globals-to-save (append '(
                                        (compile-history          . 30)
                                        (extended-command-history . 30)
-                                       (file-name-history        . 100)
+                                       ;; (file-name-history        . 100)
                                        (grep-history             . 30)
                                        (minibuffer-history       . 50)
                                        (query-replace-history    . 60)
@@ -7694,45 +7694,42 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                                        (shell-command-history    . 50)
                                        register-alist
                                        tags-file-name
-                                       ))
-     desktop-minor-mode-table '(
-                                (auto-complete-mode nil)
-                                (auto-fill-function auto-fill-mode)
-                                (auto-highlight-symbol nil)
-                                (auto-highlight-symbol-mode nil)
-                                (autopair-mode nil)
-                                (buffer-file-coding-system nil)
-                                (dired-omit-mode nil)
-                                (eldoc-mode nil)
-                                (elisp-slime-nav-mode nil)
-                                (erc-track-minor-mode nil)
-                                (fci-mode nil)
-                                (flymake-mode nil)
-                                (global-hardhat-mode nil)
-                                (hardhat-mode nil)
-                                (highlight-indentation-current-column-mode nil)
-                                (highlight-indentation-mode nil)
-                                (override-global-mode nil)
-                                (paredit-mode nil)
-                                (pony-minor-mode nil)
-                                (pony-tpl-minor-mode nil)
-                                (pretty-mode nil)
-                                (py-smart-operator-mode nil)
-                                (rainbow-delimiters-mode nil)
-                                (redshank-mode nil)
-                                (ropemacs-mode nil)
-                                (savehist-mode nil)
-                                (smart-operator-mode nil)
-                                (smartparens-mode nil)
-                                (type-break-mode nil)
-                                (undo-tree-mode nil)
-                                (vc-dired-mode nil)
-                                (vc-mode nil)
-                                (volatile-highlights-mode nil)
-                                (whitespace-mode nil)
-                                (yas-minor-mode nil)
-                                (zencoding-mode nil)
-                                ))))
+                                       )))
+
+    (setq workspace-desktop-directory (expand-file-name
+                                       "desktops/" user-data-directory))
+
+    (defun workspace-desktop-save ()
+      (interactive)
+      (let* ((workspace-prefix (workspace-prefix))
+             (workspace-directory (f-expand
+                                   workspace-prefix
+                                   workspace-desktop-directory)))
+        (if (not workspace-prefix)
+            (error "no workspace available")
+          (make-directory workspace-directory t)
+          (desktop-save workspace-directory)
+          (desktop-save-mode))))
+
+    (defun workspace-desktop-load ()
+      (interactive)
+      (let* ((workspace-prefix (workspace-prefix))
+             (workspace-directory (f-expand
+                                   workspace-prefix
+                                   workspace-desktop-directory)))
+        (if (not workspace-prefix)
+            (error "no workspace available")
+          (make-directory workspace-directory t)
+          (desktop-read workspace-directory)
+          (desktop-save-mode)))))
+  :config
+  (progn
+    (--each '(global-hardhat-mode)
+      (add-to-list 'desktop-minor-mode-table (list it nil)))
+    (defadvice desktop-save (before no-minor-modes activate)
+      (--each minor-mode-list
+        (add-to-list 'desktop-minor-mode-table (list it nil))))))
+
 
 ;;;; desktop-menu
 (use-package desktop-menu
