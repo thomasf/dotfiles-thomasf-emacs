@@ -8,18 +8,23 @@ get_emacs() {
     set -e
     mkdir -p ~/.opt
     cd ~/.opt
-    if [ -d emacs-24 ]; then
-        cd emacs-24
-        bzr pull bzr://bzr.savannah.gnu.org/emacs/emacs-24
-        make
-        make info
+    if [ -d emacs ]; then
+      cd emacs
+      git pull origin emacs-24
+      make
+      make info
     else
-        bzr branch bzr://bzr.savannah.gnu.org/emacs/emacs-24
-        cd emacs-24
-        ./autogen.sh
-        ./configure --with-x-toolkit=gtk3 --with-file-notification=inotify --without-pop --enable-link-time-optimization --without-toolkit-scroll-bars
-        make bootstrap
-        make info
+      git clone -b emacs-24 git://git.sv.gnu.org/emacs.git emacs
+      cd emacs
+      ./autogen.sh
+      ./configure \
+        --with-x-toolkit=gtk3 \
+        --with-file-notification=inotify \
+        --without-pop \
+        --enable-link-time-optimization \
+        --without-toolkit-scroll-bars
+      make bootstrap
+      make info
     fi
 }
 
