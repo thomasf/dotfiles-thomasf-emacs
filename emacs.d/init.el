@@ -10030,6 +10030,9 @@ drag the viewpoint on the image buffer that the window displays."
       "Adds paren-face support to the mode."
       (font-lock-add-keywords nil '(("\\[\\|\\]" . paren-face)))
       (font-lock-add-keywords nil '(("{\\|}" . paren-face))))
+    (add-hook 'go-mode-hook 'paren-face-add-keyword)
+    (add-hook 'go-mode-hook 'paren-face-add-keyword-other)
+    (add-hook 'coffee-mode-hook 'paren-face-add-keyword)
     (add-hook 'python-mode-hook 'paren-face-add-keyword)
     (add-hook 'python-mode-hook 'paren-face-add-keyword-other)
     (add-hook 'coffee-mode-hook 'paren-face-add-keyword)
