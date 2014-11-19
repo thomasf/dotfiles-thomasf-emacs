@@ -5159,19 +5159,27 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :mode "\\.go\\'"
   :config
   (progn
+
     (defun gopath-set-here ()
       (interactive)
       (message (or (buffer-file-name) default-directory))
       (setenv "GOPATH"
               (f-expand (or (buffer-file-name) default-directory))))
+
     (setq gofmt-command (cond
                          ((executable-find "goimports") "goimports")
                          (t "gofmt")))
+
+    (use-package go-stacktracer
+      :ensure t
+      :commands (go-stacktracer-region))
+
     (use-package go-eldoc
       :ensure t
       :init
       (progn
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
+
     (use-package go-autocomplete
       :ensure t
       :pre-load
@@ -5184,6 +5192,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
                       (setq ac-sources
                             '(ac-source-go
                               ac-source-yasnippet))))))
+
     (bind-key "M-." 'godef-jump go-mode-map)))
 
 ;;;; slim-mode
