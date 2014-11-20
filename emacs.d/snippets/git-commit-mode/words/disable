@@ -1,5 +1,5 @@
 # name: Disable
-# key: d
+# key: dis
 # expand-env: ()
 # --
 Disable $0

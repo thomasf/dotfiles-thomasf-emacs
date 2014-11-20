@@ -1,0 +1,12 @@
+# name: clean messages
+# key: clean
+# expand-env: ()
+# --
+${1:$$(yas-choose-value '(
+"Improve source readability"
+"Improve source formatting"
+"Improve documentation"
+"Fix pep8 issues"
+"Remove unused code"
+"Gofmt'd"
+))}$0

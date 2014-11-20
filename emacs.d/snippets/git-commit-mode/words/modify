@@ -1,5 +1,5 @@
 # name: Modify
-# key: m
+# key: mod
 # expand-env: ()
 # --
 Modify $0
