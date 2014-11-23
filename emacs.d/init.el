@@ -6747,6 +6747,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                (".experimental" . "~/.config/dotfiles/experimental")
                (".private" . "~/.config/dotfiles/private")
                (".config" . "~/.config/")
+               ("goroot" . "~/.opt/go/")
                )))))
     (use-package ibuffer-git
       :ensure t)
@@ -6760,7 +6761,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
          ((and gopath (s-starts-with? gopath filename))
           (concat "gopath"
                   my-ibufffer-separator
-                  (s-replace gopath "" filename)))
+                  (s-replace (concat gopath "/") "" filename)))
          (t (abbreviate-file-name filename)))))
 
     (define-ibuffer-column filename
