@@ -1345,7 +1345,9 @@ buffer-local wherever it is set."
             (logior (file-modes buffer-file-name) #o100))
     (message (concat "Made " buffer-file-name " executable"))))))
 
-(add-hook 'after-save-hook 'my-make-script-executable)
+(when (not degrade-p-noninteractive)
+  (add-hook 'after-save-hook 'my-make-script-executable))
+
 
 ;;; functions: calling external commands
 (defun pip-freeze ()
@@ -2939,6 +2941,7 @@ for the current buffer's file name, and the line number at point."
 ;;;; dired-toggle-sudo
 (use-package dired-toggle-sudo
   :ensure t
+  :if (not degrade-p-noninteractive)
   :commands dired-toggle-sudo)
 
 ;;;; download-region
@@ -3664,6 +3667,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package dired
   :commands (dired)
   :bind (("C-x d d" . ido-dired))
+  :if (not degrade-p-noninteractive)
   :init
   (progn
     (setq dired-listing-switches "-alh"
@@ -4140,6 +4144,7 @@ file to write to."
 (use-package abbrev
   :defer t
   :diminish ""
+  :if (not degrade-p-noninteractive)
   :init
   (progn
     (setq
@@ -4149,6 +4154,7 @@ file to write to."
 ;;;; quickrun
 (use-package quickrun
   :ensure t
+  :if (not degrade-p-noninteractive)
   :commands (quickrun
              quickrun-region
              quickrun-with-arg
@@ -4170,6 +4176,7 @@ file to write to."
 (let ((ad-redefinition-action 'accept))
   (use-package color-moccur
     :ensure t
+    :if (not degrade-p-noninteractive)
     :commands (isearch-moccur
                isearch-moccur-all
                moccur
@@ -4192,6 +4199,7 @@ file to write to."
 ;;;; goto-chg
 (use-package goto-chg
   ;; :ensure t
+  :if (not degrade-p-noninteractive)
   :commands (goto-last-change goto-last-change-flash)
   :bind ("C-c C-SPC" . goto-last-change-flash)
   :config
@@ -4261,6 +4269,7 @@ file to write to."
     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
     (use-package ghc
       :ensure t
+      :if (not degrade-p-noninteractive)
       :commands ghc-init
       :init
       (progn
@@ -4276,6 +4285,7 @@ file to write to."
         (add-hook 'haskell-mode-hook 'my-ghc-mod-hook)))
     (use-package hi2
       :disabled t
+      :if (not degrade-p-noninteractive)
       :ensure t
       :commands turn-on-hi2
       :init
@@ -4288,6 +4298,7 @@ file to write to."
 ;;;; shm (structured haskell mode)
 (use-package shm
   :ensure t
+  :if (not degrade-p-noninteractive)
   :commands structured-haskell-mode)
 
 ;;;; plantuml-mode
@@ -4916,6 +4927,7 @@ otherwise use the subtree title."
 (use-package vkill
   :ensure t
   :commands vkill
+  :if (not degrade-p-noninteractive)
   :init
   (progn
     (defun vkill-and-helm-occur ()
@@ -4996,6 +5008,7 @@ otherwise use the subtree title."
 ;;;; flycheck
 (use-package flycheck
   :ensure t
+  :if (not degrade-p-noninteractive)
   :commands (flycheck-mode
              global-flycheck-mode)
   :diminish ((global-flycheck-mode . "fc")
