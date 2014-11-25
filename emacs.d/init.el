@@ -5601,6 +5601,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 ;;;; artbollocks-mode
 (use-package artbollocks-mode
   :commands artbollocks-mode
+  :ensure t
   :init
   (progn
     (setq lexical-illusions nil)
@@ -10162,6 +10163,10 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package phi-search
   :ensure t
   :commands (phi-search phi-search-backwards))
+
+(use-package phi-search-dired
+  :ensure t
+  :commands phi-search-dired)
 
 ;;;; pt
 (use-package pt
