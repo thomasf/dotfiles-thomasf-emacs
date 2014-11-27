@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: mod
-# key: mod
+# name: module skeleton
+# key: module
 # --
 var $1 = require("${2:$1}")$3
 
