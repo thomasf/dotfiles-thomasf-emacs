@@ -5618,7 +5618,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (setq lexical-illusions nil)
-    (add-hook 'markdown-mode-hook 'artbollocks-mode)))
+    ;; (add-hook 'markdown-mode-hook 'artbollocks-mode)
+    ))
 
 ;;;; bbdb-loaddefs
 (use-package bbdb-loaddefs
