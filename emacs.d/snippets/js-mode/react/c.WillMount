@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
-# name: React#componentWillMount
-# key: cwm
+# name: componentWillMount
 # --
 componentWillMount: function() {
 $0
-}
+},

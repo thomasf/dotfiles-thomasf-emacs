@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: React createClass  (create component)
+# --
+var $1 = React.createClass({
+
+$0
+
+})

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: componentWillUpdate
+# --
+componentWillUpdate: function(nextProps, nextState) {
+$0
+}

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: componentDidUpdate
+# --
+componentDidUpdate: function(prevProps, prevState) {
+$0
+},

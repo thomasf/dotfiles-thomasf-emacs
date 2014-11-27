@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
-# name: React#render
-# key: render
+# name: component render
 # --
 render: function() {
-$0
-}
+	return ( $0 )
+},

@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
-# name: React#componentWillUnmount
-# key: cwum
+# name: componentWillUnmount
 # --
 componentWillUnmount: function() {
 $0
-}
+},

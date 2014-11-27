@@ -1,4 +1,0 @@
-# -*- mode: snippet -*-
-# name: React#setState
-# --
-this.setState({$0});

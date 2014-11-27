@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: componentWillReceiveProps
+# --
+componentWillReceiveProps: function(nextProps) {
+$0
+},

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: setState
+# --
+this.setState({
+    $0
+})
