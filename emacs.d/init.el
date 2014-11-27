@@ -8240,6 +8240,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (rename-modeline "js2-mode" js2-mode "js2")
     (setq js2-strict-missing-semi-warning nil
+          js2-strict-trailing-comma-warning nil
           js2-include-node-externs t))
   :config
   (progn
