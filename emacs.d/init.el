@@ -8239,7 +8239,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (rename-modeline "js2-mode" js2-mode "js2")
-    (setq js2-strict-missing-semi-warning nil))
+    (setq js2-strict-missing-semi-warning nil
+          js2-include-node-externs t))
   :config
   (progn
     (use-package js2-imenu-extras
