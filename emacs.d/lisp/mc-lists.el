@@ -42,6 +42,7 @@
         delete-blank-lines
         delete-indentation
         dired-back-to-start-of-files
+        dired-next-line
         duplicate-current-line-or-region
         electric-newline-and-maybe-indent
         end-of-buffer
