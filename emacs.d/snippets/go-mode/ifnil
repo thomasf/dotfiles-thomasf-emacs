@@ -1,0 +1,7 @@
+# name: if () nil {...
+# key: ifnil
+# description: ifnily
+# --
+if $1 == nil {
+	$0
+}
