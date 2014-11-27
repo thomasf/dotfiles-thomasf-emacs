@@ -6276,13 +6276,13 @@ See URL `https://pypi.python.org/pypi/flake8'."
                                          my-yas-snippets-dir)) ".*\\'")
                   'snippet-mode))
 
-
     (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
       (let ((yas-fallback-behavior nil))
         ad-do-it))
 
 
     (bind-key "C-x i" 'yas-insert-snippet)
+    (bind-key "C-h TAB" 'yas-insert-snippet)
     (hook-into-modes #'yas-minor-mode-on
                      '(org-mode-hook
                        git-commit-mode-hook))
