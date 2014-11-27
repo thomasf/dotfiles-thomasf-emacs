@@ -6276,11 +6276,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
                                          my-yas-snippets-dir)) ".*\\'")
                   'snippet-mode))
 
-    ;; (defalias 'yas/reload-all 'yas-reload-all)
-    ;; (defalias 'yas/global-mode 'yas-global-mode)
-    ;; (defalias 'yas/minor-mode 'yas-minor-mode)
-    ;; (defalias 'yas/expand 'yas-expand)
-    ;; (defalias 'yas/expand-snippet 'yas-expand-snippet)
 
     (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
       (let ((yas-fallback-behavior nil))
