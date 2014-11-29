@@ -427,7 +427,7 @@ buffer-local wherever it is set."
    ".pyo" ".idx" ".lof" ".lot" ".glo" ".blg" ".bbl" ".cp" ".cps"
    ".fn" ".fns" ".ky" ".kys" ".pg" ".pgs" ".tp" ".tps" ".vr"
    ".vrs" ".sass-cache" ".min.js" "-min.js" ".min.css" "-min.css"
-   ".hi" ".pyx" ".map"))
+   ".hi" ".pyx" ".map" ".test"))
 (setq-default ;; xterm.c
  x-underline-at-descent-line t)
 
