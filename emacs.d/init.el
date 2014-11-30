@@ -1,12 +1,11 @@
+
 ;;; init.el --- Thomas Frössman emacs init
 ;;; init
 ;;;; set emacs start time
-
 ;;; Commentary:
 ;;
 
 ;;; Code:
-
 
 (defconst emacs-start-time (current-time))
 
@@ -56,13 +55,13 @@ Font-lock, visual indicators and similar.")
   "Like batch-mode or similar.")
 (defvar degrade-p-old-emacs
   (or (not (boundp 'emacs-version))
-     (string< emacs-version "24")))
+      (string< emacs-version "24")))
 (defvar degrade-p-emacs-pre24.3
   (or (not (boundp 'emacs-version))
-     (string< emacs-version "24.3")))
+      (string< emacs-version "24.3")))
 (defvar degrade-p-emacs-pre24.4
   (or (not (boundp 'emacs-version))
-     (string< emacs-version "24.4")))
+      (string< emacs-version "24.4")))
 (defvar degrade-p-helm degrade-p-old-emacs
   "Helm does not support emacs23.")
 (and
@@ -98,7 +97,6 @@ re-downloaded in order to locate PACKAGE."
         (package-refresh-contents)
         (require-package package min-version t)))))
 
-
 (setq use-package-idle-interval 1.5)
 (require-package 'use-package)
 (require 'use-package)
@@ -113,9 +111,9 @@ re-downloaded in order to locate PACKAGE."
     (dash-enable-font-lock)))
 
 (when (not degrade-p-old-emacs)
-    (use-package dash-functional :ensure t)
-    (use-package req-package :ensure t :defer t)
-    (use-package memoize :ensure t :defer t))
+  (use-package dash-functional :ensure t)
+
+  (use-package memoize :ensure t :defer t))
 
 (use-package s :ensure t)
 (use-package f :ensure t)
@@ -144,7 +142,6 @@ re-downloaded in order to locate PACKAGE."
 
 ;; Try to load private el env
 (require 'private-init nil (not my-log-verbose))
-
 
 ;;;; startup.el
 (setq
@@ -205,7 +202,6 @@ buffer-local wherever it is set."
   (setq-local text-mode-variant t)
   (setq-local indent-line-function 'indent-relative))
 
-
 
 ;;; base directories
 ;;
@@ -261,9 +257,9 @@ buffer-local wherever it is set."
 
 ;; (bind-key )
 (defvar region-bindings-mode-map
-      (let ((region-bindings-mode-map (make-sparse-keymap)))
-        region-bindings-mode-map)
-      "Keymaps for command `region-bindings-mode-map'.")
+  (let ((region-bindings-mode-map (make-sparse-keymap)))
+    region-bindings-mode-map)
+  "Keymaps for command `region-bindings-mode-map'.")
 
 (setq use-package-verbose my-log-verbose
       use-package-debug my-log-verbose)
@@ -360,11 +356,10 @@ buffer-local wherever it is set."
     scss-mode-hook
     sass-mode-hook))
 
-
 ;;; Enable disabled commands
 (--each '(narrow-to-defun narrow-to-page narrow-to-region
-          upcase-region downcase-region
-          scroll-left dired-find-alternate-file erase-buffer)
+                          upcase-region downcase-region
+                          scroll-left dired-find-alternate-file erase-buffer)
   (put it 'disabled nil))
 
 ;;; Environment vars
@@ -463,7 +458,6 @@ buffer-local wherever it is set."
   (setq dark-theme-on t)
   (post-change-theme))
 
-
 (defun bright-theme ()
   "Switch to light mode (light color theme)."
   (interactive)
@@ -482,13 +476,12 @@ buffer-local wherever it is set."
   (post-change-theme))
 
 (and (not (boundp 'dark-theme-on))
-   (not degrade-p-noninteractive)
-   (not degrade-p-terminal)
-   (not degrade-p-minimalism)
-   (if (file-exists-p "~/.config/darkmode")
-       (dark-theme)
-     (bright-theme)))
-
+     (not degrade-p-noninteractive)
+     (not degrade-p-terminal)
+     (not degrade-p-minimalism)
+     (if (file-exists-p "~/.config/darkmode")
+         (dark-theme)
+       (bright-theme)))
 
 (add-hook 'focus-in-hook
           #'(lambda ()
@@ -496,7 +489,6 @@ buffer-local wherever it is set."
                   (when (not dark-theme-on) (dark-theme))
                 (when dark-theme-on (bright-theme)))))
 
-;;;; smart-mode-line
 (use-package smart-mode-line
   :ensure t
   :if (and
@@ -538,7 +530,6 @@ buffer-local wherever it is set."
   :config
   (load-library "smart-mode-line-autoloads"))
 
-;;;; dynamic-fonts
 (use-package dynamic-fonts
   :ensure t
   :commands (dynamic-fonts-setup)
@@ -593,7 +584,6 @@ buffer-local wherever it is set."
 
 (defvar my-normal-cursor-type 'bar)
 
-
 (setq-default fringes-outside-margins t)
 ;;;; server
 (defun workspace-prefix ()
@@ -620,7 +610,7 @@ buffer-local wherever it is set."
     (server-guess-name)
     (defun server-start-maybe ()
       (and (not (server-running-p))
-         (server-start nil t)))))
+           (server-start nil t)))))
 
 ;;;; auth
 
@@ -631,9 +621,6 @@ buffer-local wherever it is set."
     (setq ;; auth.el
      auth-sources '("~/.authinfo.gpg"))))
 
-
-
-;;;; sh-mode
 (use-package sh-script
   :defer t
   :init
@@ -641,7 +628,6 @@ buffer-local wherever it is set."
     (setq ;; sh-mode.el
      sh-basic-offset 2
      sh-indentation 2)))
-
 
 ;;;; apropos
 (setq ;; apropos.el
@@ -686,7 +672,6 @@ buffer-local wherever it is set."
 (define-coding-system-alias 'UTF-8 'utf-8)
 
 (defconst my-use-semantic-instead-of-which-func (not degrade-p-emacs-pre24.4))
-;;;; semantic
 (use-package semantic
   :commands (my-semantic-setup)
   :init
@@ -736,7 +721,6 @@ buffer-local wherever it is set."
  ;;tooltip-recent-seconds 1
  x-gtk-use-system-tooltips nil)
 
-;;;; vc
 (use-package vc
   :defer t
   :init
@@ -745,7 +729,7 @@ buffer-local wherever it is set."
     (if degrade-p-noninteractive
         ;;Disable all vcs back ends (Emacs starts faster)
         (setq vc-handled-backends ())
-      (setq vc-handled-backends '(Bzr Git Hg)))
+      (setq vc-handled-backends '(Git Hg)))
 
     (use-package vc-annotate
       :defer t
@@ -774,7 +758,6 @@ buffer-local wherever it is set."
                   )))
             date))))
     ))
-
 
 (defun current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))
@@ -807,10 +790,10 @@ buffer-local wherever it is set."
  idle-update-delay 1)
 
 (and (not degrade-p-old-emacs)
-   (fboundp 'x-cut-buffer-or-selection-value)
-   (eq system-type 'gnu/linux)
-   (setq interprogram-paste-function
-         'x-cut-buffer-or-selection-value))
+     (fboundp 'x-cut-buffer-or-selection-value)
+     (eq system-type 'gnu/linux)
+     (setq interprogram-paste-function
+           'x-cut-buffer-or-selection-value))
 
 ;;;; browse-url
 (when (eq 'gnu/linux system-type)
@@ -836,7 +819,6 @@ buffer-local wherever it is set."
  sentence-end-double-space nil)
 (unless degrade-p-noninteractive (global-subword-mode))
 
-;;;; compile
 (use-package compile
   :defer t
   :init
@@ -908,7 +890,6 @@ buffer-local wherever it is set."
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
 
-
 ;;;; eshell
 (setq ;; eshell
  eshell-directory-name (expand-file-name user-data-directory))
@@ -925,7 +906,6 @@ buffer-local wherever it is set."
 ;;;; tracking
 (setq ;; tracking
  tracking-most-recent-first t)
-
 
 ;;; functions: Main Key bindings
 
@@ -1031,7 +1011,7 @@ buffer-local wherever it is set."
 
 
 ;;; functions: buffers
-;;;; bufferswitch filtering
+;;;; bufferswitch
 (defvar my-bs-always-show-regexps
   (list (regexp-opt (list "*scratch*" "*info*"))
         "*magit:.+" "*Man" "*Org Agenda.+")
@@ -1055,11 +1035,11 @@ buffer-local wherever it is set."
   "Return non-nil if the named buffer should be ignored."
   (or
    (and (not (my-bs-str-in-regexp-list name my-bs-always-show-regexps))
-      (my-bs-str-in-regexp-list name my-bs-never-show-regexps))
+        (my-bs-str-in-regexp-list name my-bs-never-show-regexps))
    (and my-ido-ignore-dired-buffers
-      (with-current-buffer name
-        (and (equal major-mode 'dired-mode)
-           (not (string= name "*Find*")))))
+        (with-current-buffer name
+          (and (equal major-mode 'dired-mode)
+               (not (string= name "*Find*")))))
    ;;Test to see if the window is visible on an existing visible frame.
    (memq name
          (mapcar
@@ -1233,21 +1213,26 @@ buffer-local wherever it is set."
   (goto-char (point-max))
   (auto-revert-tail-mode 1))
 
-
 (defun find-notes ()
-  "find file in notes"
+  "find file in notes, FAST."
   (interactive)
-  (let ((default-directory user-notes-directory))
-    (call-interactively 'projectile-find-file)))
+  (let* ((default-directory user-notes-directory)
+        (files (->> (-concat (f-entries "agenda/" nil t)
+                            (f-entries "org/" nil t)
+                            (directory-files "sheet/" t))
+                 (--map (s-chop-prefix (s-concat default-directory "/") it))
+                 (projectile-sort-by-recentf-first)
+                 (projectile-sort-by-recently-active-first)
+                 (mapcar #'(lambda (x)
+                            (--map (if (s-suffix? it x) x )
+                                   '(".md" ".markdown" ".s" ".org" ".txt" ".plu" ))))
+                 (-flatten)
+                 (--filter (not (s-matches? "/reveal\.js/" it ))))))
+    (if files
+        (find-file (ido-completing-read "" files))
+      (message "Err0#wr"))))
 (bind-key "C-x f n" 'find-notes)
 (bind-key "C-h n" 'find-notes)
-
-(defun find-emacsd ()
-  "find file in notes"
-  (interactive)
-  (let ((default-directory "~/.config/dotfiles/emacs"))
-    (call-interactively 'projectile-find-file)))
-(bind-key "C-x f e" 'find-emacsd)
 
 ;;;; sudo-edit
 (defun sudo-edit-current-file ()
@@ -1263,11 +1248,9 @@ buffer-local wherever it is set."
       (find-alternate-file (prepare-tramp-sudo-string my-file-name))
       (goto-char position))))
 
-
 (defun prepare-tramp-sudo-string (tempfile)
   (if (file-remote-p tempfile)
       (let ((vec (tramp-dissect-file-name tempfile)))
-
         (tramp-make-tramp-file-name
          "sudo"
          (tramp-file-name-user nil)
@@ -1277,7 +1260,6 @@ buffer-local wherever it is set."
                  (tramp-file-name-user vec)
                  (tramp-file-name-host vec))))
     (concat "/sudo:root@localhost:" tempfile)))
-
 
 ;;;; buffer saving
 (defun silent-save-some-buffers ()
@@ -1340,14 +1322,13 @@ buffer-local wherever it is set."
       (widen)
       (goto-char (point-min))
       (when (and (looking-at "^#!")
-         (not (file-executable-p buffer-file-name)))
-    (set-file-modes buffer-file-name
-            (logior (file-modes buffer-file-name) #o100))
-    (message (concat "Made " buffer-file-name " executable"))))))
+                 (not (file-executable-p buffer-file-name)))
+        (set-file-modes buffer-file-name
+                        (logior (file-modes buffer-file-name) #o100))
+        (message (concat "Made " buffer-file-name " executable"))))))
 
 (when (not degrade-p-noninteractive)
   (add-hook 'after-save-hook 'my-make-script-executable))
-
 
 ;;; functions: calling external commands
 (defun pip-freeze ()
@@ -1433,12 +1414,11 @@ buffer-local wherever it is set."
   (interactive)
   (fonts-set-consolas 20))
 
-
 (defun my-set-text-scale-smaller ()
   (let ((amount -1))
     (when (and (or
-              (not (boundp 'text-scale-mode-amount))
-              (not (equal text-scale-mode-amount amount))))
+                (not (boundp 'text-scale-mode-amount))
+                (not (equal text-scale-mode-amount amount))))
       (text-scale-set amount))))
 
 (hook-into-modes 'my-set-text-scale-smaller
@@ -1462,10 +1442,9 @@ buffer-local wherever it is set."
   (add-hook 'helm-after-initialize-hook
             #'(lambda () (with-helm-buffer (my-set-text-scale-smaller)))))
 
-
 (defadvice android-logcat (after smaller-font activate)
   (with-current-buffer (get-buffer "*android-logcat*")
-        (my-set-text-scale-smaller)))
+    (my-set-text-scale-smaller)))
 
 (defun my-set-text-scale-smaller-maybe ()
   (let ((bn (buffer-name)))
@@ -1564,7 +1543,7 @@ buffer-local wherever it is set."
     (setq rgb (mapcar
                (function
                 (lambda (x) (let ((y (* 0.95 (+ x (/ (- (random 100) 50) 1200.0)))))
-                         (if (> y 1) (- 2 y) (if (< y 0) (- y) y)))))
+                              (if (> y 1) (- 2 y) (if (< y 0) (- y) y)))))
                (color-name-to-rgb (face-background 'default))))
     (setq new-color (color-rgb-to-hex (car rgb) (car (cdr rgb)) (car (cdr (cdr rgb)))))
     (set-face-background face-symbol new-color) (message (concat "color changed to " new-color))))
@@ -1596,8 +1575,8 @@ buffer-local wherever it is set."
   (delq nil
         (mapcar (lambda (face)
                   (and (string-match regexp
-                                   (symbol-name face))
-                     face))
+                                     (symbol-name face))
+                       face))
                 (face-list))))
 
 (defun wash-out-fontlock-faces (degree)
@@ -1709,7 +1688,6 @@ buffer-local wherever it is set."
 
 (defalias 'w-swap-master 'win/swap-with-master)
 
-
 ;;;; frames
 ;;;;; creating frames
 (defun new-floating-frame ()
@@ -1718,7 +1696,6 @@ This is special to my xmonad configuration which floats windows named floating"
   (interactive)
   (make-frame '((name . "floating")
                 (title . "emacs"))))
-
 
 (defun make-frame-minimal ()
   "Some kind of minimal frame, for logs etc"
@@ -1768,6 +1745,7 @@ named floating-center"
     (let ((frame (new-floating-center-large-frame) ))
       (select-frame frame)
       (find-file file))))
+
 ;;;;; intelligent close frame
 (defun intelligent-close ()
   "quit a frame the same way no matter what kind of frame you are on.
@@ -1828,7 +1806,6 @@ display, depending on the window manager)."
   (let (frame (car (car (cdr (current-frame-configuration)))))
     (x-urgency-hint frame (not arg))))
 
-
 (when window-system
   ;; (unbind-key "C-x C-c")
   (bind-key "C-x C-c" 'intelligent-close)
@@ -1864,10 +1841,8 @@ there's a region, all lines that region covers will be duplicated."
   (interactive)
   (duplicate-line-or-region -1))
 
-
 (bind-key "C-x y" 'duplicate-line-or-region)
 (bind-key "C-x C-y" 'duplicate-line-or-region-comment-original)
-
 
 (defun one-shot-keybinding (key command)
   (set-temporary-overlay-map
@@ -1881,15 +1856,14 @@ If no START and END is provided, the current region-beginning and
 region-end is used."
   (interactive "p")
   (save-excursion
-   (let* ((start (or start (region-beginning)))
-          (end (or end (region-end)))
-          (region (buffer-substring start end)))
-     (goto-char end)
-     (dotimes (i num)
-       (insert region)))))
+    (let* ((start (or start (region-beginning)))
+           (end (or end (region-end)))
+           (region (buffer-substring start end)))
+      (goto-char end)
+      (dotimes (i num)
+        (insert region)))))
 
 (bind-key "Y" 'duplicate-region region-bindings-mode-map)
-
 
 ;;;; open line above/below
 (defun open-line-below ()
@@ -1897,7 +1871,7 @@ region-end is used."
 Then move to that line and indent accordning to mode"
   (interactive)
   (cond ((or (eq major-mode 'coffee-mode)
-            (eq major-mode 'feature-mode))
+             (eq major-mode 'feature-mode))
          (let ((column
                 (save-excursion
                   (back-to-indentation)
@@ -1915,7 +1889,7 @@ Then move to that line and indent accordning to mode"
 Then move to that line and indent accordning to mode"
   (interactive)
   (cond ((or (eq major-mode 'coffee-mode)
-            (eq major-mode 'feature-mode))
+             (eq major-mode 'feature-mode))
          (let ((column
                 (save-excursion
                   (back-to-indentation)
@@ -1938,9 +1912,9 @@ Then move to that line and indent accordning to mode"
     (indent-for-tab-command))
   (indent-for-tab-command))
 
-(bind-key "C-c C-p" 'open-line-above)
-(bind-key "C-c C-n" 'open-line-below)
-(bind-key "C-c C-j" 'new-line-in-between)
+;; (bind-key "C-c C-p" 'open-line-above)
+;; (bind-key "C-c C-n" 'open-line-below)
+;; (bind-key "C-c C-j" 'new-line-in-between)
 
 (defun new-line-dwim ()
   (interactive)
@@ -1955,7 +1929,6 @@ Then move to that line and indent accordning to mode"
         (indent-for-tab-command)))
     (indent-for-tab-command)))
 (bind-key "<M-return>" 'new-line-dwim)
-
 
 ;;;; join line
 
@@ -2021,8 +1994,8 @@ Uses `current-date-time-format' for the formatting the date/time."
   (insert (format-time-string current-date-time-format-long (current-time))))
 
 (defun week-number (date)
- (org-days-to-iso-week
- (calendar-absolute-from-gregorian date)))
+  (org-days-to-iso-week
+   (calendar-absolute-from-gregorian date)))
 
 (defun insert-current-week-number ()
   (interactive)
@@ -2081,7 +2054,6 @@ Default separator is underscore."
     (loop for p from 0 to (- paragraphs 1)
           do (insert (nth p lorems)))))
 
-
 ;;;; beginning of line or indentation
 (defun beginning-of-line-or-indentation ()
   "move to beginning of line, or indentation"
@@ -2103,8 +2075,8 @@ Default separator is underscore."
         (if (> trailnewlines 0)
             (progn
               (delete-char trailnewlines)))))))
-;;;; collapse blank lines
 
+;;;; collapse blank lines
 (defun collapse-blank-lines (start end)
   (interactive "r")
   (replace-regexp "^\n\\{2,\\}" "\n" nil start end))
@@ -2211,7 +2183,7 @@ sTo this: ")
     (ring-insert lang-ring lang)
     (ispell-change-dictionary lang)
     (when (and (boundp 'flyspell-mode)
-             (eq flyspell-mode t))
+               (eq flyspell-mode t))
       (flyspell-buffer))))
 
 ;;;; goto line with feedback
@@ -2223,82 +2195,6 @@ sTo this: ")
         (linum-mode 1)
         (call-interactively 'goto-line))
     (linum-mode -1)))
-
-
-;;;; set rxvt term keys
-(defun rxvt-term-keys ()
-  "Set up all rxvt keys."
-  (interactive)
-  ;; Fix backspace and delete to work as Debian Policy says they should
-  ;; (define-key function-key-map "\C-H" [backspace])
-  ;; (define-key function-key-map "\C-?" [delete])
-  ;; stty handles delete via erase
-  ;; (define-key function-key-map "\e[3~" [delete])
-  ;; (global-set-key "\C-h" 'delete-backward-char)
-  ;; (global-set-key "\e\C-h" 'backward-kill-word)
-  (define-key function-key-map [backspace] [?\C-h])
-  (define-key function-key-map [M-backspace] [?\M-\C-?])
-  ;;
-  (define-key function-key-map "\e[7~" [home])
-  (define-key function-key-map "\e[8~" [end])
-  (define-key function-key-map "\e[1~" [find])
-  (define-key function-key-map "\e[2~" [insert])
-  (define-key function-key-map "\e[4~" [select])
-  (define-key function-key-map "\e[5~" [prior])
-  (define-key function-key-map "\e[6~" [next])
-  (define-key function-key-map "\e[11~" [f1])
-  (define-key function-key-map "\e[12~" [f2])
-  (define-key function-key-map "\e[13~" [f3])
-  (define-key function-key-map "\e[14~" [f4])
-  (define-key function-key-map "\e[15~" [f5])
-  (define-key function-key-map "\e[17~" [f6])
-  (define-key function-key-map "\e[18~" [f7])
-  (define-key function-key-map "\e[19~" [f8])
-  (define-key function-key-map "\e[20~" [f9])
-  (define-key function-key-map "\e[21~" [f10])
-  (define-key function-key-map "\e[23~" [f11])
-  (define-key function-key-map "\e[24~" [f12])
-  (define-key function-key-map "\e[25~" [f13])
-  (define-key function-key-map "\e[26~" [f14])
-  (define-key function-key-map "\e[28~" [help])
-  (define-key function-key-map "\e[29~" [menu])
-  (define-key function-key-map "\e[31~" [f17])
-  (define-key function-key-map "\e[32~" [f18])
-  (define-key function-key-map "\e[33~" [f19])
-  (define-key function-key-map "\e[34~" [f20])
-  ;; Arrows *should* be defined by terminfo
-  (define-key function-key-map "\e[A" [up])
-  (define-key function-key-map "\e[B" [down])
-  (define-key function-key-map "\e[C" [right])
-  (define-key function-key-map "\e[D" [left])
-  (define-key function-key-map "\eOa" [(control up)])
-  (define-key function-key-map "\eOb" [(control down)])
-  (define-key function-key-map "\eOc" [(control left)])
-  (define-key function-key-map "\eOd" [(control right)])
-  (define-key function-key-map "\eOA" [up])
-  (define-key function-key-map "\eOB" [down])
-  (define-key function-key-map "\eOC" [left])
-  (define-key function-key-map "\eOD" [right])
-  ;;
-  (define-key function-key-map "^M"   [kp-enter])
-  (define-key function-key-map "\eOM" [kp-enter])
-  ;;
-  (define-key function-key-map "\eOj" [kp-multiply])
-  (define-key function-key-map "\eOk" [kp-add])
-  (define-key function-key-map "\eOl" [kp-separator])
-  (define-key function-key-map "\eOm" [kp-subtract])
-  (define-key function-key-map "\eOn" [kp-decimal])
-  (define-key function-key-map "\eOo" [kp-divide])
-  (define-key function-key-map "\eOp" [kp-0])
-  (define-key function-key-map "\eOq" [kp-1])
-  (define-key function-key-map "\eOr" [kp-2])
-  (define-key function-key-map "\eOs" [kp-3])
-  (define-key function-key-map "\eOt" [kp-4])
-  (define-key function-key-map "\eOu" [kp-5])
-  (define-key function-key-map "\eOv" [kp-6])
-  (define-key function-key-map "\eOw" [kp-7])
-  (define-key function-key-map "\eOx" [kp-8])
-  (define-key function-key-map "\eOy" [kp-9]))
 
 ;;;; menu-bar-go
 (defvar menu-bar-go-active nil)
@@ -2315,24 +2211,24 @@ sTo this: ")
     ;; (menu-bar-mode 1)
     (run-with-idle-timer
      0.2 nil (lambda ()
-             (menu-bar-open)
-             (setq menu-bar-go-active t)
-             (add-hook 'pre-command-hook 'menu-bar-go-post)))))
+               (menu-bar-open)
+               (setq menu-bar-go-active t)
+               (add-hook 'pre-command-hook 'menu-bar-go-post)))))
 (bind-key "M-o M-m" 'menu-bar-go)
 
 ;;;; centering margins + easy-read-mode
 (defun auto-window-margins ()
   "Set window margins according to fill column."
   (when (not (or
-           (windmove-find-other-window 'left)
-           (windmove-find-other-window 'right)
-           (window-minibuffer-p)))
+              (windmove-find-other-window 'left)
+              (windmove-find-other-window 'right)
+              (window-minibuffer-p)))
     (and (boundp 'org-indent-mode)
-       org-indent-mode
-       (org-indent-mode -1))
+         org-indent-mode
+         (org-indent-mode -1))
     (and (boundp 'page-break-lines-mode)
-       page-break-lines-mode
-       (page-break-lines-mode -1))
+         page-break-lines-mode
+         (page-break-lines-mode -1))
     (set-window-margins nil 0)
     (let
         ((margin (max 0 (/ (- (window-body-width) fill-column) 2))))
@@ -2357,7 +2253,6 @@ sTo this: ")
      (set-window-margins it 0)
      (window-list))))
 
-
 (define-minor-mode easy-read-mode
   "..."
   nil nil nil
@@ -2371,11 +2266,11 @@ sTo this: ")
         (set-face-attribute 'fringe (selected-frame)
                             :background (frame-parameter nil 'background-color))
         (and (boundp 'rainbow-delimiters-mode)
-           rainbow-delimiters-mode
-           (rainbow-delimiters-mode -1))
+             rainbow-delimiters-mode
+             (rainbow-delimiters-mode -1))
         (and (boundp 'yascroll-bar-mode)
-           yascroll-bar-mode
-           (yascroll-bar-mode -1))
+             yascroll-bar-mode
+             (yascroll-bar-mode -1))
         (auto-window-margins-mode 1)
         ;; (wash-out-fontlock-faces 0.4)
         )
@@ -2428,7 +2323,6 @@ Used to launch magit status from command line."
 (defun my-notify (summary body)
   (unless my-notify-method (my-notify-setup))
   (funcall my-notify-method summary body))
-
 
 ;;;; invert-shift-number-keys-mode
 (define-minor-mode invert-shift-number-keys-mode
@@ -2483,8 +2377,8 @@ Used to launch magit status from command line."
 (defun popup-frame (f)
   (interactive)
   (setq popup-frame--frame (make-frame
-                                '((name . "floating-center-large")
-                                  (title . "emacs popup minibuffer"))))
+                            '((name . "floating-center-large")
+                              (title . "emacs popup minibuffer"))))
   (with-selected-frame popup-frame--frame
     (call-interactively f)))
 
@@ -2493,32 +2387,7 @@ Used to launch magit status from command line."
   (popup-frame 'helm-for-files))
 ;; (bind-key "<menu>" 'popup-frame-helm-for-files)
 
-;;;; my-dir-locals-dir
-(defun my-dir-locals-dir ()
-  "Return the directory local variables directory.
-Code taken from `hack-dir-local-variables'."
-  (let ((variables-file (dir-locals-find-file
-                         (or (buffer-file-name) default-directory)))
-        (dir-name nil))
-    (cond
-     ((stringp variables-file)
-      (setq dir-name (file-name-directory variables-file)))
-     ((consp variables-file)
-      (setq dir-name (nth 0 variables-file))))
-    dir-name))
-
-;; ;: Usage is similar to this:
-;; (dir-locals-set-class-variables
-;;  'my-python-project
-;;  '((nil . ((python-django-project-settings .  "app.settings")
-;;          (eval . (setq-local python-django-project-root (my-dir-locals-dir)))))))
-
-;; (dir-locals-set-directory-class
-;;  "~/repos/projects/mypythonproject/"
-;;  'my-python-projeect )
-
-
-;;;; flash caps lock / ring bell
+;;;; flash caps lock
 (defvar flash-scroll-lock-enabled t)
 (defvar flash-scroll-lock-active nil)
 (defvar flash-scroll-lock-initialized nil)
@@ -2554,16 +2423,7 @@ Code taken from `hack-dir-local-variables'."
           (setq flash-scroll-lock-active nil)
           (setq flash-scroll-lock-enabled nil))))))
 
-(defun my-ring-bell-function ()
-  (interactive)
-  (unless
-      (memq this-command
-            '(isearch-abort abort-recursive-edit exit-minibuffer keyboard-quit))
-    (flash-scroll-lock)
-    (ding)))
-
-(setq ring-bell-function
-      'my-ring-bell-function)
+(setq ring-bell-function nil)
 
 ;;;; get-dwim-at-point
 (defun get-dwim-at-point ()
@@ -2692,14 +2552,13 @@ for the current buffer's file name, and the line number at point."
   (nav-flash-show-soon-cancel-timer)
   (setq nav-flash-show-soon-timer
         (run-with-timer (if later 0.4 0.25) nil
-                             '(lambda ()
-                                (nav-flash-show)))))
+                        '(lambda ()
+                           (nav-flash-show)))))
 (defun nav-flash-show-later ()
   (nav-flash-show-soon t))
 
 (add-hook 'focus-in-hook 'nav-flash-show-later)
 (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
-
 
 (defun recenter-top-bottom-flash ()
   (interactive)
@@ -2729,34 +2588,30 @@ for the current buffer's file name, and the line number at point."
 
 (bind-key "C-v" 'scroll-up-command-flash)
 
-
 (defun hsadmin-magit ()
   "Open magit status buffers for all directories under
 ~/.config/dotfiles/"
   (interactive)
   (--each
-   (f-directories "~/.config/dotfiles")
-   (when (magit-git-repo-p it)
-     (magit-status (f-full it)))))
-
+      (f-directories "~/.config/dotfiles")
+    (when (magit-git-repo-p it)
+      (magit-status (f-full it)))))
 
 (hook-into-modes #'(lambda () (setq-local fill-column 120))
- my-html-like-mode-hooks)
+                 my-html-like-mode-hooks)
 ;;; packages: Eearly important order dependent packages
 ;;;; ensure misc packages
 
-
-;;;; pcache
 (use-package pcache
   :ensure t
   :defer t
   :init
   (progn
     (setq
-       pcache-directory
-       (let ((dir (expand-file-name "pcache/" user-cache-directory)))
-         (make-directory dir t)
-         dir))
+     pcache-directory
+     (let ((dir (expand-file-name "pcache/" user-cache-directory)))
+       (make-directory dir t)
+       dir))
     (eval-when-compile
       (setq
        pcache-directory
@@ -2764,12 +2619,13 @@ for the current buffer's file name, and the line number at point."
          (make-directory dir t)
          dir)))))
 
-;;;; projectile
 (use-package projectile
   :ensure t
   :commands (projectile-mode
              projectile-global-mode
-             projectile-project-p)
+             projectile-project-p
+             projectile-sort-by-recentf-first
+             projectile-sort-by-recently-active-first)
   :bind (("C-x f <SPC>" . projectile-find-file)
          ("C-x f P" . projectile-find-file-ignored)
          ("C-x d <SPC>" . projectile-find-dir)
@@ -2784,8 +2640,7 @@ for the current buffer's file name, and the line number at point."
     (setq projectile-project-root-files-child-of
           '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
             "~/\.virtualenvs/[^/]+/?$"
-            "/var/log/?$"
-            ))
+            "/var/log/?$"))
 
     (defun projectile-root-child-of (dir &optional list)
       (projectile-locate-dominating-file
@@ -2856,19 +2711,17 @@ for the current buffer's file name, and the line number at point."
 
 (defalias 'project-root-function 'projectile-project-root)
 
-
 ;;;; exec-path-from-shell
-  (use-package exec-path-from-shell
-    :ensure t
-    :commands (exec-path-from-shell-initialize)
-    :init
-    (progn
-      (unless (executable-find "hsadmin")
-        (exec-path-from-shell-initialize))))
+(use-package exec-path-from-shell
+  :ensure t
+  :commands (exec-path-from-shell-initialize)
+  :init
+  (progn
+    (unless (executable-find "hsadmin")
+      (exec-path-from-shell-initialize))))
 
 ;;; packages: packages sorted alphabetically by name
 
-;;;; ac-cider
 (use-package ac-cider
   :ensure t
   :commands (ac-cider-setup)
@@ -2882,7 +2735,6 @@ for the current buffer's file name, and the line number at point."
       :config
       (add-to-list 'ac-modes 'cider-mode))))
 
-;;;; adaptive-wrap
 (use-package adaptive-wrap
   :ensure t
   :disabled t
@@ -2893,22 +2745,18 @@ for the current buffer's file name, and the line number at point."
      #'(lambda () (adaptive-wrap-prefix-mode 1))
      my-prog-mode-hooks)))
 
-;;;; amd-mode
 (use-package amd-mode
   :ensure t
   :commands amd-mode)
 
-;;;; anaphora
 (use-package anaphora
   :ensure t
   :defer t)
 
-;;;; butler
 (use-package butler
   :ensure t
   :commands (butler-status))
 
-;;;; cdnjs
 (use-package cdnjs
   :ensure t
   :commands (cdnjs-list-packages
@@ -2917,41 +2765,34 @@ for the current buffer's file name, and the line number at point."
              cdnjs-install-gocdnjs
              cdnjs-update-package-cache))
 
-;;;; clj-refactor
 (use-package clj-refactor
   :ensure t
   :commands clj-refactor-mode)
 
-;;;; color-identifiers-mode
 (use-package color-identifiers-mode
   :ensure t
   :commands color-identifiers-mode)
 
-;;;; csv-mode
 (use-package csv-mode
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
-;;;; cuda-mode
 (use-package cuda-mode
   :ensure t
   :mode (("\\.cu\\'" . cuda-mode)
          ("\\.cuh\\'" . cuda-mode)))
 
-;;;; dired-toggle-sudo
 (use-package dired-toggle-sudo
   :ensure t
   :if (not degrade-p-noninteractive)
   :commands dired-toggle-sudo)
 
-;;;; download-region
 (use-package download-region
   :ensure t
   :commands download-region-as-url
   :init
   (setq download-region-max-downloads 5))
 
-;;;; downplay-mode
 (use-package downplay-mode
   :ensure t
   :commands downplay-mode
@@ -2961,12 +2802,10 @@ for the current buffer's file name, and the line number at point."
   (progn
     (downplay-mode 1)))
 
-;;;; dropdown-list
 (use-package dropdown-list
   :ensure t
   :defer t)
 
-;;;; ediff
 (use-package ediff
   :defer t
   :init
@@ -3074,19 +2913,19 @@ ARG is a prefix argument.  If nil, copy the current difference region."
               (condition-case conds
                   (progn
                     (ediff-with-current-buffer to-buf
-                      ;; to prevent flags from interfering if buffer is writable
-                      (let ((inhibit-read-only (null buffer-read-only)))
+                                               ;; to prevent flags from interfering if buffer is writable
+                                               (let ((inhibit-read-only (null buffer-read-only)))
 
-                        (goto-char reg-to-delete-end)
-                        (insert reg-to-copy)
+                                                 (goto-char reg-to-delete-end)
+                                                 (insert reg-to-copy)
 
-                        (if (> reg-to-delete-end reg-to-delete-beg)
-                            (kill-region reg-to-delete-beg reg-to-delete-end))
-                        ))
+                                                 (if (> reg-to-delete-end reg-to-delete-beg)
+                                                     (kill-region reg-to-delete-beg reg-to-delete-end))
+                                                 ))
                     (or batch-invocation
-                       (setq
-                        messg
-                        (ediff-save-diff-region n to-buf-type reg-to-delete))))
+                        (setq
+                         messg
+                         (ediff-save-diff-region n to-buf-type reg-to-delete))))
                 (error (message "ediff-copy-diff: %s %s"
                                 (car conds)
                                 (mapconcat 'prin1-to-string (cdr conds) " "))
@@ -3124,40 +2963,33 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (defun add-d-to-ediff-mode-map ()
       (define-key ediff-mode-map "d" 'ediff-copy-D-to-C))))
 
-;;;; eval-sexp-fu
 (use-package eval-sexp-fu
   :ensure t
   :commands (eval-sexp-fu-flash-mode))
 
-;;;; eww
 (use-package eww
   :defer t
   :init
   (progn
     (setq eww-search-prefix "http://google.com/search?q=")))
 
-;;;; fancy-narrow
 (use-package fancy-narrow
   :ensure t
   :defer t)
 
-;;;; feature-mode
 (use-package feature-mode
   :ensure t
   :mode (("\\.feature\'" . feature-mode)))
 
-;;;; git-timemachine
 (use-package git-timemachine
   :ensure t
   :commands git-timemachine)
 
-;;;; helm-chrome-bookmarks
 (use-package helm-chrome
   :ensure t
   :if (not degrade-p-helm)
   :commands helm-chrome-bookmarks)
 
-;;;; helm-dash
 (use-package helm-dash
   :ensure t
   :if (not degrade-p-helm)
@@ -3172,78 +3004,78 @@ ARG is a prefix argument.  If nil, copy the current difference region."
       (setq helm-dash-docsets-path (format "%s/.local/share/zeal/docsets"
                                            (getenv "HOME"))))
 
-        (setq helm-dash-ensure-docsets
-              '(
-                "Android"
-                "Appcelerator Titanium"
-                "BackboneJS"
-                "Bash"
-                "Bootstrap_2"
-                "Bootstrap_3"
-                "C++"
-                "CSS"
-                "Clojure"
-                "CoffeeScript"
-                "D3JS"
-                "Django"
-                "Emacs_Lisp"
-                "Flask"
-                "Foundation"
-                "Go"
-                "HTML"
-                "JavaScript"
-                "Lo-Dash"
-                "Markdown"
-                "MySQL"
-                "Nginx"
-                "NodeJS"
-                "PostgreSQL"
-                "Processing"
-                "Python_2"
-                "Python_3"
-                "SQLite"
-                "SVG"
-                "Sass"
-                "Twisted"
-                "UnderscoreJS"
-                "Vagrant"
-                "XSLT"
-                "ZeptoJS"
-                "jQuery"
-                "jQuery_Mobile"
-                "jQuery_UI"
+    (setq helm-dash-ensure-docsets
+          '(
+            "Android"
+            "Appcelerator Titanium"
+            "BackboneJS"
+            "Bash"
+            "Bootstrap_2"
+            "Bootstrap_3"
+            "C++"
+            "CSS"
+            "Clojure"
+            "CoffeeScript"
+            "D3JS"
+            "Django"
+            "Emacs_Lisp"
+            "Flask"
+            "Foundation"
+            "Go"
+            "HTML"
+            "JavaScript"
+            "Lo-Dash"
+            "Markdown"
+            "MySQL"
+            "Nginx"
+            "NodeJS"
+            "PostgreSQL"
+            "Processing"
+            "Python_2"
+            "Python_3"
+            "SQLite"
+            "SVG"
+            "Sass"
+            "Twisted"
+            "UnderscoreJS"
+            "Vagrant"
+            "XSLT"
+            "ZeptoJS"
+            "jQuery"
+            "jQuery_Mobile"
+            "jQuery_UI"
             ))
 
-        (setq helm-dash-common-docsets
-              '(
-                ;; "Bootstrap_3"
-                "CSS"
-                ;; "Clojure"
-                "CoffeeScript"
-                ;; "D3JS"
-                "Django"
-                ;; "Flask"
-                ;; "Foundation"
-                "Go"
-                "HTML"
-                "JavaScript"
-                "Lo-Dash"
-                "Markdown"
-                "MomentJS"
-                "Nginx"
-                "NodeJS"
-                "PostgreSQL"
-                ;; "Processing"
-                "Python_2"
-                "SQLite"
-                "SVG"
-                "Sass"
-                ;; "Twisted"
-                ;; "Vagrant"
-                ;; "ZeptoJS"
-                "jQuery"
-                "BackboneJS"
-             )))
+    (setq helm-dash-common-docsets
+          '(
+            ;; "Bootstrap_3"
+            "CSS"
+            ;; "Clojure"
+            "CoffeeScript"
+            ;; "D3JS"
+            "Django"
+            ;; "Flask"
+            ;; "Foundation"
+            "Go"
+            "HTML"
+            "JavaScript"
+            "Lo-Dash"
+            "Markdown"
+            "MomentJS"
+            "Nginx"
+            "NodeJS"
+            "PostgreSQL"
+            ;; "Processing"
+            "Python_2"
+            "SQLite"
+            "SVG"
+            "Sass"
+            ;; "Twisted"
+            ;; "Vagrant"
+            ;; "ZeptoJS"
+            "jQuery"
+            "BackboneJS"
+            )))
   :config
   (progn
     (defun helm-dash-install-all-docsets ()
@@ -3275,13 +3107,11 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   (progn
     (use-package helm)))
 
-;;;; helm-package
 (use-package helm-package
   :ensure t
   :if (not degrade-p-helm)
   :commands helm-package)
 
-;;;; howdoi
 (use-package howdoi
   :ensure t
   :commands (howdoi-query
@@ -3309,12 +3139,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   (progn
     (jumpc)))
 
-;;;; macrostep
 (use-package macrostep
   :ensure t
   :commands macrostep-expand)
 
-;;;; malabar-mode
 (use-package malabar-mode
   :ensure t
   :mode (("\\.java\\'" . malabar-mode))
@@ -3325,32 +3153,26 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                 (add-hook 'after-save-hook 'malabar-compile-file-silently
                           nil t)))))
 
-;;;; manage-minor-mode
 (use-package manage-minor-mode
   :ensure t
   :commands manage-minor-mode)
 
-;;;; memory-usage
 (use-package memory-usage
   :ensure t
   :commands memory-usage)
 
-;;;; peep-dired
 (use-package peep-dired
   :ensure t
   :commands peep-dired)
 
-;;;; perspectiv
 (use-package perspective
   :ensure t
   :commands persp-mode)
 
-;;;; py-autopep8
 (use-package py-autopep8
   :ensure t
   :commands (py-autopep8))
 
-;;;; region-bindings-mode
 (use-package region-bindings-mode
   :if (and
        (not degrade-p-minimalism)
@@ -3401,10 +3223,8 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (define-key region-bindings-mode-map "g" 'keyboard-quit)
     (define-key region-bindings-mode-map "s" search-map))
 
-
   )
 
-;;;; rings
 (use-package rings
   :ensure t
   :init
@@ -3432,17 +3252,14 @@ ARG is a prefix argument.  If nil, copy the current difference region."
       (global-set-key (kbd "M-<f4>") (rings-generate-adder 4)))
     (add-hook 'after-init-hook 'my-rings-setup t)))
 
-;;;; org-ehtml
 (use-package org-ehtml
   :disabled t
   :ensure t
   :defer t)
 
-;;;; org-import-calendar
 (use-package org-import-icalendar
   :commands org-icalendar-import-buffer)
 
-;;;; org-screenshot
 (use-package org-screenshot
   :commands org-screenshot-take)
 
@@ -3451,17 +3268,14 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :mode (("\\.pip\\'" . pip-requirements-mode)
          ("requirements\\.txt\\'" . pip-requirements-mode)))
 
-;;;; pushbullet
 (use-package pushbullet
   :ensure t
   :commands pushbullet)
 
-;;;; rainbow-blocks
 (use-package rainbow-blocks
   :ensure t
   :commands rainbow-blocks-mode)
 
-;;;; rainbow-identifiers
 (use-package rainbow-identifiers
   :ensure t
   :commands rainbow-identifiers-mode
@@ -3501,14 +3315,12 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   (progn
     (scroll-restore-mode 1)))
 
-;;;; shr
 (use-package shr
   :defer t
   :init
   (progn
     (setq shr-external-browser 'browse-url-generic)))
 
-;;;; shift-text
 (use-package shift-text
   :ensure t
   :bind (("S-<down>" . shift-text-down)
@@ -3522,52 +3334,45 @@ ARG is a prefix argument.  If nil, copy the current difference region."
           (lambda ()
             (cond
              ((eq major-mode 'js-mode)
-               js-indent-level)
+              js-indent-level)
              ((eq major-mode 'css-mode)
-               css-indent-offset)
+              css-indent-offset)
              ((memq major-mode
-                     '(emacs-lisp-mode
-                       lisp-mode
-                       lisp-interaction-mode
-                       scheme-mode))
-               1)
+                    '(emacs-lisp-mode
+                      lisp-mode
+                      lisp-interaction-mode
+                      scheme-mode))
+              1)
              (t tab-width))))))
 
-;;;; simple-call-tree
 (use-package simple-call-tree
   :ensure t
   :defer t)
 
-;;;; simple-call-tree+
 (use-package simple-call-tree+
   :ensure t
   :defer t)
 
-;;;; smart-shift
 (use-package smart-shift
   :ensure t
   :commands smart-shift-mode
   :bind (("S-<left>" . smart-shift-left)
          ("S-<right>" . smart-shift-right)))
 
-;;;; smeergle
 (use-package smeargle
   :ensure t
   :commands (smeargle
              smeargle-commits
              smeargle-clear))
 
-;;;; sos
 (use-package sos
   :ensure t
   :commands sos)
 
-;;;; sqlite
 (use-package sqlite
   :ensure t
   :defer t)
 
-;;;; string-inflection
 (use-package string-inflection
   :ensure t
   :commands string-inflection-cycle)
@@ -3585,12 +3390,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :defer t)
 
-;;;; unfill-paragraph
 (use-package unfill
   :ensure t
   :commands (unfill-region unfill-paragraph toggle-fill-unfill)
   :bind ("M-q" . toggle-fill-unfill))
-;;;; wakatime-mode
 (use-package wakatime-mode
   :ensure t
   :commands (wakatime-mode global-wakatime-mode)
@@ -3605,18 +3408,15 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (when (f-file? wakatime-cli-path)
       (global-wakatime-mode 1))))
 
-;;;; whitespace
 (use-package whitespace
   :bind (("M-o w" . whitespace-cleanup)))
 
-;;;; whole-line-funcs
 (use-package whole-line-funcs
   :commands (whole-line-mark-previous
              whole-line-mark-next)
   :bind (("C-x C-p" . whole-line-mark-previous)
          ("C-x C-n" . whole-line-mark-next)))
 
-;;;; whole-line-or-region-mode
 (use-package whole-line-or-region
   :ensure t
   :commands (whole-line-org-region-mode)
@@ -3626,10 +3426,9 @@ ARG is a prefix argument.  If nil, copy the current difference region."
          ("C-y" . whole-line-or-region-yank))
   :init
   (progn
-        (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim)
+    (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim)
     ))
 
-;;;; xkcd
 (use-package xkcd
   :ensure t
   :commands (xkcd-get
@@ -3656,14 +3455,12 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands (ztree-diff ztree-dir))
 
 ;;; packages: unsorted packages
-;;;; truthy
 (use-package truthy
   :ensure t
   :commands (truthy
              truthy-s
              truthy-l))
 
-;;;; dired
 (use-package dired
   :commands (dired)
   :bind (("C-x d d" . ido-dired))
@@ -3855,7 +3652,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (bind-key "." 'dired-up-directory dired-mode-map)
     (bind-key "h" 'ibuffer dired-mode-map)
 
-     (defun my-dired-create-file (file)
+    (defun my-dired-create-file (file)
       "Create a file called FILE.
 If FILE already exists, signal an error."
       (interactive
@@ -3883,7 +3680,6 @@ If FILE already exists, signal an error."
       (interactive)
       (my-dired-create-file "__init__.py"))))
 
-;;;; key-chord
 (use-package key-chord
   :ensure t
   :if (and
@@ -3962,7 +3758,6 @@ If FILE already exists, signal an error."
        ;; ("og" . magit-status)
        ))))
 
-;;;; session
 (use-package session
   :disabled t
   :ensure t
@@ -3975,7 +3770,6 @@ If FILE already exists, signal an error."
      session-save-file (expand-file-name "session" user-data-directory))
     (session-initialize)))
 
-;;;; recentf
 (use-package recentf
   :if (and
        (not degrade-p-minimalism)
@@ -3992,7 +3786,6 @@ If FILE already exists, signal an error."
                        "ido.last"
                        "org-clock-save.el"
                        "COMMIT_EDITMSG"))
-
 
     (defun find-recent-file ()
       "Use `ido-completing-read' to \\[find-file] a recent file"
@@ -4048,7 +3841,6 @@ file to write to."
         (error
          (warn "recentf mode: %s" (error-message-string error)))))))
 
-;;;; savehist
 (use-package savehist
   :if (and
        (not degrade-p-minimalism)
@@ -4064,7 +3856,6 @@ file to write to."
   (progn
     (savehist-mode 1)))
 
-;;;; ws-butler
 (use-package ws-butler
   ;; :disabled t ;; FIXME something else prohibits restoring point after save
   ;; NOTE It seems like ws-butler has started working again
@@ -4079,7 +3870,6 @@ file to write to."
     (hook-into-modes #'ws-butler-mode my-html-like-mode-hooks)
     (hook-into-modes #'ws-butler-mode my-html-like-mode-hooks-2)))
 
-;;;; saveplace
 (use-package saveplace
   :if (and
        (not degrade-p-minimalism)
@@ -4092,7 +3882,6 @@ file to write to."
   (progn
     (setq-default save-place t)))
 
-;;;; which-func
 (use-package which-func
   :commands (which-func-mode)
   :if (and
@@ -4118,7 +3907,6 @@ file to write to."
               header-line-format which-func-header-line-format)))
     ))
 
-;;;; eldoc
 (use-package eldoc
   :defer t
   :diminish ""
@@ -4127,12 +3915,10 @@ file to write to."
     (use-package eldoc-extension
       :ensure t)))
 
-;;;; doc-mode
 (use-package adoc-mode
   :ensure t
   :mode (("\\.adoc\\'" . adoc-mode)))
 
-;;;; ansi
 (use-package ansi
   :ensure t
   :commands (with-ansi
@@ -4140,7 +3926,6 @@ file to write to."
              ansi-blue
              ansi-red))
 
-;;;; abbrev
 (use-package abbrev
   :defer t
   :diminish ""
@@ -4151,7 +3936,6 @@ file to write to."
      abbrev-file-name (expand-file-name
                        "abbrev_defs.el" user-lisp-directory))))
 
-;;;; quickrun
 (use-package quickrun
   :ensure t
   :if (not degrade-p-noninteractive)
@@ -4162,16 +3946,13 @@ file to write to."
              quickrun-compile-only)
   :bind (("M-o q" . quickrun)))
 
-;;;; websocket
 (use-package websocket
   :ensure t
   :commands websocket-open)
 
-;;;; sheet-mode
 (use-package sheet-mode
-  :commands (sheet-mode
-             find-sheet))
-
+  :commands (sheet-mode)
+  :mode "notes/cheat/.*$")
 
 (let ((ad-redefinition-action 'accept))
   (use-package color-moccur
@@ -4196,7 +3977,6 @@ file to write to."
       (unbind-key "M-o" isearch-mode-map)
       (use-package moccur-edit))))
 
-;;;; goto-chg
 (use-package goto-chg
   ;; :ensure t
   :if (not degrade-p-noninteractive)
@@ -4209,33 +3989,27 @@ file to write to."
       (call-interactively 'goto-last-change)
       (nav-flash-show-soon))))
 
-;;;; unbound
 (use-package unbound
   :ensure t
   :commands describe-unbound-keys)
 
-;;;; jade-mode
 (use-package jade-mode
   :ensure t
   :commands jade-mode)
 
-;;;; handlebars-mode
 (use-package handlebars-mode
   :ensure t
   :commands handlebars-mode
   :mode ("\\.hb\\'" . handlebars-mode))
 
-;;;; moz
 (use-package moz
   :ensure t
   :commands moz-minor-mode)
 
-;;;; gl-conf-mode
 (use-package gl-conf-mode
   :commands gl-conf-mode
   :mode ("gitolite\\.conf\\'" . gl-conf-mode))
 
-;;;; nginx-mode
 (use-package nginx-mode
   :ensure t
   :commands nginx-mode
@@ -4243,7 +4017,6 @@ file to write to."
          ("nginx/.*_params\\'" . nginx-mode)
          ("nginx/sites-\\(available\\|enabled\\)/" . nginx-mode)))
 
-;;;; htmlize
 (use-package htmlize
   :ensure t
   :commands (htmlize-buffer
@@ -4252,7 +4025,6 @@ file to write to."
              htmlize-many-files
              htmlize-many-files-dired))
 
-;;;; haskell-mode
 (use-package haskell-mode
   :ensure t
   :commands (haskell-mode)
@@ -4282,26 +4054,16 @@ file to write to."
                   '(ac-source-ghc-mod
                     ac-source-yasnippet))
             (ghc-init)))
-        (add-hook 'haskell-mode-hook 'my-ghc-mod-hook)))
-    (use-package hi2
-      :disabled t
-      :if (not degrade-p-noninteractive)
-      :ensure t
-      :commands turn-on-hi2
-      :init
-      (progn
-        (add-hook 'haskell-mode-hook 'turn-on-hi2))))
+        (add-hook 'haskell-mode-hook 'my-ghc-mod-hook))))
   :config
   (progn
     (load-library "haskell-mode-autoloads")))
 
-;;;; shm (structured haskell mode)
 (use-package shm
   :ensure t
   :if (not degrade-p-noninteractive)
   :commands structured-haskell-mode)
 
-;;;; plantuml-mode
 (use-package plantuml-mode
   :ensure t
   :commands (plantuml-mode)
@@ -4315,7 +4077,6 @@ file to write to."
           org-plantuml-jar-path plantuml-jar-path))
   :if (file-exists-p plantuml-jar-path))
 
-;;;; org
 (use-package org
   :ensure org-plus-contrib
   :commands (org
@@ -4330,6 +4091,7 @@ file to write to."
          ("\\.org\\'" . org-mode))
   :bind (("C-c l" . org-store-link)
          ("C-M-r" . org-capture)
+         ("C-h t" . org-capture)
          ("C-c a" . org-agenda)
          ("<f10>" . jump-to-org-agenda))
   :init
@@ -4340,12 +4102,6 @@ file to write to."
                              "org-clock-save.el" user-data-directory)
      org-id-locations-file (expand-file-name
                             "org-id-locations" user-data-directory))
-    (use-package org-crypt
-      :disabled t
-      :init
-      (progn
-        (org-crypt-use-before-save-magic)))
-
     (use-package org-caldav
       :ensure t
       :commands org-caldav-sync)
@@ -4380,7 +4136,7 @@ file to write to."
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
     (setq org-modules '(org-bbdb org-bibtex org-docview org-habit
-          org-id org-info org-man org-w3m))
+                                 org-id org-info org-man org-w3m))
     ;; org-git-link
     ;; (require 'ox-reveal)
     (use-package ox-reveal
@@ -4389,10 +4145,10 @@ file to write to."
       :ensure t)
 
     (and window-system
-       (require 'org-bullets nil t)
-       (fboundp 'org-bullets-mode)
-       (add-hook 'org-mode-hook 'org-bullets-mode))
-        (use-package server
+         (require 'org-bullets nil t)
+         (fboundp 'org-bullets-mode)
+         (add-hook 'org-mode-hook 'org-bullets-mode))
+    (use-package server
       :defer t
       :config
       (progn
@@ -4400,10 +4156,10 @@ file to write to."
     (when (require 'org-mu4e nil t)
       (defun my-mu4e-link-descr (msg)
         (let ((subject (or (plist-get msg :subject)
-                          "No subject"))
+                           "No subject"))
               (date (or (format-time-string mu4e-headers-date-format
-                                           (mu4e-msg-field msg :date))
-                       "No date")))
+                                            (mu4e-msg-field msg :date))
+                        "No date")))
           (concat subject " " date)))
       (setq org-mu4e-link-desc-func 'my-mu4e-link-descr))
 
@@ -4432,7 +4188,6 @@ Argument FILENAME File to insert."
       (let* ((start (point))
              (end (+ start (nth 1 (insert-file-contents filename)))))
         (org-table-convert-region start end)))
-
 
     (let*
         ((agenda-dir (f-expand "agenda" user-notes-directory))
@@ -4592,7 +4347,6 @@ Argument FILENAME File to insert."
         "* PHONE %? :phone:\n%U" :clock-in t :clock-resume t))
 
      )
-
 
     ;; Disable default key bindings for include/remove from org agenda
     (add-hook 'org-mode-hook
@@ -4776,20 +4530,16 @@ otherwise use the subtree title."
     (defadvice kill-whole-line (after fix-cookies activate)
       (myorg-update-parent-cookie))
 
-
     ))
 
-;;;; notify
 (use-package notify
   :commands notify)
 
-;;;; po-mode
 (use-package po-mode
   :disabled t ;; crashes emacs on some larger po-files
   :commands po-mode
   :mode "\\.po\\'")
 
-;;;; auto-complete
 (use-package auto-complete
   :ensure t
   :if (not
@@ -4891,11 +4641,11 @@ otherwise use the subtree title."
 
     (dolist
         (mode '(clojure-mode coffee-mode css-mode csv-mode
-                espresso-mode fmagit-log-edit-mode go-mode
-                haml-mode haskell-mode html-mode json-mode
-                less-css-mode lisp-mode log-edit-mode markdown-mode
-                nxml-mode sass-mode scss-mode sh-mode
-                smarty-mode stylus-mode textile-mode tuareg-mode yaml-mode))
+                             espresso-mode fmagit-log-edit-mode go-mode
+                             haml-mode haskell-mode html-mode json-mode
+                             less-css-mode lisp-mode log-edit-mode markdown-mode
+                             nxml-mode sass-mode scss-mode sh-mode
+                             smarty-mode stylus-mode textile-mode tuareg-mode yaml-mode))
 
       (add-to-list 'ac-modes mode))
 
@@ -4914,16 +4664,13 @@ otherwise use the subtree title."
     (defadvice load-library (after invalidate-ac-functions-cache activate)
       (auto-complete-clear-functions-cache))))
 
-;;;; erlang
 (use-package erlang
   :ensure t
   :commands (erlang-mode))
 
-;;;; lfe-mode
 (use-package lfe-mode
   :commands (lfe-mode))
 
-;;;; vkill
 (use-package vkill
   :ensure t
   :commands vkill
@@ -4940,7 +4687,6 @@ otherwise use the subtree title."
   :config
   (setq vkill-show-all-processes t))
 
-;;;; windmove
 (use-package windmove
   :if (not degrade-p-noninteractive)
   :commands windmove-find-other-window
@@ -4954,7 +4700,6 @@ otherwise use the subtree title."
     ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
     ))
 
-;;;; sunrise-commander
 (use-package sunrise-commander
   :disabled t
   :ensure t
@@ -4994,9 +4739,9 @@ otherwise use the subtree title."
       (if sr-goto-dir-function
           (funcall sr-goto-dir-function dir)
         (unless (and (eq major-mode 'sr-mode)
-                   (sr-equal-dirs dir default-directory))
+                     (sr-equal-dirs dir default-directory))
           (if (and sr-avfs-root
-                 (null (posix-string-match "#" dir)))
+                   (null (posix-string-match "#" dir)))
               (setq dir (replace-regexp-in-string
                          (expand-file-name sr-avfs-root) "" dir)))
           (sr-save-aspect
@@ -5004,8 +4749,6 @@ otherwise use the subtree title."
           (sr-history-push default-directory)
           (sr-beginning-of-buffer))))))
 
-
-;;;; flycheck
 (use-package flycheck
   :ensure t
   :if (not degrade-p-noninteractive)
@@ -5019,6 +4762,8 @@ otherwise use the subtree title."
     (setq
      flycheck-highlighting-mode 'lines
      ;; flycheck-highlighting-mode 'symbols
+     flycheck-disabled-checkers '(go-golint go-govet)
+
      flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
       (unless
@@ -5047,13 +4792,22 @@ otherwise use the subtree title."
       (progn
         (bind-key "C-c ! h" 'helm-flycheck flycheck-mode-map)))
 
+    (defun flycheck-toggle-golint-and-govet ()
+      (interactive)
+      (setq flycheck-disabled-checkers
+            (let ((disabled flycheck-disabled-checkers)
+                  (toggles '(go-golint go-vet)))
+              (if (--any? (-contains-p disabled it) toggles)
+                  (-difference disabled toggles)
+                (-concat disabled  toggles)))))
+
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
       (fringe-helper-define 'vertical-wave-bitmap '(center repeat)
-                            "...XXX."
-                            "...XXX."
-                            "..XXX.."
-                            "..XXX..")
+        "...XXX."
+        "...XXX."
+        "..XXX.."
+        "..XXX..")
 
       (flycheck-define-error-level 'error
         :severity 100
@@ -5113,16 +4867,13 @@ See URL `https://pypi.python.org/pypi/flake8'."
                 (message "E" (one-or-more digit) (zero-or-more not-newline))
                 line-end)
 
-
          (warning line-start
                   (file-name) ":" line ":" (optional column ":") " "
                   (message (or "F"            ; Pyflakes in Flake8 >= 2.0
-                              "W"            ; Pyflakes in Flake8 < 2.0
-                              "C")           ; McCabe in Flake >= 2.0
+                               "W"            ; Pyflakes in Flake8 < 2.0
+                               "C")           ; McCabe in Flake >= 2.0
                            (one-or-more digit) (zero-or-more not-newline))
                   line-end)
-
-
 
          (info line-start
                (file-name) ":" line ":" (optional column ":") " "
@@ -5135,12 +4886,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
          (error line-start (file-name) ":" line ":" (message) line-end))
         :modes python-mode))))
 
-;;;; unbound
 (use-package unbound
   :ensure t
   :commands describe-unbound-keys)
 
-;;;; edit-server
 (use-package edit-server
   :ensure t
   :commands edit-server-start
@@ -5161,20 +4910,18 @@ See URL `https://pypi.python.org/pypi/flake8'."
           (string-match
            (rx
             (and line-start
-               (* "www.")
-               (or "skunk.cc" "facebook.com")))
+                 (* "www.")
+                 (or "skunk.cc" "facebook.com")))
            edit-server-url )
         (ispell-change-dictionary "svenska"))
       (flyspell-mode 1)
       (flyspell-buffer))
     (add-hook 'edit-server-start-hook 'my-edit-server-start-hook)))
 
-;;;; highlight-tail
 (use-package highlight-tail
   :ensure t
   :commands highlight-tail-mode)
 
-;;;; go-mode
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
@@ -5216,34 +4963,18 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (bind-key "M-." 'godef-jump go-mode-map)))
 
-;;;; slim-mode
+(use-package go-rename
+  :commands go-rename)
+
 (use-package slim-mode
   :ensure t
   :mode ("\\.slim\\'" . slim-mode))
 
-;;;; geben
 (use-package geben
   :ensure t
   :commands (geben
              geben-mode))
 
-;;;; yascroll
-(use-package yascroll
-  :ensure t
-  :if (and
-       (not degrade-p-looks)
-       (not degrade-p-terminal)
-       (not degrade-p-noninteractive))
-  :commands global-yascroll-bar-mode
-  :init
-  (progn
-    (setq yascroll:disabled-modes
-          '(skewer-repl-mode
-            comint-mode))
-    ;; (global-yascroll-bar-mode 1)
-    ))
-
-;;;; nyan-mode
 (use-package nyan-mode
   :ensure t
   :if (and
@@ -5257,7 +4988,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;;(nyan-mode 1)
     ))
 
-;;;; ido
 (use-package ido
   :commands ido-mode
   :if (and
@@ -5346,19 +5076,19 @@ See URL `https://pypi.python.org/pypi/flake8'."
                "//" "~/"))
         (call-interactively 'self-insert-command)))
 
-        (defun ido-smart-select-text ()
+    (defun ido-smart-select-text ()
       "Select the current completed item.  Do NOT descend into directories."
       (interactive)
       (when (and (or (not ido-require-match)
-                  (if (memq ido-require-match
-                            '(confirm confirm-after-completion))
-                      (if (or (eq ido-cur-item 'dir)
-                             (eq last-command this-command))
-                          t
-                        (setq ido-show-confirm-message t)
-                        nil))
-                  (ido-existing-item-p))
-               (not ido-incomplete-regexp))
+                     (if (memq ido-require-match
+                               '(confirm confirm-after-completion))
+                         (if (or (eq ido-cur-item 'dir)
+                                 (eq last-command this-command))
+                             t
+                           (setq ido-show-confirm-message t)
+                           nil))
+                     (ido-existing-item-p))
+                 (not ido-incomplete-regexp))
         (when ido-current-directory
           (setq ido-exit 'takeprompt)
           (unless (and ido-text (= 0 (length ido-text)))
@@ -5385,20 +5115,17 @@ See URL `https://pypi.python.org/pypi/flake8'."
       )
     (add-hook 'ido-setup-hook 'my-ido-setup-bindings-hook)))
 
-;;;; php-mode
 (use-package php-mode
   :ensure t
   :commands php-mode
   :mode ("\\.php\\'" . php-mode))
 
-;;;; graphviz-dot-mode
 (use-package graphviz-dot-mode
   :ensure t
   :commands graphviz-dot-mode
   :mode (("\\.dot\\'" . graphviz-dot-mode)
          ("\\.gv\\'" . graphviz-dot-mode)))
 
-;;;; css-mode
 (use-package css-mode
   :commands css-mode
   :mode  ("\\.css\\'" . css-mode)
@@ -5406,7 +5133,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (setq css-indent-offset 2)))
 
-;;;; sgml-mode
 (use-package sgml-mode
   :commands html-mode
   :init
@@ -5417,7 +5143,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   ;;        ("\\.mustache\\'" . html-mode))
   )
 
-;;;; web-mode
 (use-package web-mode
   :ensure t
   :mode (("\\.phtml\\'" . web-mode) ("\\.erb\\'" . web-mode)
@@ -5443,7 +5168,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
 
-;;;; tagedit
 (use-package tagedit
   :ensure t
   :commands (tagedit-mode)
@@ -5461,13 +5185,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (bind-key "s-k" 'tagedit-kill-attribute tagedit-mode-map)
     (bind-key "s-<return>" 'tagedit-toggle-multiline-tag tagedit-mode-map)))
 
-;;;; haml-mode
 (use-package haml-mode
   :ensure t
   :disabled t
   :mode (("\\.haml\\'" . haml-mode)))
 
-;;;; apache-mode
 (use-package apache-mode
   :ensure t
   :commands apache-mode
@@ -5477,7 +5199,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ("apache2?/access\\.conf\\'" . apache-mode)
          ("apache2?//sites-\\(available\\|enabled\\)/" . apache-mode)))
 
-;;;; coffee-mode
 (use-package coffee-mode
   :ensure t
   :commands coffee-mode
@@ -5499,20 +5220,17 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;; (unbind-key "\C-m" coffee-mode-map)
     ))
 
-;;;; gitignore-mode
 (use-package gitignore-mode
   :ensure t
   :mode (("/\\.gitignore_global\\'" . gitignore-mode)
          ("/\\.gitignore\\'" . gitignore-mode)
          ("/\\.git/info/exclude\\'" . gitignore-mode)))
 
-;;;; gitconfig-mode
 (use-package gitconfig-mode
   :ensure t
   :mode (("/\\.gitconfig\\'" . gitconfig-mode)
          ("/\\.git/config\\'" . gitconfig-mode)))
 
-;;;; git-commit-mode
 (use-package git-commit-mode
   :ensure t
   :commands git-commit-mode
@@ -5534,7 +5252,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (when (boundp 'session-mode-disable-list)
       (add-to-list 'session-mode-disable-list 'git-commit-mode))))
 
-;;;; mo-git-blame
 (use-package mo-git-blame
   :ensure t
   :commands mo-git-blame-current
@@ -5542,29 +5259,26 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (setq mo-git-blame-blame-window-width 25)))
 
-;;;; annoying-arrows-mode
-(use-package annoying-arrows-mode
-  :ensure t
-  :disabled t
-  :commands (annoying-arrows-mode
-             global-annoying-arrows-mode)
-  :init
-  (progn
-    ;; (global-annoying-arrows-mode)
-    ))
+;; (use-package annoying-arrows-mode
+;;   :ensure t
+;;   :disabled t
+;;   :commands (annoying-arrows-mode
+;;              global-annoying-arrows-mode)
+;;   :init
+;;   (progn
+;;     ;; (global-annoying-arrows-mode)
+;;     ))
 
-;;;; guru-mode
-(use-package guru-mode
-  :ensure t
-  :if (not degrade-p-noninteractive)
-  :commands (guru-mode turn-on-guru-mode turn-off-guru-mode guru-global-mode)
-  :diminish (guru-mode guru-global-mode)
-  :init
-  (progn
-    ;; (guru-global-mode)
-    ))
+;; (use-package guru-mode
+;;   :ensure t
+;;   :if (not degrade-p-noninteractive)
+;;   :commands (guru-mode turn-on-guru-mode turn-off-guru-mode guru-global-mode)
+;;   :diminish (guru-mode guru-global-mode)
+;;   :init
+;;   (progn
+;;     ;; (guru-global-mode)
+;;     ))
 
-;;;; direx
 (use-package direx
   :ensure t
   :commands (direx:jump-to-directory direx:jump-to-directory-noselect
@@ -5608,7 +5322,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (define-key map (kbd "N") 'direx:next-sibling-item)
       (define-key map (kbd "P") 'direx:previous-sibling-item))))
 
-;;;; realgud
 (use-package realgud
   :ensure realgud
   :commands (realgud-pdb realgud-gdb pdb)
@@ -5619,7 +5332,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (defalias 'pdb 'realgud-pdb)))
 
-;;;; artbollocks-mode
 (use-package artbollocks-mode
   :commands artbollocks-mode
   :ensure t
@@ -5629,12 +5341,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;; (add-hook 'markdown-mode-hook 'artbollocks-mode)
     ))
 
-;;;; bbdb-loaddefs
 (use-package bbdb-loaddefs
   :disabled t
   :commands bbdb)
 
-;;;; evil
 (use-package evil
   :disabled t
   :ensure t
@@ -5645,8 +5355,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
       :ensure t
       :commands global-evil-machit-mode)))
 
-
-;;;; popwin
 (use-package popwin
   :ensure t
   :if (not degrade-p-noninteractive)
@@ -5664,27 +5372,26 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :config
   (--each
       '(("*identify*" :noselect t)
-       ("*Help*" :stick t)
-       (help-mode :noselect t)
-       ("*Ido Completions*" :noselect t :position bottom)
-       (direx:direx-mode :position left :width .25 :dedicated t)
-       ("*Messages*" :height .20)
-       ("*Pp Macroexpand Output*" :noselect t)
-       "*Personal Keybindings*"
-       (flycheck-error-list-mode :stick t)
-       ("*Org Select*" :position right :width 79 :noselect t)
-       (" *Agenda Commands*" :position right :width 79)
-       ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
-       ("*magit-commit*" :noselect t :height 0.40)
-       ("*magit-diff*" :noselect t :height 0.40)
-       ("*magit-edit-log*" :noselect t :height 0.25)
-       "*git-gutter:diff*")
+        ("*Help*" :stick t)
+        (help-mode :noselect t)
+        ("*Ido Completions*" :noselect t :position bottom)
+        (direx:direx-mode :position left :width .25 :dedicated t)
+        ("*Messages*" :height .20)
+        ("*Pp Macroexpand Output*" :noselect t)
+        "*Personal Keybindings*"
+        (flycheck-error-list-mode :stick t)
+        ("*Org Select*" :position right :width 79 :noselect t)
+        (" *Agenda Commands*" :position right :width 79)
+        ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
+        ("*magit-commit*" :noselect t :height 0.40)
+        ("*magit-diff*" :noselect t :height 0.40)
+        ("*magit-edit-log*" :noselect t :height 0.25)
+        "*git-gutter:diff*")
     (push it popwin:special-display-config))
   :idle-priority 2
   :idle
   (popwin-mode))
 
-;;;; highlight-indentation
 (use-package highlight-indentation
   ;; :disabled t
   :ensure t
@@ -5701,7 +5408,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
                      my-significant-whitespace-mode-hooks)
     (add-hook 'ruby-mode-hook 'highlight-indentation-current-column-mode)))
 
-;;;; col-highlight
 (use-package col-highlight
   :ensure t
   :disabled t
@@ -5712,8 +5418,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (col-highlight-set-interval 1)))
 
-
-;;;; indent-guide
 (use-package indent-guide
   :ensure t
   :disabled t
@@ -5725,7 +5429,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
                      my-significant-whitespace-mode-hooks)
     (add-hook 'ruby-mode-hook 'indent-guide-mode)))
 
-;;;; undo-tree
 (use-package undo-tree
   :ensure t
   :if (not degrade-p-noninteractive)
@@ -5759,23 +5462,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (bind-keys :map undo-tree-visualizer-mode-map
                ("u" . undo-tree-visualize-undo)
-               ("r" . undo-tree-visualize-redo))
-    ;;   (defadvice undo-tree-undo (around keep-region activate)
-    ;;     (if (use-region-p)
-    ;;         (let ((m (set-marker (make-marker) (mark)))
-    ;;               (p (set-marker (make-marker) (point))))
-    ;;           ad-do-it
-    ;;           (goto-char p)
-    ;;           (set-mark m)
-    ;;           (set-marker p nil)
-    ;;           (set-marker m nil))
-    ;;       ad-do-it))
-    )
+               ("r" . undo-tree-visualize-redo))))
 
-
-  )
-
-;;;; rainbow-delimiters
 (use-package rainbow-delimiters
   :ensure t
   :commands rainbow-delimiters-mode
@@ -5789,12 +5477,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;;                    haskell-mode-hook))
     ))
 
-;;;; nav
 (use-package nav
   :ensure t
   :commands nav-toggle)
 
-;;;; rainbow-mode
 (use-package rainbow-mode
   :ensure t
   :if (and
@@ -5809,9 +5495,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
                        sass-mode-hook)))
   :diminish ((rainbow-mode . "rb")))
 
-;;;; type-break
 (use-package type-break
   :defer t
+  :disabled t
   :if (and
        (not degrade-p-noninteractive)
        (not degrade-p-terminal))
@@ -5829,18 +5515,15 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;; (type-break-mode)
     ))
 
-;;;; restclient
 (use-package restclient
   :ensure t
   :commands restclient-mode)
 
-;;;; revbufs
 (use-package revbufs
   :commands revbufs
   ;; :bind (("M-o r" . revbufs))
   )
 
-;;;; auto-highlight-symbol
 (use-package auto-highlight-symbol
   :ensure t
   :if (and
@@ -5866,7 +5549,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (hook-into-modes #'auto-highlight-symbol-mode
                      my-prog-mode-hooks)))
 
-;;;; highlight-symbol
 (use-package highlight-symbol
   :ensure t
   :if (and
@@ -5879,7 +5561,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (setq
      highlight-symbol-idle-delay 1.1)))
 
-;;;; expand-region
 (use-package expand-region
   :ensure t
   :commands (er/expand-region
@@ -5891,7 +5572,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (define-key region-bindings-mode-map "h" 'er/expand-region)
     (define-key region-bindings-mode-map "j" 'er/contract-region)))
 
-;;;; smart-forward
 (use-package smart-forward
   :ensure t
   :disabled t
@@ -5900,7 +5580,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
              smart-forward
              smart-backward))
 
-;;;; rvm
 (use-package rvm
   :ensure t
   :commands (rvm-use
@@ -5911,13 +5590,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
 ;;   :ensure t
 ;;   :defer t)
 
-;;;; textile-mode
 (use-package textile-mode
   :ensure t
   :commands textile-mode
   :mode ("\\.textile\\'" . textile-mode))
 
-;;;; markdown-mode
 (use-package markdown-mode
   :ensure t
   :commands markdown-mode
@@ -5978,15 +5655,12 @@ See URL `https://pypi.python.org/pypi/flake8'."
           (cdr root))))
     (add-hook 'markdown-mode-hook
               #'(lambda ()
-                 (setq imenu-create-index-function
-                       'markdown-imenu-create-index)))))
+                  (setq imenu-create-index-function
+                        'markdown-imenu-create-index)))))
 
-;;;; table
 (use-package table
   :commands table-recognize)
 
-
-;;;; speedbar
 (use-package speedbar
   :defer t
   :init
@@ -6069,19 +5743,15 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     ))
 
-
-;;;; stylus-mode
 (use-package stylus-mode
   :ensure t
   :commands stylus-mode
   :mode ("\\.styl\\'" . stylus-mode))
 
-;;;; sws-mode
 (use-package sws-mode
   :ensure t
   :commands sws-mode)
 
-;;;; bm
 (use-package bm
   :ensure t
   :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
@@ -6112,16 +5782,13 @@ See URL `https://pypi.python.org/pypi/flake8'."
      bm-buffer-persistence t
      bm-repository-size 500)))
 
-;;;; constants
 (use-package constants
   :commands (constants-get constants-insert constants-replace))
 
-;;;; ahg
 (use-package ahg
   :ensure t
   :commands (ahg-log ahg-short-log ahg-status))
 
-;;;; magit
 (use-package magit
   :ensure t
   :commands (magit-log magit-run-gitk magit-run-git-gui
@@ -6133,10 +5800,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (setq
-     magit-repo-dirs '("~/repos"
-                       ;; "~/.config/dotfiles"
-                       )
-     magit-repo-dirs-depth 4
+     magit-repo-dirs '("~/repos")
+     magit-repo-dirs-depth 6
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers nil ;; manually saving all buffers instead
      magit-completing-read-function 'magit-ido-completing-read
@@ -6208,13 +5873,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (magit-refresh))
     (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
 
-;;;; git-rebase-mode
 (use-package git-rebase-mode
   :ensure t
   :commands git-rebase-mode
   :mode ("git-rebase-todo" . git-rebase-mode))
 
-;;;; virtualenvwrapper
 (use-package virtualenvwrapper
   :ensure t
   :commands (venv-workon
@@ -6233,8 +5896,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     ;;     (my-notify "emacs" (format "venv: %s" (f-base (getenv "VIRTUAL_ENV")))))
     ))
 
-
-;;;; volatile-highlights
 (use-package volatile-highlights
   :ensure t
   :if (not degrade-p-looks)
@@ -6247,13 +5908,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (hook-into-modes #'turn-on-volatile-highlights-mode
                      my-prog-mode-hooks)))
 
-;;;; yaml-mode
 (use-package yaml-mode
   :ensure t
   :commands yaml-mode
   :mode ("\\.y[a]?ml\\'" . yaml-mode))
 
-;;;; yasnippet
 (use-package yasnippet
   :ensure t
   :commands (yas-reload-all yas-global-mode yas-minor-mode snippet-mode
@@ -6287,7 +5946,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
       (let ((yas-fallback-behavior nil))
         ad-do-it))
-
 
     (bind-key "C-x i" 'yas-insert-snippet)
     (bind-key "C-h TAB" 'yas-insert-snippet)
@@ -6395,39 +6053,38 @@ See URL `https://pypi.python.org/pypi/flake8'."
              :max-width 80
              :isearch t)))))
 
-      (defun yas-remove-recompile-reload-all ()
-        (interactive)
-        (let ((default-directory my-yas-snippets-dir) )
-          (mapc (lambda (f)
-                  (delete-file f))
-                (file-expand-wildcards "*.elc")))
-        (f-files my-yas-snippets-dir
-                 (lambda (file)
-                   (and
-                    (equal (f-no-ext (f-filename file)) ".yas-compiled-snippets")
-                    (f-delete file)))
-                 t)
-        ;; (yas-recompile-all)
-        (yas-reload-all))
+    (defun yas-remove-recompile-reload-all ()
+      (interactive)
+      (let ((default-directory my-yas-snippets-dir) )
+        (mapc (lambda (f)
+                (delete-file f))
+              (file-expand-wildcards "*.elc")))
+      (f-files my-yas-snippets-dir
+               (lambda (file)
+                 (and
+                  (equal (f-no-ext (f-filename file)) ".yas-compiled-snippets")
+                  (f-delete file)))
+               t)
+      ;; (yas-recompile-all)
+      (yas-reload-all))
 
-      (defun my-snippet-save-hook ()
-        (when (and buffer-file-name
+    (defun my-snippet-save-hook ()
+      (when (and buffer-file-name
                  (eq major-mode 'snippet-mode))
-          (yas-remove-recompile-reload-all)))
+        (yas-remove-recompile-reload-all)))
 
-      (defun my-snippet-mode-hook ()
-        (add-hook 'after-save-hook 'my-snippet-save-hook nil t))
-      (add-hook 'snippet-mode-hook 'my-snippet-mode-hook)
+    (defun my-snippet-mode-hook ()
+      (add-hook 'after-save-hook 'my-snippet-save-hook nil t))
+    (add-hook 'snippet-mode-hook 'my-snippet-mode-hook)
 
-      (defun dired-snippets-dir ()
-        "Open dired in the yas snippets dir."
-        (interactive)
-        (dired (expand-file-name
-                "snippets" user-emacs-directory)))
+    (defun dired-snippets-dir ()
+      "Open dired in the yas snippets dir."
+      (interactive)
+      (dired (expand-file-name
+              "snippets" user-emacs-directory)))
 
-      (yas-reload-all)))
+    (yas-reload-all)))
 
-;;;; zencoding-mode
 (use-package zencoding-mode
   :ensure t
   :if (not degrade-p-minimalism)
@@ -6441,12 +6098,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (bind-key "C-c C-c" 'zencoding-expand-line zencoding-mode-keymap)
     (unbind-key "C-j" zencoding-mode-keymap)))
 
-;;;; simplezen
 (use-package simplezen
   :ensure t
   :commands (simplezen-expand))
 
-;;;; smex
 (use-package smex
   :ensure t
   :if (and
@@ -6468,7 +6123,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
      smex-history-length 15
      smex-prompt-string "")))
 
-;;;; jump-char
 (use-package jump-char
   :disabled t
   :ensure t
@@ -6478,7 +6132,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (setq jump-char-lazy-highlight-face nil)))
 
-;;;; ace-jump-mode
 (use-package ace-jump-mode
   :ensure t
   :commands (ace-jump-word-mode
@@ -6493,12 +6146,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (progn
         (unbind-key "C-c SPC" conf-mode-map)))))
 
-;;;; wgrep
 (use-package wgrep
   :ensure t
   :commands (wgrep-setup))
 
-;;;; ack-and-a-half
 (use-package ack-and-a-half
   :ensure t
   :commands (ack-and-a-half ack-and-a-half-same
@@ -6523,7 +6174,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
             (apply 'ack-and-a-half-run directory regexp pattern type)
           (ack-and-a-half pattern regexp directory))))))
 
-;;;; ag
 (use-package ag
   :ensure t
   :commands (ag
@@ -6542,8 +6192,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (use-package wgrep-ag
       :ensure t)))
 
-
-;;;; helm
 (use-package helm
   :ensure t
   :if (and
@@ -6623,7 +6271,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
                   (require 'projectile)
 
                   (helm-init-candidates-in-buffer
-                   'global projectile-known-projects)))
+                      'global projectile-known-projects)))
         (candidates-in-buffer)
         (no-delay-on-input)
         (keymap . ,helm-generic-files-map)
@@ -6641,7 +6289,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")
                   (setq helm-source-magit-repo-dir-repos
                         (mapcar 'cdr (magit-list-repos magit-repo-dirs)))
                   (helm-init-candidates-in-buffer
-                   'global helm-source-magit-repo-dir-repos)))
+                      'global helm-source-magit-repo-dir-repos)))
         (candidates-in-buffer)
         (no-delay-on-input)
         (keymap . ,helm-generic-files-map)
@@ -6652,7 +6300,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")
       "See (info \"(Emacs)File Conveniences\").
 Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
-;;;; ibuffer
 (use-package ibuffer
   :defer t
   :bind (("C-x b n" . ibuffer)
@@ -6712,8 +6359,8 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                  (buffer-path (with-current-buffer
                                   selected-buffer
                                 (or (buffer-file-name)
-                                   list-buffers-directory
-                                   default-directory)))
+                                    list-buffers-directory
+                                    default-directory)))
                  (default-directory
                    (if (file-regular-p buffer-path)
                        (file-name-directory buffer-path)
@@ -6729,8 +6376,8 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                  (buffer-path (with-current-buffer
                                   selected-buffer
                                 (or (buffer-file-name)
-                                   list-buffers-directory
-                                   default-directory)))
+                                    list-buffers-directory
+                                    default-directory)))
                  (default-directory
                    (if (file-regular-p buffer-path)
                        (file-name-directory buffer-path)
@@ -6791,7 +6438,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
                  (t (format "%d files" total))))))
       (ibuffer-my-abbrevs (or (ibuffer-buffer-file-name) "")))
 
-
     (define-ibuffer-column name-strip
       (:inline t
                :header-mouse-map ibuffer-name-header-map
@@ -6835,9 +6481,8 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
       ;; (ibuffer-awhen (buffer-local-value 'buffer-file-name buf)
       (ibuffer-awhen (with-current-buffer buf
                        (or buffer-file-name
-                          default-directory))
+                           default-directory))
         (string-match qualifier it)))
-
 
     (defun ibuffer-set-filter-groups-by-root  ()
       (interactive)
@@ -6845,13 +6490,13 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
             (-concat
              '(("MORE"
                 (or (mode . magit-log-edit-mode)
-                   (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
-                   (name . "^\\*Pymacs\\*$")
-                   (name . "^\\*helm.*\\*")
-                   (name . "^\\*Compile-log\\*$")
-                   (name . "^\\*Ido Completions\\*$")
-                   (name . "^\\*magit-\\(process\\)\\*$")
-                   (name . "^ "))))
+                    (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
+                    (name . "^\\*Pymacs\\*$")
+                    (name . "^\\*helm.*\\*")
+                    (name . "^\\*Compile-log\\*$")
+                    (name . "^\\*Ido Completions\\*$")
+                    (name . "^\\*magit-\\(process\\)\\*$")
+                    (name . "^ "))))
              '(("EMACS"
                 (or
                  (name . "^\\*scratch")
@@ -6861,7 +6506,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
              (ibuffer-projectile-generate-filter-groups-by-projectile-root)
              ;; (ibuffer-vc-generate-filter-groups-by-vc-root)
              (ibuffer-tramp-generate-filter-groups-by-tramp-connection))))
-
 
     (defun toggle-ibuffer-filter-groups ()
       "DOCSTRING"
@@ -6892,7 +6536,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
     (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
 
-
     (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
       "TODO"
       (let ((ibuf (get-buffer "*Ibuffer*")))
@@ -6910,7 +6553,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
             (let ((selected-buffer (ibuffer-current-buffer)))
               ad-do-it
               (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
-
 
     (setq
      ibuffer-default-sorting-mode 'recency
@@ -7055,7 +6697,6 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
   (progn
     (setq ielm-prompt "» ")))
 
-;;;; iflipb
 (use-package iflipb
   :ensure t
   :disabled t
@@ -7092,25 +6733,6 @@ minibuffer."
           (add-text-properties 1 (1- (length name)) '(face link) name))
         name))))
 
-;;;; paredit
-(use-package paredit
-  :ensure t
-  :disabled t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :commands paredit-mode
-  :diminish paredit-mode
-  ;; :init
-  ;; (progn
-  ;;   (hook-into-modes #'paredit-mode
-  ;;                    '(emacs-lisp-mode-hook
-  ;;                      clojure-mode-hook)))
-  :config
-  (progn
-    (unbind-key "M-s" paredit-mode-map)))
-
-;;;; pretty-mode
 (use-package pretty-mode
   :if (and
        (not degrade-p-terminal)
@@ -7128,8 +6750,6 @@ minibuffer."
                        ruby-mode-hook
                        haskell-mode-hook))))
 
-
-;;;; traad
 (use-package traad
   :ensure t
   :commands (traad-open)
@@ -7138,7 +6758,6 @@ minibuffer."
     (setq traad-auto-revert t
           traad-use-async t)))
 
-;;;; pymacs
 (use-package pymacs
   :ensure t
   :if (and
@@ -7193,8 +6812,6 @@ minibuffer."
               (ropemacs-mode))
           (error (message "Loading/Configuring of ropemacs failed")))))))
 
-
-;;;; python
 (use-package python
   :commands python-mode
   :mode ("\\.py\\'" . python-mode)
@@ -7240,7 +6857,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (setq method-args (replace-match "" t t method-args)))
         ;; (indent-for-tab-command)
         (insert (format "super(%s, %s).%s(%s"
-                               class-name self-name method-name method-args))
+                        class-name self-name method-name method-args))
         ;; (newline-and-indent)
         )))
   :config
@@ -7287,7 +6904,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (unbind-key "C-c C-p" python-mode-map)
     (unbind-key "C-c C-j" python-mode-map)))
 
-;;;; py-smart-operator
 (use-package py-smart-operator
   :commands (py-smart-operator-mode)
   :init
@@ -7295,8 +6911,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ;; (add-hook 'python-mode-hook 'py-smart-operator-mode)
     ))
 
-
-;;;; lisp-mode
 (use-package lisp-mode
   :defer t
   :init
@@ -7335,42 +6949,18 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
 
-;;;; winpoint
-(use-package winpoint
-  :disabled t
-  :ensure t
-  :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-minimalism))
-  :init
-  (progn
-    (window-point-remember-mode 1)))
-
-;;;; popup-kill-ring
-(use-package popup-kill-ring
-  :ensure t
-  :commands (popup-kill-ring)
-  :config
-  (progn
-    (use-package popup)
-    (use-package pos-tip)))
-
-;;;; browse-kill-ring
 (use-package browse-kill-ring
   :ensure t
   :bind (("M-y" . browse-kill-ring)))
 
-;;;; popup-ruler
 (use-package popup-ruler
   :commands (popup-ruler
              popup-ruler-vertical))
 
-;;;; log4j-mode
 (use-package log4j-mode
   :disabled t
   :mode ("\\.log\\'" . log4j-mode))
 
-;;;; ruby-mode
 (use-package ruby-mode
   :commands ruby-mode
   :mode (("\\.rake\\'" . ruby-mode)
@@ -7401,18 +6991,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      ruby-block-delay 0.8)
     (add-hook 'ruby-mode-hook 'ruby-electric-mode)))
 
-;;;; rinari
 (use-package rinari
   :ensure t
   :commands (rinari-launch rinari-minor-mode))
 
-;;;; jump
 (use-package my-jumps
   :ensure jump
   :if (not degrade-p-old-emacs)
   :commands (django-toggle-app))
 
-;;;; mingus
 (use-package mingus
   :commands (mingus mingus-stop)
   :init
@@ -7421,7 +7008,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      mingus-use-mouse-p nil
      mingus-use-ido-mode-p t)))
 
-;;;; volume
 (use-package volume
   :ensure t
   :commands (volume volume-mode volume-set volume-set-to-0% volume-or-set-card)
@@ -7445,13 +7031,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                  (volume-set-card)
                  (call-interactively 'volume)))))))
 
-;;;; sass-mode
 (use-package sass-mode
   :ensure t
   :commands sass-mode
   :mode (("\\.sass\\'" . sass-mode)))
 
-;;;; scss-mode
 (use-package scss-mode
   :ensure t
   :commands scss-mode
@@ -7463,7 +7047,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (unbind-key "C-c C-c" scss-mode-map)))
 
-;;;; simple-httpd
 (use-package simple-httpd
   :ensure t
   :commands httpd-start
@@ -7476,7 +7059,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (use-package skewer-mode)))
 
-;;;; json-mode
 (use-package json-mode
   :ensure t
   :commands json-mode
@@ -7488,7 +7070,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
               #'(lambda ()
                   (setq-local js-indent-level 2)))))
 
-;;;; uniquify
 (use-package uniquify
   :if (and
        (not degrade-p-minimalism)
@@ -7502,15 +7083,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      uniquify-after-kill-buffer-p t
      uniquify-ignore-buffers-re "^\\*")))
 
-;;;; edit-env
 (use-package edit-env
   :commands edit-env)
 
-;;;; edit-var
 (use-package edit-var
   :commands edit-variable)
 
-;;;; smartparens
 (use-package smartparens
   :ensure t
   :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
@@ -7591,82 +7169,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)))
 
-;;;; autopair
-(use-package autopair
-  :disabled t ; replaced by smartparens
-  :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :commands (autopair-mode)
-  :diminish autopair-mode
-  :init
-  (progn
-    (setq
-     autopair-autowrap 'help-balance
-     ;;autopair-skip-whitespace 'chomp
-     )
-
-    (hook-into-modes
-     #'(lambda () (autopair-mode))
-        my-prog-mode-hooks)
-
-    (add-hook 'python-mode-hook
-              #'(lambda ()
-                  (setq autopair-handle-action-fns
-                        (list #'autopair-default-handle-action
-                              #'autopair-python-triple-quote-action))))))
-
-;;;; mic-paren
-(use-package mic-paren
-  :disabled t ; replaced by smartparens
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :commands paren-activate
-  :init
-  (progn
-    (setq paren-delay 0.125)
-    ;; (paren-activate)
-    ))
-
-;;;; paren
-(use-package paren
-  :disabled t ; replaced by mic-paren
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :init
-  (progn
-    (setq show-paren-style 'parenthesis)
-    (show-paren-mode 1)))
-
-;;;; wrap-region
-(use-package wrap-region
-  :ensure t
-  :disabled t ;; replaced by smartparens
-  :commands (wrap-region-mode wrap-region-global-mode)
-  :diminish wrap-region-mode
-  :init
-  (progn
-    (setq wrap-region-except-modes
-          '(org-agenda-mode calc-mode dired-mode
-                            mu4e-view-mode mu4e-headers-mode))
-    (wrap-region-global-mode 1))
-  :config
-  (progn
-    (wrap-region-add-wrappers
-     '(("$" "$")
-       ("/" "/" nil ruby-mode)
-       ("/* " " */" "#" (java-mode javascript-mode css-mode
-                                   c-mode c++-mode))
-       ("`" "`" nil (markdown-mode ruby-mode shell-script-mode))
-       ("=" "=" "=" (org-mode))
-       ("*" "*" "*" (org-mode))
-       ))))
-
-
-;;;; android-mode
 (use-package android-mode
   :ensure t
   :commands (android-mode android-logcat android-start-emulator
@@ -7677,7 +7179,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      android-mode-sdk-dir "~/.opt/android-sdks"
      android-mode-avd "d")))
 
-;;;; eclim
 (use-package eclim
   :ensure emacs-eclim
   :commands (eclim-mode
@@ -7697,87 +7198,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (use-package eclimd)
     (use-package eclim-completion)))
 
-;;;; desktop
-(use-package desktop
-  :commands (desktop-save desktop-read desktop-save-mode)
-  :if (not degrade-p-noninteractive)
-  :init
-  (progn
-    (setq
-     desktop-base-file-name (convert-standard-filename ".emacs.desktop")
-     desktop-save t
-     desktop-modes-not-to-save '(tags-table-mode
-                                 org-mode)
-     desktop-globals-to-save (append '(
-                                       (compile-history          . 30)
-                                       (extended-command-history . 30)
-                                       ;; (file-name-history        . 100)
-                                       (grep-history             . 30)
-                                       (minibuffer-history       . 50)
-                                       (query-replace-history    . 60)
-                                       (read-expression-history  . 60)
-                                       (regexp-history           . 60)
-                                       (regexp-search-ring       . 20)
-                                       (search-ring              . 20)
-                                       (shell-command-history    . 50)
-                                       register-alist
-                                       tags-file-name
-                                       )))
-
-    (setq workspace-desktop-directory (expand-file-name
-                                       "desktops/" user-data-directory))
-
-    (defun workspace-desktop-save ()
-      (interactive)
-      (let* ((workspace-prefix (workspace-prefix))
-             (workspace-directory (f-expand
-                                   workspace-prefix
-                                   workspace-desktop-directory)))
-        (if (not workspace-prefix)
-            (error "no workspace available")
-          (make-directory workspace-directory t)
-          (desktop-save workspace-directory)
-          (desktop-save-mode))))
-
-    (defun workspace-desktop-load ()
-      (interactive)
-      (let* ((workspace-prefix (workspace-prefix))
-             (workspace-directory (f-expand
-                                   workspace-prefix
-                                   workspace-desktop-directory)))
-        (if (not workspace-prefix)
-            (error "no workspace available")
-          (make-directory workspace-directory t)
-          (desktop-read workspace-directory)
-          (desktop-save-mode)))))
-  :config
-  (progn
-    (--each '(global-hardhat-mode)
-      (add-to-list 'desktop-minor-mode-table (list it nil)))
-    (defadvice desktop-save (before no-minor-modes activate)
-      (--each minor-mode-list
-        (add-to-list 'desktop-minor-mode-table (list it nil))))))
-
-
-;;;; desktop-menu
-(use-package desktop-menu
-  :commands (desktop-menu)
-  :bind (("M-o d" . desktop-menu))
-  :init
-  (progn
-    (setq
-     desktop-menu-directory (expand-file-name
-                             "desktops/" user-data-directory)
-     desktop-menu-autosave t
-     desktop-menu-base-filename "desktop"
-     desktop-menu-list-file "index"))
-  :config
-  (progn
-    (make-directory desktop-menu-directory t)))
-
-
-
-;;;; imenu
 (use-package imenu
   :bind (("M-o i" . ido-goto-symbol))
   :init
@@ -7830,11 +7250,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
               (setq position
                     (get-text-property 1 'org-imenu-marker symbol))))
             (unless (or (null position) (null name)
-                       (string= (car imenu--rescan-item) name))
+                        (string= (car imenu--rescan-item) name))
               (add-to-list 'symbol-names name)
               (add-to-list 'name-and-pos (cons name position))))))))))
 
-;;;; w3m-load
 (use-package w3m
   :ensure t
   :disabled t
@@ -7902,12 +7321,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        (format "https://pypi.python.org/pypi?:action=search&term=%s"
                (w3m-search-escape-query-string term))))
 
-
     (defun goto-emacswiki ()
       (interactive)
       (w3m-browse-url "http://www.emacswiki.org"))))
 
-;;;; sclang
 (use-package sclang
   :disabled t
   :commands (sclang-start
@@ -7915,12 +7332,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :mode ("\\.\\(sc\\|scd\\)\\'" . sclang-mode)
   :interpreter ("sclang" . sclang-mode))
 
-
-;;;; solarized-theme-utils
 (use-package solarized-theme-utils
   :commands solarized-import-faces)
 
-;;;; winner
 (use-package winner
   :if (and
        (not degrade-p-minimalism)
@@ -7940,38 +7354,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (winner-mode 1)
       (error (warn "winner mode startup failed!")))))
 
-;;;; rotate
 (use-package rotate
   :ensure t
   :commands rotate-layout
   :bind (("M-o M-c" . rotate-layout)))
 
-;;;; winring
-(use-package winring
-  :disabled t
-  :commands (winring-new-configuration
-             winring-duplicate-configuration
-             winring-next-configuration
-             winring-prev-configuration)
-  :bind (("C-§" . winring-next-configuration)
-         ("C-½" . winring-prev-configuration)
-         ("M-o §" . winring-duplicate-configuration))
-  :init
-  (progn
-    (defalias 'w-new-perspective 'winring-new-configuration)
-    (defalias 'w-next-perspective 'winring-next-configuration)
-    (defalias 'w-prev-perspective 'winring-prev-configuration))
-  :config
-  (progn
-    (noflet ((winring-next-name nil "default"))
-      (winring-initialize))))
-
-;;;; workgroups2
 (use-package workgroups2
   :ensure t
   :commands workgroups-mode)
 
-;;;; transpose-frame
 (use-package transpose-frame
   :commands (flip-frame flop-frame)
   :bind (("M-o M-f" . flop-frame))
@@ -7980,12 +7371,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (defalias 'w-flip-frame 'flip-frame)
     (defalias 'w-flop-frame 'flop-frame)))
 
-;;;; logito
 (use-package logito
   :ensure t
   :commands (logito-log logito-should-log logito-insert-log))
 
-;;;; ac-slime
 (use-package ac-slime
   :ensure t
   :commands (set-up-slime-ac)
@@ -8001,17 +7390,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (progn
         (add-to-list 'ac-modes 'slime-repl-mode)))))
 
-;;;; actionscript-mode
 (use-package actionscript-mode
   :ensure t
   :mode (("\\.as\\'"  . actionscript-mode)))
 
-;;;; buffer-move
 (use-package buffer-move
   :ensure t
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
 
-;;;; elisp-slime-nav
 (use-package elisp-slime-nav
   :ensure t
   :commands (elisp-slime-nav-mode)
@@ -8020,14 +7406,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))))
 
-;;;; gist
 (use-package gist
   :ensure t
   :commands (gist-region gist-buffer gist-region-or-buffer
                          gist-region-or-buffer-private))
 
 ;; TODO: init
-;;;; highlight
 (use-package highlight
   :ensure t
   :commands (hlt-choose-default-face hlt-highlighter
@@ -8035,12 +7419,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                                      hlt-highlight-region
                                      hlt-highlight-regexp-region))
 
-;;;; mwe-log-commands
 (use-package mwe-log-commands
   :ensure t
   :commands (mwe:log-keyboard-commands mwe:open-command-log-buffer))
 
-;;;; quick-jump
 (use-package quick-jump
   :commands (quick-jump-default-keybinding
              quick-jump-push-marker
@@ -8048,13 +7430,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
              quick-jump-go-forward
              quick-jump-clear-all-marker))
 
-;;;; scratch
 (use-package scratch
   :ensure t
   :commands (scratch
              scratch-list-modes))
 
-;;;; slime
 (use-package slime
   :ensure t
   :commands (slime slime-connect)
@@ -8062,20 +7442,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (slime-setup)))
 
-;;;; window-number
-(use-package window-number
-  :disabled t
-  :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :commands (window-number-mode
-             window-number-meta-mode)
-  :init
-  (progn
-    (window-number-mode)))
-
-;;;; clojure-mode
 (use-package clojure-mode
   :ensure t
   :commands clojure-mode
@@ -8085,9 +7451,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (rename-modeline "clojure-mode" clojure-mode "clj")
     (use-package align-cljlet
+      :ensure t
       :commands (align-cljlet))))
 
-;;;; calendar
 (use-package calendar
   :defer t
   :init
@@ -8100,7 +7466,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (load "sv-kalender" 'noerror 'nomessage)))
 
-;;;; calfw
 (use-package calfw
   :ensure t
   :commands cfw:open-calendar-buffer
@@ -8121,8 +7486,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                       :sorter 'cfw:org-schedule-sorter)))
             (switch-to-buffer (cfw:cp-get-buffer cp))))))))
 
-
-;;;; cua-base
 (use-package cua-base
   :if (and
        (not degrade-p-minimalism)
@@ -8147,27 +7510,22 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (unless (eq this-original-command this-command)
             (let ((overwrite-mode
                    (and overwrite-mode
-                      not-empty
-                      (not (eq this-original-command 'self-insert-command)))))
+                        not-empty
+                        (not (eq this-original-command 'self-insert-command)))))
               (cua--fallback))))))))
 
-
-;;;; header2
 (use-package header2
   :commands (make-header make-revision make-divider make-box-comment
                          update-file-header))
 
-;;;; lib-requires
 (use-package lib-requires
   :commands (libreq-requires-tree libreq-requires-list
                                   libreq-insert-lib-requires-as-comment))
 
-;;;; aes
 (use-package aes
   :ensure t
   :commands (aes-insert-password))
 
-;;;; nav-flash
 (use-package nav-flash
   :ensure t
   :commands (nav-flash-show)
@@ -8176,13 +7534,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (setq nav-flash-delay 0.6)
     (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)))
 
-;;;; groovy-mode
 (use-package groovy-mode-autoloads
   :ensure groovy-mode
   :mode (("\\.groovy\\'" . groovy-mode)
          ("build\\.gradle\\'" . groovy-mode)))
 
-;;;; real-auto-save
 (use-package real-auto-save
   :ensure t
   :disabled t
@@ -8197,7 +7553,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (add-hook 'org-mode-hook 'turn-on-real-auto-save)))
 
-;;;; auto-revert-mode
 (use-package autorevert
   :if (and
        (not degrade-p-minimalism)
@@ -8214,10 +7569,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
             auto-revert-tail-mode-text " ar~"))
     (defun auto-revert-turn-on-maybe ()
       (unless (current-buffer-remote-p)
-       (auto-revert-mode)))
+        (auto-revert-mode)))
     (add-hook 'find-file-hook 'auto-revert-turn-on-maybe)))
 
-;;;; js
 (use-package js
   :disabled t
   :defer t
@@ -8235,7 +7589,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                             '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
                                1 font-lock-warning-face t)))))
 
-;;;; js2-mode
 (use-package js2-mode
   :ensure t
   :mode (("\\.js\\'" . js2-mode)
@@ -8262,7 +7615,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                             '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
                                1 font-lock-warning-face t)))))
 
-;;;; mu4e
 (use-package mu4e
   :if (file-exists-p "~/.config/myGmail-maildir")
   :commands (mu4e
@@ -8348,25 +7700,21 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-to-list 'mu4e-view-actions
                  '("View in browser" . mu4e-msgv-action-view-in-browser) t)))
 
-;;;; pandoc-mode
 (use-package pandoc-mode
   :ensure t
   :commands (turn-on-pandoc
              pandoc-load-default-settings))
 
-;;;; gnuplot-mode
 (use-package gnuplot-mode
   :ensure t
   :commands (gnuplot-mode)
   :mode (("\\.gp\\'" . gnuplot-mode)
          ("\\.gnuplot\\'" . gnuplot-mode)))
 
-;;;; regex-tool
 (use-package regex-tool
   :ensure t
   :commands (regex-tool))
 
-;;;; flyspell
 (use-package flyspell
   :defer t
   :diminish ((flyspell-mode . "fls"))
@@ -8374,17 +7722,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (setq flyspell-issue-message-flag nil)))
 
-
-;;;; font-utils
 (use-package font-utils
   :ensure t
   :commands (font-utils-first-existing-font))
 
-;;;; notifications
 (use-package notifications
   :commands notifications-notify)
 
-;;;; page-break-lines
 (use-package page-break-lines
   :ensure t
   :commands (turn-on-page-break-lines-mode
@@ -8399,7 +7743,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (hook-into-modes 'page-break-lines-mode my-prog-mode-hooks)
       )))
 
-;;;; fill-column-indicator
 (use-package fill-column-indicator
   :ensure t
   :commands (fci-mode
@@ -8431,7 +7774,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (defadvice popup-delete (after restore-fci-mode activate)
       "Restore fci-mode when all popups have closed"
       (when (and fci-mode-suppressed
-               (null popup-instances))
+                 (null popup-instances))
         (setq fci-mode-suppressed nil)
         (turn-on-fci-mode)))
 
@@ -8445,8 +7788,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (defadvice browse-kill-ring-quit (after restore-fci-mode activate)
       "Restore fci-mode when all popups have closed"
       (when fci-mode-suppressed)
-        (setq fci-mode-suppressed nil)
-        (turn-on-fci-mode))
+      (setq fci-mode-suppressed nil)
+      (turn-on-fci-mode))
 
     ;; Regenerate fci-mode line images after switching themes
     (defadvice enable-theme (after recompute-fci-face activate)
@@ -8455,15 +7798,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (when (fci-enabled-p)
             (turn-on-fci-mode)))))))
 
-
-
-;;;; qml-mode
 (use-package qml-mode
   :ensure t
   :mode (("\\.qml\\'" . qml-mode)))
 
-
-;;;; hardhat
 (use-package hardhat
   :ensure t
   :commands (hardhat-mode
@@ -8584,7 +7922,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (when (not degrade-p-noninteractive)
       (global-hardhat-mode 1))))
 
-;;;; kite
 (use-package kite
   :disabled t
   :ensure t
@@ -8595,13 +7932,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
          ("M-o k m" . kite-memory)
          ("M-o k s" . kite-scratch)))
 
-
-;;;; simpleclip
 (use-package simpleclip
   :ensure t
   :commands (simpleclip-mode simpleclip-set-contents
-             simpleclip-get-contents simpleclip-cut
-             simpleclip-copy simpleclip-paste)
+                             simpleclip-get-contents simpleclip-cut
+                             simpleclip-copy simpleclip-paste)
   :init
   (progn
     (setq
@@ -8657,18 +7992,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-hook 'on-blur-hook 'silent-save-some-buffers)
     (on-blur--refresh)))
 
-;;;; switch-window
 (use-package switch-window
   :ensure t
   :disabled t
   :commands switch-window)
 
-;;;; typescript
 (use-package typescript
   :ensure t
   :commands (typescript-mode))
 
-;;;; fold-this
 (use-package fold-this
   :ensure t
   :commands (fold-this)
@@ -8676,7 +8008,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
          ("C-c C-F" . fold-this)
          ("C-c M-f" . fold-this-unfold-all)))
 
-;;;; openwith
 (use-package openwith
   :ensure t
   :commands (openwith-mode openwith-open-unix open-terminal)
@@ -8692,7 +8023,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
        ))
     (when (and (not degrade-p-minimalism)
-             (not degrade-p-noninteractive))
+               (not degrade-p-noninteractive))
       (openwith-mode)))
   :config
   (progn
@@ -8701,7 +8032,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (interactive)
       (openwith-open-unix "term" nil))))
 
-;;;; skewer-mode
 (use-package skewer-mode
   :ensure t
   :commands (skewer-mode skewer-reload-page)
@@ -8729,7 +8059,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (defun skewer-reload-page ()
       "Reloads browser."
       (interactive)
-       (silent-save-some-buffers)
+      (silent-save-some-buffers)
       (skewer-eval "window.location = window.location"))
     (defun skewer-scroll-down ()
       "Scroll down"
@@ -8758,24 +8088,19 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       ;; (bind-key "<f5>" 'skewer-reload-page)
       )))
 
-
-;;;; dart-mode
 (use-package dart-mode
   :ensure t
   :commands (dart-mode)
   :mode ("\\.dart\\'" . dart-mode))
 
-;;;; window-layout
 (use-package window-layout
   :ensure t
   :commands (wlf:layout))
 
-;;;; gnomenm
 (use-package gnomenm
   :ensure t
   :commands (gnomenm-disconnect gnomenm-status gnomenm-connect))
 
-;;;; git-gutter
 (use-package git-gutter
   :ensure t
   :if (and
@@ -8802,8 +8127,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
               git-gutter:window-width 1)))
     (defun git-gutter-turn-on-maybe ()
       (and (buffer-file-name)
-         (not (current-buffer-remote-p))
-         (git-gutter-mode 1)))
+           (not (current-buffer-remote-p))
+           (git-gutter-mode 1)))
     (hook-into-modes 'git-gutter-turn-on-maybe my-prog-mode-hooks))
 
   :config
@@ -8819,26 +8144,23 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (progn
         (when (fboundp 'define-fringe-bitmap)
           (fringe-helper-define 'git-gutter-fr:added '(top repeat)
-                                ".XX.....")
+            ".XX.....")
           (fringe-helper-define 'git-gutter-fr:deleted '(top repeat)
-                                ".XX.....")
+            ".XX.....")
           (fringe-helper-define 'git-gutter-fr:modified '(top repeat)
-                                ".XX....."))))))
+            ".XX....."))))))
 
-;;;; diff-hl
 (use-package diff-hl
   :ensure t
   :commands (diff-hl-mode
              turn-on-diff-hl-mode
              global-diff-hl-mode))
 
-;;;; tagedit
 (use-package tagedit
   :ensure t
   :commands (tagedit-forward-slurp-tag tagedit-forward-barf-tag
                                        tagedit-raise-tag tagedit-kill-attribute))
 
-;;;; multiple-cursors
 (use-package multiple-cursors
   :ensure t
   :commands (multiple-cursors-mode mc/edit-lines mc/mark-next-like-this
@@ -8874,11 +8196,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (bind-key "C-s" 'phi-search mc/keymap)
     (bind-key "C-r" 'phi-search-backward mc/keymap)))
 
-;;;; menu-bar+
-(use-package menu-bar+
-  :disabled t)
-
-;;;; quick-buffer-switch
 (use-package quick-buffer-switch
   :ensure t
   :commands (quick-buffer-switch)
@@ -8922,7 +8239,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :shortcut "s"
       :test '(when (--any?
                     (eq major-mode it) my-css-like-modes)
-              qbs:buffer-file-name))
+               qbs:buffer-file-name))
      (make-qbs:predicate
       :name 'js-mode
       :shortcut "j"
@@ -8940,16 +8257,16 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :shortcut "p"
       :test '(when (eq major-mode 'python-mode)
                qbs:buffer-file-name))
-          )
+     )
     (defun quick-buffer-switch (&optional type)
       "Quick switch buffer switch according TYPE. Seed `qbs-predicates-plist'."
       (interactive)
       (let* ((type (or type
-                      (intern (ido-completing-read
-                               "Quick buffer switch predicate: "
-                               (loop for (k v) on qbs-predicates-plist by #'cddr
-                                     collect (symbol-name k))
-                               nil t nil nil nil t))))
+                       (intern (ido-completing-read
+                                "Quick buffer switch predicate: "
+                                (loop for (k v) on qbs-predicates-plist by #'cddr
+                                      collect (symbol-name k))
+                                nil t nil nil nil t))))
              (predicate (plist-get qbs-predicates-plist type))
              (qbs:pre-search (eval (qbs:predicate-pre-search predicate)))
              (blist (qbs-get-buffer-names predicate))
@@ -8975,26 +8292,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
             (switch-to-buffer value)))
           (eval (qbs:predicate-post-search predicate)))))))
 
-;;;; ein
-(use-package ein
-  :disabled t
-  :ensure t
-  :commands (ein:notebooklist-open
-             ein:notebooklist-new-notebook
-             ein:notebooklist-open-notebook-global
-             ein:notebooklist-login
-             ein:connect-to-default-notebook
-             ein:jedi-setup
-             ein:junk-new)
-  :init
-  (progn
-    (setq ein:default-url-or-port "8888"
-          ein:use-smartrep t
-          ein:use-auto-complete t
-          ein:connect-default-notebook "8888/My_Notebook")
-    (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)))
-
-;;;; request
 (use-package request
   :ensure t
   :defer t
@@ -9003,7 +8300,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (setq request-storage-directory (expand-file-name
                                      "request/" user-data-directory))))
 
-;;;; kivy-mode
 (use-package kivy-mode
   :ensure t
   :mode (("\\.kv\\'" . kivy-mode))
@@ -9012,7 +8308,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (bind-key "C-c <" 'python-indent-shift-left kivy-mode-map)
     (bind-key "C-c >" 'python-indent-shift-right kivy-mode-map)))
 
-;;;; ido-load-library
 (use-package ido-load-library
   :ensure t
   :commands (ido-load-library ido-load-library-find)
@@ -9023,7 +8318,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ;; (defalias 'find-library 'ido-load-library-find)
     ))
 
-;;;; face-remap
 (use-package face-remap
   :bind (("M-o m b" . buffer-face-toggle))
   :init
@@ -9036,7 +8330,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       "face for headers.")
     (setq buffer-face-mode-face 'fixed-pitch-terminal)))
 
-;;;; keyfreq
 (use-package keyfreq
   :ensure t
   :if (not degrade-p-noninteractive)
@@ -9051,7 +8344,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ;; (keyfreq-autosave-mode)
     ))
 
-;;;; fic-mode
 (use-package fic-ext-mode
   :disabled t
   :ensure t
@@ -9066,7 +8358,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (hook-into-modes #'fic-ext-mode my-html-like-mode-hooks)
     (hook-into-modes #'fic-ext-mode my-html-like-mode-hooks-2)))
 
-;;;; fixmee
 (use-package fixmee
   :ensure t
   :disabled t
@@ -9103,19 +8394,16 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (global-fixmee-mode 1)))
 
-;;;; command-log-mode
 (use-package command-log-mode
   :ensure t
   :if (not degrade-p-noninteractive)
   :commands (command-log-mode))
 
-;;;; backup-walker
 (use-package backup-walker
   :ensure t
   :if (not degrade-p-noninteractive)
   :commands (backup-walker-start))
 
-;;;; MRU-yank
 (use-package MRU-yank
   :if (not degrade-p-noninteractive)
   :defer t
@@ -9123,35 +8411,18 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (setq MRU-yank-mode t)))
 
-;;;; delim-pad
-(use-package delim-pad
-  :if (not degrade-p-noninteractive)
-  :commands (delim-pad-mode))
-
-
-;;;; ws-trim
 (use-package ws-trim
   :disabled t
   :ensure t)
 
-
-
-;;;; gtags
 (use-package gtags
   :ensure t
   :commands (gtags-mode))
 
-;;;; indicate-change-mode
-(use-package indicate-change-mode
-  :disabled t
-  :commands (indicate-change-mode indicate-change-on indicate-change-off))
-
-;;;; indicators
 (use-package indicators
   :ensure t
   :commands (indicators-mode))
 
-;;;; emamux
 (use-package emamux
   :ensure t
   :commands (emamux:run-command emamux:get-sessions emamux:send-keys)
@@ -9159,74 +8430,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (defun emamux:in-tmux-p () t)))
 
-;;;; look-mode
 (use-package look-mode
   :ensure t
   :commands (look-at-files look-at-this-file))
 
-;;;; guide-key
-(use-package guide-key
-  :ensure t
-  :disabled t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
-  :diminish (guide-key-mode)
-  :commands (guide-key-mode
-             guide-key/add-local-guide-key-sequence
-             guide-key/add-local-highlight-command-regexp
-             guide-key/key-chord-hack-on)
-  :init
-  (progn
-    (setq
-     guide-key/idle-delay 2
-     guide-key/polling-time 0.1
-     guide-key/recursive-key-sequence-flag t
-     guide-key/popup-window-position 'right
-     guide-key/guide-key-sequence '(
-                                    "C-c !"
-                                    "C-c b"
-                                    "C-c p"
-                                    "C-c r"
-                                    "C-x 4"
-                                    "C-x 5"
-                                    "C-x C-k"
-                                    "C-x b"
-                                    "C-x d"
-                                    "C-x f"
-                                    "C-x n"
-                                    "C-x p"
-                                    "C-x r"
-                                    "C-x v"
-                                    "M-o"
-                                    "C-c o"
-                                    "M-s"
-                                    "M-g"
-                                    ))
-    (defun guide-key/my-org-mode-hook ()
-      (guide-key/add-local-guide-key-sequence "C-c")
-      (guide-key/add-local-guide-key-sequence "C-c C-x")
-      (guide-key/add-local-highlight-command-regexp "org-"))
-    (add-hook 'org-mode-hook 'guide-key/my-org-mode-hook)
-    (defun guide-key/my-dired-mode-hook ()
-      (guide-key/add-local-guide-key-sequence "%")
-      (guide-key/add-local-guide-key-sequence "*")
-      (guide-key/add-local-highlight-command-regexp "dired-"))
-    (add-hook 'dired-mode-hook 'guide-key/my-dired-mode-hook)
-    (defun guide-key/my-ibuffer-mode-hook ()
-      (guide-key/add-local-guide-key-sequence "%")
-      (guide-key/add-local-guide-key-sequence "*")
-      (guide-key/add-local-guide-key-sequence "/")
-      (guide-key/add-local-highlight-command-regexp "ibuffer-"))
-    (add-hook 'ibuffer-mode-hook 'guide-key/my-ibuffer-mode-hook))
-  :idle-priority 6
-  :idle
-  (progn
-    (guide-key-mode 1)
-    ;; (guide-key/key-chord-hack-on)
-    ))
-
-;;;; find-file
 (use-package find-file
   :defer t
   :bind (("C-h C-o" . cc-other-file))
@@ -9277,7 +8484,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        ("\\.js\\'" (".coffee"))
        ))))
 
-;;;; google-this
 (use-package google-this
   :ensure t
   :commands (google-this
@@ -9287,14 +8493,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
              google-this-symbol google-this-word)
   :init
   (progn
-        (define-key search-map "G" 'google-this-region)))
+    (define-key search-map "G" 'google-this-region)))
 
-;;;; litable
 (use-package litable
   :ensure t
   :commands (litable-mode))
 
-;;;; show-css
 (use-package show-css
   :ensure t
   :disabled t
@@ -9309,13 +8513,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (showcss-mode 'toggle)
         (message "Not in an html mode")))))
 
-;;;; lexbind-mode
 (use-package lexbind-mode
   :ensure t
   :commands (lexbind-toggle-lexical-binding lexbind-lexscratch
-             lexbind-modeline-content lexbind-mode))
+                                            lexbind-modeline-content lexbind-mode))
 
-;;;; lusty-explorer
 (use-package lusty-explorer
   :ensure t
   :disabled t
@@ -9352,10 +8554,10 @@ already present."
              (file-portion (file-name-nondirectory path))
              (files
               (and dir
-                 ;; NOTE: directory-files is quicker but
-                 ;;       doesn't append slash for directories.
-                 ;;(directory-files dir nil nil t)
-                 (file-name-all-completions "" dir)))
+                   ;; NOTE: directory-files is quicker but
+                   ;;       doesn't append slash for directories.
+                   ;;(directory-files dir nil nil t)
+                   (file-name-all-completions "" dir)))
              (filtered (lusty-filter-files
                         file-portion
                         (if lusty-only-directories
@@ -9364,7 +8566,7 @@ already present."
                                   collect f)
                           files))))
         (if (or (string= file-portion "")
-               (string= file-portion "."))
+                (string= file-portion "."))
             (sort filtered 'string<)
           (lusty-sort-by-fuzzy-score filtered file-portion))))
 
@@ -9394,14 +8596,12 @@ already present."
   :bind (("C-x C-f" . lusty-file-explorer)
          ("C-x f f" . lusty-file-explorer)))
 
-;;;; mouse
 (use-package mouse
   :defer t
   :init
   (progn
     (setq mouse-yank-at-point t)))
 
-;;;; multi-term
 (use-package multi-term
   :ensure t
   :commands (multi-term)
@@ -9410,7 +8610,6 @@ already present."
   (progn
     (setq multi-term-program "/bin/bash")))
 
-;;;; iswitchb
 (use-package iswitchb
   :disabled t
   :if (not degrade-p-noninteractive)
@@ -9418,7 +8617,6 @@ already present."
   (progn
     (iswitchb-mode 1)))
 
-;;;; weechat
 (use-package weechat
   :ensure t
   :commands (weechat-connect)
@@ -9451,12 +8649,10 @@ already present."
       (require 'private-weechat nil t)
       (my-weechat-connect))))
 
-;;;; mouse-slider-mode
 (use-package mouse-slider-mode
   :ensure t
   :commands mouse-slider-mode)
 
-;;;; tramp
 (use-package tramp
   :defer t
   :init
@@ -9474,7 +8670,6 @@ already present."
            tramp-completion-function-alist-ssh
            '((tramp-parse-shosts "~/.ssh/known_hosts"))))))
 
-;;;; python-django
 (use-package python-django
   :ensure t
   :if (not degrade-p-old-emacs)
@@ -9491,7 +8686,6 @@ already present."
      '("css" "gif" "htm" "html" "jpg" "js" "json" "mo" "png" "po" "py"
        "txt" "xml" "yaml" "scss" "less" "coffee"))))
 
-;;;; loccur
 (use-package loccur
   :ensure t
   :commands (loccur loccur-mode loccur-current loccur-no-highlight)
@@ -9507,12 +8701,10 @@ declaration in a Python file."
       (loccur-no-highlight "^ *def "))
     (define-key region-bindings-mode-map "l" 'loccur-current)))
 
-;;;; jss
 (use-package jss
   :ensure t
   :commands jss-connect)
 
-;;;; js-comint
 (use-package js-comint
   :commands inferior-js-mode
   :ensure t
@@ -9520,7 +8712,6 @@ declaration in a Python file."
   (progn
     (setq inferior-js-program-command "nodejs")))
 
-;;;; js2-refactor
 (use-package js2-refactor
   :ensure t
   :commands (js2r-add-keybindings-with-modifier
@@ -9537,12 +8728,10 @@ declaration in a Python file."
              js2r-use-strict js2r-var-to-this js2r-wrap-buffer-in-iife
              js2r-wrap-in-for-loop))
 
-;;;; cider
 (use-package cider
   :ensure t
   :commands (cider-jack-in cider))
 
-;;;; helm-ag
 (use-package helm-ag
   :ensure t
   :if (not degrade-p-helm)
@@ -9555,7 +8744,6 @@ declaration in a Python file."
   :if (not degrade-p-helm)
   :bind ("M-o M-a" . helm-ag-r))
 
-;;;; google-translate
 (use-package google-translate
   :ensure t
   :commands (google-translate-at-point
@@ -9564,7 +8752,6 @@ declaration in a Python file."
   (progn
     (define-key region-bindings-mode-map "t" 'google-translate-at-point)))
 
-;;;; helm-github-stars
 (use-package helm-github-stars
   :ensure t
   :if (not degrade-p-helm)
@@ -9574,7 +8761,6 @@ declaration in a Python file."
     (setq helm-github-stars-cache-file
           (expand-file-name "hgs-cache" user-cache-directory))))
 
-;;;; helm-css-scss
 (use-package helm-css-scss
   :ensure t
   :if (not degrade-p-helm)
@@ -9588,7 +8774,6 @@ declaration in a Python file."
         (bind-key "C-c C-c" 'helm-css-scss scss-mode-map)
         (bind-key "C-c c" 'helm-css-scss-multi scss-mode-map)))))
 
-;;;; helm-git-grep
 (use-package helm-git-grep
   :ensure t
   :if (not degrade-p-helm)
@@ -9598,16 +8783,15 @@ declaration in a Python file."
   :init
   (progn
     (defun helm-git-grep-region ()
-  "Helm git grep with region
+      "Helm git grep with region
 if submodules exists, grep submodules too."
-  (interactive)
-  (let* ((symbol (buffer-substring (mark) (point)))
-         (input (if symbol (concat symbol " ") nil)))
-    (helm-git-grep-1 input)))
+      (interactive)
+      (let* ((symbol (buffer-substring (mark) (point)))
+             (input (if symbol (concat symbol " ") nil)))
+        (helm-git-grep-1 input)))
     (define-key search-map "g" 'helm-git-grep-region)
     ))
 
-;;;; helm-swoop
 (use-package helm-swoop
   :ensure t
   :if (not degrade-p-helm)
@@ -9618,14 +8802,12 @@ if submodules exists, grep submodules too."
     (define-key search-map "S" 'helm-multi-swoop-all)
     ))
 
-;;;; swoop
 (use-package swoop
   :ensure t
   :disabled t
   :if (not degrade-p-helm)
   :commands (swoop swoop-multi))
 
-;;;; visible-mark
 (use-package visible-mark
   :ensure t
   :commands (visible-mark-mode global-visible-mark-mode)
@@ -9636,7 +8818,6 @@ if submodules exists, grep submodules too."
     ;;  my-prog-mode-hooks)
     ))
 
-;;;; back-button
 (use-package back-button
   :ensure t
   :if (and
@@ -9652,7 +8833,6 @@ if submodules exists, grep submodules too."
   (progn
     (back-button-mode 1)))
 
-;;;; syslog-mode
 (use-package syslog-mode
   :ensure t
   :mode (("var/log/syslog.*\\'" . syslog-mode)
@@ -9660,22 +8840,18 @@ if submodules exists, grep submodules too."
          ("var/log/kern.*\\'" . syslog-mode)
          ("var/log/dmesg.*\\'" . syslog-mode)))
 
-;;;; bf-mode
 (use-package bf-mode
   :ensure t
   :commands bf-mode)
 
-;;;; archive-region
 (use-package archive-region
   :ensure t
   :commands (archive-region))
 
-;;;; google-c-style
 (use-package google-c-style
   :ensure t
   :commands (google-set-c-style google-make-newline-indent))
 
-;;;; ecb-autoloads
 (use-package ecb-autoloads
   :disabled t
   :ensure ecb
@@ -9692,7 +8868,7 @@ if submodules exists, grep submodules too."
   (progn
     (require 'ecb-layout)
     (ecb-layout-define "my-left1" left
-      "This function creates the following layout:
+                       "This function creates the following layout:
    ----------------------------------
    | Sources |                      |
    |---------|         Edit         |
@@ -9700,14 +8876,13 @@ if submodules exists, grep submodules too."
    |--------------------------------|
    |           Compilation          |
    ----------------------------------"
-      (ecb-set-sources-buffer)
-      (variable-pitch-mode 1)
-      (ecb-split-ver 0.3)
-      (ecb-set-history-buffer)
-      (variable-pitch-mode 1)
-      (select-window (next-window)))))
+                       (ecb-set-sources-buffer)
+                       (variable-pitch-mode 1)
+                       (ecb-split-ver 0.3)
+                       (ecb-set-history-buffer)
+                       (variable-pitch-mode 1)
+                       (select-window (next-window)))))
 
-;;;; pager
 (use-package pager
   :ensure t
   :disabled t ;; is scroll-preserve-screen-position enough?
@@ -9720,41 +8895,34 @@ if submodules exists, grep submodules too."
          ("M-<down>" . pager-row-down)
          ("M-<kp-2>" . pager-row-down)))
 
-;;;; capture
 (use-package capture
   :ensure t
   :commands (capture-mode))
 
-;;;; sourcetalk
 (use-package sourcetalk
   :ensure t
   :commands (sourcetalk-start-external-conference))
 
-;;;; launch
 (use-package launch
   :ensure t
   :commands (global-launch-mode turn-on-launch-mode launch-file))
 
-;;;; drag-stuff
 (use-package drag-stuff
   :ensure t
   :commands (drag-stuff-global-mode drag-stuff-mode))
 
-;;;; stripe-buffer
 (use-package stripe-buffer
   :ensure t
   :commands (stripe-buffer-mode))
 
-;;;; nrepl-eval-sexp-fu
 (use-package nrepl-eval-sexp-fu
   :ensure t
   :disabled t
   :commands (nrepl-eval-sexp-fu-flash-mode
-              turn-on-nrepl-eval-sexp-fu-flash-mode
+             turn-on-nrepl-eval-sexp-fu-flash-mode
              nrepl-eval-sexp-fu-eval-sexp-inner-list
              nrepl-eval-sexp-fu-eval-sexp-inner-sexp))
 
-;;;; ac-nrepl
 (use-package ac-nrepl
   :ensure t
   :disabled t
@@ -9768,12 +8936,10 @@ if submodules exists, grep submodules too."
       :config
       (add-to-list 'ac-modes 'nrepl-mode))))
 
-;;;; grizzl
 (use-package grizzl
   :ensure t
   :commands (grizzl-completing-read grizzl-make-index))
 
-;;;; point-undo
 (use-package point-undo
   :ensure t
   :if (and
@@ -9791,7 +8957,6 @@ if submodules exists, grep submodules too."
         ("r" . point-redo)))
     (require 'point-undo)))
 
-;;;; image-mode
 (use-package image-mode
   :defer t
   :config
@@ -9816,11 +8981,11 @@ drag the viewpoint on the image buffer that the window displays."
                    ;; as used in mouse.el:mouse-drag-track
                    (setq event (read-event))
                    (or (mouse-movement-p event)
-                      (memq (car-safe event) '(switch-frame select-window))))
+                       (memq (car-safe event) '(switch-frame select-window))))
             (setq now-posn (event-start event))
             ;; check if drag is within image on frame
             (if (and (eq (nth 7 start-posn) (nth 7 now-posn))
-                   (eq (nth 1 start-posn) (nth 1 now-posn)))
+                     (eq (nth 1 start-posn) (nth 1 now-posn)))
                 (progn
                   (setq nowpos (nth 8 now-posn))
                   (setq x-diff (- (car startpos) (car nowpos)))
@@ -9846,13 +9011,11 @@ drag the viewpoint on the image buffer that the window displays."
       (image-dired default-directory))
     (bind-key "d" 'image-dired-here  image-mode-map)))
 
-;;;; mouse-drag
 (use-package mouse-drag
   :bind ("<down-mouse-3>" . mouse-drag-drag))
 
-;;;; oauth2
 (use-package oauth2
-    :ensure t
+  :ensure t
   ;; :commands ()
   :defer t
   :init
@@ -9860,24 +9023,6 @@ drag the viewpoint on the image buffer that the window displays."
     (setq
      oauth2-token-file "~/.config-private/oauth2.plstore")))
 
-;;;; google-contacts
-(use-package google-contacts
-  :ensure t
-  :commands (google-contacts)
-  :init
-  (progn
-      ;; (setq
-      ;;  google-contacts)
-    )
-  :config
-  (progn
-    (require 'oauth2)))
-
-;;;; reddit
-(use-package reddit
-  :commands reddit)
-
-;;;; god-mode
 (use-package god-mode
   :ensure t
   :commands (god-mode god-mode-all god-local-mode
@@ -9898,18 +9043,6 @@ drag the viewpoint on the image buffer that the window displays."
     (define-key god-local-mode-map (kbd "i") 'god-mode-all)
     ))
 
-;;;; key-combo
-
-(use-package key-combo
-  :ensure t
-  :disabled t ;; seems to not work with pretty-mode and possibly others
-  :commands (key-combo-mode global-key-combo-mode key-combo-load-default)
-  :init
-  (progn
-    ;; (global-key-combo-mode t)
-    ))
-
-;;;; electic
 (use-package electric
   :defer t
   :config
@@ -9917,36 +9050,11 @@ drag the viewpoint on the image buffer that the window displays."
     ;; (electric-indent-mode -1)
     ))
 
-
-;;;; elnode
-(use-package elnode
-  :ensure t
-  :commands (elnode-make-webserver elnode-init elnode-start)
-  :init
-  (progn
-    (defconst elnode-config-directory
-      (expand-file-name (f-expand user-data-directory "elnode/")))
-    (setq elnode-init-port 3264
-          elnode-do-init nil)
-    (use-package elnode-bm
-      :disabled t
-      :commands elnode-bm-handler
-      :init
-      (progn
-        (setq elnode-bookmark-file-name (f-expand
-                                         "org/urls.org"
-                                         user-notes-directory))
-        (defun start-elnode-bm ()
-          (interactive)
-          (elnode-start 'elnode-bm-handler :port 8004 :host "localhost" ))))))
-
-;;;; floobits
 (use-package floobits
   :ensure t
   :commands (floobits-join-workspace floobits-share-dir-public
                                      floobits-share-dir-private))
 
-;;;; tern
 (use-package tern
   :ensure t
   :disabled t
@@ -9954,7 +9062,7 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (unless degrade-p-old-emacs
-          (add-hook 'js2-mode-hook 'tern-mode)))
+      (add-hook 'js2-mode-hook 'tern-mode)))
   :config
   (progn
     (use-package tern-auto-complete
@@ -9962,33 +9070,10 @@ drag the viewpoint on the image buffer that the window displays."
       :commands tern-ac-setup
       :init (tern-ac-setup))))
 
-;;;; outline
 (use-package outline
   :defer t
   :diminish ((outline-minor-mode . "")))
 
-;;;; outshine
-(use-package outshine
-  :disabled t
-  :ensure t
-  :commands outshine-hook-function
-  :diminish ""
-  :init
-  (progn
-     (add-hook  'outline-minor-mode-hook 'outshine-hook-function)))
-
-;;;; navi-mode
-(use-package navi-mode
-  :ensure t
-  :disabled t
-  :commands (navi-search-and-switch))
-
-;;;; outorg
-(use-package outorg
-  :ensure t
-  :commands outorg-edit-as-org)
-
-;;;; glsl-mode
 (use-package glsl-mode
   :ensure t
   :mode (("\\.glsl\\'" . glsl-mode)
@@ -9996,26 +9081,10 @@ drag the viewpoint on the image buffer that the window displays."
          ("\\.frag\\'" . glsl-mode)
          ("\\.geom\\'" . glsl-mode)))
 
-;;;; weather-metno
-(use-package weather-metno
-  :ensure t
-  :commands (weather-metno-update weather-metno-forecast
-                                  weather-metno-forecast-location)
-  :init
-  (progn
-    (setq weather-metno-get-image-props '(:width 16 :height 16 :ascent center))
-    (use-package org
-      :defer t
-      :config
-      (progn
-        (use-package org-weather-metno)))))
-
-;;;; string-edit
 (use-package string-edit
   :ensure t
   :commands (string-edit-at-point))
 
-;;;; keep-buffers
 (use-package keep-buffers
   :if (and
        (not degrade-p-minimalism)
@@ -10034,7 +9103,6 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :defer t)
 
-;;;; dockerfile-mode
 (use-package dockerfile-mode
   :ensure t
   :mode (("Dockerfile\\'" . dockerfile-mode))
@@ -10042,12 +9110,10 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq-default docker-use-sudo nil)))
 
-;;;; Clojure cheatsheet
 (use-package clojure-cheatsheet
   :ensure t
   :commands clojure-cheatsheet)
 
-;;;; parenface
 (use-package parenface-plus
   :ensure t
   :if (and
@@ -10068,8 +9134,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'coffee-mode-hook 'paren-face-add-keyword)
     (add-hook 'coffee-mode-hook 'paren-face-add-keyword-other)))
 
-
-;;;; auto-install
 (use-package auto-install
   :ensure t
   :commands auto-install-from-url
@@ -10077,22 +9141,18 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq auto-install-directory user-site-lisp-directory)))
 
-;;;; sauron
 (use-package sauron
   :ensure t
   :commands (sauron-start sauron-start-hidden))
 
-;;;; hy-mode
 (use-package hy-mode
   :ensure t
   :mode "\\.hy\\'")
 
-;;;; interaction-log
 (use-package interaction-log
   :ensure t
   :commands interaction-log-mode)
 
-;;;; helm-recoll
 (use-package helm-recoll
   :ensure t
   :if (not degrade-p-helm)
@@ -10102,7 +9162,6 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (helm-recoll-create-source "all" "~/.recoll/")))
 
-;;;; helm-orgcard
 (use-package helm-orgcard
   :ensure t
   :if (not degrade-p-helm)
@@ -10111,33 +9170,27 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package misc
   :bind (("M-z" . zap-up-to-char)))
 
-;;;; popup-switcher
 (use-package popup-switcher
   :ensure t
   :commands (psw-switch-buffer))
 
-;;;; elfeed
 (use-package elfeed
   :ensure t
   :commands elfeed)
 
-;;;; anzu-mode
 (use-package anzu
   :ensure t
   :init (global-anzu-mode 1)
   :diminish "")
 
-;;;; tox
 (use-package tox
   :ensure t
   :commands (tox-current-test tox-current-cast))
 
-;;;; vagrant
 (use-package vagrant
   :ensure t
   :commands (vagrant-up vagrant-ssh))
 
-;;;; easy-kill
 (use-package easy-kill
   :ensure t
   :commands easy-kill
@@ -10145,7 +9198,6 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (global-set-key [remap kill-ring-save] 'easy-kill)))
 
-;;;; tabbar and tabbar-ruler
 (use-package tabbar
   :disabled t
   :ensure t
@@ -10164,13 +9216,11 @@ drag the viewpoint on the image buffer that the window displays."
       (progn
         (tabbar-ruler-group-by-projectile-project)))))
 
-;;;; helm-pydoc
 (use-package helm-pydoc
   :ensure t
   :if (not degrade-p-helm)
   :commands helm-pydoc)
 
-;;;; know-your-http-well
 (use-package know-your-http-well
   :ensure t
   :commands (http-header
@@ -10178,7 +9228,6 @@ drag the viewpoint on the image buffer that the window displays."
              http-relation
              http-status-code))
 
-;;;; phi-search
 (use-package phi-search
   :ensure t
   :commands (phi-search phi-search-backwards))
@@ -10187,7 +9236,6 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :commands phi-search-dired)
 
-;;;; pt
 (use-package pt
   :ensure t
   :commands (pt-regexp projectile-pt)
@@ -10197,23 +9245,19 @@ drag the viewpoint on the image buffer that the window displays."
     (setq pt-arguments
           (list "--smart-case"))))
 
-;;;; bug-reference-github
 (use-package bug-reference-github
   :ensure t
   :defer t)
 
-;;;; edbi
 (use-package edbi
   :disabled t
   :ensure t
   :commands edbi:open-db-viewer)
 
-;;;; edit-color-stamp
 (use-package edit-color-stamp
   :ensure t
   :commands edit-color-stamp)
 
-;;;; visual-regexp
 (use-package visual-regexp
   :ensure t
   :commands (vr/replace vr/query-replace)
@@ -10222,8 +9266,6 @@ drag the viewpoint on the image buffer that the window displays."
     (use-package visual-regexp-steroids
       :ensure t)))
 
-
-;;;; eimp-mode
 (use-package eimp
   :ensure t
   :commands (eimp-mode eimp-fit-image-to-window)
@@ -10248,7 +9290,6 @@ drag the viewpoint on the image buffer that the window displays."
       (progn
         (bind-key "h" 'eimp-fit-image-to-window image-mode-map)))))
 
-;;;; zeal-at-point
 (use-package zeal-at-point
   :ensure t
   :commands zeal-at-point
@@ -10290,13 +9331,7 @@ drag the viewpoint on the image buffer that the window displays."
             (scala-mode . "scala")
             (vim-mode . "vim")))))
 
-(use-package historyf
-  :ensure t
-  :disabled t
-  :commands (historyf-back historyf-forward))
-
 (use-package multi-web-mode
-  :disabled t
   :ensure t
   :commands (multi-web-global-mode))
 
@@ -10307,19 +9342,6 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (defadvice list-packages (before load-muv activate)
       (use-package melpa-upstream-visit))))
-
-
-(use-package buffer-stack
-  :ensure t
-  :disabled t
-  :bind (("<f9>" . buffer-stack-up)
-         ("<f10>" . buffer-stack-down)))
-
-(use-package swbuff-x
-  :ensure t
-  :disabled t
-  :bind (("<f9>" . swbuff-switch-to-next-buffer)
-         ("<f10>" . swbuff-switch-to-previous-buffer)))
 
 (use-package thingopt :ensure t :defer t)
 

@@ -35,12 +35,6 @@
   (set (make-local-variable 'font-lock-defaults)
        '(sheet-mode-font-lock-keywords)))
 
-(defun find-sheet ()
-  "Opens a cheat sheet."
-  (interactive)
-  (ido-find-file-in-dir
-   (concat user-notes-directory "cheat/"))
-  (sheet-mode))
 
 (provide 'sheet-mode)
 
