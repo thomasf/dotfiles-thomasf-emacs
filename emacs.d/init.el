@@ -5050,82 +5050,90 @@ otherwise use the subtree title."
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
       (fringe-helper-define 'vertical-wave-bitmap '(center repeat)
-        "...XXX."
-        "...XXX."
-        "..XXX.."
-        "..XXX..")
+                            "...XXX."
+                            "...XXX."
+                            "..XXX.."
+                            "..XXX..")
 
       (flycheck-define-error-level 'error
+        :severity 100
         :overlay-category 'flycheck-error-overlay
         :fringe-bitmap 'vertical-wave-bitmap
-        :fringe-face 'flycheck-fringe-error)
+        :fringe-face 'flycheck-fringe-error
+        :error-list-face 'flycheck-error-list-error)
 
       (flycheck-define-error-level 'warning
+        :severity 10
         :overlay-category 'flycheck-warning-overlay
         :fringe-bitmap 'vertical-wave-bitmap
-        :fringe-face 'flycheck-fringe-warning)
+        :fringe-face 'flycheck-fringe-warning
+        :error-list-face 'flycheck-error-list-warning)
 
       (flycheck-define-error-level 'info
+        :severity -1
         :overlay-category 'flycheck-info-overlay
         :fringe-bitmap 'vertical-wave-bitmap
-        :fringe-face 'flycheck-fringe-info))
+        :fringe-face 'flycheck-fringe-info
+        :error-list-face 'flycheck-error-list-info)
 
-
-    (flycheck-define-checker python-flake8
-      "A Python syntax and style checker using Flake8.
+      (flycheck-define-checker python-flake8
+        "A Python syntax and style checker using Flake8.
 
 For best error reporting, use Flake8 2.0 or newer.
 
 See URL `https://pypi.python.org/pypi/flake8'."
-      :command ("flake8"
-                (config-file "--config" flycheck-flake8rc)
-                (option "--max-complexity"
-                        flycheck-flake8-maximum-complexity
-                        flycheck-option-int)
-                (option "--max-line-length"
-                        flycheck-flake8-maximum-line-length
-                        flycheck-option-int)
-                source-inplace)
-      :error-patterns
-      (       (info line-start
-                    (file-name) ":" line ":" (optional column ":") " "
-                    (message "N"              ; pep8-naming in Flake8 >= 2.0
-                             (one-or-more digit) (zero-or-more not-newline))
-                    line-end)
+        :command ("flake8"
+                  (config-file "--config" flycheck-flake8rc)
+                  (option "--max-complexity"
+                          flycheck-flake8-maximum-complexity nil
+                          flycheck-option-int)
+                  (option "--max-line-length"
+                          flycheck-flake8-maximum-line-length nil
+                          flycheck-option-int)
+                  source)
+        :error-patterns
+        (
 
-              (info line-start
-                    (file-name) ":" line ":" (optional column ":") " "
-                    (message (or
-                              "F401" ;; pyflakes: module imported but unused
-                              "E303" ;; pep8: too many blank lines (3)
-                              "E501" ;; pep8: line too long (82 > 79 characters)
-                              "E2";; pep8: Whitespace
-                              "E3";; pep8: blank lines
-                              "W2";; pep8: Whitespace
-                              "W3";; pep8: blank lines
-                              )
-                             (zero-or-more not-newline))
-                    line-end)
-              (error line-start
-                     (file-name) ":" line ":" (optional column ":") " "
-                     (message "E" (one-or-more digit) (zero-or-more not-newline))
-                     line-end)
-              (warning line-start
-                       (file-name) ":" line ":" (optional column ":") " "
-                       (message (or "F"            ; Pyflakes in Flake8 >= 2.0
-                                   "W"            ; Pyflakes in Flake8 < 2.0
-                                   "C")           ; McCabe in Flake >= 2.0
-                                (one-or-more digit) (zero-or-more not-newline))
-                       line-end)
-              (info line-start
-                    (file-name) ":" line ":" (optional column ":") " "
-                    (message "N"              ; pep8-naming in Flake8 >= 2.0
-                             (one-or-more digit) (zero-or-more not-newline))
-                    line-end)
-              ;; Syntax errors in Flake8 < 2.0, in Flake8 >= 2.0 syntax errors are caught
-              ;; by the E.* pattern above
-              (error line-start (file-name) ":" line ":" (message) line-end))
-      :modes python-mode)))
+         (info line-start
+               (file-name) ":" line ":" (optional column ":") " "
+               (message (or
+                         "F401" ;; pyflakes: module imported but unused
+                         "E303" ;; pep8: too many blank lines (3)
+                         "E501" ;; pep8: line too long (82 > 79 characters)
+                         "E2";; pep8: Whitespace
+                         "E3";; pep8: blank lines
+                         "W2";; pep8: Whitespace
+                         "W3";; pep8: blank lines
+                         )
+                        (zero-or-more not-newline))
+               line-end)
+
+         (error line-start
+                (file-name) ":" line ":" (optional column ":") " "
+                (message "E" (one-or-more digit) (zero-or-more not-newline))
+                line-end)
+
+
+         (warning line-start
+                  (file-name) ":" line ":" (optional column ":") " "
+                  (message (or "F"            ; Pyflakes in Flake8 >= 2.0
+                              "W"            ; Pyflakes in Flake8 < 2.0
+                              "C")           ; McCabe in Flake >= 2.0
+                           (one-or-more digit) (zero-or-more not-newline))
+                  line-end)
+
+
+
+         (info line-start
+               (file-name) ":" line ":" (optional column ":") " "
+               (message "N"              ; pep8-naming in Flake8 >= 2.0
+                        (one-or-more digit) (zero-or-more not-newline))
+               line-end)
+
+         ;; Syntax errors in Flake8 < 2.0, in Flake8 >= 2.0 syntax errors are caught
+         ;; by the E.* pattern above
+         (error line-start (file-name) ":" line ":" (message) line-end))
+        :modes python-mode))))
 
 ;;;; unbound
 (use-package unbound
