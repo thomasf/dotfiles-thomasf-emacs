@@ -4623,6 +4623,7 @@ otherwise use the subtree title."
   :config
   (progn
     (use-package pos-tip
+      :ensure t
       :if (not
            (or
             degrade-p-terminal
