@@ -1225,7 +1225,7 @@ buffer-local wherever it is set."
                  (projectile-sort-by-recently-active-first)
                  (mapcar #'(lambda (x)
                             (--map (if (s-suffix? it x) x )
-                                   '(".md" ".markdown" ".s" ".org" ".txt" ".plu" ))))
+                                   '(".md" ".markdown" ".s" ".org" ".txt" ".plu" ".org.gpg"))))
                  (-flatten)
                  (--filter (not (s-matches? "/reveal\.js/" it ))))))
     (if files
