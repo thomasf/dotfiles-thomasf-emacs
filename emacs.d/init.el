@@ -428,6 +428,9 @@ buffer-local wherever it is set."
 
 ;;; functions: early gui setup
 
+(use-package solarized-theme
+  :ensure t
+  :defer t)
 ;;;; dark/bright mode
 (setq solarized-use-less-bold t
       solarized-use-more-italic t
