@@ -9149,6 +9149,19 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq auto-install-directory user-site-lisp-directory)))
 
+(use-package auto-package-update
+  :ensure t
+  :commands (auto-package-update-now auto-package-update-if-needed)
+  :config
+  (progn
+    (setq
+     auto-package-update-interval 7
+     apu--last-update-day-path
+          (expand-file-name apu--last-update-day-filename
+                            user-data-directory)))
+  :idle (auto-package-update-if-needed)
+  :idle-priority 100)
+
 (use-package sauron
   :ensure t
   :commands (sauron-start sauron-start-hidden))
