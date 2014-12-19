@@ -9158,9 +9158,7 @@ drag the viewpoint on the image buffer that the window displays."
      auto-package-update-interval 7
      apu--last-update-day-path
           (expand-file-name apu--last-update-day-filename
-                            user-data-directory)))
-  :idle (auto-package-update-if-needed)
-  :idle-priority 100)
+                            user-data-directory))))
 
 (use-package sauron
   :ensure t
