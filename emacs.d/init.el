@@ -8517,6 +8517,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (showcss-mode 'toggle)
         (message "Not in an html mode")))))
 
+(use-package less-css-mode
+  :ensure t
+  :mode "\\.less\\'")
+
 (use-package lexbind-mode
   :ensure t
   :commands (lexbind-toggle-lexical-binding lexbind-lexscratch
