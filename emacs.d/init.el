@@ -6756,7 +6756,7 @@ minibuffer."
 
 (use-package traad
   :ensure t
-  :commands (traad-open)
+  :commands (traad-open traad-install-server)
   :init
   (progn
     (setq traad-auto-revert t
