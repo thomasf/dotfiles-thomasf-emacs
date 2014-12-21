@@ -3232,6 +3232,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :init
   (progn
+    (setq rings-protect-buffers-in-rings nil)
     (defun my-rings-setup ()
       ;; f1
       (global-set-key (kbd "<f1>")   (rings-generate-cycler 1))
