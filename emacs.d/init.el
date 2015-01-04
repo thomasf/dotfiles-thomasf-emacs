@@ -2785,6 +2785,10 @@ for the current buffer's file name, and the line number at point."
   :mode (("\\.cu\\'" . cuda-mode)
          ("\\.cuh\\'" . cuda-mode)))
 
+(use-package dired-k
+  :ensure t
+  :commands dired-k)
+
 (use-package dired-toggle-sudo
   :ensure t
   :if (not degrade-p-noninteractive)
