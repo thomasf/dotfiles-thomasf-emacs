@@ -2752,6 +2752,10 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands amd-mode)
 
+(use-package anchored-transpose
+  :ensure t
+  :commands anchored-transpose)
+
 (use-package anaphora
   :ensure t
   :defer t)
