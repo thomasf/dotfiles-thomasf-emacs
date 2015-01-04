@@ -8015,6 +8015,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-hook 'on-blur-hook 'silent-save-some-buffers)
     (on-blur--refresh)))
 
+(use-package swift-mode
+  :ensure t
+  :mode (("\\.swift\\'" . swift-mode)))
+
 (use-package switch-window
   :ensure t
   :disabled t
