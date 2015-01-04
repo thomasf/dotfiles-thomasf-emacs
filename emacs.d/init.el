@@ -2976,6 +2976,16 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   (progn
     (setq eww-search-prefix "http://google.com/search?q=")))
 
+(use-package extempore
+  :mode ("\\.xtm\\'" . extempore-mode)
+  :config
+  (progn
+    (setq user-extempore-directory
+          (-first 'file-directory-p
+                  (list
+                   (expand-file-name "~/.opt/extempore/")
+                   "/usr/local/Cellar/extempore/0.58/extras")))))
+
 (use-package fancy-narrow
   :ensure t
   :defer t)
@@ -3266,6 +3276,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package org-screenshot
   :commands org-screenshot-take)
+
+(use-package osc
+  :defer t
+  :ensure t)
 
 (use-package pip-requirements
   :ensure t
