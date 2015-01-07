@@ -7649,6 +7649,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :bind (("C-x m" . mu4e))
   :init
   (progn
+    (add-hook 'mu4e-compose-mode-hook 'epa-mail-mode)
+    (add-hook 'mu4e-view-mode-hook 'epa-mail-mode)
     (when window-system
       (setq
        mu4e-headers-draft-mark     '("D" . "⚒")
@@ -7680,7 +7682,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           mu4e-headers-results-limit 1000
           mu4e-headers-leave-behavior 'apply
           mu4e-headers-show-threads nil
-          mu4e-view-mode-hook '(turn-on-visual-line-mode)
           ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
           mu4e-sent-messages-behavior 'delete
           mu4e-view-show-images t
