@@ -4990,6 +4990,16 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (bind-key "M-." 'godef-jump go-mode-map)))
 
+(use-package go-oracle
+  :commands
+  (go-oracle-mode go-oracle-peers go-oracle-callees
+             go-oracle-callers go-oracle-freevars
+             go-oracle-pointsto go-oracle-describe
+             go-oracle-callstack go-oracle-set-scope
+             go-oracle-whicherrs go-oracle-callgraph
+             go-oracle-referrers go-oracle-definition
+             go-oracle-implements))
+
 (use-package go-rename
   :commands go-rename)
 
