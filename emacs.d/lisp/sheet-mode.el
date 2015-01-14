@@ -22,6 +22,8 @@
    '("^ *\\([-$] \\)\\(.*\\)"
      (1 font-lock-comment-face)
      (2 font-lock-keyword-face))
+   '("^  \\(.*\\)"
+     (1 font-lock-keyword-face))
    ;; Section::
    '("\\(.*\\)\\(::\\)$"
      (1 font-lock-type-face)
