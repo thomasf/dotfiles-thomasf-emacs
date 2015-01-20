@@ -4985,6 +4985,11 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (progn
         (add-hook 'go-mode-hook
                   #'(lambda ()
+                      ;;; NOTE placing ac-source-yasnippet first is a work around.
+                      ;; This is probably still an issue for modes where ac-source-yasnippet is
+                      ;; not the last source.. (maybe) any source that has a prefix parser must
+                      ;; be placed last until this issue is resolved.
+                      ;; auto-complete/auto-complete#348 (comment)
                       (setq ac-sources
                             '(ac-source-yasnippet
                               ac-source-go))))))
