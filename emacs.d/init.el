@@ -4986,8 +4986,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
         (add-hook 'go-mode-hook
                   #'(lambda ()
                       (setq ac-sources
-                            '(ac-source-go
-                              ac-source-yasnippet))))))
+                            '(ac-source-yasnippet
+                              ac-source-go))))))
 
     (bind-key "M-." 'godef-jump go-mode-map)))
 
