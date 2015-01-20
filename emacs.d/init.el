@@ -75,7 +75,8 @@ Font-lock, visual indicators and similar.")
  package-enable-at-startup nil
  package-user-dir user-elpa-directory
  package-archives
- '(("melpa" . "http://melpa.milkbox.net/packages/")
+ '(("melpa-stable" . "http://stable.melpa.org/packages/")
+   ("melpa" . "http://melpa.org/packages/")
    ("marmalade"   . "http://marmalade-repo.org/packages/")
    ("org"         . "http://orgmode.org/elpa/")
    ("gnu"         . "http://elpa.gnu.org/packages/")
@@ -7128,6 +7129,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package smartparens
   :ensure t
+  :pin "melpa-stable"
   :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
                               turn-off-smartparens-mode show-smartparens-mode
                               show-smartparens-global-mode
