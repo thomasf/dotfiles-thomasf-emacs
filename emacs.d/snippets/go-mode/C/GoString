@@ -1,0 +1,4 @@
+# name: C string to Go string: func C.GoString(*C.char) string
+# key: C.GoString
+# --
+C.GoString(${1:*C.char})$0
