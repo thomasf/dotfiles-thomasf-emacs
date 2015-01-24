@@ -86,6 +86,9 @@ Font-lock, visual indicators and similar.")
   (require 'package)
   (package-initialize t))
 
+(unless (boundp 'package-pinned-packages)
+  (setq package-pinned-packages ()))
+
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -7144,6 +7147,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :diminish ""
   :init
   (progn
+    ;; WORKAROUND for pinning until https://github.com/jwiegley/use-package/issues/153 is resolved.
+    (add-to-list 'package-pinned-packages '(smartparens . "melpa-stable"))
     (setq
      sp-show-pair-delay 0.125
      sp-show-pair-from-inside t)
