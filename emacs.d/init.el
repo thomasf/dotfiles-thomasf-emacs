@@ -1816,6 +1816,7 @@ display, depending on the window manager)."
 (when window-system
   ;; (unbind-key "C-x C-c")
   (bind-key "C-x C-c" 'intelligent-close)
+  (bind-key "s-w" 'intelligent-close)
   )
 
 ;;; functions: editing/inserting/in buffer navigation
