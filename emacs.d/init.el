@@ -6871,9 +6871,12 @@ minibuffer."
 
     (defun my-python-mode-hook ()
       (setq-local idle-update-delay 2)
-      (local-set-key (kbd "<return>") 'newline-and-indent)
-      (if (bound-and-true-p electric-indent-mode)
-          (electric-indent-local-mode -1)))
+      ;;;; TODO lets try to disable this because of new indentation engine
+      ;;;; which was pushed to the emacs24 branch today 2015-01-27 13:09
+      ;; (local-set-key (kbd "<return>") 'newline-and-indent)
+      ;; (if (bound-and-true-p electric-indent-mode)
+      ;;     (electric-indent-local-mode -1))
+      )
     (add-hook 'python-mode-hook 'my-python-mode-hook)
 
     (rename-modeline "python" python-mode "py")
