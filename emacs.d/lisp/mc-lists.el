@@ -53,6 +53,7 @@
         forward-paragraph
         forward-sentence
         forward-sexp
+        go-mode-insert-and-indent
         god-mode-repeat
         haskell-indentation-delete-backward-char
         haskell-indentation-delete-char
