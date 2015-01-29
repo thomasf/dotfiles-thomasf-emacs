@@ -5008,7 +5008,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
              go-oracle-callstack go-oracle-set-scope
              go-oracle-whicherrs go-oracle-callgraph
              go-oracle-referrers go-oracle-definition
-             go-oracle-implements))
+             go-oracle-implements)
+  :config
+  (progn
+    (setq go-oracle-command (executable-find "oracle"))))
 
 (use-package go-rename
   :commands go-rename)
