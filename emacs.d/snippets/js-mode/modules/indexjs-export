@@ -1,0 +1,4 @@
+# name: module export other file to index.js
+# expand-env: ()
+# --
+${1:name}: require('./$1'),$0
