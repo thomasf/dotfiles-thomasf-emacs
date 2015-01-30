@@ -147,19 +147,7 @@ unset category # category folder to put downloads
 ( name=org-sync; url=git://orgmode.org/org-sync.git
   getGit && installRepo ) &
 
-( name=org-caldav; url=https://github.com/dengste/org-caldav
-  getGit && installRepo ) &
-
-( url=http://www.cx4a.org/pub/auto-complete-ruby.el
-  getFile && installFile ) &
-
 ( loadPath=themes; url=https://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el
-  getFile && installFile ) &
-
-( url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized.el
-  getFile && installFile ) &
-
-( url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-theme-utils.el
   getFile && installFile ) &
 
 ( loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-dark-theme.el
@@ -177,9 +165,6 @@ unset category # category folder to put downloads
 ( url=https://raw.github.com/lewang/le_emacs_MRU_yank/master/MRU-yank.el
   getFile && installFile ) &
 
-( url=https://raw.github.com/lewang/delim-pad/master/delim-pad.el
-  getFile && installFile ) &
-
 ( url=https://raw.github.com/lewang/le_emacs_whole_line_funcs/master/whole-line-funcs.el
   getFile && installFile ) &
 
@@ -193,8 +178,6 @@ unset category # category folder to put downloads
 # NO melpa/elpa candidates? #
 #############################
 
-( url=http://www.emacswiki.org/emacs/download/desktop-menu.el
-  getFile && installFile ) &
 
 ( url=https://raw.github.com/lewang/le_emacs_libs/master/keep-buffers.el
   getFile && installFile ) &
