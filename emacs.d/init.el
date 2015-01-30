@@ -5217,6 +5217,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :config
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
+    (bind-key "C-<tab>" 'js2-mode web-mode-map)
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
 
@@ -7661,6 +7662,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           js2-include-node-externs t))
   :config
   (progn
+    (bind-key "C-<tab>" 'web-mode js2-mode-map)
+
     (use-package js2-imenu-extras
       :init
       (progn
