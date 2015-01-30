@@ -414,19 +414,17 @@ buffer-local wherever it is set."
  load-prefer-newer t)
 (setq-default ;; dired.c
  completion-ignored-extensions
- '(".rbc" ".o" "~" ".bin" ".lbin" ".so" ".a" ".ln" ".blg"
-   ".bbl" ".elc" ".lof" ".glo" ".idx" ".lot" ".svn/" ".hg/"
-   ".git/" ".bzr/" "CVS/" "_darcs/" "_MTN/" ".fmt" ".tfm"
-   ".class" ".fas" ".lib" ".mem" ".x86f" ".sparcf" ".dfsl"
-   ".pfsl" ".d64fsl" ".p64fsl" ".lx64fsl" ".lx32fsl" ".dx64fsl"
-   ".dx32fsl" ".fx64fsl" ".fx32fsl" ".sx64fsl" ".sx32fsl"
-   ".wx64fsl" ".wx32fsl" ".fasl" ".ufsl" ".fsl" ".dxl" ".lo"
-   ".la" ".gmo" ".mo" ".toc" ".aux" ".cp" ".fn" ".ky" ".pg"
-   ".tp" ".vr" ".cps" ".fns" ".kys" ".pgs" ".tps" ".vrs" ".pyc"
-   ".pyo" ".idx" ".lof" ".lot" ".glo" ".blg" ".bbl" ".cp" ".cps"
-   ".fn" ".fns" ".ky" ".kys" ".pg" ".pgs" ".tp" ".tps" ".vr"
-   ".vrs" ".sass-cache" ".min.js" "-min.js" ".min.css" "-min.css"
-   ".hi" ".pyx" ".map" ".test"))
+ '("-min.css" "-min.js" ".a" ".annot" ".aux" ".bbl" ".bbl" ".bin" ".blg" ".blg"
+ ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt" ".cmti" ".cmx" ".cmxa" ".cp"
+ ".cp" ".cps" ".cps" ".d64fsl" ".dfsl" ".dx32fsl" ".dx64fsl" ".dxl" ".elc"
+ ".fas" ".fasl" ".fmt" ".fn" ".fn" ".fns" ".fns" ".fsl" ".fx32fsl" ".fx64fsl"
+ ".git/" ".glo" ".glo" ".gmo" ".hg/" ".hi" ".idx" ".idx" ".ky" ".ky" ".kys"
+ ".kys" ".la" ".lbin" ".lib" ".ln" ".lo" ".lof" ".lof" ".lot" ".lot" ".lx32fsl"
+ ".lx64fsl" ".map" ".mem" ".min.css" ".min.js" ".mo" ".o" ".p64fsl" ".pfsl"
+ ".pg" ".pg" ".pgs" ".pgs" ".pyc" ".pyo" ".pyx" ".rbc" ".sass-cache" ".so"
+ ".sparcf" ".svn/" ".sx32fsl" ".sx64fsl" ".test" ".tfm" ".toc" ".tp" ".tp"
+ ".tps" ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl" ".x86f"
+ "CVS/" "_MTN/" "_darcs/" "~"))
 (setq-default ;; xterm.c
  x-underline-at-descent-line t)
 
@@ -3420,6 +3418,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package tree-mode
   :ensure t
   :defer t)
+
+(use-package tuareg
+  :ensure t
+  :mode ("\\.ml[ip]?\\'" . tuareg-mode))
 
 (use-package unfill
   :ensure t
