@@ -6247,7 +6247,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-helm))
-  :commands (helm-M-x helm-apt helm-bookmarks helm-browse-code
+  :commands (helm-M-x helm-bookmarks helm-browse-code
                       helm-locate helm-mini helm-for-files helm-occur
                       helm-simple-call-tree helm-top helm-ucs helm-org-headlines
                       helm-org-keywords helm-mode helm-dired-mode
@@ -6263,7 +6263,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ("C-x f L" . helm-locate))
   :init
   (progn
-    (defalias 'apt 'helm-apt)
+    (use-package helm-apt
+      :commands helm-apt
+      :init (defalias 'apt 'helm-apt))
     (setq
      helm-for-files-preferred-list
      '(
