@@ -207,6 +207,7 @@
         adv-insert-new-number
         beginning-of-buffer
         cleanup-buffer
+        compile-goto-error
         describe-key
         dired-toggle-read-only
         edebug-next-mode
