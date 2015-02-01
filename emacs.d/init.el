@@ -3163,6 +3163,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   (progn
     (jumpc)))
 
+(use-package libmpdee
+  :ensure t
+  :defer t)
+
 (use-package macrostep
   :ensure t
   :commands macrostep-expand)
