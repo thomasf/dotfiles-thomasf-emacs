@@ -2637,8 +2637,8 @@ for the current buffer's file name, and the line number at point."
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
          ("C-x b <SPC>" . projectile-switch-to-buffer)
-         ("M-o a" . projectile-ag)
-         ;; ("M-o a" . projectile-pt)
+         ;; ("M-o a" . projectile-ag)
+         ("M-o a" . projectile-pt)
          )
   :diminish ""
   :init
@@ -2678,7 +2678,7 @@ for the current buffer's file name, and the line number at point."
        projectile-root-top-down
        projectile-root-top-down-recurring
        projectile-root-child-of))
-    (bind-key "A" 'projectile-ag region-bindings-mode-map)
+    (bind-key "A" 'projectile-pt region-bindings-mode-map)
 
     (defadvice projectile-mode (before maybe-use-cache activate)
       (when
