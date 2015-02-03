@@ -2429,7 +2429,7 @@ Used to launch magit status from command line."
           (setq flash-scroll-lock-active nil)
           (setq flash-scroll-lock-enabled nil))))))
 
-(setq ring-bell-function nil)
+(setq ring-bell-function #'ignore)
 
 ;;;; get-dwim-at-point
 (defun get-dwim-at-point ()
