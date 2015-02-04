@@ -2637,9 +2637,7 @@ for the current buffer's file name, and the line number at point."
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
          ("C-x b <SPC>" . projectile-switch-to-buffer)
-         ;; ("M-o a" . projectile-ag)
-         ("M-o a" . projectile-pt)
-         )
+         ("M-o A" . projectile-ag))
   :diminish ""
   :init
   (progn
@@ -9326,7 +9324,7 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package pt
   :ensure t
   :commands (pt-regexp projectile-pt)
-  :bind (("M-s <SPC>" . projectile-pt))
+  :bind (("M-o a" . projectile-pt))
   :init
   (progn
     (setq pt-arguments
