@@ -2,4 +2,4 @@
 # name: console.log "> function >> "
 # key: lol
 # --
-console.log("> `(progn (imenu--make-index-alist) (which-function))` >> $0")
+console.log("> `(progn (imenu--make-index-alist) (which-function))` >> $0");
