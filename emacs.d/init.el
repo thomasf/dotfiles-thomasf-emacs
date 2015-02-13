@@ -442,8 +442,8 @@ buffer-local wherever it is set."
 (defvar theme-bright 'my-solarized-light "A light theme.")
 (defvar theme-dark 'my-solarized-dark "A dark theme.")
 (unless window-system
-  (setq theme-dark 'sellout-solarized-dark
-        theme-bright 'sellout-solarized-dark))
+  (setq theme-dark 'zenburn
+        theme-bright 'zenburn))
 
 (defun post-change-theme ()
   (set-face-inverse-video-p 'vertical-border nil)
@@ -482,7 +482,7 @@ buffer-local wherever it is set."
 
 (and (not (boundp 'dark-theme-on))
      (not degrade-p-noninteractive)
-     (not degrade-p-terminal)
+     ;; (not degrade-p-terminal)
      (not degrade-p-minimalism)
      (if (file-exists-p "~/.config/darkmode")
          (dark-theme)
