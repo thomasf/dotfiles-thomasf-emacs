@@ -5479,7 +5479,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :commands (indent-guide-mode indent-guide-global-mode)
   :init
   (progn
-    (setq indent-guide-char "▎")
+    (setq indent-guide-char "▎"
+          indent-guide-delay 0.5)
     (hook-into-modes #'indent-guide-mode
                      my-significant-whitespace-mode-hooks)
     (add-hook 'ruby-mode-hook 'indent-guide-mode)))
