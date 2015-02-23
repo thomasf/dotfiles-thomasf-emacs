@@ -7710,47 +7710,45 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        mu4e-headers-duplicate-prefix    '("="  . "⚌")
        mu4e-headers-default-prefix       '("|"  . "┃")))
 
-    (setq mu4e-maildir       "~/.config/myGmail-maildir"
-          mu4e-sent-folder   "/[Gmail].Sent Mail"
-          mu4e-drafts-folder "/[Gmail].Drafts"
-          mu4e-trash-folder  "/[Gmail].Trash"
-          mu4e-refile-folder "/[Gmail].All Mail"
-          mu4e-use-fancy-chars nil
-          mu4e-attachment-dir "~/Downloads"
+    (setq mu4e-attachment-dir "~/Downloads"
           mu4e-confirm-quit nil
-          mu4e-headers-results-limit 1000
-          mu4e-headers-leave-behavior 'apply
-          mu4e-headers-show-threads nil
-          ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
-          mu4e-sent-messages-behavior 'delete
-          mu4e-view-show-images t
-          mu4e-headers-include-related nil
-          mu4e-headers-skip-duplicates t
-          mu4e-headers-fields
-          '((:date . 17)
-            (:flags . 6)
-            ;; (:maildir . 17)
-            (:from . 22)
-            (:subject))
-          mu4e-headers-date-format "%x %R"
-          mu4e-html2text-command
-          (cond
-           ((executable-find "pandoc")
-            "pandoc --normalize --columns=72 -f html -t plain")
-           ((executable-find "html2text")
-            "html2text -utf8 -width 72"))
+          mu4e-drafts-folder "/[Gmail].Drafts"
           mu4e-get-mail-command
           (cond
            ((file-exists-p "~/.opt/offlineimap/offlineimap.py")
             "~/.opt/offlineimap/offlineimap.py -o -u basic")
            ((executable-find "offlineimap")
             "offlineimap -o -u basic"))
-          ;;mu4e-update-interval (* 5 60)
+          mu4e-headers-date-format "%x %R"
+          mu4e-headers-fields '
+          ((:date . 17)
+           (:flags . 6)
+           (:from . 22)
+           (:subject))
+          mu4e-headers-include-related nil
+          mu4e-headers-leave-behavior 'apply
+          mu4e-headers-results-limit 1000
+          mu4e-headers-show-threads nil
+          mu4e-headers-skip-duplicates t
+          mu4e-maildir       "~/.config/myGmail-maildir"
+          mu4e-refile-folder "/[Gmail].All Mail"
+          mu4e-sent-folder   "/[Gmail].Sent Mail"
+          mu4e-sent-messages-behavior 'delete
+          mu4e-trash-folder  "/[Gmail].Trash"
+          mu4e-use-fancy-chars nil
+          mu4e-view-show-addresses t
+          mu4e-view-show-images t
+          ;;mu4e-update-interval (* 4 60)
           ))
 
   :config
   (progn
-    ;;; message view action
+    (setq )
+    (use-package mu4e-contrib
+      :config
+      (progn
+        (setq mu4e-html2text-command 'mu4e-shr2text)))
+
     (defun mu4e-msgv-action-view-in-browser (msg)
       "View the body of the message in a web browser."
       (interactive)
