@@ -7747,6 +7747,17 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (use-package mu4e-contrib
       :config
       (progn
+        (defun mu4e-shr2text () 
+          "Html to text using the shr engine; this can be used in 
+`mu4e-html2text-command' in a new enough emacs. Based on code by 
+Titus von der Malsburg." 
+          (interactive) 
+          (let ((dom (libxml-parse-html-region (point-min) (point-max))) 
+                (shr-inhibit-images t)) 
+            (erase-buffer) 
+            (shr-insert-document dom) 
+            (goto-char (point-min))))
+        
         (setq mu4e-html2text-command 'mu4e-shr2text)))
 
     (defun mu4e-msgv-action-view-in-browser (msg)
