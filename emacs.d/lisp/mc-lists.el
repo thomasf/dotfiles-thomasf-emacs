@@ -232,6 +232,7 @@
         multiple-cursors-mode
         ns-prev-frame
         persp-switch
+        phi-search
         picture-mouse-set-point
         projectile-ag
         recenter-top-bottom-flash
