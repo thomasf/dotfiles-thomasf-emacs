@@ -4798,7 +4798,7 @@ otherwise use the subtree title."
     (setq
      flycheck-highlighting-mode 'lines
      ;; flycheck-highlighting-mode 'symbols
-     flycheck-disabled-checkers '(go-golint go-govet)
+     ;; flycheck-disabled-checkers '(go-golint go-govet)
 
      flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
@@ -4827,15 +4827,6 @@ otherwise use the subtree title."
       :init
       (progn
         (bind-key "C-c ! h" 'helm-flycheck flycheck-mode-map)))
-
-    (defun flycheck-toggle-golint-and-govet ()
-      (interactive)
-      (setq flycheck-disabled-checkers
-            (let ((disabled flycheck-disabled-checkers)
-                  (toggles '(go-golint go-vet)))
-              (if (--any? (-contains-p disabled it) toggles)
-                  (-difference disabled toggles)
-                (-concat disabled  toggles)))))
 
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
