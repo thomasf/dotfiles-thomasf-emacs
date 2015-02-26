@@ -4796,8 +4796,8 @@ otherwise use the subtree title."
   :init
   (progn
     (setq
-     flycheck-highlighting-mode 'lines
-     ;; flycheck-highlighting-mode 'symbols
+     ;; flycheck-highlighting-mode 'lines
+     flycheck-highlighting-mode 'symbols
      ;; flycheck-disabled-checkers '(go-golint go-govet)
 
      flycheck-completion-system 'ido)
