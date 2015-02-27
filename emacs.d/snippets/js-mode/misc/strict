@@ -1,0 +1,5 @@
+# name: "use strict";
+# key: strict
+# expand-env: ()
+# --
+"use strict";
