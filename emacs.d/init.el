@@ -4820,6 +4820,10 @@ otherwise use the subtree title."
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
+    (setq flycheck-javascript-jshint-executable
+          (cond
+           ((executable-find "jsxhint") "jsxhint")
+           (t "jshint")))
     (use-package helm-flycheck
       :ensure t
       :if (not degrade-p-helm)
