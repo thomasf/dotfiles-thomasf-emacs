@@ -4567,9 +4567,6 @@ otherwise use the subtree title."
 
     ))
 
-(use-package notify
-  :commands notify)
-
 (use-package po-mode
   :disabled t ;; crashes emacs on some larger po-files
   :commands po-mode
@@ -9254,6 +9251,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package sauron
   :ensure t
+  :if (and window-system (eq system-type 'gnu/linux))
   :commands (sauron-start sauron-start-hidden))
 
 (use-package hy-mode
