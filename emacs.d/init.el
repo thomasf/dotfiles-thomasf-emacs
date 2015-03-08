@@ -3836,48 +3836,53 @@ If FILE already exists, signal an error."
     (recentf-mode 1))
   :config
   (progn
-    ;; the following code is from emacswiki for merging recentf of multiple
-    ;; emacs instances.
+    (defvar recentfs-list-on-last-sync nil
+      "List of recent files reference point.")
 
-    ;;     (defun recentf-save-list ()
-    ;;       "Save the recent list.
-    ;; Load the list from the file specified by `recentf-save-file',
-    ;; merge the changes of your current session, and save it back to the
-    ;; file."
-    ;;       (interactive)
-    ;;       (let ((instance-list (copy-list recentf-list)))
-    ;;         (recentf-load-list)
-    ;;         (recentf-merge-with-default-list instance-list)
-    ;;         (recentf-write-list-to-file)))
+    (defun recentfs-update-sync ()
+      "Load saved projects from `recentf-list'."
+      (setq recentfs-list-on-last-sync
+            (and (sequencep recentf-list)
+               (copy-sequence recentf-list))))
 
-    ;;     (defun recentf-merge-with-default-list (other-list)
-    ;;       "Add all items from `other-list' to `recentf-list'."
-    ;;       (dolist (oitem other-list)
-    ;;         ;; add-to-list already checks for equal'ity
-    ;;         (add-to-list 'recentf-list oitem)))
+    (defadvice recentf-load-list (after recentfs-loaded-sync activate)
+      (recentfs-update-sync))
 
-    ;;     (defun recentf-write-list-to-file ()
-    ;;       "Write the recent files list to file.
-    ;; Uses `recentf-list' as the list and `recentf-save-file' as the
-    ;; file to write to."
-    ;;       (condition-case error
-    ;;           (with-temp-buffer
-    ;;             (erase-buffer)
-    ;;             (set-buffer-file-coding-system recentf-save-file-coding-system)
-    ;;             (insert (format recentf-save-file-header (current-time-string)))
-    ;;             (recentf-dump-variable 'recentf-list recentf-max-saved-items)
-    ;;             (recentf-dump-variable 'recentf-filter-changer-current)
-    ;;             (insert "\n \n;;; Local Variables:\n"
-    ;;                     (format ";;; coding: %s\n" recentf-save-file-coding-system)
-    ;;                     ";;; End:\n")
-    ;;             (write-file (expand-file-name recentf-save-file))
-    ;;             (when recentf-save-file-modes
-    ;;               (set-file-modes recentf-save-file recentf-save-file-modes))
-    ;;             nil)
-    ;;         (error
-    ;;          (warn "recentf mode: %s" (error-message-string error)))))
+    (defadvice recentf-save-list (around recentfs activate)
+      (recentfs-merge-lists)
+      ad-do-it
+      (recentfs-update-sync))
 
-    ))
+    (defun recentfs-load-list ()
+      "Load a previously saved recent list and return it as a value
+instead of setting it."
+      (let ((file (expand-file-name recentf-save-file))
+            (recentf-filter-changer-current nil) ;; ignored atm
+            (recentf-list nil))
+        (when (file-readable-p file)
+          (load-file file))
+        recentf-list))
+
+    (defun recentfs-merge-lists ()
+      "Merge any change from `recentf-list'.
+
+This enables multiple Emacs processes to make changes without
+overwriting each other's changes."
+      (let* ((known-now recentf-list)
+             (known-on-last-sync recentfs-list-on-last-sync)
+             (known-on-file (recentfs-load-list))
+             (removed-after-sync (-difference known-on-last-sync known-now))
+             (removed-in-other-process
+              (-difference known-on-last-sync known-on-file))
+             (new-in-other-process
+              (-difference
+               known-on-file
+               (-concat removed-after-sync removed-in-other-process known-now)))
+             (result (-distinct
+                      (-difference
+                       (-concat new-in-other-process known-now)
+                       (-concat removed-after-sync removed-in-other-process)))))
+        (setq recentf-list result)))))
 
 (use-package savehist
   :if (and
