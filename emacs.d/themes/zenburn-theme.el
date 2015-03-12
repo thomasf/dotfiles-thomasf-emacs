@@ -122,6 +122,8 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(compilation-mode-line-exit ((t (:foreground ,zenburn-green+2 :weight bold))))
    `(compilation-mode-line-fail ((t (:foreground ,zenburn-red :weight bold))))
    `(compilation-mode-line-run ((t (:foreground ,zenburn-yellow :weight bold))))
+;;;;; completions
+   `(completions-annotations ((t (:foreground ,zenburn-fg-1))))
 ;;;;; grep
    `(grep-context-face ((t (:foreground ,zenburn-fg))))
    `(grep-error-face ((t (:foreground ,zenburn-red-1 :weight bold :underline t))))
@@ -217,6 +219,7 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(popup-isearch-match ((t (:background ,zenburn-bg :foreground ,zenburn-fg))))
 ;;;;; company-mode
    `(company-tooltip ((t (:foreground ,zenburn-fg :background ,zenburn-bg+1))))
+   `(company-tooltip-annotation ((t (:foreground ,zenburn-orange :background ,zenburn-bg+1))))
    `(company-tooltip-selection ((t (:foreground ,zenburn-fg :background ,zenburn-bg-1))))
    `(company-tooltip-mouse ((t (:background ,zenburn-bg-1))))
    `(company-tooltip-common ((t (:foreground ,zenburn-green+2))))
@@ -538,6 +541,9 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(helm-moccur-buffer ((t (:foreground ,zenburn-cyan :background ,zenburn-bg))))
    `(helm-mu-contacts-address-face ((t (:foreground ,zenburn-fg-1 :background ,zenburn-bg))))
    `(helm-mu-contacts-name-face ((t (:foreground ,zenburn-fg :background ,zenburn-bg))))
+;;;;; helm-swoop
+   `(helm-swoop-target-line-face ((t (:foreground ,zenburn-fg :background ,zenburn-bg+1))))
+   `(helm-swoop-target-word-face ((t (:foreground ,zenburn-yellow :background ,zenburn-bg+2 :weight bold))))
 ;;;;; hl-line-mode
    `(hl-line-face ((,class (:background ,zenburn-bg-05))
                    (t :weight bold)))
@@ -583,7 +589,6 @@ Also bind `class' to ((class color) (min-colors 89))."
    `(ledger-font-posting-account-cleared-face ((t (:foreground ,zenburn-fg))))
    `(ledger-font-posting-account-pending-face ((t (:foreground ,zenburn-orange))))
    `(ledger-font-posting-amount-face ((t (:foreground ,zenburn-orange))))
-   `(ledger-font-posting-account-pending-face ((t (:foreground ,zenburn-orange))))
    `(ledger-occur-narrowed-face ((t (:foreground ,zenburn-fg-1 :invisible t))))
    `(ledger-occur-xact-face ((t (:background ,zenburn-bg+1))))
    `(ledger-font-comment-face ((t (:foreground ,zenburn-green))))
