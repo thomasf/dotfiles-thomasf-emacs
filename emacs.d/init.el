@@ -7702,6 +7702,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                             '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
                                1 font-lock-warning-face t)))))
 
+(use-package mml2015
+  :defer t
+  :init
+  (progn
+    (setq mml2015-encrypt-to-self t)))
+
 (use-package mu4e
   :if (file-exists-p "~/.config/myGmail-maildir")
   :commands (mu4e
