@@ -3432,8 +3432,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package wakatime-mode
   :ensure t
   :commands (wakatime-mode global-wakatime-mode)
-  :diminish ((wakatime-mode . "")
-             (global-wakatime-mode . ""))
+  :diminish (wakatime-mode . "")
   :init
   (progn
     (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
@@ -4793,8 +4792,8 @@ otherwise use the subtree title."
   :if (not degrade-p-noninteractive)
   :commands (flycheck-mode
              global-flycheck-mode)
-  :diminish ((global-flycheck-mode . "fc")
-             (flycheck-mode . "fc"))
+  :diminish ((flycheck-mode . "fc"))
+
   :bind (("M-o e" . flycheck-list-errors))
   :init
   (progn
@@ -8213,8 +8212,7 @@ Titus von der Malsburg."
   :commands (git-gutter-mode
              global-git-gutter-mode)
   :bind (("M-o m g" . git-gutter-mode))
-  :diminish (git-gutter-mode
-             global-git-gutter-mode)
+  :diminish (git-gutter-mode)
   :init
   (progn
     (setq git-gutter:verbosity 0
