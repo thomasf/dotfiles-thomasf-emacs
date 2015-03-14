@@ -4107,6 +4107,8 @@ overwriting each other's changes."
   :if (not degrade-p-noninteractive)
   :commands structured-haskell-mode)
 
+    (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
+          org-plantuml-jar-path plantuml-jar-path)
 (use-package plantuml-mode
   :ensure t
   :commands (plantuml-mode)
@@ -4114,10 +4116,6 @@ overwriting each other's changes."
   :config
   (progn
     (require 'cl-lib))
-  :pre-load
-  (progn
-    (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
-          org-plantuml-jar-path plantuml-jar-path))
   :if (file-exists-p plantuml-jar-path))
 
 (use-package org
@@ -4986,11 +4984,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (use-package go-autocomplete
       :ensure t
-      :pre-load
-      (progn
-        (use-package auto-complete :ensure t))
       :init
       (progn
+        (use-package auto-complete :ensure t)
         (add-hook 'go-mode-hook
                   #'(lambda ()
                       ;;; NOTE placing ac-source-yasnippet first is a work around.
@@ -5093,6 +5089,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
         (turn-on-ido-vertical)))
     (use-package flx-ido
       :ensure  t
+      :commands (flx-ido-mode)
       :if (not
            (or
             degrade-p-emacs-pre24.3
@@ -9303,6 +9300,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package anzu
   :ensure t
+  :commands (global-anzu-mode)
   :init (global-anzu-mode 1)
   :diminish "")
 
