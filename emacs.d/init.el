@@ -2993,7 +2993,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
           (-first 'file-directory-p
                   (list
                    (expand-file-name "~/.opt/extempore/")
-                   "/usr/local/Cellar/extempore/0.58/")))))
+                   "/usr/local/opt/extempore/")))))
 
 (use-package fancy-narrow
   :ensure t

@@ -108,7 +108,7 @@ This is just a copy of the fully expanded macro from dash."
        (list
         (expand-file-name "~/.config-private/emacs")
         (expand-file-name "~/.opt/extempore/extras")
-        (expand-file-name "/usr/local/Cellar/extempore/0.58/extras")
+        (expand-file-name "/usr/local/opt/extempore/extras")
         (concat user-site-lisp-directory "/emms/lisp")
         "/usr/local/share/emacs/site-lisp/"
         "/usr/local/share/emacs/site-lisp/mu4e/"
