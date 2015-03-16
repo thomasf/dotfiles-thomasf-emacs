@@ -2627,6 +2627,8 @@ for the current buffer's file name, and the line number at point."
 
 (use-package projectile
   :ensure t
+  ;; :idle (projectile-global-mode)
+  ;; :idle-priority 1
   :commands (projectile-mode
              projectile-global-mode
              projectile-project-p
@@ -2708,10 +2710,10 @@ for the current buffer's file name, and the line number at point."
       (interactive)
       (--each (mapcar 'cdr (magit-list-repos magit-repo-dirs))
         (projectile-add-known-project (file-name-as-directory
-                                       (file-truename it))))))
-  :idle
-  (projectile-global-mode)
-  :idle-priority 1)
+                                       (file-truename it)))))
+    (run-with-idle-timer 1 nil #'(lambda () (projectile-global-mode)))
+
+    ))
 
 (defalias 'project-root-function 'projectile-project-root)
 
@@ -3156,10 +3158,9 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands (jumpc)
   :bind (("C-<f9>" . jumpc-jump-backward)
          ("C-<f10>" . jumpc-jump-forward))
-  :idle-priority 10
-  :idle
-  (progn
-    (jumpc)))
+  ;; :idle-priority 10
+  ;; :idle (progn (jumpc))
+  )
 
 (use-package libmpdee
   :ensure t
@@ -3339,12 +3340,13 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                                scroll-other-window
                                scroll-other-window-down
                                scroll-up scroll-up-command
-                               scroll-up-command-flash)))
+                               scroll-up-command-flash))
+    (run-with-idle-timer 2 nil #'(lambda () (scroll-restore-mode 1.5)))
+    )
   ;; :bind (("M-u" . scroll-restore-jump-back))
-  :idle-priority 5
-  :idle
-  (progn
-    (scroll-restore-mode 1)))
+  ;; :idle-priority 5
+  ;; :idle (progn (scroll-restore-mode 1))
+  )
 
 (use-package shr
   :defer t
@@ -3435,12 +3437,14 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :diminish (wakatime-mode . "")
   :init
   (progn
-    (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
-  :idle-priority 7
-  :idle
-  (progn
-    (when (f-file? wakatime-cli-path)
-      (global-wakatime-mode 1))))
+    (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
+    (run-with-idle-timer
+     2.5 nil #'(lambda () (when (f-file? wakatime-cli-path)
+                     (global-wakatime-mode 1))))
+    )
+  ;; :idle-priority 7
+  ;; :idle (progn (when (f-file? wakatime-cli-path) (global-wakatime-mode 1)))
+  )
 
 (use-package whitespace
   :bind (("M-o w" . whitespace-cleanup)))
@@ -3828,11 +3832,9 @@ If FILE already exists, signal an error."
       (if (find-file (ido-completing-read "Find recent file: " recentf-list))
           (message "Opening file...")
         (message "Aborting")))
-    )
-  :idle-priority 3
-  :idle
-  (progn
-    (recentf-mode 1))
+      (run-with-idle-timer 1.5 nil #'(lambda () (recentf-mode 1))))
+  ;; :idle-priority 3
+  ;; :idle (progn (recentf-mode 1))
   :config
   (progn
     (defvar recentfs-list-on-last-sync nil
@@ -4106,8 +4108,9 @@ overwriting each other's changes."
   :if (not degrade-p-noninteractive)
   :commands structured-haskell-mode)
 
-    (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
-          org-plantuml-jar-path plantuml-jar-path)
+(setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
+      org-plantuml-jar-path plantuml-jar-path)
+
 (use-package plantuml-mode
   :ensure t
   :commands (plantuml-mode)
@@ -5439,10 +5442,12 @@ See URL `https://pypi.python.org/pypi/flake8'."
         ("*magit-diff*" :noselect t :height 0.40)
         ("*magit-edit-log*" :noselect t :height 0.25)
         "*git-gutter:diff*")
-    (push it popwin:special-display-config))
-  :idle-priority 2
-  :idle
-  (popwin-mode))
+    (push it popwin:special-display-config)
+    (run-with-idle-timer 1.5 nil #'(lambda () (popwin-mode))))
+
+  ;; :idle-priority 2
+  ;; :idle (popwin-mode)
+  )
 
 (use-package highlight-indentation
   ;; :disabled t
@@ -8490,10 +8495,6 @@ Titus von der Malsburg."
                             )))
   :config
   (progn
-    (global-fixmee-mode 1))
-  :idle-priority 5
-  :idle
-  (progn
     (global-fixmee-mode 1)))
 
 (use-package command-log-mode
@@ -8933,11 +8934,11 @@ if submodules exists, grep submodules too."
   :diminish ""
   :init
   (progn
-    (setq back-button-show-toolbar-buttons nil))
-  :idle-priority 7
-  :idle
-  (progn
-    (back-button-mode 1)))
+    (setq back-button-show-toolbar-buttons nil)
+    (run-with-idle-timer 2 nil #'(lambda () (back-button-mode 1))))
+  ;; :idle-priority 7
+  ;; :idle (progn (back-button-mode 1))
+  )
 
 (use-package syslog-mode
   :ensure t
