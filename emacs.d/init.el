@@ -86,9 +86,6 @@ Font-lock, visual indicators and similar.")
   (require 'package)
   (package-initialize t))
 
-(unless (boundp 'package-pinned-packages)
-  (setq package-pinned-packages ()))
-
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -101,9 +98,9 @@ re-downloaded in order to locate PACKAGE."
         (package-refresh-contents)
         (require-package package min-version t)))))
 
-(setq use-package-idle-interval 1.5)
-(require-package 'use-package)
-(require 'use-package)
+(eval-when-compile
+  (require-package 'use-package)
+  (require 'use-package))
 
 ;;;; load packages
 (require 'cl)
@@ -2627,8 +2624,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package projectile
   :ensure t
-  ;; :idle (projectile-global-mode)
-  ;; :idle-priority 1
+  :defer 1
   :commands (projectile-mode
              projectile-global-mode
              projectile-project-p
@@ -2710,10 +2706,10 @@ for the current buffer's file name, and the line number at point."
       (interactive)
       (--each (mapcar 'cdr (magit-list-repos magit-repo-dirs))
         (projectile-add-known-project (file-name-as-directory
-                                       (file-truename it)))))
-    (run-with-idle-timer 1 nil #'(lambda () (projectile-global-mode)))
-
-    ))
+                                       (file-truename it))))))
+  :config
+  (progn
+    (projectile-global-mode)))
 
 (defalias 'project-root-function 'projectile-project-root)
 
@@ -3157,10 +3153,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands (jumpc)
   :bind (("C-<f9>" . jumpc-jump-backward)
-         ("C-<f10>" . jumpc-jump-forward))
-  ;; :idle-priority 10
-  ;; :idle (progn (jumpc))
-  )
+         ("C-<f10>" . jumpc-jump-forward)))
 
 (use-package libmpdee
   :ensure t
@@ -3324,7 +3317,8 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package scroll-restore
   :ensure t
   :commands scroll-restore-mode
-  :init
+  :defer 1.5
+  :config
   (progn
     (setq
      scroll-restore-recenter nil
@@ -3341,12 +3335,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                                scroll-other-window-down
                                scroll-up scroll-up-command
                                scroll-up-command-flash))
-    (run-with-idle-timer 2 nil #'(lambda () (scroll-restore-mode 1.5)))
-    )
-  ;; :bind (("M-u" . scroll-restore-jump-back))
-  ;; :idle-priority 5
-  ;; :idle (progn (scroll-restore-mode 1))
-  )
+    (scroll-restore-mode 1)))
 
 (use-package shr
   :defer t
@@ -3431,20 +3420,19 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands (unfill-region unfill-paragraph toggle-fill-unfill)
   :bind ("M-q" . toggle-fill-unfill))
+
 (use-package wakatime-mode
   :ensure t
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
+  :defer 2.5
   :init
   (progn
-    (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
-    (run-with-idle-timer
-     2.5 nil #'(lambda () (when (f-file? wakatime-cli-path)
-                     (global-wakatime-mode 1))))
-    )
-  ;; :idle-priority 7
-  ;; :idle (progn (when (f-file? wakatime-cli-path) (global-wakatime-mode 1)))
-  )
+    (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
+  :config
+  (progn
+    (when (f-file? wakatime-cli-path)
+      (global-wakatime-mode 1))))
 
 (use-package whitespace
   :bind (("M-o w" . whitespace-cleanup)))
@@ -3813,6 +3801,7 @@ If FILE already exists, signal an error."
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
   :bind (("C-x f R" . find-recent-file))
+  :defer 1.5
   :init
   (progn
     (setq
@@ -3831,10 +3820,7 @@ If FILE already exists, signal an error."
       (recentf-mode 1)
       (if (find-file (ido-completing-read "Find recent file: " recentf-list))
           (message "Opening file...")
-        (message "Aborting")))
-      (run-with-idle-timer 1.5 nil #'(lambda () (recentf-mode 1))))
-  ;; :idle-priority 3
-  ;; :idle (progn (recentf-mode 1))
+        (message "Aborting"))))
   :config
   (progn
     (defvar recentfs-list-on-last-sync nil
@@ -3883,7 +3869,8 @@ overwriting each other's changes."
                       (-difference
                        (-concat new-in-other-process known-now)
                        (-concat removed-after-sync removed-in-other-process)))))
-        (setq recentf-list result)))))
+        (setq recentf-list result)))
+    (recentf-mode 1)))
 
 (use-package savehist
   :if (and
@@ -5412,6 +5399,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package popwin
   :ensure t
   :if (not degrade-p-noninteractive)
+  :defer 2
   :commands (popwin-mode popwin:display-buffer popwin:popup-buffer
                          popwin:popup-buffer-tail popwin:display-last-buffer
                          popwin:find-file popwin:find-file-tail
@@ -5443,11 +5431,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
         ("*magit-edit-log*" :noselect t :height 0.25)
         "*git-gutter:diff*")
     (push it popwin:special-display-config)
-    (run-with-idle-timer 1.5 nil #'(lambda () (popwin-mode))))
-
-  ;; :idle-priority 2
-  ;; :idle (popwin-mode)
-  )
+    (popwin-mode)))
 
 (use-package highlight-indentation
   ;; :disabled t
@@ -7162,15 +7146,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                               smartparens-strict-mode
                               turn-on-smartparens-strict-mode)
   :diminish ""
+  :defer 1
   :init
   (progn
-    ;; WORKAROUND for pinning until https://github.com/jwiegley/use-package/issues/153 is resolved.
-    (add-to-list 'package-pinned-packages '(smartparens . "melpa-stable"))
     (setq
      sp-show-pair-delay 0.125
      sp-show-pair-from-inside t)
-    (smartparens-global-mode t)
-    (show-smartparens-global-mode t)
     (hook-into-modes 'turn-on-smartparens-strict-mode my-lisp-mode-hooks))
   :config
   (progn
@@ -7233,7 +7214,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (sp-local-pair "/" "/" :actions '(wrap))
       (sp-local-pair "*" "*" :actions '(wrap)))
 
-    (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)))
+    (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+    (smartparens-global-mode t)
+    (show-smartparens-global-mode t)))
 
 (use-package android-mode
   :ensure t
@@ -8932,13 +8915,13 @@ if submodules exists, grep submodules too."
        (not degrade-p-noninteractive))
   :commands (back-button-mode)
   :diminish ""
+  :defer 2
   :init
   (progn
-    (setq back-button-show-toolbar-buttons nil)
-    (run-with-idle-timer 2 nil #'(lambda () (back-button-mode 1))))
-  ;; :idle-priority 7
-  ;; :idle (progn (back-button-mode 1))
-  )
+    (setq back-button-show-toolbar-buttons nil))
+  :config
+  (progn
+    (back-button-mode 1)))
 
 (use-package syslog-mode
   :ensure t
