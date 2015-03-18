@@ -4550,7 +4550,7 @@ otherwise use the subtree title."
     (defadvice org-agenda-Quit (after restore-window-configuration activate)
       (my-org-agenda-quit-restore-window-configuration))
 
-    ;; (run-with-idle-timer 300 t 'jump-to-org-agenda)
+    (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
     (defun myorg-update-parent-cookie ()
       (when (equal major-mode 'org-mode)
