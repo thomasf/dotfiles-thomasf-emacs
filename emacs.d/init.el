@@ -7663,7 +7663,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (bind-key "C-<tab>" 'web-mode js2-mode-map)
 
     (use-package js2-imenu-extras
-      :init
+      :config
       (progn
         (js2-imenu-extras-setup)))
 
