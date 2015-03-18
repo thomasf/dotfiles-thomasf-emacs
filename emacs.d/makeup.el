@@ -152,6 +152,7 @@ This is just a copy of the fully expanded macro from dash."
 (byte-recompile-directory user-override-directory 0)
 (byte-recompile-directory user-lib-directory 0)
 (byte-recompile-directory user-lisp-directory 0)
+(byte-recompile-directory "~/.config-private/emacs" 0)
 
 
 (makeup-log "byte recompile emacsd init files and snippets")
