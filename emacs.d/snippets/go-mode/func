@@ -2,6 +2,6 @@
 # key: func
 # description: func
 # --
-func ${1:name}(${2:arguments}) ${3:returntype} {
-	$0
+func $1($0) {
+
 }

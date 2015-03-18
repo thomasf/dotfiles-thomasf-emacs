@@ -2,6 +2,6 @@
 # key: method
 # description: snippet for struct method
 # --
-func (${1:s *Struct}) ${2:MethodName}(${3:arguments}) ${4:ReturnType} {
-	$0
+func (${1:$(substring (if (> (length yas-text) 0) (downcase yas-text) " ")0 1)} *$1) $0() {
+     
 }
