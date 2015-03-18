@@ -1291,6 +1291,8 @@ buffer-local wherever it is set."
   (nav-flash-show)
   (silent-save-some-buffers))
 
+(add-hook 'focus-out-hook 'silent-save-some-buffers)
+
 ;;;; touch-file
 (defun touch-file ()
   "updates mtime on the file for the current buffer"
@@ -8044,40 +8046,6 @@ Titus von der Malsburg."
               (with-no-warnings
                 (kill-ring-save (region-beginning) (region-end) t))
             (kill-ring-save (region-beginning) (region-end)))))))
-
-;;;; on-blur
-(if (boundp 'focus-out-hook)
-    (add-hook 'focus-out-hook 'silent-save-some-buffers)
-  (when
-      (eq window-system 'x)
-    (defvar on-blur--saved-window-id 0 "Last known focused window.")
-    (defvar on-blur--timer nil "Timer refreshing known focused window.")
-    (defun on-blur--refresh ()
-      "Runs on-blur-hook if emacs has lost focus."
-      (let* ((active-window (x-window-property
-                             "_NET_ACTIVE_WINDOW" nil "WINDOW" 0 nil t))
-             (active-window-id (if (numberp active-window)
-                                   active-window
-                                 (string-to-number
-                                  (format "%x00%x"
-                                          (car active-window)
-                                          (cdr active-window)) 16)))
-             (emacs-window-id (string-to-number
-                               (frame-parameter nil 'outer-window-id))))
-        (cond
-         ((and
-           (= emacs-window-id on-blur--saved-window-id)
-           (not (= active-window-id on-blur--saved-window-id)))
-          (run-hooks 'on-blur-hook))
-         ((and
-           (not (= emacs-window-id on-blur--saved-window-id))
-           (= active-window-id emacs-window-id))
-          (run-hooks 'on-focus-hook)))
-        (setq on-blur--saved-window-id active-window-id)
-        (run-with-timer 1 nil 'on-blur--refresh)))
-
-    (add-hook 'on-blur-hook 'silent-save-some-buffers)
-    (on-blur--refresh)))
 
 (use-package swift-mode
   :ensure t
