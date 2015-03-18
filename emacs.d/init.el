@@ -4111,6 +4111,7 @@ overwriting each other's changes."
 
 (use-package org
   :ensure org-plus-contrib
+  :defer 5
   :commands (org
              org-capture
              org-mode
@@ -6238,6 +6239,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package helm
   :ensure t
+  :defer 5
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-helm))
