@@ -82,9 +82,11 @@ Font-lock, visual indicators and similar.")
    ("gnu"         . "http://elpa.gnu.org/packages/")
    ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
 
-(eval-and-compile
+(eval-when-compile
   (require 'package)
   (package-initialize t))
+(unless (boundp 'package-pinned-packages)
+  (setq package-pinned-packages ()))
 
 (defun require-package (package &optional min-version no-refresh)
   "Install given PACKAGE, optionally requiring MIN-VERSION.
