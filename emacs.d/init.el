@@ -9466,6 +9466,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 ;; Local Variables:
 ;; eval: (outline-minor-mode 1)
+;; eval: (require 'use-package)
 ;; End:
 
 (provide 'init)
