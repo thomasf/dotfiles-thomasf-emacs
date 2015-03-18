@@ -5836,6 +5836,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package magit
   :ensure t
+  :defer 5
   :commands (magit-log magit-run-gitk magit-run-git-gui
                        magit-status magit-git-repo-p magit-list-repos)
   :bind (("M-o G" . my-magit-status-with-prefix)
