@@ -81,7 +81,7 @@ Font-lock, visual indicators and similar.")
    ("org"         . "http://orgmode.org/elpa/")
    ("gnu"         . "http://elpa.gnu.org/packages/")
    ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
-
+(defvar byte-compile-warnings nil)
 (eval-when-compile
   (require 'package)
   (package-initialize t))
