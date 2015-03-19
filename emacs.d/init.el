@@ -108,7 +108,7 @@ re-downloaded in order to locate PACKAGE."
 (require 'cl)
 (use-package dash
   :ensure t
-  :defer nil
+  :commands (dash-enable-fontlock)
   :config
   (progn
     (dash-enable-font-lock)))
@@ -116,7 +116,7 @@ re-downloaded in order to locate PACKAGE."
 (when (not degrade-p-old-emacs)
   (use-package dash-functional :ensure t)
 
-  (use-package memoize :ensure t :defer t))
+  (use-package memoize :ensure t :defer))
 
 (use-package s :ensure t)
 (use-package f :ensure t)
@@ -125,19 +125,19 @@ re-downloaded in order to locate PACKAGE."
 (use-package smartrep :ensure t)
 (use-package diminish :ensure t)
 (use-package deferred :ensure t)
-(use-package request-deferred :ensure t :defer t)
-(use-package concurrent :ensure t :defer t)
-(use-package load-relative :ensure t :defer t)
-(use-package loc-changes :ensure t :defer t)
-(use-package epc :ensure t :defer t)
-(use-package ctable :ensure t :defer t)
-(use-package fringe-helper :ensure t :defer t)
-;; (use-package button-lock :ensure t :defer t :diminish "")
-(use-package fakir :ensure t :defer t)
-(use-package fuzzy :ensure t :defer t)
+(use-package request-deferred :ensure t :defer)
+(use-package concurrent :ensure t :defer)
+(use-package load-relative :ensure t :defer)
+(use-package loc-changes :ensure t :defer)
+(use-package epc :ensure t :defer)
+(use-package ctable :ensure t :defer)
+(use-package fringe-helper :ensure t :defer)
+;; (use-package button-lock :ensure t  :diminish "" :defer)
+(use-package fakir :ensure t :defer)
+(use-package fuzzy :ensure t :defer)
 (use-package python-environment
   :ensure t
-  :defer t
+  :defer
   :init
   (progn
     (setq python-environment-directory "~/.virtualenvs/"
@@ -431,7 +431,7 @@ buffer-local wherever it is set."
 
 (use-package solarized-theme
   :ensure t
-  :defer t)
+  :defer)
 ;;;; dark/bright mode
 (setq solarized-use-less-bold t
       solarized-use-more-italic t
@@ -619,14 +619,14 @@ buffer-local wherever it is set."
 ;;;; auth
 
 (use-package auth-source
-  :defer t
+  :defer
   :init
   (progn
     (setq ;; auth.el
      auth-sources '("~/.authinfo.gpg"))))
 
 (use-package sh-script
-  :defer t
+  :defer
   :init
   (progn
     (setq ;; sh-mode.el
@@ -726,7 +726,7 @@ buffer-local wherever it is set."
  x-gtk-use-system-tooltips nil)
 
 (use-package vc
-  :defer t
+  :defer
   :init
   (progn
     (setq vc-follow-symlinks t)
@@ -736,7 +736,7 @@ buffer-local wherever it is set."
       (setq vc-handled-backends '(Git Hg)))
 
     (use-package vc-annotate
-      :defer t
+      :defer
       :init
       (progn
         (defun my-vc-annotate-hook ()
@@ -777,7 +777,7 @@ buffer-local wherever it is set."
   )
 
 (use-package tramp
-  :defer t
+  :defer
   :init
   (progn
     (setq vc-ignore-dir-regexp
@@ -824,7 +824,7 @@ buffer-local wherever it is set."
 (unless degrade-p-noninteractive (global-subword-mode))
 
 (use-package compile
-  :defer t
+  :defer
   :init
   (progn
     (setq compilation-ask-about-save nil
@@ -1443,7 +1443,7 @@ buffer-local wherever it is set."
                    debugger-mode-hook))
 
 (use-package helm
-  :defer t
+  :defer
   :config
   (add-hook 'helm-after-initialize-hook
             #'(lambda () (with-helm-buffer (my-set-text-scale-smaller)))))
@@ -2611,7 +2611,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package pcache
   :ensure t
-  :defer t
+  :defer
   :init
   (progn
     (setq
@@ -2628,7 +2628,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package projectile
   :ensure t
-  :defer 1
+  :defer 1.5
   :commands (projectile-mode
              projectile-global-mode
              projectile-project-p
@@ -2737,7 +2737,7 @@ for the current buffer's file name, and the line number at point."
     (add-hook 'cider-mode-hook 'ac-cider-setup)
     (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
     (use-package auto-complete
-      :defer t
+      :defer
       :config
       (add-to-list 'ac-modes 'cider-mode))))
 
@@ -2761,7 +2761,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package anaphora
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package butler
   :ensure t
@@ -2818,10 +2818,10 @@ for the current buffer's file name, and the line number at point."
 
 (use-package dropdown-list
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package ediff
-  :defer t
+  :defer
   :init
   (progn
     (setq
@@ -2982,7 +2982,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands (eval-sexp-fu-flash-mode))
 
 (use-package eww
-  :defer t
+  :defer
   :init
   (progn
     (setq eww-search-prefix "http://google.com/search?q=")))
@@ -2999,7 +2999,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package fancy-narrow
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package feature-mode
   :ensure t
@@ -3123,7 +3123,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :init
   (progn
     (use-package go-mode
-      :defer t
+      :defer
       :config
       (progn
         (define-key go-mode-map (kbd "C-c C-a") 'helm-go-package))))
@@ -3161,7 +3161,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package libmpdee
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package macrostep
   :ensure t
@@ -3280,7 +3280,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package org-ehtml
   :disabled t
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package org-import-icalendar
   :commands org-icalendar-import-buffer)
@@ -3289,7 +3289,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands org-screenshot-take)
 
 (use-package osc
-  :defer t
+  :defer
   :ensure t)
 
 (use-package pip-requirements
@@ -3321,7 +3321,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package scroll-restore
   :ensure t
   :commands scroll-restore-mode
-  :defer 1.5
+  :defer 1.8
   :config
   (progn
     (setq
@@ -3342,7 +3342,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (scroll-restore-mode 1)))
 
 (use-package shr
-  :defer t
+  :defer
   :init
   (progn
     (setq shr-external-browser 'browse-url-generic)))
@@ -3373,11 +3373,11 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package simple-call-tree
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package simple-call-tree+
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package smart-shift
   :ensure t
@@ -3397,7 +3397,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package sqlite
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package string-inflection
   :ensure t
@@ -3414,7 +3414,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package tree-mode
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package tuareg
   :ensure t
@@ -3429,7 +3429,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
-  :defer 2.5
+  :defer 3
   :init
   (progn
     (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
@@ -3502,7 +3502,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
           dired-dwim-target t)
 
     (use-package image-dired
-      :defer t
+      :defer
       :init
       (progn
         (setq image-dired-dir (expand-file-name
@@ -3542,7 +3542,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (unbind-key "l" dired-mode-map)
 
     (use-package wdired
-      :defer t
+      :defer
       :init
       (progn
         (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)))
@@ -3805,7 +3805,7 @@ If FILE already exists, signal an error."
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
   :bind (("C-x f R" . find-recent-file))
-  :defer 1.5
+  :defer 2.5
   :init
   (progn
     (setq
@@ -3943,7 +3943,7 @@ overwriting each other's changes."
     ))
 
 (use-package eldoc
-  :defer t
+  :defer
   :diminish ""
   :config
   (progn
@@ -3962,7 +3962,7 @@ overwriting each other's changes."
              ansi-red))
 
 (use-package abbrev
-  :defer t
+  :defer
   :diminish ""
   :if (not degrade-p-noninteractive)
   :init
@@ -4113,7 +4113,7 @@ overwriting each other's changes."
 
 (use-package org
   :ensure org-plus-contrib
-  :defer 5
+  :defer 7
   :commands (org
              org-capture
              org-mode
@@ -4184,7 +4184,7 @@ overwriting each other's changes."
          (fboundp 'org-bullets-mode)
          (add-hook 'org-mode-hook 'org-bullets-mode))
     (use-package server
-      :defer t
+      :defer
       :config
       (progn
         (use-package org-protocol)))
@@ -4409,7 +4409,7 @@ Argument FILENAME File to insert."
 
     (use-package org-agenda
       :if (not degrade-p-noninteractive)
-      :defer t
+      :defer
       :config
       (progn
         (bind-key "h" 'ibuffer org-agenda-mode-map)
@@ -5404,7 +5404,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package popwin
   :ensure t
   :if (not degrade-p-noninteractive)
-  :defer 2
+  :defer 1.7
   :commands (popwin-mode popwin:display-buffer popwin:popup-buffer
                          popwin:popup-buffer-tail popwin:display-last-buffer
                          popwin:find-file popwin:find-file-tail
@@ -5543,7 +5543,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :diminish ((rainbow-mode . "rb")))
 
 (use-package type-break
-  :defer t
+  :defer
   :disabled t
   :if (and
        (not degrade-p-noninteractive)
@@ -5635,7 +5635,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 ;;;; auctex
 ;; (use-package auctex
 ;;   :ensure t
-;;   :defer t)
+;;   :defer)
 
 (use-package textile-mode
   :ensure t
@@ -5709,7 +5709,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :commands table-recognize)
 
 (use-package speedbar
-  :defer t
+  :defer
   :init
   (progn
     (setq
@@ -5838,7 +5838,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package magit
   :ensure t
-  :defer 5
+  :defer 6
   :commands (magit-log magit-run-gitk magit-run-git-gui
                        magit-status magit-git-repo-p magit-list-repos)
   :bind (("M-o G" . my-magit-status-with-prefix)
@@ -6005,7 +6005,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
     (use-package autoinsert
       :if (not degrade-p-noninteractive)
-      :defer t
+      :defer
       :init
       (progn
         (defun autoinsert-yas-expand ()
@@ -6189,7 +6189,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (use-package conf-mode
-      :defer t
+      :defer
       :config
       (progn
         (unbind-key "C-c SPC" conf-mode-map)))))
@@ -6242,7 +6242,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package helm
   :ensure t
-  :defer 5
+  :defer 5.9
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-helm))
@@ -6352,7 +6352,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")
 Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
 (use-package ibuffer
-  :defer t
+  :defer
   :bind (("C-x b n" . ibuffer)
          ("C-h h" . ibuffer)
          ("C-h C-h" . ibuffer)
@@ -6743,7 +6743,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")))
 
 ;;; ielm
 (use-package ielm
-  :defer t
+  :defer
   :init
   (progn
     (setq ielm-prompt "» ")))
@@ -6966,7 +6966,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ))
 
 (use-package lisp-mode
-  :defer t
+  :defer 9
   :init
   (progn
     (rename-modeline "lisp-mode" emacs-lisp-mode "el")
@@ -7153,7 +7153,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                               smartparens-strict-mode
                               turn-on-smartparens-strict-mode)
   :diminish ""
-  :defer 1
+  :defer 1.6
   :init
   (progn
     (setq
@@ -7441,7 +7441,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :config
   (progn
     (use-package auto-complete
-      :defer t
+      :defer
       :config
       (progn
         (add-to-list 'ac-modes 'slime-repl-mode)))))
@@ -7511,7 +7511,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :commands (align-cljlet))))
 
 (use-package calendar
-  :defer t
+  :defer
   :init
   (progn
     (setq ;; Geolocation (Stockholm)
@@ -7613,7 +7613,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :if (and
        (not degrade-p-minimalism)
        (not degrade-p-noninteractive))
-  :defer t
+  :defer
   :init
   (progn
     (setq auto-revert-check-vc-info nil
@@ -7630,7 +7630,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package js
   :disabled t
-  :defer t
+  :defer
   :init
   (progn
     (rename-modeline "js" js-mode "js"))
@@ -7694,7 +7694,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                                1 font-lock-warning-face t)))))
 
 (use-package mml2015
-  :defer t
+  :defer
   :init
   (progn
     (setq mml2015-encrypt-to-self t)))
@@ -7810,7 +7810,7 @@ Titus von der Malsburg."
   :commands (regex-tool))
 
 (use-package flyspell
-  :defer t
+  :defer
   :diminish ((flyspell-mode . "fls"))
   :init
   (progn
@@ -8357,7 +8357,7 @@ Titus von der Malsburg."
 
 (use-package request
   :ensure t
-  :defer t
+  :defer
   :init
   (progn
     (setq request-storage-directory (expand-file-name
@@ -8465,7 +8465,7 @@ Titus von der Malsburg."
 
 (use-package MRU-yank
   :if (not degrade-p-noninteractive)
-  :defer t
+  :defer
   :init
   (progn
     (setq MRU-yank-mode t)))
@@ -8494,7 +8494,7 @@ Titus von der Malsburg."
   :commands (look-at-files look-at-this-file))
 
 (use-package find-file
-  :defer t
+  :defer
   :bind (("C-h C-o" . cc-other-file))
   :init
   (progn
@@ -8660,7 +8660,7 @@ already present."
          ("C-x f f" . lusty-file-explorer)))
 
 (use-package mouse
-  :defer t
+  :defer
   :init
   (progn
     (setq mouse-yank-at-point t)))
@@ -8717,7 +8717,7 @@ already present."
   :commands mouse-slider-mode)
 
 (use-package tramp
-  :defer t
+  :defer
   :init
   (progn
     (setq
@@ -8831,7 +8831,7 @@ declaration in a Python file."
   :init
   (progn
     (use-package scss-mode
-      :defer t
+      :defer
       :config
       (progn
         (bind-key "C-c C-c" 'helm-css-scss scss-mode-map)
@@ -8995,7 +8995,7 @@ if submodules exists, grep submodules too."
     (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
     (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
     (use-package auto-complete
-      :defer t
+      :defer
       :config
       (add-to-list 'ac-modes 'nrepl-mode))))
 
@@ -9021,7 +9021,7 @@ if submodules exists, grep submodules too."
     (require 'point-undo)))
 
 (use-package image-mode
-  :defer t
+  :defer
   :config
   (progn
     (auto-image-file-mode +1)
@@ -9080,7 +9080,7 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package oauth2
   :ensure t
   ;; :commands ()
-  :defer t
+  :defer
   :init
   (progn
     (setq
@@ -9107,7 +9107,7 @@ drag the viewpoint on the image buffer that the window displays."
     ))
 
 (use-package electric
-  :defer t
+  :defer
   :config
   (progn
     ;; (electric-indent-mode -1)
@@ -9134,7 +9134,7 @@ drag the viewpoint on the image buffer that the window displays."
       :init (tern-ac-setup))))
 
 (use-package outline
-  :defer t
+  :defer
   :diminish ((outline-minor-mode . "")))
 
 (use-package glsl-mode
@@ -9164,7 +9164,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package dom
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package dockerfile-mode
   :ensure t
@@ -9323,7 +9323,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package bug-reference-github
   :ensure t
-  :defer t)
+  :defer)
 
 (use-package edbi
   :disabled t
@@ -9361,7 +9361,7 @@ drag the viewpoint on the image buffer that the window displays."
        ad-do-it
        ))
     (use-package image-mode
-      :defer t
+      :defer
       :config
       (progn
         (bind-key "h" 'eimp-fit-image-to-window image-mode-map)))))
@@ -9420,7 +9420,7 @@ drag the viewpoint on the image buffer that the window displays."
     (defadvice list-packages (before load-muv activate)
       (use-package melpa-upstream-visit))))
 
-(use-package thingopt :ensure t :defer t)
+(use-package thingopt :ensure t :defer)
 
 (use-package figlet
   :ensure t
