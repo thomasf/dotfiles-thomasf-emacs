@@ -82,54 +82,65 @@ This is just a copy of the fully expanded macro from dash."
     (add-to-list 'custom-theme-load-path user-themes-directory)
   (add-to-list 'load-path user-themes-directory))
 
-(defun add-to-load-path (path &optional dir)
-  (setq load-path
-        (cons (expand-file-name path (or dir user-emacs-directory)) load-path)))
+(defun load-path-load-path ()
+  (let ((load-path load-path) )
+    (defun add-to-load-path (path &optional dir)
+      (setq load-path
+            (cons (expand-file-name path (or dir user-emacs-directory)) load-path)))
 
-;; Add top-level lisp directories, in case they were not setup by the
-;; environment.
-(dolist (dir (nreverse
-              (list user-override-directory
-                    user-lisp-directory
-                    user-lib-directory
-                    user-elpa-directory
-                    user-local-site-lisp-directory
-                    user-site-lisp-directory
-                    user-site-lisp-version-dependent-directory)))
-  (dolist (entry (nreverse (directory-files-and-attributes dir)))
-    (and
-     (cadr entry)
-     (not (string= (car entry) ".."))
-     (add-to-load-path (car entry) dir))))
+    ;; Add top-level lisp directories, in case they were not setup by the
+    ;; environment.
+    (dolist (dir (nreverse
+                  (list user-override-directory
+                        user-lisp-directory
+                        user-lib-directory
+                        user-elpa-directory
+                        user-local-site-lisp-directory
+                        user-site-lisp-directory
+                        user-site-lisp-version-dependent-directory)))
+      (dolist (entry (nreverse (directory-files-and-attributes dir)))
+        (and
+         (cadr entry)
+         (not (string= (car entry) ".."))
+         (add-to-load-path (car entry) dir))))
 
 
-(mapc #'add-to-load-path
-      (nreverse
-       (list
-        (expand-file-name "~/.config-private/emacs")
-        (expand-file-name "~/.opt/extempore/extras")
-        (expand-file-name "/usr/local/opt/extempore/extras")
-        (concat user-site-lisp-directory "/emms/lisp")
-        "/usr/local/share/emacs/site-lisp/"
-        "/usr/local/share/emacs/site-lisp/mu4e/"
-        "/opt/local/share/emacs/site-lisp/"
-        "/usr/share/emacs/site-lisp/SuperCollider/"
-        "/usr/share/emacs/site-lisp/supercollider/"
-        "/var/lib/gems/1.9.1/gems/trogdoro-el4r-1.0.10/data/emacs/site-lisp/")))
+    (mapc #'add-to-load-path
+          (nreverse
+           (list
+            (expand-file-name "~/.config-private/emacs")
+            (expand-file-name "~/.opt/extempore/extras")
+            (expand-file-name "/usr/local/opt/extempore/extras")
+            (concat user-site-lisp-directory "/emms/lisp")
+            "/usr/local/share/emacs/site-lisp/"
+            "/usr/local/share/emacs/site-lisp/mu4e/"
+            "/opt/local/share/emacs/site-lisp/"
+            "/usr/share/emacs/site-lisp/SuperCollider/"
+            "/usr/share/emacs/site-lisp/supercollider/"
+            "/var/lib/gems/1.9.1/gems/trogdoro-el4r-1.0.10/data/emacs/site-lisp/")))
 
-(let ((cl-p load-path))
-  (while cl-p
-    (setcar cl-p (file-name-as-directory
-                  (expand-file-name (car cl-p))))
-    (setq cl-p (cdr cl-p))))
+    (let ((cl-p load-path))
+      (while cl-p
+        (setcar cl-p (file-name-as-directory
+                      (expand-file-name (car cl-p))))
+        (setq cl-p (cdr cl-p))))
 
-(when
-    (or (not (boundp 'emacs-version))
-       (string< emacs-version "24.3"))
-  (add-to-load-path
-   (expand-file-name "site-lisp/cl-lib" user-emacs-directory)))
+    (when
+        (or (not (boundp 'emacs-version))
+           (string< emacs-version "24.3"))
+      (add-to-load-path
+       (expand-file-name "site-lisp/cl-lib" user-emacs-directory)))
 
-(setq load-path (delete-dups load-path))
+    (setq load-path (delete-dups load-path))
+    load-path))
+
+
+
+(defmacro load-path-set-load-path ()
+  `(setq load-path ',(load-path-load-path)))
+
+(load-path-set-load-path)
+
 
 (eval-after-load "info"
   #'(progn
@@ -145,7 +156,7 @@ This is just a copy of the fully expanded macro from dash."
 
 (when (bound-and-true-p x-bitmap-file-path)
   (add-to-list 'x-bitmap-file-path
-             (concat user-emacs-directory "/icons")))
+               (concat user-emacs-directory "/icons")))
 
 (require 'cus-load nil t)
 
