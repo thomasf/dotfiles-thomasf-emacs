@@ -9412,6 +9412,7 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (multi-web-global-mode))
 
 (use-package melpa-upstream-visit
+  :disabled t
   :ensure t
   :commands muv
   :init
