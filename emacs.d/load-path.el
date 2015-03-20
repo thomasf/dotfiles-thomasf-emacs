@@ -131,13 +131,27 @@ This is just a copy of the fully expanded macro from dash."
       (add-to-load-path
        (expand-file-name "site-lisp/cl-lib" user-emacs-directory)))
 
-    (setq load-path (delete-dups load-path))
-    load-path))
+
+    (delete-dups
+     (delq nil (mapcar #'(lambda (x)
+                         (if (file-directory-p x)
+                             x
+                           nil))
+                     load-path)))))
 
 
 
 (defmacro load-path-set-load-path ()
-  `(setq load-path ',(load-path-load-path)))
+
+  `(progn
+     (setq load-path ',(load-path-load-path))
+     (let ((failed nil))
+       (mapc #'(lambda (x)
+                 (unless failed
+                   (setq failed (not (file-directory-p x)))))
+             load-path)
+       (when failed
+         (setq load-path (load-path-load-path))))))
 
 (load-path-set-load-path)
 
