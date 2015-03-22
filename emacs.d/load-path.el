@@ -142,7 +142,6 @@ This is just a copy of the fully expanded macro from dash."
 
 
 (defmacro load-path-set-load-path ()
-
   `(progn
      (setq load-path ',(load-path-load-path))
      (let ((failed nil))
@@ -151,7 +150,12 @@ This is just a copy of the fully expanded macro from dash."
                    (setq failed (not (file-directory-p x)))))
              load-path)
        (when failed
-         (setq load-path (load-path-load-path))))))
+         (require 'bytecomp)
+         (let ((byte-compile-verbose nil)
+               (byte-compile-warnings nil)
+               (use-package-verbose nil)
+               (ad-redefinition-action 'accept))
+           (byte-recompile-file "~/.emacs.d/load-path.el" t 0 t))))))
 
 (load-path-set-load-path)
 
