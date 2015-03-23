@@ -1444,9 +1444,12 @@ buffer-local wherever it is set."
 
 (use-package helm
   :defer
+  :commands (with-helm-buffer)
   :config
-  (add-hook 'helm-after-initialize-hook
-            #'(lambda () (with-helm-buffer (my-set-text-scale-smaller)))))
+  (progn
+    (add-hook 'helm-after-initialize-hook
+              #'(lambda () (with-helm-buffer (my-set-text-scale-smaller))))
+    ))
 
 (defadvice android-logcat (after smaller-font activate)
   (with-current-buffer (get-buffer "*android-logcat*")
