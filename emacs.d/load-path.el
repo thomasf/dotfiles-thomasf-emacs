@@ -82,19 +82,21 @@ This is just a copy of the fully expanded macro from dash."
     (add-to-list 'custom-theme-load-path user-themes-directory)
   (add-to-list 'load-path user-themes-directory))
 
-(defun load-path-load-path ()
-  (let ((load-path load-path) )
-    (defun add-to-load-path (path &optional dir)
-      (setq load-path
-            (cons (expand-file-name path (or dir user-emacs-directory)) load-path)))
+(defun add-to-load-path (path &optional dir)
+  (setq load-path
+        (cons (expand-file-name path (or dir user-emacs-directory)) load-path)))
 
+(defun load-path-load-path ()
+  (let ((load-path load-path)
+        (package-user-dir user-elpa-directory))
     ;; Add top-level lisp directories, in case they were not setup by the
     ;; environment.
+    (require 'package)
+    (package-initialize)
     (dolist (dir (nreverse
                   (list user-override-directory
                         user-lisp-directory
                         user-lib-directory
-                        user-elpa-directory
                         user-local-site-lisp-directory
                         user-site-lisp-directory
                         user-site-lisp-version-dependent-directory)))
@@ -140,7 +142,6 @@ This is just a copy of the fully expanded macro from dash."
                      load-path)))))
 
 
-
 (defmacro load-path-set-load-path ()
   `(progn
      (setq load-path ',(load-path-load-path))
@@ -158,7 +159,6 @@ This is just a copy of the fully expanded macro from dash."
            (byte-recompile-file "~/.emacs.d/load-path.el" t 0 t))))))
 
 (load-path-set-load-path)
-
 
 (eval-after-load "info"
   #'(progn
