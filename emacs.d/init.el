@@ -429,20 +429,33 @@ buffer-local wherever it is set."
 
 ;;; functions: early gui setup
 
+(defvar theme-bright nil "A light theme.")
+(defvar theme-dark nil "A dark theme.")
+
 (use-package solarized-theme
   :ensure t
-  :defer)
-;;;; dark/bright mode
-(setq solarized-use-less-bold t
-      solarized-use-more-italic t
-      solarized-emphasize-indicators nil
-      solarized-distinct-fringe-background nil
-      solarized-high-contrast-mode-line nil)
-(defvar theme-bright 'my-solarized-light "A light theme.")
-(defvar theme-dark 'my-solarized-dark "A dark theme.")
-(unless window-system
-  (setq theme-dark 'zenburn
-        theme-bright 'zenburn))
+  :if window-system
+  :init
+  (progn
+    (setq solarized-use-less-bold t
+          solarized-use-more-italic t
+          solarized-emphasize-indicators nil
+          solarized-distinct-fringe-background nil
+          solarized-high-contrast-mode-line nil))
+  :config
+  (progn
+    (load "solarized-theme-autoloads" nil t)
+    (setq theme-dark 'solarized-dark
+          theme-bright 'solarized-light)))
+
+(use-package zenburn-theme
+  :ensure t
+  :if (not window-system)
+  :config
+  (progn
+    (load "zenburn-theme-autoloads" nil t)
+    (setq theme-dark 'zenburn
+          theme-bright 'zenburn)))
 
 (defun post-change-theme ()
   (set-face-inverse-video-p 'vertical-border nil)
@@ -456,20 +469,22 @@ buffer-local wherever it is set."
 (defun dark-theme ()
   "Switch to dark mode (dark color theme)."
   (interactive)
-  (if degrade-p-old-emacs
-      (load-theme theme-dark)
-    (load-theme theme-dark t))
-  (setq dark-theme-on t)
-  (post-change-theme))
+  (when theme-dark
+    (if degrade-p-old-emacs
+        (load-theme theme-dark)
+      (load-theme theme-dark t))
+    (setq dark-theme-on t)
+    (post-change-theme)))
 
 (defun bright-theme ()
   "Switch to light mode (light color theme)."
   (interactive)
-  (if degrade-p-old-emacs
-      (load-theme theme-bright)
-    (load-theme theme-bright t))
-  (setq dark-theme-on nil)
-  (post-change-theme))
+  (when theme-bright
+    (if degrade-p-old-emacs
+        (load-theme theme-bright)
+      (load-theme theme-bright t))
+    (setq dark-theme-on nil)
+    (post-change-theme)))
 
 (defun toggle-dark-theme ()
   "Toggle between light and dark modes."
