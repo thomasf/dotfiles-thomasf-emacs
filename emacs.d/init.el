@@ -672,7 +672,7 @@ buffer-local wherever it is set."
 (defun workspace-prefix ()
   (let ((res (if (and
                   (eq window-system 'x)
-                  (executable-find "wsname"))
+                  #'(executable-find "wsname"))
                  (shell-command-to-string "wsname -p"))))
     (if (and res (not (s-blank? res))) res)))
 
@@ -3578,7 +3578,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
     (use-package dired-avfs
       :ensure t
-      :if (executable-find "mountavfs"))
+      :if #'(executable-find "mountavfs"))
 
     (use-package dired-narrow
       :ensure t
@@ -6303,9 +6303,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
        helm-source-projectile-files-list
        ;; helm-source-projectile-buffers-list
        helm-source-projectile-recentf-list
-       helm-source-projectile-known-projects
-       helm-source-magit-repo-dirs
-       helm-source-file-cache)
+       helm-source-file-cache
+       )
      helm-prevent-escaping-from-minibuffer nil
      helm-buffer-max-length 50
      helm-full-frame t
@@ -6340,45 +6339,12 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :config
   (progn
     (use-package helm-config)
-    (use-package helm-files)
-    (use-package helm-help)
+    ;; (use-package helm-files)
+    ;; (use-package helm-help)
     (use-package helm-projectile)
-    (use-package helm-adaptative
-      :commands (helm-adaptative-mode))
-    (defvar helm-source-projectile-known-projects
-      `((name . "Projectile known projects")
-        (init . (lambda ()
-                  (require 'projectile)
-
-                  (helm-init-candidates-in-buffer
-                      'global projectile-known-projects)))
-        (candidates-in-buffer)
-        (no-delay-on-input)
-        (keymap . ,helm-generic-files-map)
-        (help-message . helm-generic-file-help-message)
-        (mode-line . helm-generic-file-mode-line-string)
-        (action . ,(cdr (helm-get-actions-from-type
-                         helm-source-locate))))
-      "See (info \"(Emacs)File Conveniences\").
-Set `recentf-max-saved-items' to a bigger value if default is too small.")
-
-    (defvar helm-source-magit-repo-dirs
-      `((name . "Magit repo dirs")
-        (init . (lambda ()
-                  (require 'magit)
-                  (setq helm-source-magit-repo-dir-repos
-                        (mapcar 'cdr (magit-list-repos magit-repo-dirs)))
-                  (helm-init-candidates-in-buffer
-                      'global helm-source-magit-repo-dir-repos)))
-        (candidates-in-buffer)
-        (no-delay-on-input)
-        (keymap . ,helm-generic-files-map)
-        (help-message . helm-generic-file-help-message)
-        (mode-line . helm-generic-file-mode-line-string)
-        (action . ,(cdr (helm-get-actions-from-type
-                         helm-source-locate))))
-      "See (info \"(Emacs)File Conveniences\").
-Set `recentf-max-saved-items' to a bigger value if default is too small.")))
+    ;; (use-package helm-adaptative
+    ;; :commands (helm-adaptative-mode))
+    ))
 
 (use-package ibuffer
   :defer
@@ -7756,7 +7722,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (cond
            ((file-exists-p "~/.opt/offlineimap/offlineimap.py")
             "~/.opt/offlineimap/offlineimap.py -o -u basic")
-           ((executable-find "offlineimap")
+           (#'(executable-find "offlineimap")
             "offlineimap -o -u basic"))
           mu4e-headers-date-format "%x %R"
           mu4e-headers-fields '
