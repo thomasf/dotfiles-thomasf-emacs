@@ -92,7 +92,7 @@ This is just a copy of the fully expanded macro from dash."
              (f-delete file)))
          t)
 
- (--each '("site-lisp" "override" "lib" "themes" "lisp")
+ (--each '("site-lisp" "override" "lib" "lisp")
   (f-files (f-join makeup-emacsd-path it)
            (lambda (file)
              (when (and
