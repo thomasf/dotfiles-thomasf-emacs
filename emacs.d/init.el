@@ -532,7 +532,8 @@ buffer-local wherever it is set."
       (sml/apply-theme nil))
     (add-hook 'after-init-hook 'my-sml-setup t))
   :config
-  (load-library "smart-mode-line-autoloads"))
+  (progn
+    (load "smart-mode-line-autoloads" nil t)))
 
 (use-package dynamic-fonts
   :ensure t
@@ -4105,7 +4106,7 @@ overwriting each other's changes."
         (add-hook 'haskell-mode-hook 'my-ghc-mod-hook))))
   :config
   (progn
-    (load-library "haskell-mode-autoloads")))
+    (load "haskell-mode-autoloads" nil t)))
 
 (use-package shm
   :ensure t
