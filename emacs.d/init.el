@@ -579,6 +579,69 @@ buffer-local wherever it is set."
              (dynamic-fonts-setup))))))
     (add-hook 'after-init-hook 'my-set-fonts t)))
 
+
+(use-package nav-flash
+  :ensure t
+  :commands (nav-flash-show)
+  :init
+  (progn
+    (setq nav-flash-delay 0.6)
+    (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
+    (defun flash-defun()
+      "Flash current defun"
+      (interactive)
+      (save-restriction
+        (narrow-to-defun)
+        (nav-flash-show (point-min) (point-max))))
+
+    (defvar nav-flash-show-soon-timer nil)
+    (defun nav-flash-show-soon-cancel-timer ()
+      (when nav-flash-show-soon-timer
+        (cancel-timer nav-flash-show-soon-timer)
+        (setq nav-flash-show-soon nil)))
+
+    (defun nav-flash-show-soon (&optional later)
+      (nav-flash-show-soon-cancel-timer)
+      (setq nav-flash-show-soon-timer
+            (run-with-timer (if later 0.4 0.25) nil
+                            '(lambda ()
+                               (nav-flash-show)))))
+
+    (defun nav-flash-show-later ()
+      (nav-flash-show-soon t))
+
+    (add-hook 'focus-in-hook 'nav-flash-show-later)
+    (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
+
+    (defun recenter-top-bottom-flash ()
+      (interactive)
+      (call-interactively 'recenter-top-bottom)
+      (nav-flash-show))
+
+    (bind-key "C-l" 'recenter-top-bottom-flash)
+
+    (defun move-to-window-line-top-bottom-flash ()
+      (interactive)
+      (call-interactively 'move-to-window-line-top-bottom)
+      (nav-flash-show))
+
+    (bind-key "M-r" 'move-to-window-line-top-bottom-flash)
+
+    (defun scroll-up-command-flash ()
+      (interactive)
+      (call-interactively 'scroll-up-command)
+      (nav-flash-show-soon))
+
+    (bind-key "M-v" 'scroll-down-command-flash)
+
+    (defun scroll-down-command-flash ()
+      (interactive)
+      (call-interactively 'scroll-down-command)
+      (nav-flash-show-soon))
+
+    (bind-key "C-v" 'scroll-up-command-flash)))
+
+
 
 
 ;;; functions: Main settings block
@@ -2544,59 +2607,6 @@ for the current buffer's file name, and the line number at point."
        (if selective-display nil (or col 1))))))
 ;; (bind-key* "C-M-f" 'toggle-fold)
 
-(defun flash-defun()
-  "Flash current defun"
-  (interactive)
-  (save-restriction
-    (narrow-to-defun)
-    (nav-flash-show (point-min) (point-max))))
-
-(defvar nav-flash-show-soon-timer nil)
-(defun nav-flash-show-soon-cancel-timer ()
-  (when nav-flash-show-soon-timer
-    (cancel-timer nav-flash-show-soon-timer)
-    (setq nav-flash-show-soon nil)
-    ))
-
-(defun nav-flash-show-soon (&optional later)
-  (nav-flash-show-soon-cancel-timer)
-  (setq nav-flash-show-soon-timer
-        (run-with-timer (if later 0.4 0.25) nil
-                        '(lambda ()
-                           (nav-flash-show)))))
-(defun nav-flash-show-later ()
-  (nav-flash-show-soon t))
-
-(add-hook 'focus-in-hook 'nav-flash-show-later)
-(add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
-
-(defun recenter-top-bottom-flash ()
-  (interactive)
-  (call-interactively 'recenter-top-bottom)
-  (nav-flash-show))
-
-(bind-key "C-l" 'recenter-top-bottom-flash)
-
-(defun move-to-window-line-top-bottom-flash ()
-  (interactive)
-  (call-interactively 'move-to-window-line-top-bottom)
-  (nav-flash-show))
-
-(bind-key "M-r" 'move-to-window-line-top-bottom-flash)
-
-(defun scroll-up-command-flash ()
-  (interactive)
-  (call-interactively 'scroll-up-command)
-  (nav-flash-show-soon))
-
-(bind-key "M-v" 'scroll-down-command-flash)
-
-(defun scroll-down-command-flash ()
-  (interactive)
-  (call-interactively 'scroll-down-command)
-  (nav-flash-show-soon))
-
-(bind-key "C-v" 'scroll-up-command-flash)
 
 (defun hsadmin-magit ()
   "Open magit status buffers for all directories under
@@ -7584,14 +7594,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package aes
   :ensure t
   :commands (aes-insert-password))
-
-(use-package nav-flash
-  :ensure t
-  :commands (nav-flash-show)
-  :init
-  (progn
-    (setq nav-flash-delay 0.6)
-    (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)))
 
 (use-package groovy-mode-autoloads
   :ensure groovy-mode
