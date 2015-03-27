@@ -9107,7 +9107,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package tern
   :ensure t
-  :disabled t
+  :if #'(executable-find "tern")
   :commands tern-mode
   :init
   (progn
@@ -9116,9 +9116,12 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
     (use-package tern-auto-complete
-      :disabled t ;; FIXME slows down things?
       :commands tern-ac-setup
-      :init (tern-ac-setup))))
+      :disabled t
+      :init
+      (progn
+        (use-package auto-complete)
+        (tern-ac-setup)))))
 
 (use-package outline
   :defer
