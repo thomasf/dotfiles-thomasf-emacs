@@ -136,8 +136,8 @@ This is just a copy of the fully expanded macro from dash."
       (unless (was-compiled-p directory)
         (byte-recompile-directory directory 0)))))
 
-(makeup-log "If any packages installed with package.el aren't compiled yet, compile them.")
-(ensure-packages-compiled)
+;; (makeup-log "If any packages installed with package.el aren't compiled yet, compile them.")
+;; (ensure-packages-compiled)
 
 
 (use-package multi-term)
