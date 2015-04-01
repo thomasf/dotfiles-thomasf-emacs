@@ -453,9 +453,12 @@ buffer-local wherever it is set."
   :if (not window-system)
   :config
   (progn
+    (use-package anti-zenburn-theme
+      :config
+      (load "anti-zenburn-theme-autoloads" nil t))
     (load "zenburn-theme-autoloads" nil t)
     (setq theme-dark 'zenburn
-          theme-bright 'zenburn)))
+          theme-bright 'anti-zenburn)))
 
 (defun post-change-theme ()
   (set-face-inverse-video-p 'vertical-border nil)
