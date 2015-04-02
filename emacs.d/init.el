@@ -5894,6 +5894,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
      ;; magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t)
+
+    (defadvice magit-version (around skipit activate)
+      "900000000")
+
     (use-package magit-stgit
       :ensure t
       :commands (magit-stgit-mode
