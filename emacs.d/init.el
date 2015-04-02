@@ -102,7 +102,11 @@ re-downloaded in order to locate PACKAGE."
 
 (eval-when-compile
   (require-package 'use-package)
-  (require 'use-package))
+  (require 'use-package)
+
+  (defmacro executable-find* (command)
+    "Macro form of executable-find..."
+    (executable-find command)))
 
 ;;;; load packages
 (require 'cl)
@@ -454,6 +458,7 @@ buffer-local wherever it is set."
   :config
   (progn
     (use-package anti-zenburn-theme
+      :ensure t
       :config
       (load "anti-zenburn-theme-autoloads" nil t))
     (load "zenburn-theme-autoloads" nil t)
@@ -675,7 +680,7 @@ buffer-local wherever it is set."
 (defun workspace-prefix ()
   (let ((res (if (and
                   (eq window-system 'x)
-                  #'(executable-find "wsname"))
+                  (executable-find* "wsname"))
                  (shell-command-to-string "wsname -p"))))
     (if (and res (not (s-blank? res))) res)))
 
@@ -2488,7 +2493,7 @@ Used to launch magit status from command line."
   (unless flash-scroll-lock-initialized
     (unless (and
              ;; (eq window-system 'x)
-             (executable-find "xset"))
+             (executable-find* "xset"))
       (setq flash-scroll-lock-enabled nil))
     (setq flash-scroll-lock-initialized t))
   (when (and
@@ -2755,7 +2760,7 @@ for the current buffer's file name, and the line number at point."
   :commands (exec-path-from-shell-initialize)
   :init
   (progn
-    (unless (executable-find "hsadmin")
+    (unless (executable-find* "hsadmin")
       (exec-path-from-shell-initialize))))
 
 ;;; packages: packages sorted alphabetically by name
@@ -3581,7 +3586,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
     (use-package dired-avfs
       :ensure t
-      :if #'(executable-find "mountavfs"))
+      :if (executable-find* "mountavfs"))
 
     (use-package dired-narrow
       :ensure t
@@ -4113,7 +4118,7 @@ overwriting each other's changes."
       :init
       (progn
         (defun my-ghc-mod-hook ()
-          (if (not (executable-find "ghc-mod"))
+          (if (not (executable-find* "ghc-mod"))
               (warn
                (concat "ghc-mod executable not found "
                        " >> cabal install happy; cabal install ghc-mod"))
@@ -4851,7 +4856,7 @@ otherwise use the subtree title."
   (progn
     (setq flycheck-javascript-jshint-executable
           (cond
-           ((executable-find "jsxhint") "jsxhint")
+           ((executable-find* "jsxhint") "jsxhint")
            (t "jshint")))
     (use-package helm-flycheck
       :ensure t
@@ -4995,7 +5000,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
               (f-expand (or (buffer-file-name) default-directory))))
 
     (setq gofmt-command (cond
-                         ((executable-find "goimports") "goimports")
+                         ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
 
     (use-package go-stacktracer
@@ -5037,7 +5042,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
              go-oracle-implements)
   :config
   (progn
-    (setq go-oracle-command (executable-find "oracle"))))
+    (setq go-oracle-command (executable-find* "oracle"))))
 
 (use-package go-rename
   :commands go-rename)
@@ -7726,7 +7731,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           (cond
            ((file-exists-p "~/.opt/offlineimap/offlineimap.py")
             "~/.opt/offlineimap/offlineimap.py -o -u basic")
-           (#'(executable-find "offlineimap")
+           ((executable-find* "offlineimap")
             "offlineimap -o -u basic"))
           mu4e-headers-date-format "%x %R"
           mu4e-headers-fields '
@@ -9111,7 +9116,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package tern
   :ensure t
-  :if #'(executable-find "tern")
+  :if (executable-find* "tern")
   :commands tern-mode
   :init
   (progn
