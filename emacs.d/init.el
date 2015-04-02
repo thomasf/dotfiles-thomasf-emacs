@@ -5880,6 +5880,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :init
   (progn
     (setq
+     magit-last-seen-setup-instructions "1.4.0"
      magit-repo-dirs '("~/repos")
      magit-repo-dirs-depth 6
      magit-status-buffer-switch-function 'switch-to-buffer
