@@ -5002,6 +5002,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (setq gofmt-command (cond
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
+    (bind-key "C-c C-c" 'gofmt go-mode-map)
 
     (use-package go-stacktracer
       :ensure t
