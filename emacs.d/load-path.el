@@ -17,8 +17,6 @@ See also `locate-user-emacs-file'.")
 (defconst user-lisp-directory
   (expand-file-name "lisp" user-emacs-directory))
 
-
-
 (defun load-path--take (n list)
   "Returns a new list of the first N items in LIST, or all items if there are fewer than N.
 This is just a copy of the fully expanded macro from dash."
@@ -39,26 +37,10 @@ This is just a copy of the fully expanded macro from dash."
               (1+ it))))
     (nreverse result)))
 
-(defconst my-simplified-emacs-version-number
-  (mapconcat 'identity (mapcar
-                        #'(lambda (x)
-                            (number-to-string x))
-                        (load-path--take 3 (version-to-list emacs-version)))
-             "."))
-
-(defconst user-elpa-directory
-  (expand-file-name (format "packages/%s" my-simplified-emacs-version-number) user-emacs-directory))
 (defconst user-lib-directory
   (expand-file-name "lib" user-emacs-directory))
 (defconst user-site-lisp-directory
   (expand-file-name "site-lisp/shared" user-emacs-directory))
-(defconst user-site-lisp-version-dependent-directory
-  (expand-file-name  (concat "site-lisp/emacs"
-                             (if (or (not (boundp 'emacs-version))
-                                    (string< emacs-version "24"))
-                                 "23"
-                               "24"))
-                     user-emacs-directory))
 (defconst user-local-site-lisp-directory
   (expand-file-name "emacs-site-lisp" "~/.opt"))
 (defconst user-override-directory
@@ -72,7 +54,6 @@ This is just a copy of the fully expanded macro from dash."
 
 ;; These should always exist
 (make-directory user-data-directory t)
-(make-directory user-elpa-directory t)
 (make-directory user-cache-directory t)
 (make-directory user-local-override-directory t)
 (make-directory user-local-site-lisp-directory t)
@@ -87,8 +68,7 @@ This is just a copy of the fully expanded macro from dash."
         (cons (expand-file-name path (or dir user-emacs-directory)) load-path)))
 
 (defun load-path-load-path ()
-  (let ((load-path load-path)
-        (package-user-dir user-elpa-directory))
+  (let ((load-path load-path))
     ;; Add top-level lisp directories, in case they were not setup by the
     ;; environment.
     (require 'package)
@@ -98,8 +78,7 @@ This is just a copy of the fully expanded macro from dash."
                         user-lisp-directory
                         user-lib-directory
                         user-local-site-lisp-directory
-                        user-site-lisp-directory
-                        user-site-lisp-version-dependent-directory)))
+                        user-site-lisp-directory)))
       (dolist (entry (nreverse (directory-files-and-attributes dir)))
         (and
          (cadr entry)

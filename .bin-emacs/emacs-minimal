@@ -1,8 +1,8 @@
 #!/bin/sh
 #
-# Opens an emacs session where all features are enabled
+# Start a minimally configured emacs
 #
 # Author: Thomas Frössman  ( thomasf@jossystem.se / http://thomas.jossystem.se )
 #
 
-exec emacs -q -l ~/.emacs.d/init-low $*
+exec emacs -q -l ~/.emacs.d/init-minimal $*

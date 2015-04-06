@@ -36,18 +36,7 @@ This is just a copy of the fully expanded macro from dash."
               (1+ it))))
     (nreverse result)))
 
-(defconst my-simplified-emacs-version-number
-  (mapconcat 'identity (mapcar
-                        '(lambda (x)
-                           (number-to-string x))
-                        (load-path--take 3 (version-to-list emacs-version)))
-             "."))
-
-(setq package-user-dir (expand-file-name
-                        (format "packages/%s/" my-simplified-emacs-version-number)
-                        user-emacs-directory)
-      delete-by-moving-to-trash nil)
-
+(require 'package)
 (mkdir package-user-dir t)
 
 
@@ -142,13 +131,11 @@ This is just a copy of the fully expanded macro from dash."
 
 (use-package multi-term)
 (defvar user-site-lisp-directory)
-(defvar user-site-lisp-version-dependent-directory)
 (defvar user-override-directory)
 (defvar user-lib-directory)
 (defvar user-lisp-directory)
 (makeup-log "byte recompile emacsd lisp dirs")
 (byte-recompile-directory user-site-lisp-directory 0)
-(byte-recompile-directory user-site-lisp-version-dependent-directory 0)
 (byte-recompile-directory user-override-directory 0)
 (byte-recompile-directory user-lib-directory 0)
 (byte-recompile-directory user-lisp-directory 0)

@@ -31,49 +31,18 @@
 
 ;;; Emacs version check and feature inhibitions
 
-(defvar degrade-level 0
-  "Higher values turns off more features.
-0       = all features enabled.
-10...90  ...
-100 = very minimal feature set.")
-;; Heavy
-(defvar degrade-p-eclim (>= degrade-level 2)
-  "Inhibit auto loading of eclim.")
-;; Medium
-(defvar degrade-p-looks (>= degrade-level 7)
-  "Inhibit some visual indicators.
-Font-lock, visual indicators and similar.")
-(defvar degrade-p-font-lock (>= degrade-level 8)
-  "Don't enable maximum font-locking features.")
-;; Light
-(defvar degrade-p-minimalism (>= degrade-level 10)
-  "Inhibit turning on minor features that might slow down usage.")
-;; Dependent on external factors
-(defvar degrade-p-terminal (not window-system)
-  "Inhibit activating things that does not work well in a terminal.")
-(defvar degrade-p-noninteractive noninteractive
-  "Like batch-mode or similar.")
-(defvar degrade-p-old-emacs
-  (or (not (boundp 'emacs-version))
-      (string< emacs-version "24")))
-(defvar degrade-p-emacs-pre24.3
-  (or (not (boundp 'emacs-version))
-      (string< emacs-version "24.3")))
-(defvar degrade-p-emacs-pre24.4
-  (or (not (boundp 'emacs-version))
-      (string< emacs-version "24.4")))
-(defvar degrade-p-helm degrade-p-old-emacs
-  "Helm does not support emacs23.")
+(defvar degrade-p-minimalism nil
+  "If set to non nil a lighter emacs config is used. ")
+
 (and
- (not degrade-p-noninteractive)
- (or degrade-p-old-emacs degrade-p-emacs-pre24.3)
+ (not noninteractive)
+ (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))
  (warn "Use a newer version of Emacs for a full featured environment!"))
 
 ;;;; package.el
 
 (setq
  package-enable-at-startup nil
- package-user-dir user-elpa-directory
  package-archives
  '(("melpa-stable" . "http://stable.melpa.org/packages/")
    ("melpa" . "http://melpa.org/packages/")
@@ -103,32 +72,29 @@ re-downloaded in order to locate PACKAGE."
 (eval-when-compile
   (require-package 'use-package)
   (require 'use-package)
-
   (defmacro executable-find* (command)
     "Macro form of executable-find..."
     (executable-find command)))
 
 ;;;; load packages
 (require 'cl)
+
 (use-package dash
   :ensure t
+  :demand
   :commands (dash-enable-fontlock)
-  :config
+  :init
   (progn
-    (dash-enable-font-lock)))
+    (add-hook 'emacs-lisp-mode-hook 'dash-enable-font-lock)))
 
-(when (not degrade-p-old-emacs)
-  (use-package dash-functional :ensure t)
-
-  (use-package memoize :ensure t :defer))
-
+(use-package dash-functional :ensure t :defer)
+(use-package memoize :ensure t :defer)
 (use-package s :ensure t)
 (use-package f :ensure t)
-(use-package noflet :ensure t)
 (use-package bind-key :ensure t)
 (use-package smartrep :ensure t)
 (use-package diminish :ensure t)
-(use-package deferred :ensure t)
+(use-package deferred :ensure t :commands (deferred:$))
 (use-package request-deferred :ensure t :defer)
 (use-package concurrent :ensure t :defer)
 (use-package load-relative :ensure t :defer)
@@ -230,11 +196,6 @@ buffer-local wherever it is set."
  auto-save-file-name-transforms `((".*" ,autosave-dir t)))
 
 (add-to-list 'load-suffixes ".el.gpg")
-
-;; emacs backport/compat
-
-(when degrade-p-old-emacs
-  (require 'thomasf-emacs23-compat))
 
 ;; Try to load local customize file
 (setq custom-file (expand-file-name
@@ -478,9 +439,7 @@ buffer-local wherever it is set."
   "Switch to dark mode (dark color theme)."
   (interactive)
   (when theme-dark
-    (if degrade-p-old-emacs
-        (load-theme theme-dark)
-      (load-theme theme-dark t))
+    (load-theme theme-dark t)
     (setq dark-theme-on t)
     (post-change-theme)))
 
@@ -488,9 +447,7 @@ buffer-local wherever it is set."
   "Switch to light mode (light color theme)."
   (interactive)
   (when theme-bright
-    (if degrade-p-old-emacs
-        (load-theme theme-bright)
-      (load-theme theme-bright t))
+    (load-theme theme-bright t)
     (setq dark-theme-on nil)
     (post-change-theme)))
 
@@ -503,8 +460,8 @@ buffer-local wherever it is set."
   (post-change-theme))
 
 (and (not (boundp 'dark-theme-on))
-     (not degrade-p-noninteractive)
-     ;; (not degrade-p-terminal)
+     (not noninteractive)
+     ;; (not (not window-system))
      (not degrade-p-minimalism)
      (if (file-exists-p "~/.config/darkmode")
          (dark-theme)
@@ -519,8 +476,8 @@ buffer-local wherever it is set."
 (use-package smart-mode-line
   :ensure t
   :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-terminal)
+       (not noninteractive)
+       (not (not window-system))
        (not degrade-p-minimalism))
   :commands (sml/setup)
   :init
@@ -730,7 +687,7 @@ buffer-local wherever it is set."
 
 ;;;; font locking
 ;; (setq font-lock-global-modes '(not web-mode))
-(unless degrade-p-font-lock
+(unless noninteractive
   (setq font-lock-maximum-decoration t)
   ;; (global-font-lock-mode t)
   )
@@ -762,7 +719,11 @@ buffer-local wherever it is set."
 (set-language-environment "UTF-8")
 (define-coding-system-alias 'UTF-8 'utf-8)
 
-(defconst my-use-semantic-instead-of-which-func (not degrade-p-emacs-pre24.4))
+(defconst my-use-semantic-instead-of-which-func
+  (and
+   (boundp 'emacs-version)
+   (string< "24.4" emacs-version)))
+
 (use-package semantic
   :commands (my-semantic-setup)
   :init
@@ -817,7 +778,7 @@ buffer-local wherever it is set."
   :init
   (progn
     (setq vc-follow-symlinks t)
-    (if degrade-p-noninteractive
+    (if noninteractive
         ;;Disable all vcs back ends (Emacs starts faster)
         (setq vc-handled-backends ())
       (setq vc-handled-backends '(Git Hg)))
@@ -880,8 +841,7 @@ buffer-local wherever it is set."
  eval-expression-print-level nil
  idle-update-delay 1)
 
-(and (not degrade-p-old-emacs)
-     (fboundp 'x-cut-buffer-or-selection-value)
+(and (fboundp 'x-cut-buffer-or-selection-value)
      (eq system-type 'gnu/linux)
      (setq interprogram-paste-function
            'x-cut-buffer-or-selection-value))
@@ -908,7 +868,7 @@ buffer-local wherever it is set."
 ;;;; paragraphs
 (setq
  sentence-end-double-space nil)
-(unless degrade-p-noninteractive (global-subword-mode))
+(unless noninteractive (global-subword-mode))
 
 (use-package compile
   :defer
@@ -1420,7 +1380,7 @@ buffer-local wherever it is set."
                         (logior (file-modes buffer-file-name) #o100))
         (message (concat "Made " buffer-file-name " executable"))))))
 
-(when (not degrade-p-noninteractive)
+(when (not noninteractive)
   (add-hook 'after-save-hook 'my-make-script-executable))
 
 ;;; functions: calling external commands
@@ -2665,7 +2625,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package projectile
   :ensure t
-  :defer 1.5
+  :defer 1.4
   :commands (projectile-mode
              projectile-global-mode
              projectile-project-p
@@ -2728,7 +2688,6 @@ for the current buffer's file name, and the line number at point."
 
     (use-package helm-projectile
       :ensure t
-      :if (not degrade-p-helm)
       :commands (helm-projectile)
       :bind ("C-x f p" . helm-projectile))
 
@@ -2835,7 +2794,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package dired-toggle-sudo
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands dired-toggle-sudo)
 
 (use-package download-region
@@ -3048,12 +3007,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package helm-chrome
   :ensure t
-  :if (not degrade-p-helm)
   :commands helm-chrome-bookmarks)
 
 (use-package helm-dash
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-dash helm-dash-at-point)
   :bind (("C-h SPC" . helm-dash-at-point))
   :init
@@ -3170,7 +3127,6 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package helm-package
   :ensure t
-  :if (not degrade-p-helm)
   :commands helm-package)
 
 (use-package howdoi
@@ -3236,8 +3192,8 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package region-bindings-mode
   :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+       (not noninteractive)
+       (not degrade-p-minimalism))
   :ensure t
   :commands (region-bindings-mode-enable)
   :init
@@ -3466,7 +3422,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
-  :defer 3
+  :defer 2.7
   :init
   (progn
     (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
@@ -3531,7 +3487,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package dired
   :commands (dired)
   :bind (("C-x d d" . ido-dired))
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :init
   (progn
     (setq dired-listing-switches "-alh"
@@ -3749,9 +3705,7 @@ If FILE already exists, signal an error."
 
 (use-package key-chord
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands
   (key-chord-mode
    key-chord-define
@@ -3761,7 +3715,7 @@ If FILE already exists, signal an error."
     (setq
      key-chord-two-keys-delay 0.05
      key-chord-one-key-delay 0.15)
-    (when (not degrade-p-terminal)
+    (when (not (not window-system))
       (key-chord-mode 1)))
   :config
   (progn
@@ -3828,9 +3782,7 @@ If FILE already exists, signal an error."
 (use-package session
   :disabled t
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (setq
@@ -3838,9 +3790,7 @@ If FILE already exists, signal an error."
     (session-initialize)))
 
 (use-package recentf
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :bind (("C-x f R" . find-recent-file))
   :defer 2.5
   :init
@@ -3914,9 +3864,7 @@ overwriting each other's changes."
     (recentf-mode 1)))
 
 (use-package savehist
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (setq
@@ -3932,7 +3880,7 @@ overwriting each other's changes."
   ;; :disabled t ;; FIXME something else prohibits restoring point after save
   ;; NOTE It seems like ws-butler has started working again
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (ws-butler-mode)
   :diminish ws-butler-mode
   :init
@@ -3943,9 +3891,7 @@ overwriting each other's changes."
     (hook-into-modes #'ws-butler-mode my-html-like-mode-hooks-2)))
 
 (use-package saveplace
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (setq save-place-file (expand-file-name
@@ -3956,10 +3902,7 @@ overwriting each other's changes."
 
 (use-package which-func
   :commands (which-func-mode)
-  :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-minimalism)
-       (not degrade-p-old-emacs))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (when my-use-semantic-instead-of-which-func
@@ -4001,7 +3944,7 @@ overwriting each other's changes."
 (use-package abbrev
   :defer
   :diminish ""
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :init
   (progn
     (setq
@@ -4010,7 +3953,7 @@ overwriting each other's changes."
 
 (use-package quickrun
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (quickrun
              quickrun-region
              quickrun-with-arg
@@ -4029,7 +3972,7 @@ overwriting each other's changes."
 (let ((ad-redefinition-action 'accept))
   (use-package color-moccur
     :ensure t
-    :if (not degrade-p-noninteractive)
+    :if (not noninteractive)
     :commands (isearch-moccur
                isearch-moccur-all
                moccur
@@ -4051,7 +3994,7 @@ overwriting each other's changes."
 
 (use-package goto-chg
   ;; :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (goto-last-change goto-last-change-flash)
   :bind ("C-c C-SPC" . goto-last-change-flash)
   :config
@@ -4113,7 +4056,7 @@ overwriting each other's changes."
     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
     (use-package ghc
       :ensure t
-      :if (not degrade-p-noninteractive)
+      :if (not noninteractive)
       :commands ghc-init
       :init
       (progn
@@ -4133,7 +4076,7 @@ overwriting each other's changes."
 
 (use-package shm
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands structured-haskell-mode)
 
 (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
@@ -4307,7 +4250,7 @@ Argument FILENAME File to insert."
      org-agenda-dim-blocked-tasks nil
      org-agenda-show-all-dates nil
      org-agenda-span 'fortnight
-     org-agenda-sticky (not degrade-p-noninteractive)
+     org-agenda-sticky (not noninteractive)
      org-agenda-tags-todo-honor-ignore-options t
      org-deadline-warning-days 14
      org-agenda-todo-ignore-deadlines t
@@ -4342,10 +4285,10 @@ Argument FILENAME File to insert."
                           (org-agenda-files :maxlevel . 9))
      org-refile-use-outline-path 'file
      org-return-follows-link t
-     org-startup-folded (not degrade-p-noninteractive)
+     org-startup-folded (not noninteractive)
      org-startup-indented t
-     org-startup-with-inline-images (not degrade-p-noninteractive)
-     org-startup-with-inline-images degrade-p-noninteractive
+     org-startup-with-inline-images (not noninteractive)
+     org-startup-with-inline-images noninteractive
      org-treat-S-cursor-todo-selection-as-state-change nil
      org-use-fast-todo-selection t
      org-use-sub-superscripts '{}
@@ -4445,7 +4388,7 @@ Argument FILENAME File to insert."
                     ("screen" . shell-script)))
 
     (use-package org-agenda
-      :if (not degrade-p-noninteractive)
+      :if (not noninteractive)
       :defer
       :config
       (progn
@@ -4613,8 +4556,8 @@ otherwise use the subtree title."
   :ensure t
   :if (not
        (or
-        degrade-p-emacs-pre24.3
-        degrade-p-noninteractive))
+        noninteractive
+        (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
   :commands (auto-complete-mode)
   :diminish ""
   :init
@@ -4695,8 +4638,8 @@ otherwise use the subtree title."
       :ensure t
       :if (not
            (or
-            degrade-p-terminal
-            degrade-p-noninteractive)))
+            (not window-system)
+            noninteractive)))
 
     (use-package yasnippet)
     (use-package auto-complete-config)
@@ -4744,7 +4687,7 @@ otherwise use the subtree title."
 (use-package vkill
   :ensure t
   :commands vkill
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :init
   (progn
     (defun vkill-and-helm-occur ()
@@ -4758,7 +4701,7 @@ otherwise use the subtree title."
   (setq vkill-show-all-processes t))
 
 (use-package windmove
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands windmove-find-other-window
   :init
   (progn
@@ -4821,7 +4764,7 @@ otherwise use the subtree title."
 
 (use-package flycheck
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (flycheck-mode
              global-flycheck-mode)
   :diminish ((flycheck-mode . "fc"))
@@ -4860,7 +4803,6 @@ otherwise use the subtree title."
            (t "jshint")))
     (use-package helm-flycheck
       :ensure t
-      :if (not degrade-p-helm)
       :commands (helm-flycheck)
       :init
       (progn
@@ -5061,9 +5003,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :ensure t
   :if (and
        (not (image-type-available-p 'xpm))
-       (not degrade-p-looks)
-       (not degrade-p-terminal)
-       (not degrade-p-noninteractive))
+       (not (not window-system))
+       (not noninteractive))
   :commands nyan-mode
   :init
   (progn
@@ -5073,7 +5014,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package ido
   :commands ido-mode
   :if (and
-       (not degrade-p-noninteractive))
+       (not noninteractive))
   :init
   (progn
     (setq
@@ -5111,9 +5052,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   (progn
     (use-package ido-vertical-mode
       :ensure t
-      :if (and
-           (not degrade-p-minimalism)
-           (not degrade-p-old-emacs))
+      :if (and (not degrade-p-minimalism))
       :commands (turn-on-ido-vertical
                  ido-vertical-mode)
       :init
@@ -5122,12 +5061,10 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (use-package flx-ido
       :ensure  t
       :commands (flx-ido-mode)
-      :if (not
-           (or
-            degrade-p-emacs-pre24.3
-            degrade-p-old-emacs
-            degrade-p-noninteractive
-            degrade-p-minimalism))
+      :if (not (or
+             noninteractive
+             degrade-p-minimalism
+             (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
       :init
       (progn
         (flx-ido-mode 1)))
@@ -5143,9 +5080,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (use-package ido-ubiquitous
       :ensure t
       :disabled t
-      :if (and
-           (not degrade-p-minimalism)
-           (not degrade-p-old-emacs))
+      :if (and (not degrade-p-minimalism))
       :commands ido-ubiquitous-mode
       :init
       (progn
@@ -5355,7 +5290,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 ;; (use-package guru-mode
 ;;   :ensure t
-;;   :if (not degrade-p-noninteractive)
+;;   :if (not noninteractive)
 ;;   :commands (guru-mode turn-on-guru-mode turn-off-guru-mode guru-global-mode)
 ;;   :diminish (guru-mode guru-global-mode)
 ;;   :init
@@ -5441,8 +5376,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package popwin
   :ensure t
-  :if (not degrade-p-noninteractive)
-  :defer 1.7
+  :if (not noninteractive)
+  :defer 1
   :commands (popwin-mode popwin:display-buffer popwin:popup-buffer
                          popwin:popup-buffer-tail popwin:display-last-buffer
                          popwin:find-file popwin:find-file-tail
@@ -5480,8 +5415,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
   ;; :disabled t
   :ensure t
   :if (and
-       (not degrade-p-looks)
-       (not degrade-p-noninteractive))
+       (not noninteractive))
   :commands (highlight-indentation-mode
              highlight-indentation-current-column-mode)
   :diminish (highlight-indentation-mode
@@ -5516,7 +5450,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package undo-tree
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (global-undo-tree-mode turn-on-undo-tree-mode)
   :diminish undo-tree-mode
   :init
@@ -5552,7 +5486,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package rainbow-delimiters
   :ensure t
   :commands rainbow-delimiters-mode
-  :if (not degrade-p-font-lock)
+  :if (not noninteractive)
   :bind (("M-o m r" . rainbow-delimiters-mode))
   :init
   (progn
@@ -5569,8 +5503,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package rainbow-mode
   :ensure t
   :if (and
-       (not degrade-p-terminal)
-       (not degrade-p-font-lock))
+       (not (not window-system))
+       (not noninteractive))
   :commands rainbow-mode
   :init
   (progn
@@ -5584,8 +5518,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
   :defer
   :disabled t
   :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-terminal))
+       (not noninteractive)
+       (not (not window-system)))
   :init
   (progn
     (setq
@@ -5612,8 +5546,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package auto-highlight-symbol
   :ensure t
   :if (and
-       (not degrade-p-looks)
-       (not degrade-p-noninteractive))
+       (not noninteractive))
   :commands auto-highlight-symbol-mode
   :diminish auto-highlight-symbol-mode
   :init
@@ -5637,8 +5570,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package highlight-symbol
   :ensure t
   :if (and
-       (not degrade-p-looks)
-       (not degrade-p-noninteractive))
+       (not noninteractive))
   :commands (highlight-symbol-mode highlight-symbol-at-point)
   :diminish highlight-symbol-mode
   :init
@@ -5851,7 +5783,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (use-package helm-bm
       :ensure t
       :commands helm-bm
-      :if (not degrade-p-helm)
       :bind (
              ("C-c b b" . helm-bm)
              ("C-h u" . helm-bm))
@@ -5989,7 +5920,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package volatile-highlights
   :ensure t
-  :if (not degrade-p-looks)
   :commands volatile-highlights-mode
   :diminish volatile-highlights-mode
   :init
@@ -6047,7 +5977,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
     (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks)
 
     (use-package autoinsert
-      :if (not degrade-p-noninteractive)
+      :if (not noninteractive)
       :defer
       :init
       (progn
@@ -6195,9 +6125,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 
 (use-package smex
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-old-emacs))
+  :if (and (not degrade-p-minimalism))
   :commands (smex smex-major-mode-commands smex-show-unbound-commands)
   :bind (("M-x" . smex)
          ("<menu>" . smex)
@@ -6286,9 +6214,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package helm
   :ensure t
   :defer 5.9
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-helm))
+  :if (and (not degrade-p-minimalism))
   :commands (helm-M-x helm-bookmarks helm-browse-code
                       helm-locate helm-mini helm-for-files helm-occur
                       helm-simple-call-tree helm-top helm-ucs helm-org-headlines
@@ -6794,11 +6720,7 @@ minibuffer."
         name))))
 
 (use-package pretty-mode
-  :if (and
-       (not degrade-p-terminal)
-       (not degrade-p-font-lock)
-       (not degrade-p-looks)
-       (not degrade-p-noninteractive))
+  :if (and (window-system) (not noninteractive))
   :commands pretty-mode
   :diminish pretty-mode
   :init
@@ -6820,9 +6742,7 @@ minibuffer."
 
 (use-package pymacs
   :ensure t
-  :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-minimalism))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (pymacs-apply pymacs-call pymacs-eval pymacs-load pymacs-exec
                           pymacs-autoload)
   :init
@@ -7060,7 +6980,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package my-jumps
   :ensure jump
-  :if (not degrade-p-old-emacs)
+
   :commands (django-toggle-app))
 
 (use-package mingus
@@ -7134,9 +7054,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                   (setq-local js-indent-level 2)))))
 
 (use-package uniquify
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not degrade-p-minimalism) (not noninteractive))
   :init
   (progn
     (setq
@@ -7162,7 +7080,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                               smartparens-strict-mode
                               turn-on-smartparens-strict-mode)
   :diminish ""
-  :defer 1.6
+  :defer 1.4
   :init
   (progn
     (setq
@@ -7401,9 +7319,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands solarized-import-faces)
 
 (use-package winner
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not degrade-p-minimalism) (not noninteractive))
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
   :init
@@ -7552,9 +7468,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
             (switch-to-buffer (cfw:cp-get-buffer cp))))))))
 
 (use-package cua-base
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (setq
@@ -7591,17 +7505,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :ensure t
   :commands (aes-insert-password))
 
-(use-package groovy-mode-autoloads
-  :ensure groovy-mode
+(use-package groovy-mode
+  :ensure t
   :mode (("\\.groovy\\'" . groovy-mode)
          ("build\\.gradle\\'" . groovy-mode)))
 
 (use-package real-auto-save
   :ensure t
   :disabled t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands
   (real-auto-save
    turn-on-real-auto-save
@@ -7611,15 +7523,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (add-hook 'org-mode-hook 'turn-on-real-auto-save)))
 
 (use-package autorevert
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :defer
   :init
   (progn
     (setq auto-revert-check-vc-info nil
           auto-revert-verbose nil)
-    (if (not degrade-p-terminal)
+    (if (not (not window-system))
         (setq auto-revert-mode-text " ♻"
               auto-revert-tail-mode-text " ♻~")
       (setq auto-revert-mode-text " ar"
@@ -8014,7 +7924,7 @@ Titus von der Malsburg."
        hardhat-protected-osx-homebrew
        (perl-mode  . hardhat-protected-by-perl-semantic-eof)
        (cperl-mode . hardhat-protected-by-perl-semantic-eof)))
-    (when (not degrade-p-noninteractive)
+    (when (not noninteractive)
       (global-hardhat-mode 1))))
 
 (use-package kite
@@ -8087,8 +7997,9 @@ Titus von der Malsburg."
        ("\\.\\(?:mpe?g\\|mkv\\|avi\\|wmv\\)\\'" "mplayer" ("-idx" file))
        ;; ("\\.\\(?:jp?g\\|png\\)\\'" "display" (file))
        ))
-    (when (and (not degrade-p-minimalism)
-               (not degrade-p-noninteractive))
+    (when (and
+           (not noninteractive)
+           (not degrade-p-minimalism))
       (openwith-mode)))
   :config
   (progn
@@ -8168,9 +8079,7 @@ Titus von der Malsburg."
 
 (use-package git-gutter
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (git-gutter-mode
              global-git-gutter-mode)
   :bind (("M-o m g" . git-gutter-mode))
@@ -8396,7 +8305,7 @@ Titus von der Malsburg."
 
 (use-package keyfreq
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (keyfreq-mode
              keyfreq-autosave-mode)
   :init
@@ -8411,7 +8320,7 @@ Titus von der Malsburg."
 (use-package fic-ext-mode
   :disabled t
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (fic-ext-mode)
   :bind ("M-o m f" . fic-ext-mode)
   :init
@@ -8456,16 +8365,16 @@ Titus von der Malsburg."
 
 (use-package command-log-mode
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (command-log-mode))
 
 (use-package backup-walker
   :ensure t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :commands (backup-walker-start))
 
 (use-package MRU-yank
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :defer
   :init
   (progn
@@ -8585,9 +8494,7 @@ Titus von der Malsburg."
 (use-package lusty-explorer
   :ensure t
   :disabled t
-  :if (and
-       (not degrade-p-noninteractive)
-       (not degrade-p-minimalism))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (lusty-explorer-mode lusty-buffer-explorer lusty-file-explorer)
   :config
   (progn
@@ -8676,7 +8583,7 @@ already present."
 
 (use-package iswitchb
   :disabled t
-  :if (not degrade-p-noninteractive)
+  :if (not noninteractive)
   :init
   (progn
     (iswitchb-mode 1)))
@@ -8736,7 +8643,7 @@ already present."
 
 (use-package python-django
   :ensure t
-  :if (not degrade-p-old-emacs)
+
   :commands (python-django-open-project)
   :bind (("C-x j" . python-django-open-project))
   :init
@@ -8798,14 +8705,12 @@ declaration in a Python file."
 
 (use-package helm-ag
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-ag)
   ;; :bind ("M-o M-a" . helm-ag)
   )
 
 (use-package helm-ag-r
   :ensure t
-  :if (not degrade-p-helm)
   :bind ("M-o M-a" . helm-ag-r))
 
 (use-package google-translate
@@ -8818,7 +8723,6 @@ declaration in a Python file."
 
 (use-package helm-github-stars
   :ensure t
-  :if (not degrade-p-helm)
   :commands helm-github-stars
   :init
   (progn
@@ -8827,7 +8731,6 @@ declaration in a Python file."
 
 (use-package helm-css-scss
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-css-scss helm-css-scss-multi)
   :init
   (progn
@@ -8840,7 +8743,6 @@ declaration in a Python file."
 
 (use-package helm-git-grep
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-git-grep
              helm-git-grep-1
              helm-git-grep-at-point)
@@ -8858,7 +8760,6 @@ if submodules exists, grep submodules too."
 
 (use-package helm-swoop
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-swoop
              helm-multi-swoop-all)
   :init
@@ -8869,7 +8770,6 @@ if submodules exists, grep submodules too."
 (use-package swoop
   :ensure t
   :disabled t
-  :if (not degrade-p-helm)
   :commands (swoop swoop-multi))
 
 (use-package visible-mark
@@ -8884,9 +8784,7 @@ if submodules exists, grep submodules too."
 
 (use-package back-button
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (back-button-mode)
   :diminish ""
   :defer 2
@@ -9006,9 +8904,7 @@ if submodules exists, grep submodules too."
 
 (use-package point-undo
   :ensure t
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (point-undo point-redo)
   :bind (("M-u" . point-undo))
   :init
@@ -9125,8 +9021,8 @@ drag the viewpoint on the image buffer that the window displays."
   :commands tern-mode
   :init
   (progn
-    (unless degrade-p-old-emacs
-      (add-hook 'js2-mode-hook 'tern-mode)))
+    (add-hook 'js2-mode-hook 'tern-mode)
+    )
   :config
   (progn
     (use-package tern-auto-complete
@@ -9153,9 +9049,7 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (string-edit-at-point))
 
 (use-package keep-buffers
-  :if (and
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (keep-buffers-mode)
   :init
   (progn
@@ -9183,10 +9077,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package parenface-plus
   :ensure t
-  :if (and
-       (not degrade-p-terminal)
-       (not degrade-p-minimalism)
-       (not degrade-p-noninteractive))
+  :if (and (not noninteractive) (not (not window-system)) (not degrade-p-minimalism))
   :config
   (progn
     (defun paren-face-add-keyword-other ()
@@ -9234,7 +9125,6 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package helm-recoll
   :ensure t
-  :if (not degrade-p-helm)
   :commands (helm-recoll helm-recoll-all)
   :bind (("M-o r" . helm-recoll-all))
   :config
@@ -9243,7 +9133,6 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package helm-orgcard
   :ensure t
-  :if (not degrade-p-helm)
   :commands helm-orgcard)
 
 (use-package misc
@@ -9298,7 +9187,6 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package helm-pydoc
   :ensure t
-  :if (not degrade-p-helm)
   :commands helm-pydoc)
 
 (use-package know-your-http-well
@@ -9456,7 +9344,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 ;;; Display Emacs load time
 (when (and load-file-name
-           (not degrade-p-noninteractive))
+         (not noninteractive))
   (let ((file-name (file-name-nondirectory load-file-name)))
     (let ((elapsed (float-time (time-subtract (current-time)
                                               emacs-start-time))))

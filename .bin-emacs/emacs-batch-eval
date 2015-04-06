@@ -8,4 +8,4 @@
 set -e
 set -u
 
-exec emacs --quick -Q -q --batch -l ~/.emacs.d/init-batch.el -eval "$1"
+exec emacs --quick -Q -q --batch -l ~/.emacs.d/init-batch -eval "$1"

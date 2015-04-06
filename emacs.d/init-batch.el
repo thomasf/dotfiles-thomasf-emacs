@@ -5,6 +5,6 @@
   "always grab lock."
   (warn "Grabbing lock for: %s" file)
   t)
-(setq degrade-level 100)
+
 (load (expand-file-name "init" (file-name-directory load-file-name)) nil t)
 
