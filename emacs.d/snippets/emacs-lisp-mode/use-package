@@ -2,14 +2,4 @@
 # name: use-package
 # key: use-package
 # --
-(use-package ${1:name}
-  :ensure t
-  :commands $0
-  :init
-  (progn
-  
-    )
-  :config
-  (progn
-  
-    ))
+(use-package $0)
