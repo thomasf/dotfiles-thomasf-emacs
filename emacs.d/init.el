@@ -2038,6 +2038,10 @@ See help of `format-time-string' for possible replacements")
   "Format of date to insert with `insert-current-date-time' func
 See help of `format-time-string' for possible replacements")
 
+(defvar current-date-time-format-compact "%Y%m%d-%H%M%S-%Z"
+  "Format of date to insert with `insert-current-date-time' func
+See help of `format-time-string' for possible replacements")
+
 (defun insert-current-date-time ()
   "insert the current date and time into current buffer.
 Uses `current-date-time-format' for the formatting the date/time."
@@ -2049,6 +2053,12 @@ Uses `current-date-time-format' for the formatting the date/time."
 Uses `current-date-time-format' for the formatting the date/time."
   (interactive)
   (insert (format-time-string current-date-time-format-long (current-time))))
+
+(defun insert-current-date-time-compact ()
+  "insert the current date and time into current buffer.
+Uses `current-date-time-format' for the formatting the date/time."
+  (interactive)
+  (insert (format-time-string current-date-time-format-compact (current-time))))
 
 (defun week-number (date)
   (org-days-to-iso-week
