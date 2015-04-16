@@ -4379,6 +4379,9 @@ Argument FILENAME File to insert."
                 (org-defkey org-mode-map "\C-c[" 'undefined)
                 (org-defkey org-mode-map "\C-c]" 'undefined)))
 
+
+    (use-package ob-http :ensure t)
+    
     (org-babel-do-load-languages
      'org-babel-load-languages
      '((perl . t)
@@ -4389,7 +4392,7 @@ Argument FILENAME File to insert."
        (dot . t)
        (ditaa . t)
        (plantuml . t)
-       ))
+       (http . t)))
 
     (setq-default org-src-lang-modes
                   '(("ocaml" . tuareg) ("elisp" . emacs-lisp) ("ditaa" . artist)
