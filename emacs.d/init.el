@@ -4392,6 +4392,7 @@ Argument FILENAME File to insert."
        (dot . t)
        (ditaa . t)
        (plantuml . t)
+       (sql . t)
        (http . t)))
 
     (setq-default org-src-lang-modes
