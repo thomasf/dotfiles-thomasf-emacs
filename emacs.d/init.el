@@ -5595,7 +5595,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
 (use-package expand-region
   :ensure t
   :commands (er/expand-region
-             er/contract-region)
+             er/contract-region
+             er/mark-inside-quotes)
   :bind (("C-=" . er/expand-region)
          ("M-h" . er/expand-region))
   :init
