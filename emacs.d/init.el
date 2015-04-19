@@ -7939,7 +7939,7 @@ Titus von der Malsburg."
        hardhat-protected-osx-homebrew
        (perl-mode  . hardhat-protected-by-perl-semantic-eof)
        (cperl-mode . hardhat-protected-by-perl-semantic-eof)))
-    (when (not noninteractive)
+    (when (and (not noninteractive) load-file-name)
       (global-hardhat-mode 1))))
 
 (use-package kite
