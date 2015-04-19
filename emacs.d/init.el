@@ -4960,6 +4960,13 @@ See URL `https://pypi.python.org/pypi/flake8'."
                          (t "gofmt")))
     (bind-key "C-c C-c" 'gofmt go-mode-map)
 
+    (use-package go-direx
+      :ensure t
+      :commands go-direx-pop-to-buffer
+      :init
+      (progn
+        (bind-key "C-c d" 'go-direx-pop-to-buffer go-mode-map)))
+
     (use-package go-stacktracer
       :ensure t
       :commands (go-stacktracer-region))
