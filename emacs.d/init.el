@@ -8817,6 +8817,14 @@ if submodules exists, grep submodules too."
   (progn
     (back-button-mode 1)))
 
+(use-package sx-load
+  :ensure sx
+  :commands (sx-inbox sx-search)
+  :init
+  (progn
+    (setq sx-cache-directory
+          (expand-file-name "sx" user-data-directory))))
+
 (use-package syslog-mode
   :ensure t
   :mode (("var/log/syslog.*\\'" . syslog-mode)
