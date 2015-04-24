@@ -4851,6 +4851,42 @@ otherwise use the subtree title."
         :fringe-face 'flycheck-fringe-info
         :error-list-face 'flycheck-error-list-info)
 
+      (flycheck-define-checker go-errcheck
+        "A Go checker for unchecked errors.
+
+See URL `https://github.com/kisielk/errcheck'."
+        :command ("errcheck" (eval (flycheck-go-package-name)))
+        :error-patterns
+        ((warning line-start
+                  (file-name) ":" line ":" column (one-or-more "\t")
+                  (message)
+                  line-end))
+        :error-filter
+        (lambda (errors)
+          (let ((errors (flycheck-sanitize-errors errors))
+                (gosrc (expand-file-name "src/" (getenv "GOPATH"))))
+            (dolist (err errors)
+              ;; File names are relative to the Go source directory, so we need to
+              ;; unexpand and re-expand them
+              (setf (flycheck-error-filename err)
+                    (expand-file-name
+                     ;; Get the relative name back, since Flycheck has already
+                     ;; expanded the name for us
+                     (file-relative-name (flycheck-error-filename err))
+                     ;; And expand it against the Go source directory
+                     gosrc))
+              (-when-let (message (flycheck-error-message err))
+                ;; Improve the messages reported by errcheck to make them more clear.
+                (setf (flycheck-error-message err)
+                      (format "Ignored `error` returned from `%s`" message)))))
+          errors)
+        :modes go-mode
+        :predicate
+        (lambda ()
+          ;; We need a valid package name, since errcheck only works on entire
+          ;; packages, and can't check individual Go files.
+          (and (flycheck-buffer-saved-p) (flycheck-go-package-name))))
+
       (flycheck-define-checker python-flake8
         "A Python syntax and style checker using Flake8.
 
