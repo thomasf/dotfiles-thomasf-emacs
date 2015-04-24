@@ -1,6 +1,6 @@
 # name: for range
 # key: range
 # --
-for ${3:key}, ${2:value} := range ${1:target} {
+for ${3:k}, ${2:v} := range ${1:target} {
 	$0
 }

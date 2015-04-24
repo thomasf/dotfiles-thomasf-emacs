@@ -1,5 +1,5 @@
 # name: Go string to C string: func C.CString(string) *C.char
-# key: C.CString
+# key: CCString
 # binding: 
 # expand-env: ()
 # --
