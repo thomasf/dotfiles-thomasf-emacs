@@ -480,6 +480,9 @@ buffer-local wherever it is set."
        (not (not window-system))
        (not degrade-p-minimalism))
   :commands (sml/setup)
+  :preface
+  (progn
+    (load "smart-mode-line-autoloads" t t))
   :init
   (progn
     (defface sml/my-face-1
@@ -510,10 +513,7 @@ buffer-local wherever it is set."
     (defun my-sml-setup  ()
       (sml/setup)
       (sml/apply-theme nil))
-    (add-hook 'after-init-hook 'my-sml-setup t))
-  :config
-  (progn
-    (load "smart-mode-line-autoloads" nil t)))
+    (add-hook 'after-init-hook 'my-sml-setup t)))
 
 (use-package dynamic-fonts
   :ensure t
@@ -1495,8 +1495,7 @@ buffer-local wherever it is set."
   :config
   (progn
     (add-hook 'helm-after-initialize-hook
-              #'(lambda () (with-helm-buffer (my-set-text-scale-smaller))))
-    ))
+              #'(lambda () (with-helm-buffer (my-set-text-scale-smaller))))))
 
 (defadvice android-logcat (after smaller-font activate)
   (with-current-buffer (get-buffer "*android-logcat*")
@@ -4054,6 +4053,9 @@ overwriting each other's changes."
   :ensure t
   :commands (haskell-mode)
   :mode ("\\.l?hs\\'" . haskell-mode)
+  :preface
+  (progn
+    (load "haskell-mode-autoloads" t t))
   :init
   (progn
     (setq
@@ -4079,18 +4081,18 @@ overwriting each other's changes."
                   '(ac-source-ghc-mod
                     ac-source-yasnippet))
             (ghc-init)))
-        (add-hook 'haskell-mode-hook 'my-ghc-mod-hook))))
-  :config
-  (progn
-    (load "haskell-mode-autoloads" nil t)))
+        (add-hook 'haskell-mode-hook 'my-ghc-mod-hook)))))
 
 (use-package shm
   :ensure t
   :if (not noninteractive)
   :commands structured-haskell-mode)
 
-(setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
-      org-plantuml-jar-path plantuml-jar-path)
+
+
+(progn
+  (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
+        org-plantuml-jar-path plantuml-jar-path))
 
 (use-package plantuml-mode
   :ensure t
@@ -4851,41 +4853,6 @@ otherwise use the subtree title."
         :fringe-face 'flycheck-fringe-info
         :error-list-face 'flycheck-error-list-info)
 
-      (flycheck-define-checker go-errcheck
-        "A Go checker for unchecked errors.
-
-See URL `https://github.com/kisielk/errcheck'."
-        :command ("errcheck" (eval (flycheck-go-package-name)))
-        :error-patterns
-        ((warning line-start
-                  (file-name) ":" line ":" column (one-or-more "\t")
-                  (message)
-                  line-end))
-        :error-filter
-        (lambda (errors)
-          (let ((errors (flycheck-sanitize-errors errors))
-                (gosrc (expand-file-name "src/" (getenv "GOPATH"))))
-            (dolist (err errors)
-              ;; File names are relative to the Go source directory, so we need to
-              ;; unexpand and re-expand them
-              (setf (flycheck-error-filename err)
-                    (expand-file-name
-                     ;; Get the relative name back, since Flycheck has already
-                     ;; expanded the name for us
-                     (file-relative-name (flycheck-error-filename err))
-                     ;; And expand it against the Go source directory
-                     gosrc))
-              (-when-let (message (flycheck-error-message err))
-                ;; Improve the messages reported by errcheck to make them more clear.
-                (setf (flycheck-error-message err)
-                      (format "Ignored `error` returned from `%s`" message)))))
-          errors)
-        :modes go-mode
-        :predicate
-        (lambda ()
-          ;; We need a valid package name, since errcheck only works on entire
-          ;; packages, and can't check individual Go files.
-          (and (flycheck-buffer-saved-p) (flycheck-go-package-name))))
 
       (flycheck-define-checker python-flake8
         "A Python syntax and style checker using Flake8.
@@ -5846,7 +5813,6 @@ See URL `https://pypi.python.org/pypi/flake8'."
              ("C-h u" . helm-bm))
       :config
       (progn
-        (use-package helm-config)
         (use-package bm)))
     (setq
      bm-repository-file (expand-file-name
@@ -6287,6 +6253,9 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ("C-h r" . helm-recentf)
          ;; ("<f6>" . helm-recentf)
          ("C-x f L" . helm-locate))
+  :preface
+  (progn
+    (load "helm-autoloads" t t))
   :init
   (progn
     (use-package helm-apt
@@ -6333,24 +6302,14 @@ See URL `https://pypi.python.org/pypi/flake8'."
       (progn
         (defvar helm-descbinds-Orig-describe-bindings
           (symbol-function 'describe-bindings))
-        (fset 'describe-bindings 'helm-descbinds))))
-  :config
-  (progn
-    (use-package helm-config)
-    ;; (use-package helm-files)
-    ;; (use-package helm-help)
-    (use-package helm-projectile)
-    ;; (use-package helm-adaptative
-    ;; :commands (helm-adaptative-mode))
-    ))
+        (fset 'describe-bindings 'helm-descbinds)))))
 
 (use-package ibuffer
   :defer
   :bind (("C-x b n" . ibuffer)
          ("C-h h" . ibuffer)
          ("C-h C-h" . ibuffer)
-         ("<XF86Search>" . ibuffer)
-         )
+         ("<XF86Search>" . ibuffer))
   :init
   (progn
     (defvar my-ibufffer-separator " • ")
@@ -8856,7 +8815,7 @@ if submodules exists, grep submodules too."
 (use-package sx-load
   :ensure sx
   :commands (sx-inbox sx-search)
-  :init
+  :preface
   (progn
     (setq sx-cache-directory
           (expand-file-name "sx" user-data-directory))))
