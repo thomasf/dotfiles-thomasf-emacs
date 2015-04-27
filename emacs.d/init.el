@@ -3812,7 +3812,9 @@ If FILE already exists, signal an error."
      recentf-exclude '(file-remote-p
                        "ido.last"
                        "org-clock-save.el"
-                       "COMMIT_EDITMSG"))
+                       "COMMIT_EDITMSG"
+                       ".*-autoloads\\.el\\'"
+                       "[/\\]\\.git/"))
 
     (defun find-recent-file ()
       "Use `ido-completing-read' to \\[find-file] a recent file"
