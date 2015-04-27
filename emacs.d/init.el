@@ -4295,7 +4295,7 @@ Argument FILENAME File to insert."
                           (org-agenda-files :maxlevel . 9))
      org-refile-use-outline-path 'file
      org-return-follows-link t
-     org-startup-folded (not noninteractive)
+     org-startup-folded nil
      org-startup-indented t
      org-startup-with-inline-images (not noninteractive)
      org-startup-with-inline-images noninteractive
