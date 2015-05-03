@@ -1487,7 +1487,8 @@ buffer-local wherever it is set."
                    pt-search-mode-hook
                    grep-mode-hook
                    direx:direx-mode-hook
-                   debugger-mode-hook))
+                   debugger-mode-hook
+                   prodigy-view-mode-hook))
 
 (use-package helm
   :defer
@@ -5435,6 +5436,7 @@ See URL `https://github.com/golang/lint'."
         ("*Ido Completions*" :noselect t :position bottom)
         (direx:direx-mode :position left :width .25 :dedicated t)
         ("*Messages*" :height .25)
+        (prodigy-mode :height .25)
         ("*Keys*" :height .85)
         ("*Pp Macroexpand Output*" :noselect t)
         "*Personal Keybindings*"
@@ -9363,7 +9365,8 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package prodigy
   :ensure t
-  :commands (prodigy prodigy-define-service))
+  :commands (prodigy prodigy-define-service)
+  :bind ("C-h p" . prodigy))
 
 (use-package whitespace-cleanup-mode
   :disabled t
