@@ -4896,8 +4896,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
          (warning line-start
                   (file-name) ":" line ":" (optional column ":") " "
                   (message (or "F"            ; Pyflakes in Flake8 >= 2.0
-                               "W"            ; Pyflakes in Flake8 < 2.0
-                               "C")           ; McCabe in Flake >= 2.0
+                              "W"            ; Pyflakes in Flake8 < 2.0
+                              "C")           ; McCabe in Flake >= 2.0
                            (one-or-more digit) (zero-or-more not-newline))
                   line-end)
 
@@ -4910,7 +4910,19 @@ See URL `https://pypi.python.org/pypi/flake8'."
          ;; Syntax errors in Flake8 < 2.0, in Flake8 >= 2.0 syntax errors are caught
          ;; by the E.* pattern above
          (error line-start (file-name) ":" line ":" (message) line-end))
-        :modes python-mode))))
+        :modes python-mode)
+
+      (flycheck-define-checker go-golint
+        "A Go style checker using Golint.
+
+See URL `https://github.com/golang/lint'."
+        :command ("golint" source)
+        :error-patterns
+        ((info line-start (file-name) ":" line ":" column ": " (message) line-end))
+        :modes go-mode
+        :next-checkers (go-vet
+                        ;; Fall back, if go-vet doesn't exist
+                        go-build go-test go-errcheck)))))
 
 (use-package unbound
   :ensure t
