@@ -4799,9 +4799,9 @@ otherwise use the subtree title."
     (defun flycheck-turn-on-maybe ()
       (unless
           (or
+           buffer-read-only
            (hardhat-buffer-included-p (current-buffer))
-           (current-buffer-remote-p)
-           buffer-read-only)
+           (current-buffer-remote-p))
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
