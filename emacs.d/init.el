@@ -4804,7 +4804,7 @@ otherwise use the subtree title."
     (setq
      flycheck-highlighting-mode 'lines
      ;; flycheck-highlighting-mode 'symbols
-     ;; flycheck-disabled-checkers '(go-golint go-govet)
+     flycheck-disabled-checkers '(javascript-jshint)
 
      flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
