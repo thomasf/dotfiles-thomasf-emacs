@@ -19,6 +19,10 @@
      (menu-bar-mode -1))
 (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(setq default-frame-alist '((vertical-scroll-bars . nil)
+                            (tool-bar-lines . 0)
+                            (menu-bar-lines . 0)
+                            (fullscreen . nil)))
 (when load-file-name
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
@@ -72,6 +76,8 @@ re-downloaded in order to locate PACKAGE."
 (eval-when-compile
   (require-package 'use-package)
   (require 'use-package)
+  ;; (require-package 'names)
+  ;; (require 'names)
   (defmacro executable-find* (command)
     "Macro form of executable-find..."
     (executable-find command)))
@@ -117,9 +123,10 @@ re-downloaded in order to locate PACKAGE."
 (require 'private-init nil (not my-log-verbose))
 
 ;;;; startup.el
+
+(defun display-startup-echo-area-message ())
 (setq
  auto-save-list-file-prefix (expand-file-name
-
                              "auto-save-list/" user-data-directory)
  inhibit-startup-message t
  inhibit-splash-screen t
@@ -230,7 +237,7 @@ buffer-local wherever it is set."
   "Keymaps for command `region-bindings-mode-map'.")
 
 (setq use-package-verbose my-log-verbose
-      use-package-debug my-log-verbose)
+      use-package-debug nil)
 
 ;;;; utils
 ;; shorthand for interactive lambdas
@@ -473,6 +480,7 @@ buffer-local wherever it is set."
                   (when (not dark-theme-on) (dark-theme))
                 (when dark-theme-on (bright-theme)))))
 
+(setq sml/theme nil)
 (use-package smart-mode-line
   :ensure t
   :if (and
@@ -485,35 +493,14 @@ buffer-local wherever it is set."
     (load "smart-mode-line-autoloads" t t))
   :init
   (progn
-    (defface sml/my-face-1
-      '((t (:foreground "#2aa198" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-2
-      '((t (:foreground "#859900" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-3
-      '((t (:foreground "#6c71c4" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-4
-      '((t (:foreground "#b58900" :weight bold))) "sml/my-faces")
-    (defface sml/my-face-5
-      '((t (:foreground "#dc322f" :weight bold :inverse-video t))) "sml/my-faces")
     (setq
      sml/shorten-modes nil
      sml/projectile-replacement-format ":p/%s:"
      sml/replacer-regexp-list
      '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
        ("^/sudo:.*:" ":su:")
-       ("^~/dropbox/" ":db:"))
-     sml/prefix-face-list
-     '((":su:" sml/my-face-5)
-       (":e/" sml/my-face-4)
-       (":p/" sml/my-face-3)
-       (":nt:" sml/my-face-2)
-       (":dc:" sml/my-face-2)
-       (":db:" sml/my-face-2)
-       ("" sml/my-face-1)))
-    (defun my-sml-setup  ()
-      (sml/setup)
-      (sml/apply-theme nil))
-    (add-hook 'after-init-hook 'my-sml-setup t)))
+       ("^~/dropbox/" ":db:")))
+    (sml/setup)))
 
 (use-package dynamic-fonts
   :ensure t
@@ -1869,6 +1856,28 @@ display, depending on the window manager)."
   )
 
 ;;; functions: editing/inserting/in buffer navigation
+
+;;;; enable "regular" backspace behaviour in isearch
+(defun isearch-delete-something ()
+  "Delete non-matching text or the last character."
+  (interactive)
+  (if (= 0 (length isearch-string))
+      (ding)
+    (setq isearch-string
+          (substring isearch-string
+                     0
+                     (or (isearch-fail-pos) (1- (length isearch-string)))))
+    (setq isearch-message
+          (mapconcat #'isearch-text-char-description isearch-string "")))
+  (if isearch-other-end (goto-char isearch-other-end))
+  (isearch-search)
+  (isearch-push-state)
+  (isearch-update))
+
+(define-key isearch-mode-map (kbd "<backspace>")
+  #'isearch-delete-something)
+
+
 ;;;; duplicate line /  region
 
 (defun duplicate-line-or-region (arg)
@@ -3720,13 +3729,12 @@ If FILE already exists, signal an error."
   (key-chord-mode
    key-chord-define
    key-chord-define-global)
+  :defer 0.2
   :init
   (progn
     (setq
      key-chord-two-keys-delay 0.05
-     key-chord-one-key-delay 0.15)
-    (when (not (not window-system))
-      (key-chord-mode 1)))
+     key-chord-one-key-delay 0.15))
   :config
   (progn
     (mapc
@@ -3787,7 +3795,12 @@ If FILE already exists, signal an error."
        ;; ("FF" . jump-char-forward)
        ;; ("BB" . jump-char-backward)
        ;; ("og" . magit-status)
-       ))))
+       ))
+
+    (when (window-system)
+      (cl-letf (((symbol-function 'message)
+                 (lambda (fmt &rest _))))
+        (key-chord-mode 1)))))
 
 (use-package session
   :disabled t
@@ -3873,7 +3886,10 @@ overwriting each other's changes."
                        (-concat new-in-other-process known-now)
                        (-concat removed-after-sync removed-in-other-process)))))
         (setq recentf-list result)))
-    (recentf-mode 1)))
+
+    (cl-letf (((symbol-function 'message)
+               (lambda (fmt &rest _))))
+      (recentf-mode 1))))
 
 (use-package savehist
   :if (and (not noninteractive) (not degrade-p-minimalism))
@@ -4132,9 +4148,9 @@ overwriting each other's changes."
                              "org-clock-save.el" user-data-directory)
      org-id-locations-file (expand-file-name
                             "org-id-locations" user-data-directory))
-    (use-package org-caldav
+    (use-package org-gcal
       :ensure t
-      :commands org-caldav-sync)
+      :commands (org-gcal-sync))
 
     (use-package org-annotate-file
       :bind ("C-c C-l" . org-annotate-file))
@@ -4253,13 +4269,7 @@ Argument FILENAME File to insert."
                                      "org/file-annotations.org"
                                      user-notes-directory)
      ;; org-annotate-file-add-search nil
-     org-caldav-files org-agenda-files
-     org-caldav-backup-file (expand-file-name
-                             "org-caldav-backup.org" user-notes-directory)
-     org-caldav-save-directory (expand-file-name ".org-caldav"
-                                                 user-notes-directory)
-     org-caldav-inbox (expand-file-name
-                       "agenda/from-gcal.org" user-notes-directory)
+
      ;; org-hide-block-startup t
      org-agenda-block-separator nil
      org-agenda-dim-blocked-tasks nil
@@ -5416,7 +5426,6 @@ See URL `https://github.com/golang/lint'."
 (use-package popwin
   :ensure t
   :if (not noninteractive)
-  :defer 1
   :commands (popwin-mode popwin:display-buffer popwin:popup-buffer
                          popwin:popup-buffer-tail popwin:display-last-buffer
                          popwin:find-file popwin:find-file-tail
@@ -5428,6 +5437,7 @@ See URL `https://github.com/golang/lint'."
          ("M-o p s" . popwin:select-popup-window)
          ("M-o p S" . popwin:stick-popup-window)
          ("M-o p f" . popwin:find-file-tail))
+  :defer 0.2
   :config
   (--each
       '(("*identify*" :noselect t)
@@ -5450,6 +5460,10 @@ See URL `https://github.com/golang/lint'."
         "*git-gutter:diff*")
     (push it popwin:special-display-config)
     (popwin-mode)))
+
+(use-package import-popwin
+  :ensure t
+  :commands (import-popwin))
 
 (use-package highlight-indentation
   ;; :disabled t
@@ -6261,7 +6275,7 @@ See URL `https://github.com/golang/lint'."
                       helm-org-keywords helm-mode helm-dired-mode
                       helm-recentf helm-find)
   :bind (("M-o M-x" . helm-M-x)
-         ("C-h a" . helm-c-apropos)
+         ("C-h a" . helm-apropos)
          ("M-s b" . helm-occur)
          ;; ("C-x f h" . helm-for-files)
          ;; ("<f7>" . helm-for-files)
@@ -9390,14 +9404,25 @@ drag the viewpoint on the image buffer that the window displays."
   (let ((file-name (file-name-nondirectory load-file-name)))
     (let ((elapsed (float-time (time-subtract (current-time)
                                               emacs-start-time))))
-      (message "Loading %s...done (%.3fs)" file-name elapsed))
+
+      (with-current-buffer (get-buffer-create " *emacslog*")
+        (insert (format "init-loaded (%.3fs)" elapsed))))
     (add-hook 'after-init-hook
               `(lambda ()
                  (let ((elapsed (float-time (time-subtract (current-time)
                                                            emacs-start-time))))
-                   (message "Loading %s...done (%.3fs) [after-init]"
-                            ,file-name elapsed)))
+                   (with-current-buffer (get-buffer-create " *emacslog*")
+                     (insert (format "after-init  (%.3fs)" elapsed))))
+                 t)
               t)))
+
+
+;; this thing just nuges emacs to adjust it's window size, some times it starts
+;; in 80x35.
+(and load-file-name
+   window-system
+   (not noninteractive)
+   (message nil))
 
 ;;; File local vars
 
