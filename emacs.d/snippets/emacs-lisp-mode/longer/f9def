@@ -1,0 +1,12 @@
+# name: f9 defun quick setup
+# key: f9def
+# expand-env: ()
+# --
+
+(defun temp-func-f9 ()
+  "temorary funk for f9"
+  (interactive)
+  $0
+)
+
+(bind-key* "<f9>" 'temp-func-f9)
