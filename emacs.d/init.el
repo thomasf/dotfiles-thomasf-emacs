@@ -4986,7 +4986,15 @@ See URL `https://github.com/golang/lint'."
     (setq gofmt-command (cond
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
-    (bind-key "C-c C-c" 'gofmt go-mode-map)
+
+    (defun my-go-go-command ()
+      "Save all buffers, run go fmt and then flycheck, bound to C-c C-C in my go-mode."
+      (interactive)
+      (silent-save-some-buffers)
+      (gofmt)
+      (flycheck-buffer))
+
+    (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
 
     (use-package go-direx
       :ensure t
