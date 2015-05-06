@@ -5455,28 +5455,28 @@ See URL `https://github.com/golang/lint'."
          ("M-o p s" . popwin:select-popup-window)
          ("M-o p S" . popwin:stick-popup-window)
          ("M-o p f" . popwin:find-file-tail))
-  :defer 0.2
   :config
-  (--each
-      '(("*identify*" :noselect t)
-        ("*Help*" :stick t)
-        (help-mode :noselect t)
-        ("*Ido Completions*" :noselect t :position bottom)
-        (direx:direx-mode :position left :width .25 :dedicated t)
-        ("*Messages*" :height .25)
-        (prodigy-mode :height .25)
-        ("*Keys*" :height .85)
-        ("*Pp Macroexpand Output*" :noselect t)
-        "*Personal Keybindings*"
-        (flycheck-error-list-mode :stick t)
-        ("*Org Select*" :position right :width 79 :noselect t)
-        (" *Agenda Commands*" :position right :width 79)
-        ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
-        ("*magit-commit*" :noselect t :height 0.40)
-        ("*magit-diff*" :noselect t :height 0.40)
-        ("*magit-edit-log*" :noselect t :height 0.25)
-        "*git-gutter:diff*")
-    (push it popwin:special-display-config)
+  (progn
+    (--each
+        '(("*identify*" :noselect t)
+          ("*Help*" :stick t)
+          (help-mode :noselect t)
+          ("*Ido Completions*" :noselect t :position bottom)
+          (direx:direx-mode :position left :width .25 :dedicated t)
+          ("*Messages*" :height .25)
+          (prodigy-mode :height .25)
+          ("*Keys*" :height .85)
+          ("*Pp Macroexpand Output*" :noselect t)
+          "*Personal Keybindings*"
+          (flycheck-error-list-mode :stick t)
+          ("*Org Select*" :position right :width 79 :noselect t)
+          (" *Agenda Commands*" :position right :width 79)
+          ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
+          ("*magit-commit*" :noselect t :height 0.40)
+          ("*magit-diff*" :noselect t :height 0.40)
+          ("*magit-edit-log*" :noselect t :height 0.25)
+          "*git-gutter:diff*")
+      (push it popwin:special-display-config))
     (popwin-mode)))
 
 (use-package import-popwin
