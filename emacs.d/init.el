@@ -3018,7 +3018,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package feature-mode
   :ensure t
-  :mode (("\\.feature\'" . feature-mode)))
+  :mode (("\\.feature\\'" . feature-mode)))
 
 (use-package git-timemachine
   :ensure t
