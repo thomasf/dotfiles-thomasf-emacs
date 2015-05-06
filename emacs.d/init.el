@@ -4990,7 +4990,17 @@ See URL `https://github.com/golang/lint'."
     (defun my-go-go-command ()
       "Save all buffers, run go fmt and then flycheck, bound to C-c C-C in my go-mode."
       (interactive)
-      (silent-save-some-buffers)
+      (save-window-excursion
+        (--each (-difference (buffer-list) (list (current-buffer)))
+          (and
+           (buffer-live-p it)
+           (buffer-modified-p it)
+           (eq major-mode 'go-mode)
+           (not (eq major-mode 'messages-buffer-mode))
+           (not (buffer-base-buffer it))
+           (buffer-file-name it)
+           (with-current-buffer it
+             (save-buffer)))))
       (gofmt)
       (flycheck-buffer))
 
