@@ -494,6 +494,10 @@ buffer-local wherever it is set."
   :init
   (progn
     (setq
+     sml/modified-char "m"
+     sml/read-only-char "r"
+     sml/outside-modified-char "M"
+     sml/mule-info ""
      sml/shorten-modes nil
      sml/projectile-replacement-format ":p/%s:"
      sml/replacer-regexp-list
@@ -859,11 +863,14 @@ buffer-local wherever it is set."
 
 (use-package compile
   :defer
-  :init
+  :config
   (progn
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 '(my-go . ("^\t+\\([^()\t\n]+\\):\\([0-9]+\\):? .*$" 1 2)) t)
     (setq compilation-ask-about-save nil
           compilation-error-regexp-alist
           '(
+            my-go
             absoft
             ;; ada
             aix
@@ -922,6 +929,7 @@ buffer-local wherever it is set."
       (setq truncate-lines t)
       (setq-local truncate-partial-width-windows nil))
     (add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
+    (add-hook 'compilation-minor-mode-hook 'my-compilation-mode-hook)
     (defun my-colorize-compilation-buffer ()
       (when (eq major-mode 'compilation-mode)
         (use-package ansi-color)
@@ -1046,6 +1054,20 @@ buffer-local wherever it is set."
 (global-set-key (kbd "C-x C-2") 'split-window-below)
 (global-set-key (kbd "C-x C-3") 'split-window-right)
 (global-set-key (kbd "C-x C-0") 'delete-window)
+
+(unbind-key "M-t")
+(bind-keys
+ ;; :map undo-tree-visualizer-mode-map
+ :prefix-map my-transpose-map
+ :prefix "M-t"
+ ("c" . transpose-chars)
+ ("w" . transpose-words)
+ ("t" . transpose-words)
+ ("M-t" . transpose-words)
+ ("l" . transpose-lines)
+ ("e" . transpose-sexps)
+ ("s" . transpose-sentences)
+ ("p" . transpose-paragraphs))
 
 
 ;;; functions: buffers
@@ -2816,6 +2838,7 @@ for the current buffer's file name, and the line number at point."
   :if (not noninteractive)
   :commands dired-toggle-sudo)
 
+
 (use-package download-region
   :ensure t
   :commands download-region-as-url
@@ -2830,6 +2853,10 @@ for the current buffer's file name, and the line number at point."
   :config
   (progn
     (downplay-mode 1)))
+
+(use-package dpaste
+  :commands (dpaste-region dpaste-buffer dpaste-region-or-buffer)
+  :ensure t)
 
 (use-package dropdown-list
   :ensure t
@@ -3019,6 +3046,22 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package feature-mode
   :ensure t
   :mode (("\\.feature\\'" . feature-mode)))
+
+(use-package flx-isearch
+  :ensure t
+  :disabled t
+  :bind (( "C-s" . flx-isearch-forward)
+         ( "C-r" . flx-isearch-backward)))
+
+(use-package gitlab
+  :ensure t
+  :commands (gitlab-version)
+  :init
+  (progn
+    (use-package helm-gitlab
+      :ensure t
+      :commands (helm-gitlab-issues
+                 helm-gitlab-projects))))
 
 (use-package git-timemachine
   :ensure t
@@ -3332,8 +3375,8 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 
 (use-package scroll-restore
   :ensure t
+  :if (not noninteractive)
   :commands scroll-restore-mode
-  :defer 1.8
   :config
   (progn
     (setq
@@ -3414,6 +3457,14 @@ ARG is a prefix argument.  If nil, copy the current difference region."
 (use-package string-inflection
   :ensure t
   :commands string-inflection-cycle)
+
+(use-package todotxt
+  :ensure t
+  :commands todotxt
+  :init
+  (progn
+    (setq
+     todotxt-file (expand-file-name "~/Dropbox/todo/todo.txt"))))
 
 (use-package toggle-quotes
   :ensure t
@@ -5444,6 +5495,7 @@ See URL `https://github.com/golang/lint'."
 (use-package popwin
   :ensure t
   :if (not noninteractive)
+  :defer 0.5
   :commands (popwin-mode popwin:display-buffer popwin:popup-buffer
                          popwin:popup-buffer-tail popwin:display-last-buffer
                          popwin:find-file popwin:find-file-tail
@@ -5461,10 +5513,12 @@ See URL `https://github.com/golang/lint'."
         '(("*identify*" :noselect t)
           ("*Help*" :stick t)
           (help-mode :noselect t)
-          ("*Ido Completions*" :noselect t :position bottom)
+          ("*Ido Completions*" :noseelect t :position bottom)
           (direx:direx-mode :position left :width .25 :dedicated t)
-          ("*Messages*" :height .25)
-          (prodigy-mode :height .25)
+          ("*Messages*" :height .40 :tail t)
+          ("*pt-search*" :height .40 :stick t)
+          ("*prodigy*" :height .40)
+          ("^\\*prodigy-.*\\*$" :regexp t :height .40 :stick t :tail t)
           ("*Keys*" :height .85)
           ("*Pp Macroexpand Output*" :noselect t)
           "*Personal Keybindings*"
@@ -9398,7 +9452,45 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package prodigy
   :ensure t
   :commands (prodigy prodigy-define-service)
-  :bind ("C-h p" . prodigy))
+  :bind ("C-h p" . prodigy)
+  :config
+  (progn
+    (defun prodigy-go-build (service)
+      (prodigy-insert-output
+       service
+       "- - - - - - - - - - - - - - - - - - - - - -\n")
+      (let ((cmd (plist-get service :command)))
+        (when (file-exists-p cmd)
+          (delete-file cmd))
+        (with-temp-buffer
+          (let ((success (eq 0 (call-process "go" nil t nil "build"
+                                             "-o"  cmd (plist-get service :go-main)))))
+            (prodigy-insert-output service (buffer-string))
+            (unless success
+              (error "prodigy-go-build-failed"))))))
+
+    (defun prodigy-docker-compose-up (service)
+      (prodigy-insert-output
+       service
+       "- - - - - - - - - - - - - - - - - - - - - -\n")
+      (with-temp-buffer
+        (let ((success (eq 0 (call-process "docker-compose" nil t nil "up" "-d"))))
+          (prodigy-insert-output service (buffer-string))
+          (unless success
+            (error "docker-compose up failed")))))
+
+    (defun my-prodigy-view-mode-hook ()
+      (compilation-minor-mode))
+    (add-hook 'prodigy-view-mode-hook 'my-prodigy-view-mode-hook)
+
+    (defun my-prodigy-display-process ()
+      "Switch to process buffer for service at current line."
+      (interactive)
+      (-when-let (service (prodigy-service-at-pos))
+        (-if-let (buffer (get-buffer (prodigy-buffer-name service)))
+            (progn (popwin:close-popup-window) (display-buffer buffer) (prodigy-view-mode))
+          (message "Nothing to show for %s" (plist-get service :name)))))
+    (bind-key "RET" 'my-prodigy-display-process prodigy-mode-map)))
 
 (use-package whitespace-cleanup-mode
   :disabled t
