@@ -2,7 +2,7 @@
 # key: struct
 # description: add a struct
 # --
-type ${1:StructName} struct {
-  ${2:VariableName}	${3:Type}
+// $1 .
+type $1 struct {
 	$0
 }

@@ -10,7 +10,7 @@
 (defconst emacs-start-time (current-time))
 
 (setq-default ;; alloc.c
- gc-cons-threshold 50000000
+ gc-cons-threshold (* 1204 1204 200)
  gc-cons-percentage 0.5)
 
 ;;;; Set some things early
@@ -995,13 +995,28 @@ buffer-local wherever it is set."
 ;; (bind-key "<f5>" 'ibuffer)
 (bind-key "C-H-n" 'forward-paragraph)
 (bind-key "C-H-p" 'backward-paragraph)
-(bind-key "M-H-n" 'next-error)
-(bind-key "M-H-p" 'previous-error)
+
+(defun my-next-error (&optional arg reset)
+  ""
+  (interactive)
+  (next-error arg reset)
+  (recenter)
+)
+
+
+(defun my-previous-error (&optional n)
+  ""
+  (interactive)
+  (my-next-error (- (or n 1))))
+
+
+(bind-key "M-H-n" 'my-next-error)
+(bind-key "M-H-p" 'my-previous-error)
 
 (bind-key "C-s-n" 'forward-paragraph)
 (bind-key "C-s-p" 'backward-paragraph)
-(bind-key "M-s-n" 'next-error)
-(bind-key "M-s-p" 'previous-error)
+(bind-key "M-s-n" 'my-next-error)
+(bind-key "M-s-p" 'my-previous-error)
 
 ;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
 ;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
@@ -2763,7 +2778,7 @@ for the current buffer's file name, and the line number at point."
     (unless (executable-find* "hsadmin")
       (exec-path-from-shell-initialize))))
 
-;;; packages: packages sorted alphabetically by name
+;;; use-package packages: packages sorted alphabetically by name
 
 (use-package ac-cider
   :ensure t
@@ -3547,7 +3562,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands (ztree-diff ztree-dir))
 
-;;; packages: unsorted packages
+;;; use-package packages: unsorted packages
 (use-package truthy
   :ensure t
   :commands (truthy
@@ -4221,13 +4236,7 @@ overwriting each other's changes."
         (setq
          org-journal-dir
          (expand-file-name "org/journal/" user-notes-directory)
-         org-journal-file-pattern "[0-9]\\{8\\}$")))
-
-    (use-package org-manage
-      :commands org-manage
-      :init
-      (progn
-        (setq org-manage-directory-org user-notes-directory))))
+         org-journal-file-pattern "[0-9]\\{8\\}$"))))
   :config
   (progn
     (unbind-key "M-h" org-mode-map)
@@ -7165,7 +7174,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :ensure t
   :commands json-mode
   :mode (("\\.json\\'" . json-mode)
-         ("\\.ipynb\\'" . json-mode))
+         ("\\.ipynb\\'" . json-mode)
+         ("\\.eslintrc\\'" . json-mode))
   :config
   (progn
     (add-hook 'json-mode-hook
@@ -8492,13 +8502,6 @@ Titus von der Malsburg."
   :if (not noninteractive)
   :commands (backup-walker-start))
 
-(use-package MRU-yank
-  :if (not noninteractive)
-  :defer
-  :init
-  (progn
-    (setq MRU-yank-mode t)))
-
 (use-package ws-trim
   :disabled t
   :ensure t)
@@ -9479,16 +9482,61 @@ drag the viewpoint on the image buffer that the window displays."
           (unless success
             (error "docker-compose up failed")))))
 
+    (prodigy-define-tag
+       :name 'bin
+       :hide t
+       :path (lambda ()
+               (file-truename default-directory)))
+
+    (prodigy-define-tag
+      :name 'go-build
+      :hide t
+      :init  (prodigy-callback (service) (prodigy-go-build service))
+      :tags '(bin))
+
+    (prodigy-define-tag
+      :name 'docker-compose-up
+      :command "docker-compose"
+      :args '("logs")
+      :hide t
+      :init (prodigy-callback (service) (prodigy-docker-compose-up service)))
+
+    (prodigy-define-tag
+      :name 'webpack
+      :hide t
+      :command "webpack"
+      :args (prodigy-callback (service)
+              (let ((config (or(plist-get service :webpack-config ) "webpack.config.js")) )
+                (-concat (list "--config" config "--watch"  "--debug")
+                         (plist-get service :webpack-args)))))
+
+    (setq my-prodigy-truncate-amount 5000
+          my-prodigy-truncate-threshold 15000)
+    ;; NOTE overriden
+    (defun prodigy-truncate-buffer (service _)
+      "Truncate SERVICE process view buffer to its maximum size."
+      (prodigy-with-service-process-buffer service
+        (when (>  (line-number-at-pos (point-max)) my-prodigy-truncate-threshold)
+          (save-excursion
+            (goto-char (point-min))
+            (forward-line my-prodigy-truncate-amount)
+            (delete-region (point-min) (point))))))
+
     (defun my-prodigy-view-mode-hook ()
       (compilation-minor-mode))
     (add-hook 'prodigy-view-mode-hook 'my-prodigy-view-mode-hook)
 
+    ;; NOTE overriden
     (defun my-prodigy-display-process ()
       "Switch to process buffer for service at current line."
       (interactive)
       (-when-let (service (prodigy-service-at-pos))
         (-if-let (buffer (get-buffer (prodigy-buffer-name service)))
-            (progn (popwin:close-popup-window) (display-buffer buffer) (prodigy-view-mode))
+            (progn
+              (popwin:close-popup-window)
+              (display-buffer buffer)
+              (with-current-buffer buffer
+                  (prodigy-view-mode)))
           (message "Nothing to show for %s" (plist-get service :name)))))
     (bind-key "RET" 'my-prodigy-display-process prodigy-mode-map)))
 

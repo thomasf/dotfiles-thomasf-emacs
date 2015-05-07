@@ -93,6 +93,7 @@
         my-join-line
         my-mark-char-backward
         my-mark-word
+        my-mark-word-backward
         new-line-above
         new-line-dwim
         open-line-above
