@@ -5513,7 +5513,7 @@ See URL `https://github.com/golang/lint'."
         '(("*identify*" :noselect t)
           ("*Help*" :stick t)
           (help-mode :noselect t)
-          ("*Ido Completions*" :noseelect t :position bottom)
+          ("*Ido Completions*" :noselect t :position bottom)
           (direx:direx-mode :position left :width .25 :dedicated t)
           ("*Messages*" :height .40 :tail t)
           ("*pt-search*" :height .40 :stick t)
