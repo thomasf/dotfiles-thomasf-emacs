@@ -37,16 +37,9 @@ This is just a copy of the fully expanded macro from dash."
               (1+ it))))
     (nreverse result)))
 
-(defconst user-lib-directory
-  (expand-file-name "lib" user-emacs-directory))
+
 (defconst user-site-lisp-directory
   (expand-file-name "site-lisp/shared" user-emacs-directory))
-(defconst user-local-site-lisp-directory
-  (expand-file-name "emacs-site-lisp" "~/.opt"))
-(defconst user-override-directory
-  (expand-file-name "override" user-emacs-directory))
-(defconst user-local-override-directory
-  (expand-file-name "emacs-override" "~/.opt"))
 (defconst user-themes-directory
   (expand-file-name "themes" user-emacs-directory))
 (defconst user-notes-directory
@@ -55,8 +48,6 @@ This is just a copy of the fully expanded macro from dash."
 ;; These should always exist
 (make-directory user-data-directory t)
 (make-directory user-cache-directory t)
-(make-directory user-local-override-directory t)
-(make-directory user-local-site-lisp-directory t)
 
 ;; emacs23 compat
 (if (boundp 'custom-theme-load-path)
@@ -74,10 +65,7 @@ This is just a copy of the fully expanded macro from dash."
     (require 'package)
     (package-initialize)
     (dolist (dir (nreverse
-                  (list user-override-directory
-                        user-lisp-directory
-                        user-lib-directory
-                        user-local-site-lisp-directory
+                  (list user-lisp-directory
                         user-site-lisp-directory)))
       (dolist (entry (nreverse (directory-files-and-attributes dir)))
         (and

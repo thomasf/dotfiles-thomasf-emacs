@@ -81,7 +81,7 @@ This is just a copy of the fully expanded macro from dash."
              (f-delete file)))
          t)
 
- (--each '("site-lisp" "override" "lib" "lisp")
+ (--each '("site-lisp" "lisp")
   (f-files (f-join makeup-emacsd-path it)
            (lambda (file)
              (when (and
@@ -131,13 +131,9 @@ This is just a copy of the fully expanded macro from dash."
 
 (use-package multi-term)
 (defvar user-site-lisp-directory)
-(defvar user-override-directory)
-(defvar user-lib-directory)
 (defvar user-lisp-directory)
 (makeup-log "byte recompile emacsd lisp dirs")
 (byte-recompile-directory user-site-lisp-directory 0)
-(byte-recompile-directory user-override-directory 0)
-(byte-recompile-directory user-lib-directory 0)
 (byte-recompile-directory user-lisp-directory 0)
 (byte-recompile-directory "~/.config-private/emacs" 0)
 
