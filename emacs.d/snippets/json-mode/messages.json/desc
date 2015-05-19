@@ -1,0 +1,6 @@
+# name: description field
+# key: desc
+# expand-env: ()
+# condition: (and buffer-file-name (string= (file-name-nondirectory buffer-file-name) "messages.json"))
+# --
+"description": "$0"
