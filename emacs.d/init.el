@@ -3082,6 +3082,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands git-timemachine)
 
+(use-package focus
+  :ensure t
+  :commands focus-mode)
+
 (use-package helm-chrome
   :ensure t
   :commands helm-chrome-bookmarks)
