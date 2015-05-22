@@ -18,7 +18,7 @@ get_emacs() {
       cd emacs
       ./autogen.sh
       ./configure \
-        --with-x-toolkit=gtk3 \
+        --with-x-toolkit=lucid \
         --with-file-notification=inotify \
         --without-pop \
         --enable-link-time-optimization \
