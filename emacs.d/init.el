@@ -5299,6 +5299,7 @@ See URL `https://github.com/golang/lint'."
          ("\\.erb\\'" . web-mode) ("\\.html\\'" . web-mode)
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
+         ("\\.jsx\\'" . js2-mode)
          )
   :init
   (progn
@@ -7692,7 +7693,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package js2-mode
   :ensure t
   :mode (("\\.js\\'" . js2-mode)
-         ("\\.jsx\\'" . js2-mode))
+         ;; ("\\.jsx\\'" . js2-mode)
+         )
   :init
   (progn
     (rename-modeline "js2-mode" js2-mode "js2")
