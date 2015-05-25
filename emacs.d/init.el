@@ -146,8 +146,14 @@ re-downloaded in order to locate PACKAGE."
 ;;                 ''     ''
 
 ")
+
 ;;; some early compat functions
 (eval-and-compile
+  ;; for < emacs25
+  (when (not (fboundp 'save-mark-and-excursion))
+    (defmacro save-mark-and-excursion (&rest body)
+      `(save-excursion ,@body)))
+
   ;; Provide `defvar-local' and `setq-local' for Emacs 24.2 and below
   (unless (fboundp 'defvar-local)
 
