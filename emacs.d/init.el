@@ -5305,7 +5305,7 @@ See URL `https://github.com/golang/lint'."
          ("\\.erb\\'" . web-mode) ("\\.html\\'" . web-mode)
          ("\\.rhtml\\'" . web-mode) ("\\.mustache\\'" . web-mode)
          ("\\.hbs\\'" . web-mode)
-         ("\\.jsx\\'" . js2-mode)
+         ("\\.jsx\\'" . web-mode)
          )
   :init
   (progn
