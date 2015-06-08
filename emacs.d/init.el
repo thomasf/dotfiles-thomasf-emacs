@@ -9243,6 +9243,7 @@ drag the viewpoint on the image buffer that the window displays."
     (setq auto-install-directory user-site-lisp-directory)))
 
 (use-package auto-package-update
+  :disabled t
   :ensure t
   :commands (auto-package-update-now auto-package-update-if-needed)
   :config
