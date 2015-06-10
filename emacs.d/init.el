@@ -3239,6 +3239,18 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :bind (("C-<f9>" . jumpc-jump-backward)
          ("C-<f10>" . jumpc-jump-forward)))
 
+(use-package langtool
+  :ensure t
+  :commands (langtool-check langtool-correct-buffer)
+  :config
+  (progn
+    (setq langtool-language-tool-jar "~/.opt/LanguageTool/languagetool-commandline.jar"
+          langtool-disabled-rules '(
+                                    "WHITESPACE_RULE"
+                                    ;; "EN_UNPAIRED_BRACKETS"
+                                    ;; "COMMA_PARENTHESIS_WHITESPACE"
+                                    "EN_QUOTES"))))
+
 (use-package libmpdee
   :ensure t
   :defer)
