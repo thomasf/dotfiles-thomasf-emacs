@@ -192,6 +192,7 @@
         touch-buffer-file
         transpose-params
         transpose-sexps
+        wdired-next-line
         whole-line-or-region-comment-dwim
         whole-line-or-region-kill-region
         whole-line-or-region-yank
