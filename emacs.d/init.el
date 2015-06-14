@@ -6871,6 +6871,7 @@ minibuffer."
         name))))
 
 (use-package pretty-mode
+  :disabled t
   :if (and (window-system) (not noninteractive))
   :commands pretty-mode
   :diminish pretty-mode
