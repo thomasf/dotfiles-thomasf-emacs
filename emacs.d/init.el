@@ -6135,6 +6135,7 @@ See URL `https://github.com/golang/lint'."
     (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks)
 
     (use-package autoinsert
+      :disabled t
       :if (not noninteractive)
       :defer
       :init
