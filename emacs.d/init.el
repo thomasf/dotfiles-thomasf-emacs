@@ -3285,6 +3285,14 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :ensure t
   :commands persp-mode)
 
+(use-package prog-mode
+  :defer t
+  :init
+  (progn
+    (hook-into-modes
+     'prettify-symbols-mode
+     my-prog-mode-hooks)))
+
 (use-package py-autopep8
   :ensure t
   :commands (py-autopep8))
