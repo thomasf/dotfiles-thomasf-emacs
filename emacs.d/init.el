@@ -10,7 +10,7 @@
 (defconst emacs-start-time (current-time))
 
 (setq-default ;; alloc.c
- gc-cons-threshold (* 1204 1204 200)
+ gc-cons-threshold (* 20 1204 1204)
  gc-cons-percentage 0.5)
 
 ;;;; Set some things early
