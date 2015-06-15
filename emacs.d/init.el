@@ -9489,6 +9489,7 @@ drag the viewpoint on the image buffer that the window displays."
              figlet-figletify-region-comment))
 
 (use-package prodigy
+  :disabled t
   :ensure t
   :commands (prodigy prodigy-define-service)
   :bind ("C-h p" . prodigy)
