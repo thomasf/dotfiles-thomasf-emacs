@@ -3289,9 +3289,229 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :defer t
   :init
   (progn
-    (hook-into-modes
-     'prettify-symbols-mode
-     my-prog-mode-hooks)))
+    (defun my-prettify-symbols-compile-patterns (patterns)
+      (let ((pretty-patterns))
+        (loop for (glyph . pairs) in patterns do
+              (loop for (regexp . major-modes) in pairs do
+                    (loop for mode in major-modes do
+                          (let* ((mode (intern (concat (symbol-name mode)
+                                                       "-mode")))
+                                 (assoc-pair (assoc mode pretty-patterns))
+
+                                 (entry (cons regexp glyph)))
+                            (if assoc-pair
+                                (push entry (cdr assoc-pair))
+                              (push (cons mode (list entry))
+                                    pretty-patterns))))))
+        pretty-patterns))
+
+    (defvar my-prettify-symbols-patterns nil)
+    (setq my-prettify-symbols-patterns
+          (let* ((lispy '(scheme emacs-lisp lisp clojure))
+                 (mley '(tuareg haskell sml coq))
+                 (c-like '(c c++ perl sh python java ess ruby js coffee go))
+                 (all `(,@lispy ,@mley ,@c-like octave latex)))
+            (my-prettify-symbols-compile-patterns
+             `(
+               (?¬ (,(rx "not") python ,@lispy haskell coffee)
+                   (,(rx "!") c c++ java js)
+                   (,(rx "~~") coq)
+                   (,(rx "\\neg") latex))
+               (?≠ (,(rx "!=") ,@c-like scheme octave coq)
+                   (,(rx "<>") tuareg octave)
+                   (,(rx "~=") octave)
+                   (,(rx "/=") haskell emacs-lisp)
+                   (,(rx "\\neq") latex)
+                   (,(rx "not=") clojure))
+               (?≺ (,(rx "<") ,@all)
+                   (,(rx "\\prec") latex))
+               (?≻ (,(rx ">") ,@all)
+                   (,(rx "\\succ") latex))
+               (?≼ (,(rx "<=") ,@all)
+                   (,(rx "\\leq") latex))
+               (?≽ (,(rx ">=") ,@all)
+                   (,(rx "\\geq") latex))
+
+                                        ;(?× (,(rx "*[^[:alpha:]]") ,@all))
+               ;; (?÷ (,(rx "/[^*/]") ,@all))
+               (?− (,(rx "-") ,@all))
+               (?+ (,(rx "+") ,@all))
+               (?⁑ (,(rx "**") python))
+
+               ;; (?² (,(rx  " **"  " 2") python tuareg octave)
+               ;;     (,(rx "^2") octave haskell))
+               ;; (?³ (,(rx  " **"  " 3") python tuareg octave)
+               ;;     (,(rx "^3") octave haskell))
+               ;; (?ⁿ ;;(,(rx  " **"  " n") python tuareg octave)
+               ;;     (,(rx "^n") octave haskell coq))
+
+               (?∧ (,(rx "and") emacs-lisp lisp clojure python coffee)
+                   (,(rx "&&") haskell c c++ java perl coq js)
+                   (,(rx "\\wedge") latex)
+                   (,(rx "\\land") latex))
+               (?∨ (,(rx "or") emacs-lisp lisp clojure python coffee)
+                   (,(rx "||") haskell c c++ java perl coq js)
+                   (,(rx "\\vee") latex)
+                   (,(rx "\\lor") latex))
+
+               (?≡ (,(rx "==") ,@all)
+                   (,(rx "=") clojure)
+                   (,(rx "\\equiv") latex))
+               (?⟵ ;;(,(rx "<-") ,@mley ess)
+                (,(rx "\\leftarrow") latex))
+               (?⟶ ;;(,(rx "->") ,@mley ess c c++ perl coffee)
+                (,(rx "\\rightarrow") latex))
+               (?↑ (,(rx "\\^") tuareg)
+                   (,(rx "^+") coq))
+               (?⟹ ;; (,(rx "=>") sml perl ruby haskell coq coffee)
+                (,(rx "\\Rightarrow") latex))
+               (?⟷ (,(rx "<->") coq)
+                   (,(rx "\leftrightarrow") latex))
+               (?↣ (,(rx ">->") coq))
+               (?↦ (,(rx "\\mapsto") latex))
+               (?∅ (,(rx "nil") emacs-lisp clojure ruby)
+                   (,(rx "null") scheme java js coffee)
+                   (,(rx "NULL") c c++)
+                   (,(rx "None") python)
+                   (,(rx "set0") coq)
+                   (,(rx "()") ,@mley)
+                   (,(rx "\\emptyset") latex)
+                   (,(rx "\\varnothing") latex))
+               ;; (?… (,(rx "...") ,@all)
+               ;;     (,(rx "..") haskell)
+               ;;     (,(rx "\\ldots") latex))
+               (?⊲ (,(rx "<|") coq))
+               ;;(?√ (,(rx "sqrt") ,@all))
+               (?∑ ;;(,(rx "sum") python)
+                (,(rx "\\sum") coq latex)
+                (,(rx "\\Sigma") latex)
+                (,(rx "reduce \+") clojure))
+               (?∪ (,(rx ":|:") coq))
+               (?∩ (,(rx ":&:") coq))
+               (?∁ (,(rx "~:") coq))
+               ;; (?α (,(rx "alpha") ,@all)
+               ;;     (,(rx "'a") ,@mley)
+               ;;     (,(rx "\\alpha") latex))
+               ;; (?β (,(rx "beta") ,@all)
+               ;;     (,(rx "'b") ,@mley)
+               ;;     (,(rx "\\beta") latex))
+               ;; (?γ (,(rx "gamma") ,@all)
+               ;;     (,(rx "'c") ,@mley)
+               ;;     (,(rx "\\gamma") latex))
+               ;; (?Δ (,(rx "delta") ,@all)
+               ;;     (,(rx "'d") ,@mley)
+               ;;     (,(rx "\\Delta") latex))
+               ;; (?ε (,(rx "epsilon") ,@all)
+               ;;     (,(rx "\\epsilon") latex))
+               ;; (?ι (,(rx "iota") ,@all)
+               ;;     (,(rx "\\iota") latex))
+               ;; (?θ (,(rx "theta") ,@all)
+               ;;     (,(rx "\\theta") latex))
+               ;; (?ρ (,(rx "rho") ,@all)
+               ;;     (,(rx "\\rho") latex))
+               ;; (?σ ;;(,(rx "sigma") ,@all)
+                ;; (,(rx "filter") python clojure)
+                ;; (,(rx "select") clojure))
+               ;; (?μ (,(rx "mu") ,@all))
+               (?λ (,(rx "lambda") ,@all)
+                   (,(rx "fn") sml)
+                   (,(rx "fun") tuareg)
+                   (,(rx "\\") haskell)
+                   (,(rx "\\lambda") latex)
+                   ;;(,(rx "[^\s\t]+function") js)
+                   )
+               (?𝜆 (,(rx "lambda") python))
+               ;; (?π (,(rx "pi") ,@all)
+               ;;     (,(rx "M_PI") c c++)
+               ;;     (,(rx "\\pi") latex)
+               ;;     (,(rx "map") python clojure))
+               (?Π ;;(,(rx "Pi") @all)
+                (,(rx "\\prod") latex)
+                (,(rx "\\Pi") latex))
+               (?ω ;;(,(rx "omega") @all)
+                (,(rx "\\omega") latex))
+               (?Φ ;;(,(rx "Phi") @all)
+                (,(rx "\\Phi") latex))
+               (?Ω ;;(,(rx "Ohm") @all)
+                (,(rx "\\ohm") latex)
+                (,(rx "\\Omega") latex))
+               (?℧ ;;(,(rx "Mho") @all)
+                (,(rx "\\mho") latex))
+               (?φ ;;(,(rx "phi") ,@all)
+                (,(rx "\\varphi") latex))
+               (?η ;;(,(rx "eta") ,@all)
+                (,(rx "\\eta") latex))
+
+               ;;(?∞ (,(rx "HUGE_VAL") c c++))
+               ;;(?∎ (,(rx "Qed.") coq))
+
+               ;;(?∗ (,(rx "all" (? "()")) python))
+               ;;(?⊢ (,(rx "assert") python))
+               ;;(?≍ (,(rx "is") python))
+               ;;(?𝝈 (,(rx "filter_by") python))
+               ;; (?ℵ (,(rx "count") python clojure))
+               ;; (?⇓(,(rx "order_by") python))
+               ;; (?⤚ (,(rx "group_by") python))
+               ;; (?⟶ (,(rx "def") python))
+
+               (?⊤ (,(rx "True") python))
+               (?⊥ (,(rx "False") python))
+
+               (?⋂ (,(rx "intersect") python)
+                   (,(rx "\\bigcap") coq)
+                   (,(rx "\\cap") latex)
+                   (,(rx "intersection") clojure))
+               (?∏ (,(rx "\\prod") coq))
+               (?⋃ (,(rx "union") python clojure)
+                   (,(rx "\\bigcup") coq)
+                   (,(rx "\\cup") latex))
+               (?⊎ (,(rx "\\uplus") latex))
+               (?ℕ (,(rx "nat") coq))
+               (?∣ (,(rx "%|") coq))
+
+
+               ;;(?∈ (,(rx "in") python coffee))
+               (?∉ ;;(,(rx "not in") python)
+                (,(rx "\\notin") coq latex))
+               ;;(?⊼ (,(rx "and not") python coffee))
+               ;;(?⊽ (,(rx "or not") python coffee))
+               (?⊻ (,(rx "(\\+)") coq))
+
+               (?∀ ;;(,(rx "for") python coffee)
+                ;;(,(rx "forall") haskell coq)
+                (,(rx "\\forall") latex))
+               ;;(?∄ (,(rx "not any") python))
+               ;; (?∃ (,(rx "any") python)
+               ;;     (,(rx "exists") coq)
+               ;;     (,(rx "\\exists") latex)
+               ;;     (,(rx "some") clojure))
+               (?⊂ (,(rx "\\proper") coq)
+                   (,(rx "\\subset") latex))
+               (?⊆ (,(rx "\\subset") coq)
+                   (,(rx "\\subseteq") latex))
+               (?∖ (,(rx ":\\:") coq)
+                   (,(rx "\\setminus") latex)
+                   (,(rx "difference") clojure))
+               (?⋊ (,(rx "><|") coq))
+
+               (?× (,(rx "\\times") latex))
+               (?〈 (,(rx "\\langle") latex))
+                 (?〉 (,(rx "\\rangle") latex))))))
+
+    (defun my-prettify-symbols-hook-fn (&optional mode)
+      "TODO"
+      (let* ((mode (or mode major-mode))
+             (kwds (cdr-safe
+                    (or (assoc mode my-prettify-symbols-patterns)
+                       (assoc (cdr-safe
+                               (assoc mode pretty-interaction-mode-alist))
+                              my-prettify-symbols-patterns)))))
+        (mapc #'(lambda (v)
+                  (push v prettify-symbols-alist)
+                  )  kwds)))
+
+    (add-hook 'prog-mode-hook 'my-prettify-symbols-hook-fn)
+    (hook-into-modes 'prettify-symbols-mode my-prog-mode-hooks)))
 
 (use-package py-autopep8
   :ensure t
@@ -3739,16 +3959,10 @@ ARG is a prefix argument.  If nil, copy the current difference region."
       (progn
         (bind-key "M-r" 'dired-efap dired-mode-map)))
 
-    (if (boundp 'dired-hide-details-mode)
-        (add-hook 'dired-mode-hook 'dired-hide-details-mode)
-      (use-package dired-details
-        :ensure t
-        :commands dired-details-install
-        :init
-        (progn
-          (setq
-           dired-details-hidden-string " ⋯ " )
-          (dired-details-install))))
+    (when (boundp 'dired-hide-details-mode)
+      (setq dired-hide-details-hide-symlink-targets nil
+            dired-hide-details-hide-information-lines t)
+      (add-hook 'dired-mode-hook 'dired-hide-details-mode))
 
     (defun dired-sort-size ()
       "Dired sort by size."
@@ -3897,16 +4111,6 @@ If FILE already exists, signal an error."
       (cl-letf (((symbol-function 'message)
                  (lambda (fmt &rest _))))
         (key-chord-mode 1)))))
-
-(use-package session
-  :disabled t
-  :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :init
-  (progn
-    (setq
-     session-save-file (expand-file-name "session" user-data-directory))
-    (session-initialize)))
 
 (use-package recentf
   :if (and (not noninteractive) (not degrade-p-minimalism))
@@ -4836,50 +5040,7 @@ otherwise use the subtree title."
   :disabled t
   :ensure t
   :commands (sunrise
-             sunrise-cd)
-  :config
-  (progn
-    (use-package sunrise-x-tree
-      :ensure t)
-    (use-package sunrise-x-tabs
-      :ensure t)
-
-    (defun sr-browse-file (&optional file)
-      "Display the selected file with the default appication."
-      (interactive)
-      (setq file (or file (dired-get-filename)))
-      (save-selected-window
-        (sr-select-viewer-window)
-        (let ((buff (current-buffer))
-              (fname (if (file-directory-p file)
-                         file
-                       (file-name-nondirectory file)))
-              (app (cond
-                    ((eq system-type 'darwin)       "open %s")
-                    ((eq system-type 'windows-nt)   "open %s")
-                    (t                              "xdg-open %s"))))
-          (start-process-shell-command "open" nil (format app file))
-          (unless (eq buff (current-buffer))
-            (sr-scrollable-viewer (current-buffer)))
-          (message "Opening \"%s\" ..." fname))))
-
-    (defun sr-goto-dir (dir)
-      "Change the current directory in the active pane to the given one."
-      (interactive (list (progn
-                           (require 'lusty-explorer)
-                           (lusty-read-directory))))
-      (if sr-goto-dir-function
-          (funcall sr-goto-dir-function dir)
-        (unless (and (eq major-mode 'sr-mode)
-                     (sr-equal-dirs dir default-directory))
-          (if (and sr-avfs-root
-                   (null (posix-string-match "#" dir)))
-              (setq dir (replace-regexp-in-string
-                         (expand-file-name sr-avfs-root) "" dir)))
-          (sr-save-aspect
-           (sr-within dir (sr-alternate-buffer (dired dir))))
-          (sr-history-push default-directory)
-          (sr-beginning-of-buffer))))))
+             sunrise-cd))
 
 (use-package flycheck
   :ensure t
@@ -5229,6 +5390,7 @@ See URL `https://github.com/golang/lint'."
     (use-package ido-hacks
       :ensure t
       :disabled t
+      :commands ido-hacks-mode
       :if (not degrade-p-minimalism)
       :init
       (progn
@@ -5435,26 +5597,6 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     (setq mo-git-blame-blame-window-width 25)))
-
-;; (use-package annoying-arrows-mode
-;;   :ensure t
-;;   :disabled t
-;;   :commands (annoying-arrows-mode
-;;              global-annoying-arrows-mode)
-;;   :init
-;;   (progn
-;;     ;; (global-annoying-arrows-mode)
-;;     ))
-
-;; (use-package guru-mode
-;;   :ensure t
-;;   :if (not noninteractive)
-;;   :commands (guru-mode turn-on-guru-mode turn-off-guru-mode guru-global-mode)
-;;   :diminish (guru-mode guru-global-mode)
-;;   :init
-;;   (progn
-;;     ;; (guru-global-mode)
-;;     ))
 
 (use-package direx
   :ensure t
@@ -6878,20 +7020,6 @@ minibuffer."
           (setq name (format "[%s]" name))
           (add-text-properties 1 (1- (length name)) '(face link) name))
         name))))
-
-(use-package pretty-mode
-  :disabled t
-  :if (and (window-system) (not noninteractive))
-  :commands pretty-mode
-  :diminish pretty-mode
-  :init
-  (progn
-    (hook-into-modes #'pretty-mode
-                     '(emacs-lisp-mode-hook
-                       coffee-mode-hook
-                       python-mode-hook
-                       ruby-mode-hook
-                       haskell-mode-hook))))
 
 (use-package traad
   :ensure t
