@@ -246,12 +246,6 @@ buffer-local wherever it is set."
       use-package-debug nil)
 
 ;;;; utils
-;; shorthand for interactive lambdas
-(defmacro λ (&rest body)
-  `(lambda ()
-     (interactive)
-     ,@body))
-(global-set-key (kbd "C-x 8 l") (λ (insert "λ")))
 
 ;;;; Modes and mode groupings
 (defmacro hook-into-modes (func modes)
@@ -964,11 +958,11 @@ buffer-local wherever it is set."
 ;; This is very special because what I have done to my caps lock key.
 (define-key special-event-map (kbd "<key-17>") 'ignore)
 (define-key special-event-map (kbd "<M-key-17>") 'ignore)
-(unbind-key "C-x C-l") ;; downcase region
-(unbind-key "C-x C-u") ;; upcase region
-(unbind-key "M-l") ;; downcase word
-(unbind-key "M-u") ;; upcase word
-(unbind-key "M-c") ;; capitalize word
+;; (unbind-key "C-x C-l") ;; downcase region
+;; (unbind-key "C-x C-u") ;; upcase region
+;; (unbind-key "M-l") ;; downcase word
+;; (unbind-key "M-u") ;; upcase word
+;; (unbind-key "M-c") ;; capitalize word
 (unbind-key "<mouse-3>")
 
 ;; make home/end behave the same as elsewhere on 'darwin
@@ -976,23 +970,23 @@ buffer-local wherever it is set."
 (bind-key "<end>" 'end-of-line)
 (bind-key "C-h B" 'describe-personal-keybindings)
 (bind-key "C-h I" 'info)
-(bind-key "C-h s" (λ (switch-to-buffer "*scratch*")))
+(bind-key "C-h s" (lambda nil (interactive) (switch-to-buffer "*scratch*")))
 (bind-key "C-?" 'undo)
 (bind-key "C-_" 'redo)
 (bind-key* "C-." 'undo) ;; NOTE this does not work in terminals
 (bind-key* "C-," 'redo) ;; NOTE this does not work in terminals
-(bind-key "<f5>" (λ (jump-to-register ?5)))
-(bind-key "<f6>" (λ (jump-to-register ?6)))
-(bind-key "<f7>" (λ (jump-to-register ?7)))
-(bind-key "<f8>" (λ (jump-to-register ?8)))
-(bind-key "C-<f5>" (λ (window-configuration-to-register ?5)))
-(bind-key "C-<f6>" (λ (window-configuration-to-register ?6)))
-(bind-key "C-<f7>" (λ (window-configuration-to-register ?7)))
-(bind-key "C-<f8>" (λ (window-configuration-to-register ?8)))
-(bind-key "S-<f5>" (λ (window-configuration-to-register ?5)))
-(bind-key "S-<f6>" (λ (window-configuration-to-register ?6)))
-(bind-key "S-<f7>" (λ (window-configuration-to-register ?7)))
-(bind-key "S-<f8>" (λ (window-configuration-to-register ?8)))
+(bind-key "<f5>" (lambda nil (interactive) (jump-to-register ?5)))
+(bind-key "<f6>" (lambda nil (interactive) (jump-to-register ?6)))
+(bind-key "<f7>" (lambda nil (interactive) (jump-to-register ?7)))
+(bind-key "<f8>" (lambda nil (interactive) (jump-to-register ?8)))
+(bind-key "C-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
+(bind-key "C-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
+(bind-key "C-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
+(bind-key "C-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
+(bind-key "S-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
+(bind-key "S-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
+(bind-key "S-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
+(bind-key "S-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
 
 ;; (bind-key "<f9>" 'previous-buffer)
 ;; (bind-key "<f10>" 'next-buffer)
@@ -1207,7 +1201,7 @@ buffer-local wherever it is set."
         (setq enable-recursive-minibuffers t)
         (minibuffer-depth-indicate-mode))
     (setq enable-recursive-minibuffers nil)))
-
+(recursive-minibuffer-mode)
 ;;; functions: files / directories
 ;;;; dired jump commands
 
@@ -3286,7 +3280,6 @@ ARG is a prefix argument.  If nil, copy the current difference region."
   :commands persp-mode)
 
 (use-package prog-mode
-  :defer t
   :init
   (progn
     (defun my-prettify-symbols-compile-patterns (patterns)
@@ -3305,16 +3298,31 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                                     pretty-patterns))))))
         pretty-patterns))
 
+    (defvar my-prettify-symbols-interaction-mode-alist
+      '((inferior-scheme-mode . scheme-mode)
+        (lisp-interaction-mode . emacs-lisp-mode)
+        (inferior-lisp-mode . lisp-mode)
+        (inferior-ess-mode . ess-mode)
+        (inf-haskell-mode . haskell-mode)
+        (tuareg-interactive-mode . tuareg-mode)
+        (inferior-python-mode . python-mode)
+        (inferior-octave-mode . octave-mode)
+        (inferior-ruby-mode . ruby-mode))
+      "Alist mapping from inferior process interaction modes to their
+  corresponding script editing modes.")
+
+
     (defvar my-prettify-symbols-patterns nil)
     (setq my-prettify-symbols-patterns
           (let* ((lispy '(scheme emacs-lisp lisp clojure))
                  (mley '(tuareg haskell sml coq))
-                 (c-like '(c c++ perl sh python java ess ruby js coffee go))
+                 (c-like '(c c++ perl sh python java ess ruby js js2 coffee go))
+                 (alljs '(js js2))
                  (all `(,@lispy ,@mley ,@c-like octave latex)))
             (my-prettify-symbols-compile-patterns
              `(
                (?¬ (,(rx "not") python ,@lispy haskell coffee)
-                   (,(rx "!") c c++ java js)
+                   (,(rx "!") c c++ java ,@alljs go)
                    (,(rx "~~") coq)
                    (,(rx "\\neg") latex))
                (?≠ (,(rx "!=") ,@c-like scheme octave coq)
@@ -3325,35 +3333,20 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                    (,(rx "not=") clojure))
                (?≺ (,(rx "<") ,@all)
                    (,(rx "\\prec") latex))
-               (?≻ (,(rx ">") ,@all)
-                   (,(rx "\\succ") latex))
+               (?≻ (,(rx "\\succ") latex))
                (?≼ (,(rx "<=") ,@all)
                    (,(rx "\\leq") latex))
                (?≽ (,(rx ">=") ,@all)
                    (,(rx "\\geq") latex))
-
-                                        ;(?× (,(rx "*[^[:alpha:]]") ,@all))
-               ;; (?÷ (,(rx "/[^*/]") ,@all))
-               (?− (,(rx "-") ,@all))
-               (?+ (,(rx "+") ,@all))
                (?⁑ (,(rx "**") python))
-
-               ;; (?² (,(rx  " **"  " 2") python tuareg octave)
-               ;;     (,(rx "^2") octave haskell))
-               ;; (?³ (,(rx  " **"  " 3") python tuareg octave)
-               ;;     (,(rx "^3") octave haskell))
-               ;; (?ⁿ ;;(,(rx  " **"  " n") python tuareg octave)
-               ;;     (,(rx "^n") octave haskell coq))
-
                (?∧ (,(rx "and") emacs-lisp lisp clojure python coffee)
-                   (,(rx "&&") haskell c c++ java perl coq js)
+                   (,(rx "&&") haskell c c++ java perl coq ,@alljs go)
                    (,(rx "\\wedge") latex)
                    (,(rx "\\land") latex))
                (?∨ (,(rx "or") emacs-lisp lisp clojure python coffee)
-                   (,(rx "||") haskell c c++ java perl coq js)
+                   (,(rx "||") haskell c c++ java perl coq ,@alljs go)
                    (,(rx "\\vee") latex)
                    (,(rx "\\lor") latex))
-
                (?≡ (,(rx "==") ,@all)
                    (,(rx "=") clojure)
                    (,(rx "\\equiv") latex))
@@ -3369,8 +3362,8 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                    (,(rx "\leftrightarrow") latex))
                (?↣ (,(rx ">->") coq))
                (?↦ (,(rx "\\mapsto") latex))
-               (?∅ (,(rx "nil") emacs-lisp clojure ruby)
-                   (,(rx "null") scheme java js coffee)
+               (?⌀ (,(rx "nil") emacs-lisp clojure ruby go)
+                   (,(rx "null") scheme java ,@alljs coffee)
                    (,(rx "NULL") c c++)
                    (,(rx "None") python)
                    (,(rx "set0") coq)
@@ -3410,21 +3403,16 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                ;; (?ρ (,(rx "rho") ,@all)
                ;;     (,(rx "\\rho") latex))
                ;; (?σ ;;(,(rx "sigma") ,@all)
-                ;; (,(rx "filter") python clojure)
-                ;; (,(rx "select") clojure))
+               ;; (,(rx "filter") python clojure)
+               ;; (,(rx "select") clojure))
                ;; (?μ (,(rx "mu") ,@all))
                (?λ (,(rx "lambda") ,@all)
                    (,(rx "fn") sml)
                    (,(rx "fun") tuareg)
                    (,(rx "\\") haskell)
                    (,(rx "\\lambda") latex)
-                   ;;(,(rx "[^\s\t]+function") js)
                    )
-               (?𝜆 (,(rx "lambda") python))
-               ;; (?π (,(rx "pi") ,@all)
-               ;;     (,(rx "M_PI") c c++)
-               ;;     (,(rx "\\pi") latex)
-               ;;     (,(rx "map") python clojure))
+               (?π (,(rx "\\pi") latex))
                (?Π ;;(,(rx "Pi") @all)
                 (,(rx "\\prod") latex)
                 (,(rx "\\Pi") latex))
@@ -3454,8 +3442,12 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                ;; (?⤚ (,(rx "group_by") python))
                ;; (?⟶ (,(rx "def") python))
 
-               (?⊤ (,(rx "True") python))
-               (?⊥ (,(rx "False") python))
+               (?⊤ (,(rx "True") python)
+                   (,(rx "true") go ,@alljs)
+                   )
+               (?⊥ (,(rx "False") python)
+                   (,(rx "false") go ,@alljs)
+                   )
 
                (?⋂ (,(rx "intersect") python)
                    (,(rx "\\bigcap") coq)
@@ -3499,19 +3491,21 @@ ARG is a prefix argument.  If nil, copy the current difference region."
                  (?〉 (,(rx "\\rangle") latex))))))
 
     (defun my-prettify-symbols-hook-fn (&optional mode)
-      "TODO"
       (let* ((mode (or mode major-mode))
              (kwds (cdr-safe
                     (or (assoc mode my-prettify-symbols-patterns)
-                       (assoc (cdr-safe
-                               (assoc mode pretty-interaction-mode-alist))
-                              my-prettify-symbols-patterns)))))
+                        (assoc (cdr-safe
+                                (assoc mode  my-prettify-symbols-interaction-mode-alist))
+                               my-prettify-symbols-patterns)))))
         (mapc #'(lambda (v)
-                  (push v prettify-symbols-alist)
-                  )  kwds)))
+                  (push v prettify-symbols-alist))
+              kwds)))
+    (unless noninteractive
+      (add-hook 'prog-mode-hook 'my-prettify-symbols-hook-fn)))
 
-    (add-hook 'prog-mode-hook 'my-prettify-symbols-hook-fn)
-    (hook-into-modes 'prettify-symbols-mode my-prog-mode-hooks)))
+  :config
+  (progn
+    (global-prettify-symbols-mode)))
 
 (use-package py-autopep8
   :ensure t
@@ -5067,6 +5061,7 @@ otherwise use the subtree title."
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'web-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'ruby-mode-hook 'flycheck-turn-on-maybe)
@@ -5076,6 +5071,7 @@ otherwise use the subtree title."
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (progn
     (setq flycheck-javascript-jshint-executable
           (cond
@@ -6582,12 +6578,7 @@ See URL `https://github.com/golang/lint'."
     (use-package helm-descbinds
       :ensure t
       :commands helm-descbinds
-      :bind ("C-h b" . helm-descbinds)
-      :init
-      (progn
-        (defvar helm-descbinds-Orig-describe-bindings
-          (symbol-function 'describe-bindings))
-        (fset 'describe-bindings 'helm-descbinds)))))
+      :bind ("C-h b" . helm-descbinds))))
 
 (use-package ibuffer
   :defer
@@ -7834,17 +7825,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :defer
   :init
   (progn
-    (rename-modeline "js" js-mode "js"))
-  :config
-  (progn
-    (font-lock-add-keywords
-     'js-mode `(("\\(function *\\)("
-                 (0 (progn (compose-region
-                            (match-beginning 1)
-                            (match-end 1) "ƒ") nil)))))
-    (font-lock-add-keywords 'js-mode
-                            '(("\\<\\(FIX\\|TODO\\|FIXME\\|HACK\\|REFACTOR\\):"
-                               1 font-lock-warning-face t)))))
+    (rename-modeline "js" js-mode "js")))
 
 (use-package js2-mode
   :ensure t
@@ -7862,6 +7843,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           ))
   :config
   (progn
+    (when (and (not noninteractive) window-system)
+      (font-lock-add-keywords
+       'js2-mode `(("\\(function *\\)("
+                    (0 (progn (compose-region
+                               (match-beginning 1)
+                               (match-end 1) "λ") nil))))))
+
     (bind-key "C-<tab>" 'web-mode js2-mode-map)
 
     (use-package js2-imenu-extras
@@ -7870,22 +7858,22 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         (js2-imenu-extras-setup)))
 
     (font-lock-add-keywords
-    ;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
-    ;; add any symbols to a buffer-local var of acceptable global vars
-    ;; Note that we also support the "symbol: true" way of specifying names via a hack (remove any ":true"
-    ;; to make it look like a plain decl, and any ':false' are left behind so they'll effectively be ignored as
-    ;; you can;t have a symbol called "someName:false"
-    (add-hook 'js2-post-parse-callbacks
-              (lambda ()
-                (when (> (buffer-size) 0)
-                  (let ((btext (replace-regexp-in-string
-                                ": *true" " "
-                                (replace-regexp-in-string "[\n\t ]+" " " (buffer-substring-no-properties 1 (buffer-size)) t t))))
-                    (mapc (apply-partially 'add-to-list 'js2-additional-externs)
-                          (split-string
-                           (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
-                           " *, *" t))
-                    ))))
+     ;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
+     ;; add any symbols to a buffer-local var of acceptable global vars
+     ;; Note that we also support the "symbol: true" way of specifying names via a hack (remove any ":true"
+     ;; to make it look like a plain decl, and any ':false' are left behind so they'll effectively be ignored as
+     ;; you can;t have a symbol called "someName:false"
+     (add-hook 'js2-post-parse-callbacks
+               (lambda ()
+                 (when (> (buffer-size) 0)
+                   (let ((btext (replace-regexp-in-string
+                                 ": *true" " "
+                                 (replace-regexp-in-string "[\n\t ]+" " " (buffer-substring-no-properties 1 (buffer-size)) t t))))
+                     (mapc (apply-partially 'add-to-list 'js2-additional-externs)
+                           (split-string
+                            (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
+                            " *, *" t))
+                     ))))
 
      'js2-mode `(("\\(function *\\)("
                   (0 (progn (compose-region
@@ -9198,7 +9186,6 @@ if submodules exists, grep submodules too."
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (point-undo point-redo)
-  :bind (("M-u" . point-undo))
   :init
   (progn
     (define-key region-bindings-mode-map "u" 'point-undo)
