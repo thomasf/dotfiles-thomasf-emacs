@@ -535,6 +535,10 @@ buffer-local wherever it is set."
       (setq my-monospaced-font "PragmataPro-13"
             my-variable-pitch-font "Pt Sans-13"))
 
+    (when (s-starts-with? "blopp" system-name)
+      (setq my-monospaced-font "PragmataPro-15"
+            my-variable-pitch-font "Pt Sans-15"))
+
     (defun my-set-fonts  ()
       (interactive)
       (when window-system
