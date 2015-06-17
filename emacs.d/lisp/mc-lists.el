@@ -48,6 +48,7 @@
         end-of-buffer
         eval-and-replace
         eval-last-sexp
+        eval-print-last-sexp
         exchange-dot-and-mark
         fold-this
         forward-paragraph
