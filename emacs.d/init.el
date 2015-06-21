@@ -5358,7 +5358,7 @@ See URL `https://github.com/golang/lint'."
      ido-auto-merge-work-directories-length -1
      ido-file-extensions-order
      '( ;; languages
-       ".py" ".rb" ".java" ".coffee" ".js" ".c" ".cpp" ".el"
+       ".py" ".go"  ".js" ".jsx"  ".coffee" ".rb" ".java" ".c"  ".cc" ".cpp" ".el"
        ;; markup
        ".html" ".htm" ".xhtml"
        ;; styles
