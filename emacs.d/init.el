@@ -1,12 +1,17 @@
-
 ;;; init.el --- Thomas Frössman emacs init
-;;; init
-;;;; set emacs start time
 ;;; Commentary:
 ;;
 
 ;;; Code:
 
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+;; (package-initialize)
+
+;;; init
+;;;; set emacs start time
 (defconst emacs-start-time (current-time))
 
 (setq-default ;; alloc.c
@@ -8361,6 +8366,7 @@ Titus von der Malsburg."
       )))
 
 (use-package dart-mode
+  :disabled t
   :ensure t
   :commands (dart-mode)
   :mode ("\\.dart\\'" . dart-mode))
@@ -9746,10 +9752,20 @@ drag the viewpoint on the image buffer that the window displays."
 
 ;; this thing just nuges emacs to adjust it's window size, some times it starts
 ;; in 80x35.
+
 (and load-file-name
-   window-system
-   (not noninteractive)
-   (message nil))
+     window-system
+     (eq system-type 'gnu/linux)
+     (not noninteractive)
+     ;; for emacs 24.4
+     (not (message nil))
+     ;; for emacs 25 (2015-06-21)
+     (add-hook 'after-init-hook
+               #'(lambda ()
+                   (run-with-idle-timer
+                    0 nil '(lambda ()
+                           (tool-bar-mode -1))) nil)))
+
 
 ;;; File local vars
 

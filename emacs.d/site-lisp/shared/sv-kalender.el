@@ -258,5 +258,5 @@ Beräkna påskdagen för år YEAR."
 
 ;; Listan med kalenderns helgdagar
 (setq calendar-holidays
-      (append general-holidays local-holidays
+      (append general-holidays holiday-local-holidays
               other-holidays solar-holidays))

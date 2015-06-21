@@ -10,7 +10,7 @@ get_emacs() {
     cd ~/.opt
     if [ -d emacs ]; then
       cd emacs
-      git pull origin emacs-24
+      git pull
       make
       make info
     else
