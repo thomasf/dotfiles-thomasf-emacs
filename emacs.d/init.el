@@ -7797,10 +7797,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
               (cua--fallback))))))))
 
 (use-package header2
+  :ensure t
   :commands (make-header make-revision make-divider make-box-comment
                          update-file-header))
 
 (use-package lib-requires
+  :ensure t
   :commands (libreq-requires-tree libreq-requires-list
                                   libreq-insert-lib-requires-as-comment))
 
