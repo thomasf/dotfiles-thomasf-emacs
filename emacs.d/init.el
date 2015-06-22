@@ -873,7 +873,15 @@ buffer-local wherever it is set."
 ;;;; paragraphs
 (setq
  sentence-end-double-space nil)
-(unless noninteractive (global-subword-mode))
+
+(use-package subword
+  :defer t
+  :diminish ""
+  :init
+  (progn
+    (unless noninteractive
+      (global-subword-mode))))
+
 
 (use-package compile
   :defer
