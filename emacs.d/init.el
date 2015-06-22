@@ -6151,7 +6151,10 @@ See URL `https://github.com/golang/lint'."
      magit-completing-read-function 'magit-ido-completing-read
      ;; magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
-     magit-log-auto-more t)
+     magit-log-auto-more t
+     magit-auto-revert-mode t
+     magit-auto-revert-mode-lighter ""
+     magit-set-upstream-on-push t)
 
     (defadvice magit-version (around skipit activate)
       "900000000")
