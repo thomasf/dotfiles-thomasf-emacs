@@ -15,24 +15,19 @@
   (file-name-directory load-file-name)
   "The path to emacs.d.")
 
-
+
+(makeup-log "Delete ELPA leftovers and setup package.el.")
 (require 'package)
 (mkdir package-user-dir t)
-
-
-(makeup-log "Delete ELPA leftovers and add elpa packages to load path.")
 (let ((default-directory package-user-dir))
   (mapc (lambda (dir)
           (and
            (file-directory-p dir)
-           (let ((pkgel (file-expand-wildcards (concat dir "/*-pkg.el")) ))
-             (when pkgel
-               (setq load-path
-                     (cons (expand-file-name dir default-directory) load-path)))
-             (not pkgel))
+           (not (file-expand-wildcards (concat dir "/*-pkg.el")))
            (file-expand-wildcards (concat dir "/*-pkg.elc"))
            (delete-directory dir t)))
         (directory-files package-user-dir)))
+(package-initialize)
 
 
 ;; require some packages
@@ -40,6 +35,30 @@
 (use-package s)
 (use-package dash)
 (use-package f)
+
+
+(defun was-compiled-p (path)
+  "Does the directory at PATH contain .elc files?"
+  (--any-p (s-ends-with-p ".elc" it) (directory-files path)))
+
+(defun no-dot-directories (directories)
+  "Exclude the . and .. directory from a list."
+  (--remove (or (string= "." (file-name-nondirectory it))
+               (string= ".." (file-name-nondirectory it))
+               (string= ".git" (file-name-nondirectory it))
+               (string= "archives" (file-name-nondirectory it)))
+            directories))
+
+(defun ensure-packages-compiled ()
+  "If any packages installed with package.el aren't compiled yet, compile them."
+  (let* ((package-files (no-dot-directories (directory-files package-user-dir t)))
+         (package-directories (-filter 'file-directory-p package-files)))
+    (dolist (directory package-directories)
+      (unless (was-compiled-p directory)
+        (byte-recompile-directory directory 0)))))
+;; (makeup-log "If any packages installed with package.el aren't compiled yet, compile them.")
+;; (ensure-packages-compiled)
+
 
 
 (makeup-log "Delete el/elc files.")
@@ -76,37 +95,14 @@
            t))
 
 
-(makeup-log "Load init.el")
+
+;; (makeup-log "Load init.el")
 (setq byte-compile-verbose nil
       byte-compile-warnings nil
       use-package-verbose nil
       ad-redefinition-action 'accept)
-(load (expand-file-name "init" makeup-emacsd-path) nil t)
+(load (expand-file-name "load-path" makeup-emacsd-path) nil t)
 
-
-
-(defun was-compiled-p (path)
-  "Does the directory at PATH contain .elc files?"
-  (--any-p (s-ends-with-p ".elc" it) (directory-files path)))
-
-(defun no-dot-directories (directories)
-  "Exclude the . and .. directory from a list."
-  (--remove (or (string= "." (file-name-nondirectory it))
-               (string= ".." (file-name-nondirectory it))
-               (string= ".git" (file-name-nondirectory it))
-               (string= "archives" (file-name-nondirectory it)))
-            directories))
-
-(defun ensure-packages-compiled ()
-  "If any packages installed with package.el aren't compiled yet, compile them."
-  (let* ((package-files (no-dot-directories (directory-files package-user-dir t)))
-         (package-directories (-filter 'file-directory-p package-files)))
-    (dolist (directory package-directories)
-      (unless (was-compiled-p directory)
-        (byte-recompile-directory directory 0)))))
-
-;; (makeup-log "If any packages installed with package.el aren't compiled yet, compile them.")
-;; (ensure-packages-compiled)
 
 
 (use-package multi-term)

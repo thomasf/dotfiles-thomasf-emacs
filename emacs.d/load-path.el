@@ -16,28 +16,6 @@ See also `locate-user-emacs-file'.")
   (file-truename "~/.cache/emacs-user-cache"))
 (defconst user-lisp-directory
   (expand-file-name "lisp" user-emacs-directory))
-
-(defun load-path--take (n list)
-  "Returns a new list of the first N items in LIST, or all items if there are fewer than N.
-This is just a copy of the fully expanded macro from dash."
-  (let (result)
-    (let
-        ((num n)
-         (it 0))
-      (while
-          (< it num)
-        (when list
-          (setq result
-                (cons
-                 (car list)
-                 result))
-          (setq list
-                (cdr list)))
-        (setq it
-              (1+ it))))
-    (nreverse result)))
-
-
 (defconst user-site-lisp-directory
   (expand-file-name "site-lisp/shared" user-emacs-directory))
 (defconst user-themes-directory
@@ -60,10 +38,10 @@ This is just a copy of the fully expanded macro from dash."
 
 (defun load-path-load-path ()
   (let ((load-path load-path))
-    ;; Add top-level lisp directories, in case they were not setup by the
-    ;; environment.
     (require 'package)
     (package-initialize)
+    ;; Add top-level lisp directories, in case they were not setup by the
+    ;; environment.
     (dolist (dir (nreverse
                   (list user-lisp-directory
                         user-site-lisp-directory)))

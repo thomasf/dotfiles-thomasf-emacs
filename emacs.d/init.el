@@ -32,11 +32,16 @@
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
 
-(defvar my-log-verbose nil)
-;; (setq my-log-verbose t)
-(if my-log-verbose
-    (setq byte-compile-verbose t)
-  (setq ad-redefinition-action 'accept))
+(setq
+ abbrev-file-name (expand-file-name
+                   "abbrev_defs.el" user-lisp-directory))
+
+(eval-and-compile
+  (defvar my-log-verbose nil)
+  ;; (setq my-log-verbose t)
+  (if my-log-verbose
+      (setq byte-compile-verbose t)
+    (setq ad-redefinition-action 'accept)))
 
 ;;; Emacs version check and feature inhibitions
 
@@ -49,36 +54,37 @@
  (warn "Use a newer version of Emacs for a full featured environment!"))
 
 ;;;; package.el
+(eval-and-compile
+  (setq
+   package-enable-at-startup nil
+   package-archives
+   '(("melpa-stable" . "http://stable.melpa.org/packages/")
+     ("melpa" . "http://melpa.org/packages/")
+     ("marmalade"   . "http://marmalade-repo.org/packages/")
+     ("org"         . "http://orgmode.org/elpa/")
+     ("gnu"         . "http://elpa.gnu.org/packages/")
+     ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
 
-(setq
- package-enable-at-startup nil
- package-archives
- '(("melpa-stable" . "http://stable.melpa.org/packages/")
-   ("melpa" . "http://melpa.org/packages/")
-   ("marmalade"   . "http://marmalade-repo.org/packages/")
-   ("org"         . "http://orgmode.org/elpa/")
-   ("gnu"         . "http://elpa.gnu.org/packages/")
-   ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
-(defvar byte-compile-warnings nil)
-(eval-when-compile
-  (require 'package)
-  (package-initialize t))
-(unless (boundp 'package-pinned-packages)
-  (setq package-pinned-packages ()))
+  (unless (boundp 'package-pinned-packages)
+    (setq package-pinned-packages ()))
 
-(defun require-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
+  (defun require-package (package &optional min-version no-refresh)
+    "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
 re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-      t
-    (if (or (assoc package package-archive-contents) no-refresh)
-        (package-install package)
-      (progn
-        (package-refresh-contents)
-        (require-package package min-version t)))))
+    (if (package-installed-p package min-version)
+        t
+      (if (or (assoc package package-archive-contents) no-refresh)
+          (package-install package)
+        (progn
+          (package-refresh-contents)
+          (require-package package min-version t))))))
+
+(defvar byte-compile-warnings nil)
 
 (eval-when-compile
+  (require 'package)
+  (package-initialize t)
   (require-package 'use-package)
   (require 'use-package)
   ;; (require-package 'names)
@@ -86,6 +92,7 @@ re-downloaded in order to locate PACKAGE."
   (defmacro executable-find* (command)
     "Macro form of executable-find..."
     (executable-find command)))
+
 
 ;;;; load packages
 (require 'cl)
@@ -2920,6 +2927,7 @@ for the current buffer's file name, and the line number at point."
 
   :config
   (progn
+
     (require 'ediff-init)           ;ensure the macro is defined, so we can override it
     (defmacro ediff-char-to-buftype (arg)
       `(cond ((memq ,arg '(?a ?A)) 'A)
@@ -3600,25 +3608,25 @@ ARG is a prefix argument.  If nil, copy the current difference region."
     (setq rings-protect-buffers-in-rings nil)
     (defun my-rings-setup ()
       ;; f1
-      (global-set-key (kbd "<f1>")   (rings-generate-cycler 1))
-      (global-set-key (kbd "S-<f1>") (rings-generate-setter 1))
-      (global-set-key (kbd "C-<f1>") (rings-generate-remover 1))
-      (global-set-key (kbd "M-<f1>") (rings-generate-adder 1))
+      (global-set-key (kbd "<f1>") (lambda nil (interactive) (rings-cycle 1)))
+      (global-set-key (kbd "S-<f1>") (lambda nil (interactive) (rings-toggle-buffer 1)))
+      (global-set-key (kbd "C-<f1>") (lambda nil (interactive) (rings-remove-buffer 1)))
+
       ;; f2
-      (global-set-key (kbd "<f2>")   (rings-generate-cycler 2))
-      (global-set-key (kbd "S-<f2>") (rings-generate-toggler 2))
-      (global-set-key (kbd "C-<f2>") (rings-generate-remover 2))
-      (global-set-key (kbd "M-<f2>") (rings-generate-adder 2))
+      (global-set-key (kbd "<f2>") (lambda nil (interactive) (rings-cycle 2)))
+      (global-set-key (kbd "S-<f2>") (lambda nil (interactive) (rings-toggle-buffer 2)))
+      (global-set-key (kbd "C-<f2>") (lambda nil (interactive) (rings-remove-buffer 2)))
+
       ;; f3
-      (global-set-key (kbd "<f3>")   (rings-generate-cycler 3))
-      (global-set-key (kbd "S-<f3>") (rings-generate-toggler 3))
-      (global-set-key (kbd "C-<f3>") (rings-generate-remover 3))
-      (global-set-key (kbd "M-<f3>") (rings-generate-adder 3))
+      (global-set-key (kbd "<f3>") (lambda nil (interactive) (rings-cycle 3)))
+      (global-set-key (kbd "S-<f3>") (lambda nil (interactive) (rings-toggle-buffer 3)))
+      (global-set-key (kbd "C-<f3>") (lambda nil (interactive) (rings-remove-buffer 3)))
+
       ;; f4
-      (global-set-key (kbd "<f4>")   (rings-generate-cycler 4))
-      (global-set-key (kbd "S-<f4>") (rings-generate-toggler 4))
-      (global-set-key (kbd "C-<f4>") (rings-generate-remover 4))
-      (global-set-key (kbd "M-<f4>") (rings-generate-adder 4)))
+      (global-set-key (kbd "<f4>") (lambda nil (interactive) (rings-cycle 4)))
+      (global-set-key (kbd "S-<f4>") (lambda nil (interactive) (rings-toggle-buffer 4)))
+      (global-set-key (kbd "C-<f4>") (lambda nil (interactive) (rings-remove-buffer 4)))
+      )
     (add-hook 'after-init-hook 'my-rings-setup t)))
 
 (use-package org-ehtml
@@ -4296,12 +4304,9 @@ overwriting each other's changes."
 (use-package abbrev
   :defer
   :diminish ""
-  :if (not noninteractive)
   :init
   (progn
-    (setq
-     abbrev-file-name (expand-file-name
-                       "abbrev_defs.el" user-lisp-directory))))
+    ))
 
 (use-package quickrun
   :ensure t
@@ -6139,6 +6144,9 @@ See URL `https://github.com/golang/lint'."
   :ensure t
   :commands (ahg-log ahg-short-log ahg-status))
 
+(eval-and-compile
+  (setq magit-last-seen-setup-instructions "1.4.0"))
+
 (use-package magit
   :ensure t
   :defer 6
@@ -6150,8 +6158,9 @@ See URL `https://github.com/golang/lint'."
          )
   :init
   (progn
+
     (setq
-     magit-last-seen-setup-instructions "1.4.0"
+
      magit-repo-dirs '("~/repos")
      magit-repo-dirs-depth 6
      magit-status-buffer-switch-function 'switch-to-buffer
