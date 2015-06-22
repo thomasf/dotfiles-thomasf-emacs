@@ -16,26 +16,6 @@
   "The path to emacs.d.")
 
 
-(defun load-path--take (n list)
-  "Returns a new list of the first N items in LIST, or all items if there are fewer than N.
-This is just a copy of the fully expanded macro from dash."
-  (let (result)
-    (let
-        ((num n)
-         (it 0))
-      (while
-          (< it num)
-        (when list
-          (setq result
-                (cons
-                 (car list)
-                 result))
-          (setq list
-                (cdr list)))
-        (setq it
-              (1+ it))))
-    (nreverse result)))
-
 (require 'package)
 (mkdir package-user-dir t)
 
