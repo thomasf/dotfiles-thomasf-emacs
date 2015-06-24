@@ -7307,7 +7307,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands (django-toggle-app))
 
 (use-package mingus
-  :commands (mingus mingus-stop)
+  :commands (mingus mingus-stop mingus-dired-add mingus-dired-add-and-play)
   :init
   (progn
     (setq
