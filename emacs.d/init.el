@@ -3927,6 +3927,7 @@ ARG is a prefix argument.  If nil, copy the current difference region."
         (dired-rainbow-define doc "#6c71c4" ("org" "html" "md" "txt" "markdown"))))
 
     (use-package dired-subtree
+      :disabled t ;; dired-subtree is not compatible with dired-hide-details-mode
       :ensure t
       :commands (dired-subtree-insert
                  dired-subreee-remove)
