@@ -4492,6 +4492,10 @@ overwriting each other's changes."
                  org-readme-convert-to-markdown
                  org-readme-git))
 
+    (use-package org-dashboard
+      :ensure t
+      :commands (org-dashboard-display))
+
     (use-package org-journal
       :ensure t
       :commands (org-journal-new-entry)
