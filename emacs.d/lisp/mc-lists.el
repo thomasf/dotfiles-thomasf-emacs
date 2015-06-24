@@ -42,6 +42,7 @@
         delete-blank-lines
         delete-indentation
         dired-back-to-start-of-files
+        dired-maybe-insert-subdir
         dired-next-line
         duplicate-current-line-or-region
         electric-newline-and-maybe-indent
