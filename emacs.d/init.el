@@ -3130,6 +3130,10 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands focus-mode)
 
+(use-package ham-mode
+  :ensure t
+  :commands (ham-mode))
+
 (use-package helm-chrome
   :ensure t
   :commands helm-chrome-bookmarks)
@@ -5253,6 +5257,8 @@ See URL `https://github.com/golang/lint'."
        (unsplittable . nil))))
   :config
   (progn
+    (use-package gmail-message-mode
+      :ensure t)
     (defun my-edit-server-start-hook ()
       "My edit-server mode hook."
       ;; TODO: support enabling org-mode, markdown-mode, rest-mode
