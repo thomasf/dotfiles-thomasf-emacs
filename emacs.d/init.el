@@ -429,8 +429,8 @@ buffer-local wherever it is set."
   :config
   (progn
     (load "solarized-theme-autoloads" nil t)
-    (setq theme-dark 'solarized-dark
-          theme-bright 'solarized-light)))
+    (setq theme-dark 'my-solarized-dark
+          theme-bright 'my-solarized-light)))
 
 (use-package zenburn-theme
   :ensure t
