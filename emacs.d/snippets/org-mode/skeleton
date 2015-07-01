@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: org mode file header
-# key: fileheader
+# key: skeleton
 # --
 #+TITLE:                `(s-titleize (f-base (f-this-file)))`
 #+AUTHOR:               `user-full-name`
