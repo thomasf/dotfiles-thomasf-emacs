@@ -2760,7 +2760,7 @@ for the current buffer's file name, and the line number at point."
        projectile-root-top-down
        projectile-root-top-down-recurring
        projectile-root-child-of))
-    (bind-key "A" 'projectile-pt region-bindings-mode-map)
+    (bind-key "A" 'projectile-pt-file-pattern region-bindings-mode-map)
 
     (defadvice projectile-mode (before maybe-use-cache activate)
       (when
@@ -4249,7 +4249,9 @@ overwriting each other's changes."
     (setq
      savehist-file (expand-file-name
                     "savehist" user-data-directory)
-     savehist-additional-variables '(search ring regexp-search-ring)
+     savehist-additional-variables '(search ring regexp-search-ring
+                                     projectile-pt-file-pattern-history
+                                     projectile-pt-file-pattern-search-history)
      savehist-autosave-interval 60))
   :config
   (progn
@@ -9557,12 +9559,31 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package pt
   :ensure t
-  :commands (pt-regexp projectile-pt)
-  :bind (("M-o a" . projectile-pt))
+  :commands (pt-regexp projectile-pt projectile-pt-file-pattern)
+  :bind (("M-o a" . projectile-pt-file-pattern))
   :init
   (progn
     (setq pt-arguments
-          (list "--smart-case"))))
+          (list "--smart-case")))
+  :config
+  (progn
+
+    (defvar projectile-pt-file-pattern-history '())
+    (defvar projectile-pt-file-pattern-search-history '())
+
+    (defun projectile-pt-file-pattern (regexp pattern)
+      "Run a pt search with REGEXP rooted at DIRECTORY with FILE-FILTER."
+      (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol)
+                                               nil nil 'projectile-pt-file-pattern-history)
+                         (read-from-minibuffer "File pattern: " nil
+                                               nil nil 'projectile-pt-file-pattern-search-history)))
+      (pt-regexp regexp
+                 (projectile-project-root)
+                 (append
+                  (mapcar (lambda (val) (concat "--ignore=" val))
+                          (append projectile-globally-ignored-files
+                                  projectile-globally-ignored-directories))
+                  (list (concat "--file-search-regexp=" (shell-quote-argument pattern))))))))
 
 (use-package bug-reference-github
   :ensure t
