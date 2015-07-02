@@ -5628,27 +5628,6 @@ See URL `https://github.com/golang/lint'."
   :mode (("/\\.gitconfig\\'" . gitconfig-mode)
          ("/\\.git/config\\'" . gitconfig-mode)))
 
-(use-package git-commit-mode
-  :ensure t
-  :commands git-commit-mode
-  :mode (("COMMIT_EDITMSG" . git-commit-mode)
-         ("NOTES_EDITMSG" . git-commit-mode)
-         ("MERGE_MSG" . git-commit-mode)
-         ("TAG_EDITMSG" . git-commit-mode))
-  :init
-  (progn
-    (defun my-git-commit-hook ()
-      "My git commit mode hook."
-      (unless degrade-p-minimalism
-        (ispell-change-dictionary "english")
-        (turn-on-flyspell)
-        (toggle-save-place 0)
-        (git-commit-save-message)
-        (turn-on-auto-fill)))
-    (add-hook 'git-commit-mode-hook 'my-git-commit-hook)
-    (when (boundp 'session-mode-disable-list)
-      (add-to-list 'session-mode-disable-list 'git-commit-mode))))
-
 (use-package mo-git-blame
   :ensure t
   :commands mo-git-blame-current
@@ -6237,6 +6216,17 @@ See URL `https://github.com/golang/lint'."
         (call-interactively 'my-magit-status))))
   :config
   (progn
+    (defun my-git-commit-hook-fn ()
+      "My git commit mode hook."
+      (unless degrade-p-minimalism
+        (ispell-change-dictionary "english")
+        (turn-on-flyspell)
+        (toggle-save-place 0)
+        (git-commit-save-message)
+        (turn-on-auto-fill)))
+    ;; FIXME Where to run my-git-commit-hook-fn ?
+    ;; (add-hook 'git-commit-hook 'my-git-commit-hook-fn)
+
     (require 'json)
     ;; (defadvice magit-status (around magit-fullscreen activate)
     ;;   (window-configuration-to-register :magit-fullscreen)
@@ -6266,12 +6256,8 @@ See URL `https://github.com/golang/lint'."
       (interactive)
       (setq magit-diff-options (remove "-w" magit-diff-options))
       (magit-refresh))
-    (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)))
-
-(use-package git-rebase-mode
-  :ensure t
-  :commands git-rebase-mode
-  :mode ("git-rebase-todo" . git-rebase-mode))
+    ;; (bind-key "W" 'magit-toggle-whitespace magit-status-mode-map)
+    ))
 
 (use-package virtualenvwrapper
   :ensure t
