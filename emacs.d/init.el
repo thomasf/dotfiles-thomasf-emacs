@@ -6177,7 +6177,7 @@ See URL `https://github.com/golang/lint'."
      magit-log-auto-more t
      magit-auto-revert-mode t
      magit-auto-revert-mode-lighter ""
-     magit-set-upstream-on-push t)
+     magit-revert-buffers 'silent)
 
     (defadvice magit-version (around skipit activate)
       "900000000")
