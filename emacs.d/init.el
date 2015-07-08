@@ -6221,11 +6221,9 @@ See URL `https://github.com/golang/lint'."
       (unless degrade-p-minimalism
         (ispell-change-dictionary "english")
         (turn-on-flyspell)
-        (toggle-save-place 0)
-        (git-commit-save-message)
-        (turn-on-auto-fill)))
-    ;; FIXME Where to run my-git-commit-hook-fn ?
-    ;; (add-hook 'git-commit-hook 'my-git-commit-hook-fn)
+        (toggle-save-place 0)))
+
+    (add-hook 'git-commit-setup-hook 'my-git-commit-hook-fn)
 
     (require 'json)
     ;; (defadvice magit-status (around magit-fullscreen activate)
@@ -6297,7 +6295,8 @@ See URL `https://github.com/golang/lint'."
   :ensure t
   :commands (yas-reload-all yas-global-mode yas-minor-mode snippet-mode
                             yas-expand yas-expand-snippet yas-minor-mode-on
-                            dired-snippets-dir yas-insert-snippet)
+                            dired-snippets-dir yas-insert-snippet
+                            yas-activate-extra-mode)
   :bind (("C-x d y" . dired-snippets-dir))
   :diminish yas-minor-mode
   :init
@@ -6329,9 +6328,13 @@ See URL `https://github.com/golang/lint'."
 
     (bind-key "C-x i" 'yas-insert-snippet)
     (bind-key "C-h TAB" 'yas-insert-snippet)
-    (hook-into-modes #'yas-minor-mode-on
-                     '(org-mode-hook
-                       git-commit-mode-hook))
+
+    (defun my-ac-git-commit-setup-hook-fn ()
+      (yas-activate-extra-mode 'git-commit-mode)
+      (yas-minor-mode-on))
+
+    (add-hook 'git-commit-setup-hook #'my-ac-git-commit-setup-hook-fn )
+    (hook-into-modes #'yas-minor-mode-on '(org-mode-hook))
     (hook-into-modes #'yas-minor-mode-on my-prog-mode-hooks)
     (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks)
 
