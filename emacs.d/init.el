@@ -7189,10 +7189,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :init
       (progn
         (setq
-         jedi:install-imenu t
+         ;; NOTE enabling jedi:install-imenu causes buffer revert errors
+         ;; see https://github.com/tkf/emacs-jedi/issues/234
+         jedi:install-imenu nil
          jedi:complete-on-dot t)
 
         (use-package jedi-direx
+          ;; NOTE enabling jedi-direx causes buffer revert errors
+          ;; see https://github.com/tkf/emacs-jedi/issues/234
+          :disabled t
           :ensure t
           :commands (jedi-direx:pop-to-buffer
                      jedi-direx:switch-to-buffer
