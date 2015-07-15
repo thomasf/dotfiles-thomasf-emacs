@@ -2882,6 +2882,11 @@ for the current buffer's file name, and the line number at point."
   :if (not noninteractive)
   :commands dired-toggle-sudo)
 
+(use-package docker
+  :ensure t
+  :commands (docker-ps
+             docker-containers
+             docker-images))
 
 (use-package download-region
   :ensure t
