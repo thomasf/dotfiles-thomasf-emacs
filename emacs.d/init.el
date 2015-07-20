@@ -1541,7 +1541,9 @@ buffer-local wherever it is set."
                    grep-mode-hook
                    direx:direx-mode-hook
                    debugger-mode-hook
-                   prodigy-view-mode-hook))
+                   prodigy-view-mode-hook
+                   docker-images-mode-hook
+                   docker-containers-mode-hook))
 
 (use-package helm
   :defer
