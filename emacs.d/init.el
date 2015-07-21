@@ -6764,13 +6764,13 @@ See URL `https://github.com/golang/lint'."
       :ensure t)
 
     (defun ibuffer-my-abbrevs (filename)
-      (let ((gopath (getenv "GOPATH"))
+      (let ((gosrc (if (getenv "GOPATH")  (expand-file-name "src" (getenv "GOPATH"))))
             (directory-abbrev-alist ibuffer-directory-abbrev-alist))
         (cond
-         ((and gopath (s-starts-with? gopath filename))
-          (concat "gopath"
+         ((and gosrc (s-starts-with? gosrc filename))
+          (concat "gosrc"
                   my-ibufffer-separator
-                  (s-replace (concat gopath "/") "" filename)))
+                  (s-replace (concat gosrc "/") "" filename)))
          (t (abbreviate-file-name filename)))))
 
     (define-ibuffer-column filename
