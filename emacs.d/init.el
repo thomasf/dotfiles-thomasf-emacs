@@ -538,17 +538,17 @@ buffer-local wherever it is set."
        "Tahoma" "Verdana" "Helvetica" "Arial Unicode MS" "Arial")
      dynamic-fonts-preferred-proportional-point-size 11)
 
-    (defvar my-monospaced-font "PragmataPro-11.8")
+    (defvar my-monospaced-font "Pragmata Pro-11.8")
     (defvar my-variable-pitch-font "Pt Sans-13")
     ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
     ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
     (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "PragmataPro-13"
+      (setq my-monospaced-font "Pragmata Pro-13"
             my-variable-pitch-font "Pt Sans-13"))
 
     (when (s-starts-with? "blopp" system-name)
-      (setq my-monospaced-font "PragmataPro-15"
+      (setq my-monospaced-font "Pragmata Pro-15"
             my-variable-pitch-font "Pt Sans-15"))
 
     (defun my-set-fonts  ()
@@ -1498,7 +1498,7 @@ buffer-local wherever it is set."
   "Set PragmataPro/PT Sans for selected frame."
   (interactive "P")
   (let ((size (if arg arg 11)))
-    (fonts-set (format "PragmataPro-%s" size)
+    (fonts-set (format "Pragmata Pro-%s" size)
                (format "PT Sans-%s" size)
                (selected-frame))))
 
