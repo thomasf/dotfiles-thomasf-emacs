@@ -6768,7 +6768,7 @@ See URL `https://github.com/golang/lint'."
             (directory-abbrev-alist ibuffer-directory-abbrev-alist))
         (cond
          ((and gosrc (s-starts-with? gosrc filename))
-          (concat "gosrc"
+          (concat "go"
                   my-ibufffer-separator
                   (s-replace (concat gosrc "/") "" filename)))
          (t (abbreviate-file-name filename)))))
