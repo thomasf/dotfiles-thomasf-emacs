@@ -7960,7 +7960,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (setq mml2015-encrypt-to-self t
-          mml2015-sign-with-sender t)))
+          mml2015-sign-with-sender t
+          mml2015-use 'epg)))
 
 (use-package mu4e
   :if (file-exists-p "~/.config/myGmail-maildir")
