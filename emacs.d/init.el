@@ -5373,6 +5373,10 @@ See URL `https://github.com/golang/lint'."
 (use-package go-rename
   :commands go-rename)
 
+(use-package go-scratch
+  :ensure t
+  :commands go-scratch)
+
 (use-package slim-mode
   :ensure t
   :mode ("\\.slim\\'" . slim-mode))
