@@ -3289,6 +3289,10 @@ for the current buffer's file name, and the line number at point."
                     (region-end))))
         (howdoi-request query 'howdoi-pop-answer-to-buffer-callback)))))
 
+(use-package ido-completing-read+
+  :ensure t
+  :defer t)
+
 (use-package jumpc
   :disabled t
   :ensure t
