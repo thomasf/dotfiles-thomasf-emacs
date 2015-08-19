@@ -1,0 +1,5 @@
+# name: panic(err)
+# key: panerr
+# description: panic(err)
+# --
+panic(err)
