@@ -5209,6 +5209,7 @@ See URL `https://pypi.python.org/pypi/flake8'."
                          "F401" ;; pyflakes: module imported but unused
                          "E303" ;; pep8: too many blank lines (3)
                          "E501" ;; pep8: line too long (82 > 79 characters)
+                         "E128" ;; pep8:       continuation line under-indented for visual indent.
                          "E2";; pep8: Whitespace
                          "E3";; pep8: blank lines
                          "W2";; pep8: Whitespace
