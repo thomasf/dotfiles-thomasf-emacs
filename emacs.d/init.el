@@ -6766,6 +6766,7 @@ See URL `https://github.com/golang/lint'."
                (".private" . "~/.config/dotfiles/private")
                (".config" . "~/.config/")
                ("goroot" . "~/.opt/go/")
+               ("goroot" . "~/.opt/go-master/")
                )))))
     (use-package ibuffer-git
       :ensure t)
@@ -8247,6 +8248,7 @@ Titus von der Malsburg."
        "~/\\.opt/emacs-site-lisp/"
        "~/\\.opt/emacs/"
        "~/\\.opt/go/"
+       "~/\\.opt/go-master/"
        "~/\\.opt/xmonad/"
        "~/\\.rvm/"
        "~/\\.virthualenv/"
