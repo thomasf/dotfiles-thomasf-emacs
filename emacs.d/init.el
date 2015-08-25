@@ -1230,7 +1230,7 @@ buffer-local wherever it is set."
         (setq enable-recursive-minibuffers t)
         (minibuffer-depth-indicate-mode))
     (setq enable-recursive-minibuffers nil)))
-(recursive-minibuffer-mode)
+;; (recursive-minibuffer-mode)
 ;;; functions: files / directories
 ;;;; dired jump commands
 
