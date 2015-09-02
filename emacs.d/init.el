@@ -5752,6 +5752,7 @@ See URL `https://github.com/golang/lint'."
           (direx:direx-mode :position left :width .25 :dedicated t)
           ("*Messages*" :height .40 :tail t)
           ("*pt-search*" :height .40 :stick t)
+          ("*go-traceback*" :height .40 :stick t)
           ("*prodigy*" :height .40)
           ("^\\*prodigy-.*\\*$" :regexp t :height .40 :stick t :tail t)
           ("*Keys*" :height .85)
