@@ -3574,10 +3574,6 @@ for the current buffer's file name, and the line number at point."
   (progn
     (global-prettify-symbols-mode)))
 
-(use-package py-autopep8
-  :ensure t
-  :commands (py-autopep8))
-
 (use-package region-bindings-mode
   :if (and
        (not noninteractive)
@@ -7201,6 +7197,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         )))
   :config
   (progn
+    (use-package py-autopep8
+      :ensure t
+      :commands (py-autopep8)
+      :init
+      (progn
+            (bind-key "C-c C-c" 'py-autopep8 python-mode-map)))
 
     (use-package jedi
       :ensure t
