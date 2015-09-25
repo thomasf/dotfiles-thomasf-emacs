@@ -7974,7 +7974,23 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (setq mml2015-encrypt-to-self t
           mml2015-sign-with-sender t
-          mml2015-use 'epg)))
+          mml2015-use 'epg))
+  :config
+  (progn
+    (defun mml2015-epg-check-user-id (key recipient)
+      (let ((pointer (epg-key-user-id-list key))
+            result)
+        (while pointer
+          (if (and (equal (downcase (car (mail-header-parse-address
+                                        (epg-user-id-string (car pointer)))))
+                        (downcase (car (mail-header-parse-address
+                                        recipient))))
+                 (not (memq (epg-user-id-validity (car pointer))
+                          '(revoked expired))))
+              (setq result t
+                    pointer nil)
+            (setq pointer (cdr pointer))))
+        result))))
 
 (use-package mu4e
   :if (file-exists-p "~/.config/myGmail-maildir")
