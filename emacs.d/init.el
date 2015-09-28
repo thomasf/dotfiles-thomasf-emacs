@@ -2862,6 +2862,11 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands clj-refactor-mode)
 
+(use-package cmake-mode
+  :ensure t
+  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
+         ("\\.cmake\\'" . cmake-mode)))
+
 (use-package color-identifiers-mode
   :ensure t
   :commands color-identifiers-mode)
