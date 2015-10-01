@@ -239,6 +239,7 @@
         phi-search
         picture-mouse-set-point
         projectile-ag
+        projectile-find-file
         recenter-top-bottom-flash
         shell
         smex
