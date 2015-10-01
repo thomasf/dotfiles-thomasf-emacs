@@ -3298,6 +3298,10 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :defer t)
 
+(use-package ietf-docs
+  :ensure t
+  :commands ietf-docs-open-at-point)
+
 (use-package jumpc
   :disabled t
   :ensure t
