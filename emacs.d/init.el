@@ -3356,6 +3356,7 @@ for the current buffer's file name, and the line number at point."
   :commands persp-mode)
 
 (use-package prog-mode
+  :defer
   :init
   (progn
     (defun my-prettify-symbols-compile-patterns (patterns)
