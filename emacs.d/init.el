@@ -46,7 +46,10 @@
   ;; (setq my-log-verbose t)
   (if my-log-verbose
       (setq byte-compile-verbose t)
-    (setq ad-redefinition-action 'accept)))
+    (setq ad-redefinition-action 'accept))
+  (setq use-package-verbose my-log-verbose
+        use-package-debug nil
+        use-package-minimum-reported-time 0.01))
 
 ;;; Emacs version check and feature inhibitions
 
@@ -258,9 +261,6 @@ buffer-local wherever it is set."
   (let ((region-bindings-mode-map (make-sparse-keymap)))
     region-bindings-mode-map)
   "Keymaps for command `region-bindings-mode-map'.")
-
-(setq use-package-verbose my-log-verbose
-      use-package-debug nil)
 
 ;;;; utils
 
