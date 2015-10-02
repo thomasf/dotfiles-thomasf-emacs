@@ -20,10 +20,15 @@
 
 ;;;; Set some things early
 (and (fboundp 'menu-bar-mode)
-     (not (eq system-type 'darwin))
-     (menu-bar-mode -1))
-(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-(when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+   menu-bar-mode
+   (not (eq system-type 'darwin))
+   (menu-bar-mode -1))
+(and (fboundp 'tool-bar-mode)
+   tool-bar-mode
+   (tool-bar-mode -1))
+(and (fboundp 'scroll-bar-mode)
+   scroll-bar-mode
+   (scroll-bar-mode -1))
 (setq default-frame-alist '((vertical-scroll-bars . nil)
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
