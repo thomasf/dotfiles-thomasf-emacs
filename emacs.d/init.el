@@ -3643,6 +3643,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package rings
   :ensure t
+  :if (not noninteractive)
   :init
   (progn
     (setq rings-protect-buffers-in-rings nil)
@@ -7452,6 +7453,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package smartparens
   :ensure t
   :pin "melpa-stable"
+  :if (not noninteractive)
   :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
                               turn-off-smartparens-mode show-smartparens-mode
                               show-smartparens-global-mode
