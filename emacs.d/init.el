@@ -7364,6 +7364,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package mingus
   :commands (mingus mingus-stop mingus-dired-add mingus-dired-add-and-play)
+  :ensure t
   :init
   (progn
     (setq
