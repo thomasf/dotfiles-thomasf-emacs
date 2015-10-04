@@ -7365,11 +7365,28 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package mingus
   :commands (mingus mingus-stop mingus-dired-add mingus-dired-add-and-play)
   :ensure t
+  :if (not noninteractive)
   :init
   (progn
     (setq
      mingus-use-mouse-p nil
-     mingus-use-ido-mode-p t)))
+     mingus-use-ido-mode-p t))
+  :config
+  (progn
+    (dolist
+        (m (list mingus-playlist-map mingus-browse-map mingus-help-map))
+      (define-key m "s" 'isearch-forward-regexp)
+      (define-key m "t" 'mingus-toggle)
+      (define-key m "n" 'next-line)
+      (define-key m "p" 'previous-line)
+      (define-key m "h" 'ibuffer))
+    (defun mingus ()
+      "My mingus command"
+      (interactive)
+      (mingus-switch-to-playlist)
+      (mingus-playlist)
+      (mingus-goto-current-song)
+      (recenter))))
 
 (use-package volume
   :ensure t
