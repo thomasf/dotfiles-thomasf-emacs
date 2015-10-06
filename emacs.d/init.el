@@ -3352,6 +3352,12 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands memory-usage)
 
+(use-package nxml-mode
+  :defer t
+  :config
+  (progn
+    (unbind-key "M-h" nxml-mode-map)))
+
 (use-package peep-dired
   :ensure t
   :commands peep-dired)
