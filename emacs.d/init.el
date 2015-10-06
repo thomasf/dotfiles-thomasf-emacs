@@ -121,6 +121,7 @@ re-downloaded in order to locate PACKAGE."
 (use-package smartrep :ensure t)
 (use-package diminish :ensure t)
 (use-package deferred :ensure t :commands (deferred:$))
+(use-package let-alist :ensure t :commands (let-alist))
 (use-package request-deferred :ensure t :defer)
 (use-package concurrent :ensure t :defer)
 (use-package load-relative :ensure t :defer)
@@ -5129,13 +5130,14 @@ otherwise use the subtree title."
   :ensure t
   :if (not noninteractive)
   :commands (flycheck-mode
-             global-flycheck-mode)
-  :diminish ((flycheck-mode . "fc"))
-
-  :bind (("M-o e" . flycheck-list-errors))
+             global-flycheck-mode
+             my-flycheck-list-errors)
+  :bind (("M-o e" . my-flycheck-list-errors)
+         ("C-h w" . my-flycheck-list-errors))
   :init
   (progn
     (setq
+     flycheck-mode-line '(:eval (my-flycheck-mode-line-status-text))
      flycheck-highlighting-mode 'lines
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint)
@@ -5160,8 +5162,37 @@ otherwise use the subtree title."
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
   (progn
+    (defun my-flycheck-mode-line-status-text (&optional status)
+      (let ((text (pcase (or status flycheck-last-status-change)
+                    (`not-checked "")
+                    (`no-checker "-")
+                    (`running "*")
+                    (`errored "!")
+                    (`finished
+                     (let-alist (flycheck-count-errors flycheck-current-errors)
+                       ;; (if (or .error .warning)
+                       ;;     (format ":%s/%s" (or .error 0) (or .warning 0))
+                       ;;   "")))
+                       (if .error
+                           (format ":%s" (or .error 0))
+                         "")))
+                    (`interrupted "-")
+                    (`suspicious "?"))))
+        (concat " fc" text)))
+
+
+    (defun my-flycheck-list-errors ()
+      "Save all buffers before opening list"
+      (interactive)
+      (if (not (flycheck-may-enable-mode))
+          (error "flycheck not supported in this mode")
+        (silent-save-some-buffers)
+        (unless flycheck-mode
+          (flycheck-mode))
+        (flycheck-list-errors)))
+
+    (flycheck-add-mode 'javascript-eslint 'web-mode)
     (setq flycheck-javascript-jshint-executable
           (cond
            ((executable-find* "jsxhint") "jsxhint")
@@ -5244,8 +5275,8 @@ See URL `https://pypi.python.org/pypi/flake8'."
          (warning line-start
                   (file-name) ":" line ":" (optional column ":") " "
                   (message (or "F"            ; Pyflakes in Flake8 >= 2.0
-                              "W"            ; Pyflakes in Flake8 < 2.0
-                              "C")           ; McCabe in Flake >= 2.0
+                               "W"            ; Pyflakes in Flake8 < 2.0
+                               "C")           ; McCabe in Flake >= 2.0
                            (one-or-more digit) (zero-or-more not-newline))
                   line-end)
 
