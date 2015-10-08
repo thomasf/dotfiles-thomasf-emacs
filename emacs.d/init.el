@@ -2802,6 +2802,7 @@ for the current buffer's file name, and the line number at point."
                                        (file-truename it))))))
   :config
   (progn
+    (add-to-list 'projectile-globally-ignored-directories "vendor")
     (projectile-global-mode)))
 
 (defalias 'project-root-function 'projectile-project-root)
