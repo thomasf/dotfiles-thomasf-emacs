@@ -5182,6 +5182,13 @@ otherwise use the subtree title."
                     (`suspicious "?"))))
         (concat " fc" text)))
 
+    (defun my-flycheck-error-list-goto-error (&optional pos)
+      (interactive)
+      (flycheck-error-list-goto-error)
+      (recenter)
+      (nav-flash-show))
+
+    (bind-key "RET" 'my-flycheck-error-list-goto-error flycheck-error-list-mode-map)
 
     (defun my-flycheck-list-errors ()
       "Save all buffers before opening list"
