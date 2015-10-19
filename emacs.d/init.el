@@ -3338,7 +3338,11 @@ for the current buffer's file name, and the line number at point."
 
 (use-package malabar-mode
   :ensure t
-  :mode (("\\.java\\'" . malabar-mode))
+  :commands (malabar-mode malabar-java-mode malabar-groovy-mode)
+  :init
+  (progn
+    (add-hook 'groovy-mode-hook 'malabar-groovy-mode)
+    (add-hook 'java-mode-hook   'malabar-java-mode))
   :config
   (progn
     (add-hook 'malabar-mode-hook
@@ -4464,7 +4468,7 @@ overwriting each other's changes."
      ;; haskell-tags-on-save t
      haskell-stylish-on-save t)
     (defun my-haskell-mode-hook ()
-      (turn-on-haskell-indentation))
+      (haskell-indentation-mode))
     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
     (use-package ghc
       :ensure t
@@ -7613,7 +7617,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (setq
-     eclim-eclipse-dirs '("~/.opt/eclipse")
+     eclim-eclipse-dirs '("~/.opt/eclipse" "~/.opt/eclipse/jee-mars/eclipse")
      eclim-executable "~/.opt/eclipse/eclim"))
   :config
   (progn
