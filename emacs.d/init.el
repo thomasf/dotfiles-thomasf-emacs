@@ -2735,6 +2735,7 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq projectile-project-root-files-child-of
           '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            "~/\.opt/[^/]+/?$"
             "~/\.virtualenvs/[^/]+/?$"
             "/var/log/?$"))
 
