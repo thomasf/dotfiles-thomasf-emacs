@@ -5189,7 +5189,7 @@ otherwise use the subtree title."
 
     (defun my-flycheck-error-list-goto-error (&optional pos)
       (interactive)
-      (flycheck-error-list-goto-error)
+      (flycheck-error-list-goto-error pos)
       (recenter)
       (nav-flash-show))
 
@@ -5203,7 +5203,8 @@ otherwise use the subtree title."
         (silent-save-some-buffers)
         (unless flycheck-mode
           (flycheck-mode))
-        (flycheck-list-errors)))
+        (flycheck-list-errors)
+        (select-window (get-buffer-window "*Flycheck errors*"))))
 
     (flycheck-add-mode 'javascript-eslint 'web-mode)
     (setq flycheck-javascript-jshint-executable
