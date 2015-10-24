@@ -5439,6 +5439,7 @@ See URL `https://github.com/golang/lint'."
     (setq go-oracle-command (executable-find* "oracle"))))
 
 (use-package go-rename
+  :ensure t
   :commands go-rename)
 
 (use-package go-scratch
