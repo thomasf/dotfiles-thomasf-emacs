@@ -2883,6 +2883,11 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
+(use-package describe-number
+  :ensure t
+  :commands (describe-number
+             describe-number-at-point))
+
 (use-package cuda-mode
   :ensure t
   :mode (("\\.cu\\'" . cuda-mode)
