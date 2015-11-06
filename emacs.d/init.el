@@ -1251,14 +1251,19 @@ buffer-local wherever it is set."
 (defun dired-23c ()
   "dired-23c"
   (interactive)
-  (dired "~/repos/23c/"))
+  (dired "~/src/gitlab.23c.se/"))
 (bind-key "C-x d 2" 'dired-23c)
+
+(defun dired-src ()
+  "dired-src"
+  (interactive)
+  (dired "~/src/"))
+(bind-key "C-x d r" 'dired-src)
 
 (defun dired-repos ()
   "dired-repos"
   (interactive)
-  (dired "~/repos/"))
-(bind-key "C-x d r" 'dired-repos)
+  (dired-src))
 
 (defun dired-downloads ()
   "dired-downloads"
@@ -2793,14 +2798,7 @@ for the current buffer's file name, and the line number at point."
       "Projectile find file without ignore."
       (interactive)
       (let ((projectile-git-command "git ls-files -zco"))
-        (call-interactively 'projectile-find-file)))
-
-    (defun projectile-add-magit-repo-dirs-to-known-projects ()
-      "Add `magit-repo-dirs' to `projectile-known-projects'."
-      (interactive)
-      (--each (mapcar 'cdr (magit-list-repos magit-repo-dirs))
-        (projectile-add-known-project (file-name-as-directory
-                                       (file-truename it))))))
+        (call-interactively 'projectile-find-file))))
   :config
   (progn
     (add-to-list 'projectile-globally-ignored-directories "vendor")
@@ -6253,7 +6251,7 @@ See URL `https://github.com/golang/lint'."
 
     (setq
 
-     magit-repo-dirs '("~/repos")
+     magit-repo-dirs '("~/src")
      magit-repo-dirs-depth 6
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers nil ;; manually saving all buffers instead
@@ -6818,17 +6816,17 @@ See URL `https://github.com/golang/lint'."
               (cons  (f-slash (f-canonical (cdr it))) (concat (car it) my-ibufffer-separator)))
 
              '(
-               ("23c" . "~/repos/23c/23c/")
-               ("23c" . "~/repos/23c/")
-               ("github" . "~/repos/github/")
+               ("23c" . "~/src/gitlab.23c.se/23c/")
+               ("23c" . "~/src/gitlab.23c.se/23c/23c/")
+               ("github" . "~/src/github.com/")
                ("notes-agenda" . "~/notes/agenda/")
                ("notes-org" . "~/notes/org/")
                ("notes" . "~/notes/")
                ("venv" . "~/.virtualenvs/")
                (".emacsp" . "~/.emacs.d/elpa/")
                (".emacsd" . "~/.emacs.d/")
-               ("dotfiles" . "~/repos/dotfiles/")
-               ("repos" . "~/repos/")
+               ("dotfiles" . "~/src/dotfiles/")
+               ("src" . "~/src/")
                (".emacs" . "~/.config/dotfiles/emacs")
                (".base" . "~/.config/dotfiles/base")
                (".xmonad'" . "~/.config/dotfiles/xmonad")
