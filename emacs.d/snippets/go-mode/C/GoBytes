@@ -1,6 +1,0 @@
-# name: C pointer, length to Go []byte: func C.GoBytes(unsafe.Pointer, C.int) []byte
-# key: CGoBytes
-# binding: 
-# expand-env: ()
-# --
-C.GoBytes(${1:unsafe.Pointer}, ${2:C.int})$0

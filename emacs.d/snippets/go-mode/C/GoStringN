@@ -1,6 +1,0 @@
-# name: C string, length to Go string: func C.GoStringN(*C.char, C.int) string
-# key: CGoStringN
-# binding: 
-# expand-env: ()
-# --
-C.GoStringN(${1:*C.char}, ${2:C.int})$0

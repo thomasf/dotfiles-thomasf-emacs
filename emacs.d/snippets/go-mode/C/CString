@@ -1,6 +1,0 @@
-# name: Go string to C string: func C.CString(string) *C.char
-# key: CCString
-# binding: 
-# expand-env: ()
-# --
-C.CString(${1:string})$0
