@@ -8145,7 +8145,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
   :config
   (progn
-    (setq )
     (use-package mu4e-contrib
       :config
       (progn
