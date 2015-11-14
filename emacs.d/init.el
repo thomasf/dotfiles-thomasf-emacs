@@ -6812,29 +6812,35 @@ See URL `https://github.com/golang/lint'."
            (-flatten
             (--map
              (list
-              (cons  (f-slash (f-expand (cdr it))) (concat (car it) my-ibufffer-separator))
-              (cons  (f-slash (f-canonical (cdr it))) (concat (car it) my-ibufffer-separator)))
+              (cons  (f-slash (f-expand (cdr it))) (format "%12s" (concat (car it) my-ibufffer-separator)))
+              (cons  (f-slash (f-canonical (cdr it))) (format "%12s" (concat (car it) my-ibufffer-separator))))
 
              '(
+               ("alkasir" . "~/src/gitlab.23c.se/alkasir/")
+               ("tracklib" . "~/src/github.com/tracklib/")
                ("23c" . "~/src/gitlab.23c.se/23c/")
-               ("23c" . "~/src/gitlab.23c.se/23c/23c/")
+               ("tf@23c" . "~/src/gitlab.23c.se/thomasf")
+               ("23c" . "~/src/gitlab.23c.se/")
+               ("tf@gh" . "~/src/github.com/thomasf/")
                ("github" . "~/src/github.com/")
-               ("notes-agenda" . "~/notes/agenda/")
-               ("notes-org" . "~/notes/org/")
+               ("src" . "~/src/")
                ("notes" . "~/notes/")
                ("venv" . "~/.virtualenvs/")
                (".emacsp" . "~/.emacs.d/elpa/")
                (".emacsd" . "~/.emacs.d/")
-               ("dotfiles" . "~/src/dotfiles/")
-               ("src" . "~/src/")
-               (".emacs" . "~/.config/dotfiles/emacs")
-               (".base" . "~/.config/dotfiles/base")
-               (".xmonad'" . "~/.config/dotfiles/xmonad")
-               (".experimental" . "~/.config/dotfiles/experimental")
-               (".private" . "~/.config/dotfiles/private")
                (".config" . "~/.config/")
+               ("dotfiles" . "~/src/dotfiles/")
                ("goroot" . "~/.opt/go/")
                ("goroot" . "~/.opt/go-master/")
+               (".opt" . "~/.opt")
+               ("/usr" . "/usr")
+               ("/var" . "/var")
+               ("/etc" . "/etc")
+               ("/lib" . "/lib")
+               ("/media" . "/media")
+               ("/mnt" . "/mnt")
+               ("/srv" . "/srv")
+
                )))))
     (use-package ibuffer-git
       :ensure t)
@@ -6842,14 +6848,9 @@ See URL `https://github.com/golang/lint'."
       :ensure t)
 
     (defun ibuffer-my-abbrevs (filename)
-      (let ((gosrc (if (getenv "GOPATH")  (expand-file-name "src" (getenv "GOPATH"))))
-            (directory-abbrev-alist ibuffer-directory-abbrev-alist))
-        (cond
-         ((and gosrc (s-starts-with? gosrc filename))
-          (concat "go"
-                  my-ibufffer-separator
-                  (s-replace (concat gosrc "/") "" filename)))
-         (t (abbreviate-file-name filename)))))
+      (let ((directory-abbrev-alist ibuffer-directory-abbrev-alist))
+        (abbreviate-file-name filename)
+        ))
 
     (define-ibuffer-column filename
       (:summarizer
