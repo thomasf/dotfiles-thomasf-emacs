@@ -7965,7 +7965,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (use-package groovy-mode
   :ensure t
   :mode (("\\.groovy\\'" . groovy-mode)
-         ("build\\.gradle\\'" . groovy-mode)))
+         ("\\.gradle\\'" . groovy-mode)))
 
 (use-package real-auto-save
   :ensure t
