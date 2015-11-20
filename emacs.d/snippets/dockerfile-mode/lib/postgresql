@@ -1,0 +1,7 @@
+# name: install postgresql build dep and client
+# key:
+# binding:
+# expand-env: ()
+# --
+# install postgresql client and developlemt libraries
+apt-get install -y postgresql-client libpq-dev

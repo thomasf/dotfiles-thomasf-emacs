@@ -1,0 +1,12 @@
+# name: from python
+# key:
+# binding:
+# expand-env: ()
+# --
+from python:3.5.0
+env PYTHONUNBUFFERED 1
+
+run apt-get update -y && apt-get install -y apt-transport-https
+run pip install --no-cache-dir --upgrade pip
+# run apt-get install -y build-essential
+#

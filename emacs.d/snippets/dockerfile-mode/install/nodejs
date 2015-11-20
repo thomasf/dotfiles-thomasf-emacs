@@ -1,0 +1,7 @@
+# name: install nodejs 4.x
+# key:
+# binding:
+# expand-env: ()
+# --
+# install nodejs
+run curl -sL https://deb.nodesource.com/setup_4.x | bash - && apt-get install -y nodejs
