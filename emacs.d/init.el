@@ -6250,13 +6250,10 @@ See URL `https://github.com/golang/lint'."
   (progn
 
     (setq
-
-     magit-repo-dirs '("~/src")
-     magit-repo-dirs-depth 6
      magit-status-buffer-switch-function 'switch-to-buffer
      magit-save-some-buffers nil ;; manually saving all buffers instead
      magit-completing-read-function 'magit-ido-completing-read
-     ;; magit-diff-refine-hunk 'all
+     magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t
      magit-auto-revert-mode t
