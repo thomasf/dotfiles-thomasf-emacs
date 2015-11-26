@@ -5161,6 +5161,7 @@ otherwise use the subtree title."
         (flycheck-mode)))
     (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'js2-jsx-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'web-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
@@ -5644,7 +5645,7 @@ See URL `https://github.com/golang/lint'."
   :config
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
-    (bind-key "C-<tab>" 'js2-mode web-mode-map)
+    (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
 
@@ -7010,6 +7011,7 @@ See URL `https://github.com/golang/lint'."
                        (mode . coffee-mode)
                        (mode . js-mode)
                        (mode . js2-mode)
+                       (mode . js2-jsx-mode)
                        (mode . actionscript-mode)
                        (mode . java-mode)
                        (mode . sh-mode)
@@ -8002,8 +8004,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package js2-mode
   :ensure t
+  :commands (js2-mode js2-jsx-mode)
   :mode (("\\.js\\'" . js2-mode)
-         ;; ("\\.jsx\\'" . js2-mode)
+         ("\\.jsx\\'" . js2-jsx-mode)
          )
   :init
   (progn
@@ -8012,8 +8015,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           js2-strict-trailing-comma-warning nil
           js2-include-node-externs t
           js2-idle-timer-delay 0.1
+          js2-highlight-level 3
           js2-show-parse-errors nil ;; Let flycheck handle parse errors
           ))
+
   :config
   (progn
     (when (and (not noninteractive) window-system)
@@ -8022,8 +8027,22 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                     (0 (progn (compose-region
                                (match-beginning 1)
                                (match-end 1) "λ") nil))))))
+    (defun my-js2-maybe-jsx-mode ()
+      "Switch to js2-jsx-mode if buffers seems to be using react"
+      (when (eq major-mode 'js2-mode)
+        (save-excursion
+          (goto-char (point-min))
+          (when (re-search-forward
+                 (rx (or
+                      "from \"react\""
+                      "from 'react'"
+                      "require(\"react\")"
+                      "require('react')"))
+                 3000 t 1)
+            (js2-jsx-mode)))))
+    (add-hook 'after-change-major-mode-hook 'my-js2-maybe-jsx-mode )
 
-    (bind-key "C-<tab>" 'web-mode js2-mode-map)
+    (bind-key "C-<tab>" 'web-mode js2-jsx-mode-map)
 
     (use-package js2-imenu-extras
       :config
