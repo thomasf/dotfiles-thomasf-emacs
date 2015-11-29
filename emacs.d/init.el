@@ -2873,6 +2873,24 @@ for the current buffer's file name, and the line number at point."
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'" . cmake-mode)))
 
+(use-package code-library
+  :ensure t
+  :commands code-library-save-code
+  :config
+  (progn
+    (setq code-library-mode-file-alist '((c++-mode . "cpp.org")
+                                         (emacs-lisp-mode . "elisp.org")
+                                         (python-mode . "python.org")
+                                         (perl-mode . "perl.org")
+                                         (js2-mode . "javascript.org")
+                                         (js-mode . "javascript.org")
+                                         (js-jsx-mode . "javascript.org")
+                                         (js2-jsx-mode . "javascript.org")
+                                         (web-mode . "html.org")
+                                         (sh-mode . "sh.org"))
+          code-library-directory "~/notes/library/"
+          code-library-use-tags-command nil)))
+
 (use-package color-identifiers-mode
   :ensure t
   :commands color-identifiers-mode)
