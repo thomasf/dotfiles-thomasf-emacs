@@ -1334,6 +1334,7 @@ buffer-local wherever it is set."
   (let* ((default-directory user-notes-directory)
         (files (->> (-concat (f-entries "agenda/" nil t)
                             (f-entries "org/" nil t)
+                            (f-entries "library/" nil t)
                             (directory-files "sheet/" t))
                  (--map (s-chop-prefix (s-concat default-directory "/") it))
                  (projectile-sort-by-recentf-first)
