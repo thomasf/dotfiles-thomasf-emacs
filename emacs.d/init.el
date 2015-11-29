@@ -3848,6 +3848,10 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.toml\\'" . toml-mode)))
 
+(use-package transmission
+  :ensure t
+  :commands transmission)
+
 (use-package tree-mode
   :ensure t
   :defer)
