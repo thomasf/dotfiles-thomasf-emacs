@@ -2890,7 +2890,8 @@ for the current buffer's file name, and the line number at point."
                                          (web-mode . "html.org")
                                          (sh-mode . "sh.org"))
           code-library-directory "~/notes/library/"
-          code-library-use-tags-command nil)))
+          code-library-use-tags-command nil
+          code-library-downcased-org-keywords t)))
 
 (use-package color-identifiers-mode
   :ensure t
