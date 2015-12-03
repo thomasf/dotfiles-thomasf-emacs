@@ -6273,10 +6273,30 @@ See URL `https://github.com/golang/lint'."
          )
   :init
   (progn
-
+    (defun my-magit-display-buffer (buffer)
+      "Display BUFFER..."
+      (display-buffer
+       buffer
+       (let ((new-maj (with-current-buffer buffer major-mode))
+             (cur-maj major-mode)
+             (cur-magit-p (derived-mode-p 'magit-mode)))
+         ;; (message "cur: %S new: %S " cur-maj new-maj)
+         (cond
+          ((and
+            (eq cur-maj 'magit-log-mode)
+            (eq new-maj 'magit-revision-mode))
+           nil)
+          (t '(display-buffer-same-window))))))
     (setq
-     magit-status-buffer-switch-function 'switch-to-buffer
-     magit-save-some-buffers nil ;; manually saving all buffers instead
+     ;; magit-bury-buffer-function 'bury-buffer
+     magit-bury-buffer-function 'magit-restore-window-configuration
+     ;; magit-display-buffer-function 'magit-display-buffer-traditional
+     magit-display-buffer-function 'my-magit-display-buffer
+     magit-pre-display-buffer-hook '(magit-save-window-configuration)
+     ;; magit-post-display-buffer-hook '(magit-maybe-set-dedicated)
+     magit-post-display-buffer-hook nil
+     magit-commit-show-diff nil
+     magit-save-repository-buffers nil ;; manually saving all buffers instead (my-magit-status)
      magit-completing-read-function 'magit-ido-completing-read
      magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
