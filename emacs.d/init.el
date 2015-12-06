@@ -3804,10 +3804,6 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :defer)
 
-(use-package simple-call-tree+
-  :ensure t
-  :defer)
-
 (use-package smart-shift
   :ensure t
   :commands smart-shift-mode
