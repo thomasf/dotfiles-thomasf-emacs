@@ -3896,6 +3896,15 @@ for the current buffer's file name, and the line number at point."
     (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim)
     ))
 
+(use-package with-editor
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (setq with-editor-emacsclient-executable
+          (unless (getenv "SSH_TTY")
+            (with-editor-locate-emacsclient)))))
+
 (use-package xkcd
   :ensure t
   :commands (xkcd-get
