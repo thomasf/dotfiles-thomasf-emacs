@@ -4,8 +4,8 @@
 # expand-env: ()
 # --
 # install go
-run curl -sSL https://golang.org/dl/go1.5.1.linux.amd64.tar.gz | tar -C /tmp/go-bootstrap -xz
-run curl -sSL https://golang.org/dl/go1.5.1.src.tar.gz | tar -C /usr/local -xz
+run mkdir -p /tmp/go-bootstrap && curl -sSL https://golang.org/dl/go1.5.2.linux.amd64.tar.gz | tar -C /tmp/go-bootstrap -xz
+run curl -sSL https://golang.org/dl/go1.5.2.src.tar.gz | tar -C /usr/local -xz
 run cd /usr/local/go/src && GOROOT_BOOTSTRAP=/tmp/go-bootstrap/go ./make.bash --no-clean 2>&1
 run rm -rf /tmp/go-bootstrap && mkdir -p /go/bin
 # run for GOOS in linux darwin windows; do for GOARCH in amd64 386; do export GOOS; export GOARCH; echo "building $GOOS-$GOARCH"; go install std; done; done
