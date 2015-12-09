@@ -6856,39 +6856,44 @@ See URL `https://github.com/golang/lint'."
 
     (setq ibuffer-directory-abbrev-alist
           (-uniq
-           (-flatten
-            (--map
-             (list
-              (cons  (f-slash (f-expand (cdr it))) (format "%12s" (concat (car it) my-ibufffer-separator)))
-              (cons  (f-slash (f-canonical (cdr it))) (format "%12s" (concat (car it) my-ibufffer-separator))))
-
-             '(
-               ("alkasir" . "~/src/gitlab.23c.se/alkasir/")
-               ("tracklib" . "~/src/github.com/tracklib/")
-               ("23c" . "~/src/gitlab.23c.se/23c/")
-               ("tf@23c" . "~/src/gitlab.23c.se/thomasf")
-               ("23c" . "~/src/gitlab.23c.se/")
-               ("tf@gh" . "~/src/github.com/thomasf/")
-               ("github" . "~/src/github.com/")
-               ("src" . "~/src/")
-               ("notes" . "~/notes/")
-               ("venv" . "~/.virtualenvs/")
-               (".emacsp" . "~/.emacs.d/elpa/")
-               (".emacsd" . "~/.emacs.d/")
-               (".config" . "~/.config/")
-               ("dotfiles" . "~/src/dotfiles/")
-               ("goroot" . "~/.opt/go/")
-               ("goroot" . "~/.opt/go-master/")
-               (".opt" . "~/.opt")
-               ("/usr" . "/usr")
-               ("/var" . "/var")
-               ("/etc" . "/etc")
-               ("/lib" . "/lib")
-               ("/media" . "/media")
-               ("/mnt" . "/mnt")
-               ("/srv" . "/srv")
-
-               )))))
+           (-concat
+            (--map (cons (cdr it) (format "%12s" (concat (car it) my-ibufffer-separator)))
+                   '(("!scp" . "^/scp:" )))
+            (-flatten
+             (--map
+              (list
+               (cons
+                (file-name-as-directory (expand-file-name (cdr it)))
+                (format "%12s" (concat (car it) my-ibufffer-separator)))
+               (cons
+                (file-name-as-directory (file-truename (cdr it)))
+                (format "%12s" (concat (car it) my-ibufffer-separator))))
+              '(
+                ("alkasir" . "~/src/gitlab.23c.se/alkasir/")
+                ("tracklib" . "~/src/github.com/tracklib/")
+                ("23c" . "~/src/gitlab.23c.se/23c/")
+                ("tf@23c" . "~/src/gitlab.23c.se/thomasf")
+                ("23c" . "~/src/gitlab.23c.se/")
+                ("tf@gh" . "~/src/github.com/thomasf/")
+                ("github" . "~/src/github.com/")
+                ("src" . "~/src/")
+                ("notes" . "~/notes/")
+                ("venv" . "~/.virtualenvs/")
+                (".emacsp" . "~/.emacs.d/elpa/")
+                (".emacsd" . "~/.emacs.d/")
+                (".config" . "~/.config/")
+                ("dotfiles" . "~/src/dotfiles/")
+                ("goroot" . "~/.opt/go/")
+                ("goroot" . "~/.opt/go-master/")
+                (".opt" . "~/.opt")
+                ("/usr" . "^/usr")
+                ("/var" . "^/var")
+                ("/etc" . "^/etc")
+                ("/lib" . "^/lib")
+                ("/media" . "^/media")
+                ("/mnt" . "^/mnt")
+                ("/srv" . "^/srv")
+                ))))))
     (use-package ibuffer-git
       :ensure t)
     (use-package ibuffer-vc
