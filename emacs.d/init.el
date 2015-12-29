@@ -2853,6 +2853,10 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :defer)
 
+(use-package arduino-mode
+  :ensure t
+  :mode (("\\.ino\\'" . arduino-mode)))
+
 (use-package butler
   :ensure t
   :commands (butler-status))
