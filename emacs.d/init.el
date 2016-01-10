@@ -39,7 +39,9 @@
 
 (setq
  abbrev-file-name (expand-file-name
-                   "abbrev_defs.el" user-lisp-directory))
+                   "abbrev_defs.el" user-lisp-directory)
+
+ )
 
 (eval-and-compile
   (defvar my-log-verbose nil)
@@ -6852,8 +6854,6 @@ See URL `https://github.com/golang/lint'."
     (setq ibuffer-directory-abbrev-alist
           (-uniq
            (-concat
-            (--map (cons (cdr it) (format "%12s" (concat (car it) my-ibufffer-separator)))
-                   '(("!scp" . "^/scp:" )))
             (-flatten
              (--map
               (list
@@ -6895,9 +6895,11 @@ See URL `https://github.com/golang/lint'."
       :ensure t)
 
     (defun ibuffer-my-abbrevs (filename)
-      (let ((directory-abbrev-alist ibuffer-directory-abbrev-alist))
-        (abbreviate-file-name filename)
-        ))
+      (if (s-starts-with? "/scp:" filename t)
+          (format "%12s%s" (concat "!scp" my-ibufffer-separator)
+                  (s-chop-prefix "/scp:" filename))
+        (let ((directory-abbrev-alist ibuffer-directory-abbrev-alist))
+          (abbreviate-file-name filename))))
 
     (define-ibuffer-column filename
       (:summarizer
