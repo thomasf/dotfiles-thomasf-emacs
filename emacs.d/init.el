@@ -8443,7 +8443,7 @@ Titus von der Malsburg."
        )
      hardhat-fullpath-editable-regexps
      '("~/\\.cpan/CPAN/MyConfig\\.pm\\'"
-       "/\\.git/\\(?:COMMIT_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|TAG_EDITMSG\\|PULLREQ_EDITMSG\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\)\\'"
+       "/\\.git/\\(?:NOTES_EDITMSG\\|COMMIT_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|TAG_EDITMSG\\|PULLREQ_EDITMSG\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\)\\'"
        ;; "~/\\.cabal/"
        ;; "~/perl5/perlbrew/"
        ;; "~/\\.npm/"
