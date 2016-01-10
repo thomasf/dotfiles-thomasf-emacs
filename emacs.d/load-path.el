@@ -105,17 +105,17 @@ See also `locate-user-emacs-file'.")
 
 (load-path-set-load-path)
 
-(eval-after-load "info"
-  #'(progn
-      (when (fboundp 'info-initialize)
-        (info-initialize)
-        (defun add-to-info-path (path &optional dir)
-          (setq Info-directory-list
-                (cons (expand-file-name path (or dir user-emacs-directory)) Info-directory-list)))
-        (mapc #'add-to-info-path
-              (nreverse
-               (list
-                (expand-file-name "~/.refdoc/info")))))))
+;; (eval-after-load "info"
+;;   #'(progn
+;;       (when (fboundp 'info-initialize)
+;;         (info-initialize)
+;;         (defun add-to-info-path (path &optional dir)
+;;           (setq Info-directory-list
+;;                 (cons (expand-file-name path (or dir user-emacs-directory)) Info-directory-list)))
+;;         (mapc #'add-to-info-path
+;;               (nreverse
+;;                (list
+;;                 (expand-file-name "~/.refdoc/info")))))))
 
 (when (bound-and-true-p x-bitmap-file-path)
   (add-to-list 'x-bitmap-file-path
