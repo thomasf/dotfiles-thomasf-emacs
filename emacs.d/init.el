@@ -2691,15 +2691,6 @@ for the current buffer's file name, and the line number at point."
 ;; (bind-key* "C-M-f" 'toggle-fold)
 
 
-(defun hsadmin-magit ()
-  "Open magit status buffers for all directories under
-~/.config/dotfiles/"
-  (interactive)
-  (--each
-      (f-directories "~/.config/dotfiles")
-    (when (magit-git-repo-p it)
-      (magit-status (f-full it)))))
-
 (hook-into-modes #'(lambda () (setq-local fill-column 120))
                  my-html-like-mode-hooks)
 ;;; packages: Eearly important order dependent packages
