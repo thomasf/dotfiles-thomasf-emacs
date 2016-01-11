@@ -4242,7 +4242,7 @@ If FILE already exists, signal an error."
      recentf-exclude '(file-remote-p
                        "ido.last"
                        "org-clock-save.el"
-                       "COMMIT_EDITMSG"
+                       "[A-Z_]*_EDITMSG"
                        ".*-autoloads\\.el\\'"
                        "[/\\]\\.git/"))
 
@@ -8436,7 +8436,7 @@ Titus von der Malsburg."
        )
      hardhat-fullpath-editable-regexps
      '("~/\\.cpan/CPAN/MyConfig\\.pm\\'"
-       "/\\.git/\\(?:NOTES_EDITMSG\\|COMMIT_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|TAG_EDITMSG\\|PULLREQ_EDITMSG\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\)\\'"
+       "/\\.git/\\(?:[A-Z_]*_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\)\\'"
        ;; "~/\\.cabal/"
        ;; "~/perl5/perlbrew/"
        ;; "~/\\.npm/"
