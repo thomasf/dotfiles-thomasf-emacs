@@ -7576,7 +7576,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package smartparens
   :ensure t
-  :pin "melpa-stable"
+  ;; :pin "melpa-stable"
   :if (not noninteractive)
   :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
                               turn-off-smartparens-mode show-smartparens-mode
