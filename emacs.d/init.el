@@ -8193,7 +8193,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           ((:date . 17)
            (:flags . 6)
            (:from . 22)
-           (:thread-subject))
+           ;; (:thread-subject)
+           (:subject)
+           )
           mu4e-headers-include-related nil
           mu4e-headers-leave-behavior 'apply
           mu4e-headers-results-limit 1000
