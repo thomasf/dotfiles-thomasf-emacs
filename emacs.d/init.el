@@ -8151,7 +8151,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         result))))
 
 (use-package mu4e
-  :if (file-exists-p "~/.config/myGmail-maildir")
+  :if (file-exists-p "~/.mail/gmail")
   :commands (mu4e
              mu4e~headers-jump-to-maildir)
   :bind (("C-x m" . mu4e))
@@ -8179,15 +8179,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        mu4e-headers-duplicate-prefix    '("="  . "⚌")
        mu4e-headers-default-prefix       '("|"  . "┃")))
 
-    (setq mu4e-attachment-dir "~/Downloads"
-          mu4e-confirm-quit nil
+    (setq mu4e-maildir "~/.mail/gmail"
+          mu4e-attachment-dir "~/Downloads"
           mu4e-drafts-folder "/[Gmail].Drafts"
-          mu4e-get-mail-command
-          (cond
-           ((file-exists-p "~/.opt/offlineimap/offlineimap.py")
-            "~/.opt/offlineimap/offlineimap.py -o -u basic")
-           ((executable-find* "offlineimap")
-            "offlineimap -o -u basic"))
+          mu4e-get-mail-command "mbsync -V gmail"
+          mu4e-confirm-quit nil
           mu4e-headers-date-format "%x %R"
           mu4e-headers-fields '
           ((:date . 17)
@@ -8201,7 +8197,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           mu4e-headers-results-limit 1000
           mu4e-headers-show-threads nil
           mu4e-headers-skip-duplicates t
-          mu4e-maildir       "~/.config/myGmail-maildir"
           mu4e-refile-folder "/[Gmail].All Mail"
           mu4e-sent-folder   "/[Gmail].Sent Mail"
           mu4e-sent-messages-behavior 'delete
