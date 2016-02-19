@@ -8182,7 +8182,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (setq mu4e-maildir "~/.mail/gmail"
           mu4e-attachment-dir "~/Downloads"
           mu4e-drafts-folder "/[Gmail].Drafts"
-          mu4e-get-mail-command "mbsync -V gmail"
+          mu4e-get-mail-command "mbsync -q -V gmail"
           mu4e-confirm-quit nil
           mu4e-headers-date-format "%x %R"
           mu4e-headers-fields '
