@@ -3622,6 +3622,11 @@ for the current buffer's file name, and the line number at point."
   (progn
     (global-prettify-symbols-mode)))
 
+
+(use-package protobuf-mode
+  :ensure t
+  :mode (("\\.proto\\'" . protobuf-mode)))
+
 (use-package region-bindings-mode
   :if (and
        (not noninteractive)
