@@ -5460,15 +5460,16 @@ See URL `https://github.com/golang/lint'."
 
     (bind-key "M-." 'godef-jump go-mode-map)))
 
-(use-package go-oracle
+(use-package go-guru
+  :ensure t
   :commands
-  (go-oracle-mode go-oracle-peers go-oracle-callees
-             go-oracle-callers go-oracle-freevars
-             go-oracle-pointsto go-oracle-describe
-             go-oracle-callstack go-oracle-set-scope
-             go-oracle-whicherrs go-oracle-callgraph
-             go-oracle-referrers go-oracle-definition
-             go-oracle-implements)
+  (go-guru-mode go-guru-peers go-guru-callees
+             go-guru-callers go-guru-freevars
+             go-guru-pointsto go-guru-describe
+             go-guru-callstack go-guru-set-scope
+             go-guru-whicherrs go-guru-callgraph
+             go-guru-referrers go-guru-definition
+             go-guru-implements)
   :config
   (progn
     (setq go-oracle-command (executable-find* "oracle"))))
