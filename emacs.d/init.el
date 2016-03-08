@@ -5460,6 +5460,9 @@ See URL `https://github.com/golang/lint'."
 
     (bind-key "M-." 'godef-jump go-mode-map)))
 
+(use-package go-traceback
+  :mode ("goroutines\\.txt\\'" . go-traceback-mode))
+
 (use-package go-guru
   :ensure t
   :commands
