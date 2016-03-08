@@ -7334,6 +7334,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :init
       (progn
             (bind-key "C-c C-c" 'py-autopep8 python-mode-map)))
+    (use-package py-isort
+      :ensure t
+      :commands (py-isort-buffer))
 
     (use-package jedi
       :ensure t
