@@ -7330,13 +7330,21 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (use-package py-autopep8
       :ensure t
-      :commands (py-autopep8)
-      :init
-      (progn
-            (bind-key "C-c C-c" 'py-autopep8 python-mode-map)))
+      :commands (py-autopep8-buffer))
+
     (use-package py-isort
       :ensure t
       :commands (py-isort-buffer))
+
+    (defun python-cccc ()
+      (interactive)
+      (silent-save-some-buffers)
+      (let ((exec-path (append exec-path
+                               (list (expand-file-name "~/.virtualenvs/default/bin/")))))
+        (py-isort-buffer)
+        (py-autopep8-buffer)))
+
+    (bind-key "C-c C-c" 'python-cccc python-mode-map)
 
     (use-package jedi
       :ensure t
