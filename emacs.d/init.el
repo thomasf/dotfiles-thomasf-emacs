@@ -3379,6 +3379,13 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands memory-usage)
 
+(use-package nsm
+  :defer t
+  :init
+  (progn
+    (setq nsm-settings-file (expand-file-name
+                             "network-security.data" user-data-directory))))
+
 (use-package nxml-mode
   :defer t
   :config
