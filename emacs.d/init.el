@@ -877,10 +877,6 @@ buffer-local wherever it is set."
  url-configuration-directory (expand-file-name
                               "url/" user-data-directory))
 
-;;;; delsel
-(setq
- delete-selection-mode nil)
-
 ;;;; man
 (setq
  Man-notify-method 'pushy)
@@ -2897,6 +2893,12 @@ for the current buffer's file name, and the line number at point."
 (use-package csv-mode
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
+
+(use-package delsel
+  :defer t
+  :init
+  (progn
+    (delete-selection-mode)))
 
 (use-package describe-number
   :ensure t
