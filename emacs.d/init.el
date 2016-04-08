@@ -8009,7 +8009,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      cua-enable-cua-keys nil
      cua-enable-cursor-indications nil
      cua-rectangle-mark-key [(control return)])
-    (cua-mode t))
+    ;; cua-mode seems to prohibit mark to be deactivated properly on the emacs-25 branch (2016-04-08 18:33)
+    ;; (cua-mode t)
+    )
   :config
   (progn
     ;; smartparens references cua-replace-region (cua-base.el), which has been
