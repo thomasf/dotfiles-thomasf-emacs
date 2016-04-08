@@ -9552,6 +9552,7 @@ drag the viewpoint on the image buffer that the window displays."
      oauth2-token-file "~/.config-private/oauth2.plstore")))
 
 (use-package god-mode
+  :disabled t
   :ensure t
   :commands (god-mode god-mode-all god-local-mode
                       god-local-mode-resume god-local-mode-pause)
