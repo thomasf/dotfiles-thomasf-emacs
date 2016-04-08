@@ -4161,6 +4161,7 @@ If FILE already exists, signal an error."
       (my-dired-create-file "__init__.py"))))
 
 (use-package key-chord
+  :disabled t
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands
