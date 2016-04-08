@@ -2894,6 +2894,16 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
+(use-package debbugs
+  :ensure t
+  :commands (debbugs-gnu)
+  :config
+  (progn
+    (require 'debbugs-gnu)
+    (require 'debbugs-org)
+    (setq debbugs-gnu-persistency-file (expand-file-name
+                                        "debbugs" user-data-directory))))
+
 (use-package delsel
   :defer t
   :init
