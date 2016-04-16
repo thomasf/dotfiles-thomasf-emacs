@@ -1540,6 +1540,7 @@ buffer-local wherever it is set."
 (hook-into-modes 'my-set-text-scale-smaller
                  '(ag-mode-hook
                    flycheck-error-list-mode-hook
+                   go-traceback-mode-hook
                    ibuffer-mode-hook
                    magit-commit-mode-hook
                    python-django-mode-hook
@@ -5481,6 +5482,7 @@ See URL `https://github.com/golang/lint'."
     (bind-key "M-." 'godef-jump go-mode-map)))
 
 (use-package go-traceback
+  :commands (go-traceback)
   :mode ("goroutines\\.txt\\'" . go-traceback-mode))
 
 (use-package go-guru

@@ -1,29 +1,31 @@
 
+(require 'request)
+
 (defun go-traceback-refresh ()
   "Refresh traceback buffer"
   (interactive)
   (go-traceback go-traceback-url))
 
 
-(defconst my-js-mode-syntax-table
-  (let ((table (make-syntax-table)))
-    ;; ' is a string delimiter
-    (modify-syntax-entry ?' "\"" table)
-    ;; " is a string delimiter too
-    (modify-syntax-entry ?\" "\"" table)
+;; (defconst my-js-mode-syntax-table
+;;   (let ((table (make-syntax-table)))
+;;     ;; ' is a string delimiter
+;;     (modify-syntax-entry ?' "\"" table)
+;;     ;; " is a string delimiter too
+;;     (modify-syntax-entry ?\" "\"" table)
 
-    ;; / is punctuation, but // is a comment starter
-    (modify-syntax-entry ?/ ". 12" table)
-    ;; \n is a comment ender
-    (modify-syntax-entry ?\n ">" table)
-    table))
+;;     ;; / is punctuation, but // is a comment starter
+;;     (modify-syntax-entry ?/ ". 12" table)
+;;     ;; \n is a comment ender
+;;     (modify-syntax-entry ?\n ">" table)
+;;     table))
 
-(define-derived-mode go-traceback-mode compilation-mode "go traceback mode"
+(define-compilation-mode go-traceback-mode "go traceback mode"
   ;; :syntax-table my-js-mode-syntax-table
   (font-lock-fontify-buffer)
-
-  (set (make-local-variable 'go-traceback-url) nil)
-  (my-set-text-scale-smaller)
+  (setq-local compilation-error-regexp-alist
+              '(("^[\t ]*\\[\\([^(].*\\):\\([1-9][0-9]*\\)\\(\\]\\)?:in " 2 3)))
+  (setq-local go-traceback-url nil)
   (define-key go-traceback-mode-map (kbd "g" )
     '(lambda ()
        (interactive)
@@ -44,16 +46,15 @@
                  (let ((inhibit-read-only t)
                        (b (get-buffer-create "*go-traceback*")))
                    (with-current-buffer b
-                     (let ( (p-point (point)))
-                       (unless (eq major-mode 'go-traceback-mode)
-                         (go-traceback-mode))
-
-                       (setq go-traceback-url (request-response-url response))
+                     (let ((p-point (point)))
                        (delete-region (point-min) (point-max))
                        (insert data)
-                       (goto-char (if no-move p-point (point-min)))))
+                       (goto-char (if no-move p-point (point-min)))
+                       (go-traceback-mode)
+                       (setq go-traceback-url (request-response-url response))))
+
                    (let ((w (display-buffer b)))
                      (when w-start
-                   (set-window-start w w-start)))))))))
+                       (set-window-start w w-start)))))))))
 
 (provide 'go-traceback)
