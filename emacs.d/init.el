@@ -3195,16 +3195,16 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands (helm-dash helm-dash-at-point)
   :bind (("C-h SPC" . helm-dash-at-point))
-  :init
+  :config
   (progn
-    ;; (define-key region-bindings-mode-map "d" 'helm-dash-at-point)
-    (when (fboundp 'eww)
-      (setq helm-dash-browser-func 'eww))
+    (setq helm-dash-browser-func
+          (cond ((fboundp 'xwidget-webkit-browse-url) 'xwidget-webkit-browse-url)
+                ((fboundp 'eww) 'eww)
+                (t 'browse-url)))
     (when (eq system-type 'gnu/linux)
-      (setq helm-dash-docsets-path (format "%s/.local/share/zeal/docsets"
+      (setq helm-dash-docsets-path (format "%s/.local/share/zeal"
                                            (getenv "HOME"))))
-
-    (setq helm-dash-ensure-docsets
+    (setq helm-dash-many-docsets
           '(
             "Android"
             "Appcelerator Titanium"
@@ -3238,8 +3238,8 @@ for the current buffer's file name, and the line number at point."
             "NodeJS"
             "PostgreSQL"
             "Processing"
-            "Python_2"
-            "Python_3"
+            "Python 2"
+            "Python 3"
             "SQLite"
             "SVG"
             "Sass"
@@ -3248,12 +3248,11 @@ for the current buffer's file name, and the line number at point."
             "Vagrant"
             "XSLT"
             "ZeptoJS"
-             "iOS"
+            "iOS"
             "jQuery"
             "jQuery_Mobile"
             "jQuery_UI"
             ))
-
     (setq helm-dash-common-docsets
           '(
             ;; "Bootstrap_3"
@@ -3274,7 +3273,8 @@ for the current buffer's file name, and the line number at point."
             "NodeJS"
             "PostgreSQL"
             ;; "Processing"
-            "Python_2"
+            "Python 2"
+            "Python 3"
             "SQLite"
             "SVG"
             "Sass"
@@ -3283,23 +3283,8 @@ for the current buffer's file name, and the line number at point."
             ;; "ZeptoJS"
             "jQuery"
             "BackboneJS"
-            )))
-  :config
-  (progn
-    (defun helm-dash-install-all-docsets ()
-      (interactive)
-
-      (when (yes-or-no-p "Install all docsets?")
-        (let ((reinstall (yes-or-no-p "Reinstall/Update all?"))
-              (wanted-docsets  (-uniq (-concat helm-dash-ensure-docsets helm-dash-common-docsets)))
-              (installed-docsets (helm-dash-installed-docsets)))
-
-          (--each wanted-docsets
-            (message "will install %s" it)
-            (if (-contains? installed-docsets it)
-                (if reinstall
-                    (helm-dash-install-docset it))
-              (helm-dash-install-docset it))))))))
+            ))
+    ))
 
 (use-package helm-go-package
   :ensure t
