@@ -53,7 +53,7 @@
 (setq calendar-week-start-day 1)
 
 ;; Använd "europeiska" datum (dag/måndad)
-(setq european-calendar-style 'european)
+(setq european-date-style 'european)
 
 ;; Datumformat
 (setq calendar-date-display-form
@@ -138,7 +138,7 @@ Beräkna påskdagen för år YEAR."
         (holiday-fixed 1 6 "Trettondedag jul")
 
         ;; Påsk och pingst
-        (filter-visible-calendar-holidays
+        (holiday-filter-visible-calendar
          (mapcar
           (lambda (dag)
             (list (calendar-gregorian-from-absolute
@@ -158,7 +158,7 @@ Beräkna påskdagen för år YEAR."
                             6 (calendar-absolute-from-gregorian
                                (list 6 26 displayed-year)))))
           ;; Midsommar
-          (filter-visible-calendar-holidays
+          (holiday-filter-visible-calendar
           (list
            (list
             (calendar-gregorian-from-absolute (1- midsommar-d))
@@ -185,7 +185,7 @@ Beräkna påskdagen för år YEAR."
         (holiday-fixed 2 14 "Alla hjärtans dag")
 
         ;; Fettisdagen
-        (filter-visible-calendar-holidays
+        (holiday-filter-visible-calendar
          (list
           (list
            (calendar-gregorian-from-absolute
@@ -197,7 +197,7 @@ Beräkna påskdagen för år YEAR."
         (holiday-fixed 3 25 "Vårfrudagen")
 
         ;; Mer påsk
-        (filter-visible-calendar-holidays
+        (holiday-filter-visible-calendar
          (mapcar
           (lambda (dag)
             (list (calendar-gregorian-from-absolute
