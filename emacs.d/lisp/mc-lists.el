@@ -208,6 +208,8 @@
 
 (setq mc/cmds-to-run-once
       '(
+        xwidget-webkit-scroll-forward
+        xwidget-webkit-scroll-up
         adv-insert-new-number
         beginning-of-buffer
         cleanup-buffer
