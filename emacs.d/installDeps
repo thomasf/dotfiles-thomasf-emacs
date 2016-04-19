@@ -14,7 +14,7 @@ get_emacs() {
       make
       make info
     else
-      git clone -b emacs-24 git://git.sv.gnu.org/emacs.git emacs
+      git clone -b emacs-25 git://git.sv.gnu.org/emacs.git emac-25
       cd emacs
       ./autogen.sh
       ./configure \
