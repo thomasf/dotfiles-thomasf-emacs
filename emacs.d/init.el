@@ -5416,7 +5416,7 @@ See URL `https://github.com/golang/lint'."
       "Save all buffers, run go fmt and then flycheck, bound to C-c C-C in my go-mode."
       (interactive)
       (save-window-excursion
-        (--each (-difference (buffer-list) (list (current-buffer)))
+        (--each (buffer-list)
           (and
            (buffer-live-p it)
            (buffer-modified-p it)
@@ -5426,7 +5426,9 @@ See URL `https://github.com/golang/lint'."
            (buffer-file-name it)
            (with-current-buffer it
              (save-buffer)))))
-      (gofmt)
+      (let ((cc (current-column)))
+        (gofmt)
+        (move-to-column cc))
       (flycheck-buffer))
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
