@@ -3645,6 +3645,7 @@ for the current buffer's file name, and the line number at point."
             dired-efap-mode
             magit-status-mode
             term-mode
+            transmission-mode
             ))
     (region-bindings-mode-enable))
   :config
