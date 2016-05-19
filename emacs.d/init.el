@@ -3646,6 +3646,7 @@ for the current buffer's file name, and the line number at point."
             magit-status-mode
             term-mode
             transmission-mode
+            transmission-files-mode
             ))
     (region-bindings-mode-enable))
   :config
