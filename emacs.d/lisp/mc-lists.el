@@ -45,6 +45,7 @@
         dired-maybe-insert-subdir
         dired-next-line
         duplicate-current-line-or-region
+        duplicate-line-or-region
         electric-newline-and-maybe-indent
         end-of-buffer
         eval-and-replace
@@ -208,8 +209,6 @@
 
 (setq mc/cmds-to-run-once
       '(
-        xwidget-webkit-scroll-forward
-        xwidget-webkit-scroll-up
         adv-insert-new-number
         beginning-of-buffer
         cleanup-buffer
@@ -251,5 +250,7 @@
         wgrep-finish-edit
         wgrep-save-all-buffers
         winner-undo
+        xwidget-webkit-scroll-forward
+        xwidget-webkit-scroll-up
         yas-expand
         ))
