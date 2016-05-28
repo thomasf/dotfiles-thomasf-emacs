@@ -10040,6 +10040,20 @@ drag the viewpoint on the image buffer that the window displays."
                  t)
               t)))
 
+(defun  my-workspace-hook()
+  "workspace specific hook function."
+  t
+  (when
+      (and (not noninteractive)
+           window-system
+           (not degrade-p-minimalism)
+           )
+    (let ((workspace-prefix (workspace-prefix)))
+      (cond
+       ((equal workspace-prefix "upgrade")
+        (call-interactively 'list-packages))))))
+
+(add-hook 'after-init-hook 'my-workspace-hook t)
 
 ;; this thing just nuges emacs to adjust it's window size, some times it starts
 ;; in 80x35.
