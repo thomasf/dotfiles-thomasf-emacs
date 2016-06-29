@@ -51,6 +51,7 @@
     (setq ad-redefinition-action 'accept))
   (setq use-package-verbose my-log-verbose
         use-package-debug nil
+        use-package-enable-imenu-support t
         use-package-minimum-reported-time 0.01))
 
 ;;; Emacs version check and feature inhibitions
