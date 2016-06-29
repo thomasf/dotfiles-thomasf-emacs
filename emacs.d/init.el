@@ -2891,6 +2891,9 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands color-identifiers-mode)
 
+(use-package conf-mode
+  :mode "\\.env\\'")
+
 (use-package csv-mode
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
