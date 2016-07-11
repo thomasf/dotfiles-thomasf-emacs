@@ -46,6 +46,7 @@
         dired-next-line
         duplicate-current-line-or-region
         duplicate-line-or-region
+        easy-kill
         electric-newline-and-maybe-indent
         end-of-buffer
         eval-and-replace
@@ -94,6 +95,7 @@
         move-text-up
         move-to-window-line-top-bottom
         my-join-line
+        my-mark-char
         my-mark-char-backward
         my-mark-word
         my-mark-word-backward
@@ -223,6 +225,7 @@
         god-local-mode
         goto-line-with-feedback
         handle-switch-frame
+        helm-descbinds
         ido-switch-buffer
         image-mouse-scroll-position
         js2r-extract-var
