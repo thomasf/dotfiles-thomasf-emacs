@@ -69,12 +69,13 @@
   (setq
    package-enable-at-startup nil
    package-archives
-   '(("melpa-stable" . "http://stable.melpa.org/packages/")
-     ("melpa" . "http://melpa.org/packages/")
-     ("marmalade"   . "http://marmalade-repo.org/packages/")
+   '(("melpa-stable" . "https://stable.melpa.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")
+     ("marmalade"   . "https://marmalade-repo.org/packages/")
      ("org"         . "http://orgmode.org/elpa/")
-     ("gnu"         . "http://elpa.gnu.org/packages/")
-     ("sc"   . "http://joseito.republika.pl/sunrise-commander/")))
+     ("gnu"         . "https://elpa.gnu.org/packages/")
+     ;; ("sc"   . "http://joseito.republika.pl/sunrise-commander/")
+     ))
 
   (unless (boundp 'package-pinned-packages)
     (setq package-pinned-packages ()))
