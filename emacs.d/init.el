@@ -5408,6 +5408,26 @@ See URL `https://github.com/golang/lint'."
   :mode "\\.go\\'"
   :config
   (progn
+    (use-package go-guru
+      :ensure t
+      :commands (go-guru-hl-identifier-mode
+                 go-guru-peers go-guru-callees
+                 go-guru-callers
+                 go-guru-freevars go-guru-pointsto
+                 go-guru-describe
+                 go-guru-callstack go-guru-set-scope
+                 go-guru-whicherrs
+                 go-guru-callgraph go-guru-referrers
+                 go-guru-definition
+                 go-guru-implements)
+      :init
+      (progn
+        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+        (use-package go-mode
+          :defer
+          :config
+          (progn
+            (bind-key "M-." 'go-guru-definition go-mode-map)))))
 
     (defun gopath-set-here ()
       (interactive)
@@ -5471,27 +5491,12 @@ See URL `https://github.com/golang/lint'."
                       ;; auto-complete/auto-complete#348 (comment)
                       (setq ac-sources
                             '(ac-source-yasnippet
-                              ac-source-go))))))
-
-    (bind-key "M-." 'godef-jump go-mode-map)))
+                              ac-source-go))))))))
 
 (use-package go-traceback
   :commands (go-traceback)
   :mode ("goroutines\\.txt\\'" . go-traceback-mode))
 
-(use-package go-guru
-  :ensure t
-  :commands
-  (go-guru-mode go-guru-peers go-guru-callees
-             go-guru-callers go-guru-freevars
-             go-guru-pointsto go-guru-describe
-             go-guru-callstack go-guru-set-scope
-             go-guru-whicherrs go-guru-callgraph
-             go-guru-referrers go-guru-definition
-             go-guru-implements)
-  :config
-  (progn
-    (setq go-oracle-command (executable-find* "oracle"))))
 
 (use-package go-rename
   :ensure t
@@ -6045,7 +6050,10 @@ See URL `https://github.com/golang/lint'."
        loccur-custom-buffer-grep
        isearch)
      ahs-idle-interval 1.1)
-    (hook-into-modes #'auto-highlight-symbol-mode
+    (defun my-ahs-on ()
+      (unless (eq major-mode 'go-mode)
+        (auto-highlight-symbol-mode)))
+    (hook-into-modes #'my-ahs-on
                      my-prog-mode-hooks)))
 
 (use-package highlight-symbol
