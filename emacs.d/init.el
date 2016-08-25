@@ -3878,15 +3878,17 @@ for the current buffer's file name, and the line number at point."
 
 (use-package wakatime-mode
   :ensure t
+  :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
   :defer 2.7
   :init
   (progn
-    (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py"))
+    ;; (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
+    )
   :config
   (progn
-    (when (f-file? wakatime-cli-path)
+    (when (executable-find "wakatime")
       (global-wakatime-mode 1))))
 
 (use-package whitespace
