@@ -7721,7 +7721,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      android-mode-avd "d")))
 
 (use-package eclim
-  :ensure emacs-eclim
+  :ensure t
   :commands (eclim-mode
              global-eclim-mode)
   :init
