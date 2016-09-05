@@ -2833,9 +2833,9 @@ for the current buffer's file name, and the line number at point."
      #'(lambda () (adaptive-wrap-prefix-mode 1))
      my-prog-mode-hooks)))
 
-(use-package amd-mode
-  :ensure t
-  :commands amd-mode)
+;;(use-package amd-mode
+;;  :ensure t
+;;  :commands amd-mode)
 
 (use-package anchored-transpose
   :ensure t
