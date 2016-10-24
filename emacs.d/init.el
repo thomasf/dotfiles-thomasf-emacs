@@ -6101,10 +6101,9 @@ See URL `https://github.com/golang/lint'."
   :commands (rvm-use
              rvm-use-default))
 
-;;;; auctex
-;; (use-package auctex
-;;   :ensure t
-;;   :defer)
+(use-package tex
+  :ensure auctex
+  :defer)
 
 (use-package textile-mode
   :ensure t
