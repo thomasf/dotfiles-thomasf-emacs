@@ -6459,7 +6459,16 @@ See URL `https://github.com/golang/lint'."
 (use-package yaml-mode
   :ensure t
   :commands yaml-mode
-  :mode ("\\.y[a]?ml\\'" . yaml-mode))
+  :mode ("\\.y[a]?ml\\'" . yaml-mode)
+  :init
+  (progn
+    (defun my-yaml-save-hook-fn ()
+      (when (and buffer-file-name
+                 (eq major-mode 'yaml-mode))
+        (whitespace-cleanup-region (point-min) (point-max))))
+    (defun my-yaml-mode-hook ()
+      (add-hook 'after-save-hook 'my-yaml-save-hook-fn nil t))
+    (add-hook 'yaml-mode-hook 'my-yaml-mode-hook)))
 
 (use-package yasnippet
   :ensure t
