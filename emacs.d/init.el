@@ -5382,7 +5382,9 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     (hook-into-modes #'editorconfig-mode my-css-like-mode-hooks)
-    (hook-into-modes #'editorconfig-mode my-prog-mode-hooks))
+    (hook-into-modes #'editorconfig-mode my-prog-mode-hooks)
+    (hook-into-modes #'editorconfig-mode my-html-like-mode-hooks)
+    (hook-into-modes #'editorconfig-mode my-html-like-mode-hooks-2))
   :config
   (progn
     (require 'editorconfig-core)
