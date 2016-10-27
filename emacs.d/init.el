@@ -5376,6 +5376,18 @@ See URL `https://github.com/golang/lint'."
   :ensure t
   :commands describe-unbound-keys)
 
+(use-package editorconfig
+  :commands editorconfig-mode
+  :ensure t
+  :init
+  (progn
+    (hook-into-modes #'editorconfig-mode my-css-like-mode-hooks)
+    (hook-into-modes #'editorconfig-mode my-prog-mode-hooks))
+  :config
+  (progn
+    (require 'editorconfig-core)
+    (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash)))
+
 (use-package edit-server
   :ensure t
   :commands edit-server-start
