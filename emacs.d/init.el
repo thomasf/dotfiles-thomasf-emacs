@@ -548,7 +548,7 @@ buffer-local wherever it is set."
        "Tahoma" "Verdana" "Helvetica" "Arial Unicode MS" "Arial")
      dynamic-fonts-preferred-proportional-point-size 11)
 
-    (defvar my-monospaced-font "Pragmata Pro-11.8")
+    (defvar my-monospaced-font "Pragmata Pro-11")
     (defvar my-variable-pitch-font "Pt Sans-13")
     ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
     ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
