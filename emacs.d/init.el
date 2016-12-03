@@ -2860,6 +2860,11 @@ for the current buffer's file name, and the line number at point."
     (setq platformio-mode-silent t)
     (add-hook 'arduino-mode-hook 'platformio-mode)))
 
+(use-package irony
+  :ensure t
+  :commands (irony-mode flycheck-irony-setup)
+  :defer t)
+
 (use-package butler
   :ensure t
   :commands (butler-status))
