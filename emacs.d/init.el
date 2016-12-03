@@ -2850,6 +2850,15 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.ino\\'" . arduino-mode)))
 
+(use-package platformio-mode
+  :ensure t
+  :commands (platformio-mode
+             platformio-build
+             platformio-upload)
+  :init
+  (progn
+    (setq platformio-mode-silent t)))
+
 (use-package butler
   :ensure t
   :commands (butler-status))
