@@ -1556,6 +1556,7 @@ buffer-local wherever it is set."
                    debugger-mode-hook
                    prodigy-view-mode-hook
                    docker-images-mode-hook
+                   compilation-mode-hook
                    docker-containers-mode-hook))
 
 (use-package helm
