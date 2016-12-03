@@ -8569,6 +8569,15 @@ Titus von der Malsburg."
          ("M-o k m" . kite-memory)
          ("M-o k s" . kite-scratch)))
 
+(use-package kite-mini
+  :disabled t
+  :ensure t
+  :commands (kite-mini-mode)
+  :init
+  (progn
+    (use-package kite-mini-console
+      :commands kite-mini-console)))
+
 (use-package simpleclip
   :ensure t
   :commands (simpleclip-mode simpleclip-set-contents
