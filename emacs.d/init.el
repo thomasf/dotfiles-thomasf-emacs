@@ -2857,7 +2857,8 @@ for the current buffer's file name, and the line number at point."
              platformio-upload)
   :init
   (progn
-    (setq platformio-mode-silent t)))
+    (setq platformio-mode-silent t)
+    (add-hook 'arduino-mode-hook 'platformio-mode)))
 
 (use-package butler
   :ensure t
