@@ -2855,6 +2855,7 @@ for the current buffer's file name, and the line number at point."
   :commands (platformio-mode
              platformio-build
              platformio-upload)
+  :diminish platformio-mode
   :init
   (progn
     (setq platformio-mode-silent t)
@@ -2862,8 +2863,29 @@ for the current buffer's file name, and the line number at point."
 
 (use-package irony
   :ensure t
-  :commands (irony-mode flycheck-irony-setup)
-  :defer t)
+  :commands (irony-mode)
+  :defer t
+  :diminish irony-mode
+  :init
+  (progn
+    (setq irony-user-dir (expand-file-name "irony" user-data-directory))
+    (add-hook 'arduino-mode-hook 'irony-mode)
+    (use-package flycheck-irony
+      :after flycheck
+      :commands flycheck-irony-setup
+      :config
+      (progn
+        (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
+  :config
+  (progn
+    (add-to-list 'irony-supported-major-modes 'arduino-mode)
+    (add-to-list 'irony-lang-compile-option-alist '(arduino-mode . "c++"))
+    (use-package irony-cdb
+      :commands (irony-cdb-autosetup-compile-options)
+      :init
+      (progn
+        (add-hook 'arduino-mode-hook 'irony-cdb-autosetup-compile-options)))))
+
 
 (use-package butler
   :ensure t
@@ -5237,6 +5259,7 @@ otherwise use the subtree title."
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'arduino-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
@@ -5395,6 +5418,7 @@ See URL `https://github.com/golang/lint'."
 (use-package editorconfig
   :commands editorconfig-mode
   :ensure t
+  :diminish editorconfig-mode
   :init
   (progn
     (hook-into-modes #'editorconfig-mode my-css-like-mode-hooks)
