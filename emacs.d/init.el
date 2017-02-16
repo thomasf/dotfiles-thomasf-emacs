@@ -5486,11 +5486,7 @@ See URL `https://github.com/golang/lint'."
                  go-guru-implements)
       :init
       (progn
-        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-        (use-package go-mode
-          :config
-          (progn
-            (bind-key "M-." 'go-guru-definition go-mode-map)))))
+        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
 
     (defun gopath-set-here ()
       (interactive)
@@ -5522,6 +5518,8 @@ See URL `https://github.com/golang/lint'."
       (flycheck-buffer))
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)
+
 
     (use-package go-direx
       :ensure t
