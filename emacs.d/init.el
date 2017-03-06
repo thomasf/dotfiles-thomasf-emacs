@@ -3919,7 +3919,7 @@ for the current buffer's file name, and the line number at point."
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
-  :defer 2.7
+  :defer 4
   :init
   (progn
     ;; (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
@@ -4289,7 +4289,7 @@ If FILE already exists, signal an error."
 (use-package recentf
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :bind (("C-x f R" . find-recent-file))
-  :defer 2.5
+  :defer 6
   :init
   (progn
     (setq
@@ -4602,7 +4602,7 @@ If FILE already exists, signal an error."
 
 (use-package org
   :ensure org-plus-contrib
-  :defer 7
+  :defer 28
   :commands (org
              org-capture
              org-mode
@@ -6359,7 +6359,7 @@ See URL `https://github.com/golang/lint'."
 
 (use-package magit
   :ensure t
-  :defer 6
+  :defer 19
   :commands (magit-log magit-run-gitk magit-run-git-gui
                        magit-status magit-git-repo-p magit-list-repos)
   :bind (("M-o G" . my-magit-status-with-prefix)
@@ -6806,7 +6806,7 @@ See URL `https://github.com/golang/lint'."
 
 (use-package helm
   :ensure t
-  :defer 5.9
+  :defer 16
   :if (and (not degrade-p-minimalism))
   :commands (helm-M-x helm-bookmarks helm-browse-code
                       helm-locate helm-mini helm-for-files helm-occur
@@ -7497,10 +7497,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ))
 
 (use-package lisp-mode
-  :defer 9
+  :defer t
   :init
   (progn
-    (rename-modeline "lisp-mode" emacs-lisp-mode "el")
+    (rename-modeline "lisp-mode" emacs-lisp-mode "el"))
+  :config
+  (progn
     (use-package redshank
       :ensure t
       :commands (redshank-mode
