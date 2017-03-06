@@ -7421,6 +7421,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
         )))
   :config
   (progn
+    (use-package importmagic
+      :ensure t
+      :config
+      (add-hook 'python-mode-hook 'importmagic-mode))
     (use-package py-autopep8
       :ensure t
       :commands (py-autopep8-buffer))
