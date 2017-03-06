@@ -9445,11 +9445,12 @@ if submodules exists, grep submodules too."
     ))
 
 (use-package back-button
+  :disabled t
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (back-button-mode)
   :diminish ""
-  :defer 2
+  :defer 18
   :init
   (progn
     (setq back-button-show-toolbar-buttons nil))
