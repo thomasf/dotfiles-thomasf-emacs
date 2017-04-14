@@ -317,7 +317,7 @@ buffer-local wherever it is set."
     kivy-mode-hook))
 
 (defvar my-markup-mode-hooks-1
-  '(markdown-mode-hook
+  '(gfm-mode-hook
     rst-mode-hook))
 
 ;; org-mode is a bit special so i dont want it among the other ones.
@@ -5161,7 +5161,7 @@ otherwise use the subtree title."
         (mode '(clojure-mode coffee-mode css-mode csv-mode
                              espresso-mode fmagit-log-edit-mode go-mode
                              haml-mode haskell-mode html-mode json-mode
-                             less-css-mode lisp-mode log-edit-mode markdown-mode
+                             less-css-mode lisp-mode log-edit-mode gfm-mode markdown-mode
                              nxml-mode sass-mode scss-mode sh-mode
                              smarty-mode stylus-mode textile-mode tuareg-mode yaml-mode))
 
@@ -6164,13 +6164,13 @@ See URL `https://github.com/golang/lint'."
 
 (use-package markdown-mode
   :ensure t
-  :commands markdown-mode
-  :mode (("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.mdwn\\'" . markdown-mode)
-         ("\\.mkd\\'" . markdown-mode)
-         ("\\.mkdown\\'" . markdown-mode)
-         ("\\.mdtext\\'" . markdown-mode))
+  :commands (markdown-mode gfm-mode)
+  :mode (("\\.markdown\\'" . gfm-mode)
+         ("\\.md\\'" . gfm-mode)
+         ("\\.mdwn\\'" . gfm-mode)
+         ("\\.mkd\\'" . gfm-mode)
+         ("\\.mkdown\\'" . gfm-mode)
+         ("\\.mdtext\\'" . gfm-mode))
   :init
   (progn
     (setq markdown-command "pandoc -f markdown -t html")
@@ -6220,7 +6220,7 @@ See URL `https://github.com/golang/lint'."
                   (setq cur-alist alist))
                 (setq cur-level level)))))
           (cdr root))))
-    (add-hook 'markdown-mode-hook
+    (add-hook 'gfm-mode-hook
               #'(lambda ()
                   (setq imenu-create-index-function
                         'markdown-imenu-create-index)))))
@@ -7207,6 +7207,7 @@ See URL `https://github.com/golang/lint'."
                             (mode . text-mode)
                             (mode . rst-mode)
                             (mode . markdown-mode)
+                            (mode . gfm-mode)
                             ))
               ;; -------------------------------------------------
               ;; media
@@ -7756,13 +7757,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (sp-local-pair "<" ">")
       (sp-local-tag  "<" "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-    (sp-with-modes '(markdown-mode gfm-mode rst-mode)
+    (sp-with-modes '(gfm-mode gfm-mode rst-mode)
       (sp-local-pair "*" "*" :bind "C-*")
       (sp-local-tag "2" "**" "**")
       ;; (sp-local-tag "s" "```scheme" "```")
       (sp-local-tag "<"  "<_>" "</_>" :transform 'sp-match-sgml-tags))
 
-    (sp-with-modes '(markdown-mode gfm-mode)
+    (sp-with-modes '(gfm-mode gfm-mode)
       (sp-local-pair "#" "#" :actions '(wrap))
       (sp-local-pair "_" "_" :actions '(wrap))
       (sp-local-pair "*" "*" :actions '(wrap)))
@@ -9971,7 +9972,7 @@ drag the viewpoint on the image buffer that the window displays."
             (elixir-mode . "elixir")
             (emacs-lisp-mode . "emacs")
             (erlang-mode . "erlang")
-            (gfm-mode . "markdown")
+            (gfm-mode . "md")
             (go-mode . "go")
             (groovy-mode . "groovy")
             (haskell-mode . "haskell")
@@ -9981,7 +9982,7 @@ drag the viewpoint on the image buffer that the window displays."
             (js3-mode . "nodejs")
             (less-css-mode . "less")
             (lua-mode . "lua")
-            (markdown-mode . "markdown")
+            (markdown-mode . "md")
             (objc-mode . "iphoneos")
             (perl-mode . "perl")
             (php-mode . "php")
