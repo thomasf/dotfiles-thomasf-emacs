@@ -9733,9 +9733,9 @@ drag the viewpoint on the image buffer that the window displays."
             ))
     (keep-buffers-mode 1)))
 
-(use-package dom
-  :ensure t
-  :defer)
+;; (use-package dom
+;;   :ensure t
+;;   :defer)
 
 (use-package dockerfile-mode
   :ensure t
