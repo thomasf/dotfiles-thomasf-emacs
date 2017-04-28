@@ -4293,7 +4293,9 @@ If FILE already exists, signal an error."
   :init
   (progn
     (setq
-     recentf-save-file (expand-file-name "recentf" user-data-directory)
+     recentf-save-file (expand-file-name
+                        (concat "recentf." (or (workspace-prefix) "DEFAULT"))
+                        user-data-directory)
      recentf-max-saved-items 5000
      recentf-auto-cleanup 300
      recentf-keep '(file-readable-p)
