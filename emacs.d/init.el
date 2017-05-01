@@ -5346,63 +5346,22 @@ otherwise use the subtree title."
         :fringe-face 'flycheck-fringe-info
         :error-list-face 'flycheck-error-list-info)
 
-
-      (flycheck-define-checker python-flake8
-        "A Python syntax and style checker using Flake8.
-
-For best error reporting, use Flake8 2.0 or newer.
-
-See URL `https://pypi.python.org/pypi/flake8'."
-        :command ("flake8"
-                  (config-file "--config" flycheck-flake8rc)
-                  (option "--max-complexity"
-                          flycheck-flake8-maximum-complexity nil
-                          flycheck-option-int)
-                  (option "--max-line-length"
-                          flycheck-flake8-maximum-line-length nil
-                          flycheck-option-int)
-                  source)
-        :error-patterns
-        (
-
-         (info line-start
-               (file-name) ":" line ":" (optional column ":") " "
-               (message (or
-                         "F401" ;; pyflakes: module imported but unused
-                         "E303" ;; pep8: too many blank lines (3)
-                         "E501" ;; pep8: line too long (82 > 79 characters)
-                         "E128" ;; pep8:       continuation line under-indented for visual indent.
-                         "E2";; pep8: Whitespace
-                         "E3";; pep8: blank lines
-                         "W2";; pep8: Whitespace
-                         "W3";; pep8: blank lines
-                         )
-                        (zero-or-more not-newline))
-               line-end)
-
-         (error line-start
-                (file-name) ":" line ":" (optional column ":") " "
-                (message "E" (one-or-more digit) (zero-or-more not-newline))
-                line-end)
-
-         (warning line-start
-                  (file-name) ":" line ":" (optional column ":") " "
-                  (message (or "F"            ; Pyflakes in Flake8 >= 2.0
-                               "W"            ; Pyflakes in Flake8 < 2.0
-                               "C")           ; McCabe in Flake >= 2.0
-                           (one-or-more digit) (zero-or-more not-newline))
-                  line-end)
-
-         (info line-start
-               (file-name) ":" line ":" (optional column ":") " "
-               (message "N"              ; pep8-naming in Flake8 >= 2.0
-                        (one-or-more digit) (zero-or-more not-newline))
-               line-end)
-
-         ;; Syntax errors in Flake8 < 2.0, in Flake8 >= 2.0 syntax errors are caught
-         ;; by the E.* pattern above
-         (error line-start (file-name) ":" line ":" (message) line-end))
-        :modes python-mode)
+      (setq flycheck-flake8-error-level-alist
+            '(
+              ("^E303.*$" . info) ;; pep8: too many blank lines (3)
+              ("^E501.*$" . info) ;; pep8: line too long (82 > 79 characters)
+              ("^E128.*$" . info) ;; pep8:       continuation line under-indented for visual indent.
+              ("^E2.*$" . info)   ;; pep8: Whitespace
+              ("^E3.*$" . info)   ;; pep8: blank lines
+              ("^W2.*$" . info)   ;; pep8: Whitespace
+              ("^W3.*$" . info)   ;; pep8: blank lines
+              ("^F401.*$". info)  ;; pyflakes: module imported but unused
+              ("^E9.*$" . error)
+              ("^F82.*$" . error)
+              ("^F83.*$" . error)
+              ("^D.*$" . info)
+              ("^N.*$" . info))
+           )
 
       (flycheck-define-checker go-golint
         "A Go style checker using Golint.
