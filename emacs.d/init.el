@@ -751,6 +751,9 @@ buffer-local wherever it is set."
   :init
   (progn
     (setq
+     ;; semantic-idle-scheduler-no-working-message t ;; ignored by semantic
+     ;; semantic-idle-scheduler-working-in-modeline-flag t ;; ignored by semantic
+     semantic-minimum-working-buffer-size (* 1024 1024)
      semantic-default-submodes nil
      semanticdb-default-save-directory (expand-file-name
                                         "semanticdb" user-data-directory))
