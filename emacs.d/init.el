@@ -2937,6 +2937,10 @@ for the current buffer's file name, and the line number at point."
 (use-package conf-mode
   :mode "\\.env\\'")
 
+(use-package csharp-mode
+  :ensure t
+  :mode "\\.cs\\'")
+
 (use-package csv-mode
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
