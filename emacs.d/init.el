@@ -6793,6 +6793,9 @@ See URL `https://github.com/golang/lint'."
   :preface
   (progn
     (load "helm-autoloads" t t))
+  :config
+  (progn
+    (require 'helm-utils))
   :init
   (progn
     (use-package helm-apt
