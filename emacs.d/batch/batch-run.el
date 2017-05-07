@@ -34,9 +34,8 @@
    ("sqlite" . sql)
    ("calc" . fundamental)
    ("C" . c)
-   ("cpp" . c++)
-   ("json" . json)
-   )
+   ("bash" . sh)
+   ("cpp" . c++))
  vc-handled-backends ()
  org-confirm-babel-evaluate nil
  )
@@ -44,28 +43,34 @@
 
 ;; (setf org-html-htmlize-output-type 'css)
 
-
-;; (org-babel-do-load-languages
-;;  'org-babel-load-languages
-;;  '(
-;;    ;;(perl . t)
-;;    ;;(ruby . t)
-;;    (sh . t)
-;;    (python . t)
-;;    (emacs-lisp . t)
-;;    ;;(dot . t)
-;;    ;;(ditaa . t)
-;;    ;;(plantuml . t)
-;;    (sql . t)
-;;    (http . t)
-;;    ))
-
+(eval-after-load 'org
+  '(progn
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '(
+        (css . t)
+        (sass . t)
+        (csharp . t)
+        (haskell . t)
+        (C . t)
+        (ditaa . t)
+        (dot . t)
+        (emacs-lisp . t)
+        (http . t)
+        (js . t)
+        (latex . t)
+        (perl . t)
+        (python . t)
+        (ruby . t)
+        (sh . t)
+        (sql . t)
+        ;;(plantuml . t)
+        ))))
 
 ;;; Setup Start
 
 
 (defmacro solarized-with-color-variables (variant &rest body)
-
   `(let* ((variant ,variant)
           (s-base03    "#002b36")
           (s-base02    "#073642")
