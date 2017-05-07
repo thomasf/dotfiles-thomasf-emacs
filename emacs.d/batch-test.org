@@ -1,0 +1,212 @@
+#+TITLE:                Batch-Test
+#+AUTHOR:               Thomas Frössman
+#+EMAIL:                thomasf@jossystem.se
+#+DATE:                 2017-05-06 lör
+#+DESCRIPTION:
+#+KEYWORDS:
+#+FILETAGS:
+#+EXPORT_EXCLUDE_TAGS:  noexport
+#+CATEGORY:
+#+OPTIONS:              H:3 num:t toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS:              TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT:           view:t toc:t ltoc:t mouse:underline buttons:0 path:http://thomasf.github.com/solarized-css/org-info.min.js
+#+HTML_HEAD:            <link rel="stylesheet" type="text/css" href="http://thomasf.github.com/solarized-css/solarized-light.min.css" />
+
+* TODO json                                     :@travel:enhancement:waiting:
+** NEXT json                                                   :enhancement:
+*** DONE json                                                 :@office:bug:
+**** WAITING json                                                :project:
+
+example block json
+
+#+begin_example json
+{
+  "count": 95043,
+  "next": "http://localhost:8000/api/classifications/?page=2&page_size=1",
+  "previous": null,
+}
+#+end_example
+
+src block json
+
+#+begin_src json
+{
+  "count": 95043,
+  "next": "http://localhost:8000/api/classifications/?page=2&page_size=1",
+  "previous": null,
+}
+#+end_src
+
+* TODO python
+
+#+begin_src python
+  def create_client(self, userid="", **kwargs):
+        """
+        Do an instantiation of a client instance
+
+        :param userid: An identifier of the user
+        :param: Keyword arguments
+            Keys are ["srv_discovery_url", "client_info", "client_registration",
+            "provider_info"]
+        :return: client instance
+        """
+        _key_set = set(kwargs.keys())
+        args = {}
+        for param in ["verify_ssl"]:
+            try:
+                args[param] = kwargs[param]
+            except KeyError:
+                pass
+            else:
+                _key_set.discard(param)
+
+        try:
+            verify_ssl = default_ssl_check
+        except:
+            verify_ssl = True
+
+        client = self.client_cls(client_authn_method=CLIENT_AUTHN_METHOD,
+                                 behaviour=kwargs["behaviour"], verify_ssl=verify_ssl, **args)
+
+
+#+end_src
+
+* NEXT elisp
+#+begin_src emacs-lisp
+
+(defun python-indent--previous-level (levels indentation)
+  "Return previous level from LEVELS relative to INDENTATION."
+  (let* ((levels (sort (copy-sequence levels) #'>))
+         (default (car levels)))
+    (catch 'return
+      (dolist (level levels)
+        (when (funcall #'< level indentation)
+          (throw 'return level)))
+      default)))
+
+(defun python-indent-calculate-indentation (&optional previous)
+  "Calculate indentation.
+Get indentation of PREVIOUS level when argument is non-nil.
+Return the max level of the cycle when indentation reaches the
+minimum."
+  (let* ((indentation (python-indent--calculate-indentation))
+         (levels (python-indent--calculate-levels indentation)))
+    (if previous
+        (python-indent--previous-level levels (current-indentation))
+      (if levels
+          (apply #'max levels)
+        0))))
+
+#+end_src
+
+* NOTE api calls..
+:PROPERTIES:
+
+:header-args: :var token="boo" :host localhost:8000 :pretty json
+:END:
+** HOLD featured
+** NEXT list clasifications
+#+BEGIN_SRC http :exports both
+GET /api/classifications/?page_size=1
+Content-Type: application/json
+Authorization: Token ${token}
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+{
+  "count": 95043,
+  "next": "http://localhost:8000/api/classifications/?page=2&page_size=1",
+  "previous": null,
+  "results": []
+}
+#+end_example
+
+
+
+* redirect if local file is missing
+#+BEGIN_SRC nginx
+server {
+    root /mnt/persist/www/django/static;
+
+    location /uploads/ {
+        expires 30d;
+        alias /mnt/persist/www/django/current/uploads/;
+        try_files = $uri @missing;
+    }
+
+    location @missing {
+        rewrite ^/uploads(/.*)$ $scheme://s3-some-region.amazonaws.com/bucketname$1 permanent;
+
+   }
+}
+#+END_SRC
+
+
+* create new user and database
+
+#+begin_src sql
+--
+-- DROPS(!) and recreated the database stmplr.
+-- Useful for development.
+--
+-- usage is something like:
+--    sudo -u postgres psql < pgsql-drop-create-database.sql
+--
+
+CREATE USER something WITH PASSWORD 'something';
+CREATE DATABASE something;
+GRANT ALL PRIVILEGES ON DATABASE something TO something;
+
+-- and maybe
+ALTER USER something WITH SUPERUSER;
+
+#+end_src
+
+* Const
+:PROPERTIES:
+:ID:       3c2f2208-e8c9-4edc-b5c8-2f4e39f9828c
+:END:
+
+a pattern for  const, value, string...
+
+#+begin_src go
+//go:generate stringer -type=Pill
+type Pill int
+
+const (
+	_pills_start Pill = iota
+	Placebo
+	Aspirin
+	Ibuprofen
+	Paracetamol
+	_pills_end
+)
+
+// Set is the method to set the flag value, part of the flag.Value interface.
+// Set's argument is a string to be parsed to set the flag.
+// It's a comma-separated list, so we split it.
+func (p *Pill) Set(value string) error {
+	for x := _pills_start + 1; x < _pills_end; x++ {
+		pill := Pill(x)
+		if value == pill.String() {
+			*p = x
+			return nil
+		}
+	}
+	*p = _pills_end
+	return errors.New("invalid value")
+}
+#+end_src
+examples:
+
+#+begin_src go
+var p Pill
+p.Set("Ibuprofen")
+
+fmt.Println("pill:", p)
+// prints: pill Ibuprofen
+
+fmt.Println("error:", p.Set("Large Hadron Collider"))
+// prints: error invalid value
+#+end_src
