@@ -9,7 +9,6 @@
 
 (require 'package)
 (package-initialize)
-(require 'use-package)
 (require 'htmlize)
 (require 'go-mode)
 (require 'ansi-color)
