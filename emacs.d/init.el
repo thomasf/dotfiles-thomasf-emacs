@@ -4412,11 +4412,13 @@ If FILE already exists, signal an error."
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
-    (setq save-place-file (expand-file-name
-                           "saveplace" user-data-directory)))
+    (setq save-place-forget-unreadable-files nil))
   :config
   (progn
-    (setq-default save-place t)))
+    (setq save-place-file (expand-file-name
+                           (concat "saveplace." (or (workspace-prefix) "DEFAULT"))
+                           user-data-directory))
+    (save-place-mode 1)))
 
 (use-package which-func
   :commands (which-func-mode)
