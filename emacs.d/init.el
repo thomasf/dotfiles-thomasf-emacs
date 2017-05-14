@@ -4385,7 +4385,8 @@ If FILE already exists, signal an error."
   (progn
     (setq
      savehist-file (expand-file-name
-                    "savehist" user-data-directory)
+                    (concat "savehist." (or (workspace-prefix) "DEFAULT"))
+                    user-data-directory)
      savehist-additional-variables '(search ring regexp-search-ring
                                      projectile-pt-file-pattern-history
                                      projectile-pt-file-pattern-search-history)
