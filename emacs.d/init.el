@@ -33,6 +33,41 @@
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
                             (fullscreen . nil)))
+
+;;; Emacs version check and feature inhibitions
+
+(defvar degrade-p-minimalism nil
+  "If set to non nil a lighter emacs config is used. ")
+
+(and
+ (not noninteractive)
+ (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))
+ (warn "Use a newer version of Emacs for a full featured environment!"))
+
+(eval-when-compile
+  (defmacro executable-find* (command)
+    "Macro form of executable-find..."
+    (executable-find command)))
+
+(defun workspace-prefix ()
+  (let ((res (if (and
+                  (eq window-system 'x)
+                  (executable-find* "wsname"))
+                 (shell-command-to-string "wsname -p"))))
+    (and res
+         (not
+          (or
+           (null res)
+           (string= "" res)))
+         res)))
+
+(defvar workspace-prefix-startup
+  (or
+   (and
+    (not noninteractive)
+    (not degrade-p-minimalism)
+    (workspace-prefix))))
+
 (when load-file-name
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
@@ -54,15 +89,6 @@
         use-package-enable-imenu-support t
         use-package-minimum-reported-time 0.01))
 
-;;; Emacs version check and feature inhibitions
-
-(defvar degrade-p-minimalism nil
-  "If set to non nil a lighter emacs config is used. ")
-
-(and
- (not noninteractive)
- (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))
- (warn "Use a newer version of Emacs for a full featured environment!"))
 
 ;;;; package.el
 (eval-and-compile
@@ -101,9 +127,7 @@ re-downloaded in order to locate PACKAGE."
   (require 'use-package)
   ;; (require-package 'names)
   ;; (require 'names)
-  (defmacro executable-find* (command)
-    "Macro form of executable-find..."
-    (executable-find command)))
+  )
 
 
 ;;;; load packages
@@ -656,12 +680,10 @@ buffer-local wherever it is set."
 
 (setq-default fringes-outside-margins t)
 ;;;; server
-(defun workspace-prefix ()
-  (let ((res (if (and
-                  (eq window-system 'x)
-                  (executable-find* "wsname"))
-                 (shell-command-to-string "wsname -p"))))
-    (if (and res (not (s-blank? res))) res)))
+
+
+(defun workspace-prefix-file-name (name)
+  (concat name "." (or workspace-prefix-startup "DEFAULT")))
 
 (use-package server
   :commands server-start-maybe
@@ -671,13 +693,10 @@ buffer-local wherever it is set."
               'server-start-maybe))
   :config
   (progn
-    (defun server-guess-name ()
-      (let ((workspace-prefix (workspace-prefix)))
-        (and
-         workspace-prefix
-         (equal server-name "server")
-         (setq server-name workspace-prefix))))
-    (server-guess-name)
+    (and
+     (equal server-name "server")
+     workspace-prefix-startup
+     (setq server-name workspace-prefix-startup))
     (defun server-start-maybe ()
       (and (not (server-running-p))
            (server-start nil t)))))
@@ -4301,7 +4320,7 @@ If FILE already exists, signal an error."
   (progn
     (setq
      recentf-save-file (expand-file-name
-                        (concat "recentf." (or (workspace-prefix) "DEFAULT"))
+                        (workspace-prefix-file-name "recentf")
                         user-data-directory)
      recentf-max-saved-items 5000
      recentf-auto-cleanup 300
@@ -4385,7 +4404,7 @@ If FILE already exists, signal an error."
   (progn
     (setq
      savehist-file (expand-file-name
-                    (concat "savehist." (or (workspace-prefix) "DEFAULT"))
+                    (workspace-prefix-file-name "savehist")
                     user-data-directory)
      savehist-additional-variables '(search ring regexp-search-ring
                                      projectile-pt-file-pattern-history
@@ -4417,7 +4436,7 @@ If FILE already exists, signal an error."
   :config
   (progn
     (setq save-place-file (expand-file-name
-                           (concat "saveplace." (or (workspace-prefix) "DEFAULT"))
+                           (workspace-prefix-file-name "saveplace")
                            user-data-directory))
     (save-place-mode 1)))
 
@@ -10121,15 +10140,13 @@ drag the viewpoint on the image buffer that the window displays."
 (defun  my-workspace-hook()
   "workspace specific hook function."
   t
-  (when
-      (and (not noninteractive)
-           window-system
-           (not degrade-p-minimalism)
-           )
-    (let ((workspace-prefix (workspace-prefix)))
-      (cond
-       ((equal workspace-prefix "upgrade")
-        (call-interactively 'list-packages))))))
+  (and
+   (not noninteractive)
+   window-system
+   (not degrade-p-minimalism)
+   (cond
+    ((equal workspace-prefix-startup "upgrade")
+     (call-interactively 'list-packages)))))
 
 (add-hook 'after-init-hook 'my-workspace-hook t)
 
