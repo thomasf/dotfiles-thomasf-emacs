@@ -2,7 +2,7 @@
 from ubuntu:17.04
 
 env DEBIAN_FRONTEND noninteractive
-run apt-get update && apt-get -y install emacs24-nox
+run apt-get update && apt-get -y install emacs24-nox graphviz
 
 env HOME /emacs
 workdir /emacs
