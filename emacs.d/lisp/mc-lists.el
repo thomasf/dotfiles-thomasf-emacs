@@ -15,6 +15,7 @@
         backward-sexp
         beginning-of-line-or-indentation
         c-electric-backspace
+        c-electric-brace
         c-electric-colon
         c-electric-delete-forward
         c-electric-paren
@@ -22,6 +23,7 @@
         c-electric-semi&comma
         c-electric-slash
         c-electric-star
+        c-indent-line-or-region
         change-inner
         change-number-at-point
         change-outer
@@ -89,6 +91,7 @@
         magit-stage-item
         markdown-enter-key
         markdown-exdent-or-delete
+        markdown-outdent-or-delete
         move-line-down
         move-line-up
         move-text-down
