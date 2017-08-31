@@ -5399,7 +5399,7 @@ See URL `https://github.com/golang/lint'."
         :modes go-mode
         :next-checkers (go-vet
                         ;; Fall back, if go-vet doesn't exist
-                        go-build go-test go-errcheck)))))
+                        go-build go-test go-errcheck go-unconvert go-megacheck)))))
 
 (use-package unbound
   :ensure t
@@ -5508,7 +5508,8 @@ See URL `https://github.com/golang/lint'."
       (flycheck-buffer))
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)
+    ;; (bind-key "M-." 'godef-jump go-mode-map)
+    (bind-key "M-." 'go-guru-definition go-mode-map)
 
 
     (use-package go-direx
