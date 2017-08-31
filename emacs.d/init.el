@@ -6163,7 +6163,8 @@ See URL `https://github.com/golang/lint'."
          ("\\.mdtext\\'" . gfm-mode))
   :init
   (progn
-    (setq markdown-command "pandoc -f markdown -t html")
+    (setq markdown-command "pandoc -f markdown -t html"
+          markdown-fontify-code-blocks-natively t)
     (defun markdown-imenu-create-index ()
       (let* ((root '(nil . nil))
              cur-alist
