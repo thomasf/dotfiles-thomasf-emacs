@@ -1302,7 +1302,7 @@ buffer-local wherever it is set."
   "Jump to sitepackages directory."
   (interactive)
   (let* ((program (concat
-                   "python -c 'import distutils;"
+                   "python -c 'import distutils.sysconfig;"
                    "print(distutils.sysconfig.get_python_lib())';"))
          (output (shell-command-to-string program))
          (fun (first (split-string output)))
