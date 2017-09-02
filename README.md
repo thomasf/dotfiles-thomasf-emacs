@@ -5,21 +5,21 @@ These are my personal dotfiles, which I manage with the help of git and a nice t
 
 ## Installation 
 
-Install the [dotfiles] package, either using `pip` (recommended) or `easy_install`. Maybe with some help of `sudo`.
+Install the [dotfiles] package
 
     pip install dotfiles
 
 Create some directory where to store multiple dotfiles repositories.
    
-    mkdir -p ~/repos/dotfiles
+    mkdir -p ~/src/dotfiles
    
 Clone this repository into that directory.
    
-    git clone https://github.com/thomasf/dotfiles-thomasf-emacs ~/repos/dotfiles/emacs
+    git clone https://github.com/thomasf/dotfiles-thomasf-emacs ~/src/dotfiles/emacs
    
 And symlink it's contents into your home directory.
 
-    dotfiles -s -R ~/repos/dotfiles/emacs
+    dotfiles -s -R ~/src/dotfiles/emacs
      
 Also check out `dotfiles -h` or the [dotfiles](https://github.com/jbernard/dotfiles) manual for more information on the hows and whats of that tool.
 

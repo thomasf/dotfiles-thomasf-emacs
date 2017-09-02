@@ -5,8 +5,8 @@
 ;; (defun magit-multi-status-dotfiles ()
 ;;   (interactive)
 ;;   (magit-multi-status
-;;    '("~/.config/dotfiles/emacs" "~/.config/dotfiles/shell"
-;;      "~/.config/dotfiles/desktop" "~/.config/dotfiles/notes")))
+;;    '("~/src/dotfiles/emacs" "~/src/dotfiles/shell"
+;;      "~/src/dotfiles/desktop" "~/src/dotfiles/notes")))
 
 
 (require 'magit)
