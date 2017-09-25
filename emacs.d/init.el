@@ -4530,7 +4530,7 @@ If FILE already exists, signal an error."
       (use-package moccur-edit))))
 
 (use-package goto-chg
-  ;; :ensure t
+  :ensure t
   :if (not noninteractive)
   :commands (goto-last-change goto-last-change-flash)
   :bind ("C-c C-SPC" . goto-last-change-flash)
