@@ -5269,7 +5269,7 @@ otherwise use the subtree title."
      flycheck-mode-line '(:eval (my-flycheck-mode-line-status-text))
      flycheck-highlighting-mode 'lines
      ;; flycheck-highlighting-mode 'symbols
-     flycheck-disabled-checkers '(javascript-jshint)
+     flycheck-disabled-checkers '(javascript-jshint go-megacheck)
 
      flycheck-completion-system 'ido)
     (defun flycheck-turn-on-maybe ()
@@ -5389,6 +5389,7 @@ otherwise use the subtree title."
               ("^N.*$" . info))
            )
 
+      ;; this demotes go-golint from warning to info
       (flycheck-define-checker go-golint
         "A Go style checker using Golint.
 
