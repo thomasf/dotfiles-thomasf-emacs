@@ -5103,6 +5103,7 @@ otherwise use the subtree title."
                                       "dict" user-emacs-directory))
      ac-comphist-file (expand-file-name
                        "ac-comphist.dat" user-data-directory)
+     ac-flycheck-poll-completion-end-interval 1.0
      ac-delay 0.3
      ;; To get pop-ups with docs even if a word is uniquely completed
      ac-dwim nil
