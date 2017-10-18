@@ -5507,12 +5507,18 @@ See URL `https://github.com/golang/lint'."
       (let ((cc (current-column)))
         (gofmt)
         (move-to-column cc))
+      (save-buffer)
       (flycheck-buffer))
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
-    ;; (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "M-." 'go-guru-definition go-mode-map)
 
+    (defun my-go-jump-definition ()
+      (interactive)
+      (condition-case nil
+          (call-interactively 'go-guru-definition)
+        (error (call-interactively 'godef-jump))))
+
+    (bind-key "M-." 'my-go-jump-definition)
 
     (use-package go-direx
       :ensure t
