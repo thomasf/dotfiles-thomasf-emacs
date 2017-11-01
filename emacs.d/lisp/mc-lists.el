@@ -229,6 +229,7 @@
         goto-line-with-feedback
         handle-switch-frame
         helm-descbinds
+        ibuffer
         ido-switch-buffer
         image-mouse-scroll-position
         js2r-extract-var
