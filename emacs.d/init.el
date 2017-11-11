@@ -411,7 +411,8 @@ buffer-local wherever it is set."
 (setq-default ;; dispnew.c
  visible-bell nil)
 (setq-default ;; xdisp.c
- frame-title-format "emacs - %b"
+ ;; frame-title-format "emacs - %b"
+ frame-title-format "%b"
  scroll-step 1
  scroll-margin 0
  scroll-conservatively 10000
