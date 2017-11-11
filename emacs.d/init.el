@@ -3921,7 +3921,8 @@ for the current buffer's file name, and the line number at point."
 
 (use-package toml-mode
   :ensure t
-  :mode (("\\.toml\\'" . toml-mode)))
+  :mode (("\\.toml\\'" . toml-mode)
+         ("Gopkg\\.lock\\'" . toml-mode)))
 
 (use-package transmission
   :ensure t
