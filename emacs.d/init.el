@@ -3698,7 +3698,8 @@ for the current buffer's file name, and the line number at point."
                                my-prettify-symbols-patterns)))))
         (mapc #'(lambda (v)
                   (push v prettify-symbols-alist))
-              kwds)))
+              kwds))
+      (prettify-symbols-mode 1))
     (unless noninteractive
       (add-hook 'prog-mode-hook 'my-prettify-symbols-hook-fn)))
 
