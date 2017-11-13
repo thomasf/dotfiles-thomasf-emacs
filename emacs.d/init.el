@@ -411,8 +411,16 @@ buffer-local wherever it is set."
 (setq-default ;; dispnew.c
  visible-bell nil)
 (setq-default ;; xdisp.c
- ;; frame-title-format "emacs - %b"
- frame-title-format "%b"
+ frame-title-format
+ '((:eval (if (buffer-file-name)
+              (concat
+               (abbreviate-file-name (file-name-nondirectory buffer-file-name))
+               "  ("
+               (abbreviate-file-name (file-name-directory buffer-file-name))
+               ")")
+            "%b"))
+   " [%m] "
+   (:eval (if (buffer-modified-p) " •")))
  scroll-step 1
  scroll-margin 0
  scroll-conservatively 10000
