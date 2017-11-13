@@ -602,7 +602,8 @@ buffer-local wherever it is set."
               (set-face-attribute 'default nil :font my-monospaced-font)
               ;; (set-face-attribute 'default nil :font my-monospaced-font :width 'ultra-condensed :weight 'normal )
               (set-face-attribute 'fixed-pitch nil :font my-monospaced-font)
-              (set-face-attribute 'variable-pitch nil :font my-variable-pitch-font))
+              (set-face-attribute 'variable-pitch nil :font my-variable-pitch-font)
+              (set-fontset-font "fontset-default" 'unicode '("PragmataPro" . "iso10646-1")))
           (error
            (progn
              (message
