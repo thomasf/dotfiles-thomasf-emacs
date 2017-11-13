@@ -5539,6 +5539,7 @@ See URL `https://github.com/golang/lint'."
       (progn
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
+    (require 'go-expanderr nil t)
     (use-package go-autocomplete
       :ensure t
       :init
