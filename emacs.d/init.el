@@ -7327,11 +7327,20 @@ minibuffer."
 
 (use-package traad
   :ensure t
-  :commands (traad-open traad-install-server)
+  :commands (
+             traad-install-server
+             traad-rename
+             traad-rename-current-file
+             traad-normalize-arguments
+             traad-remove-argument
+             traad-add-argument
+             traad-extract-method
+             traad-extract-variable
+
+             )
   :init
   (progn
-    (setq traad-auto-revert t
-          traad-use-async t)))
+    (setq traad-save-unsaved-buffers 'always)))
 
 (use-package pymacs
   :ensure t
