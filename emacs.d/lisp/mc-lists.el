@@ -61,6 +61,7 @@
         forward-sexp
         go-mode-insert-and-indent
         god-mode-repeat
+        haskell-indentation-common-electric-command
         haskell-indentation-delete-backward-char
         haskell-indentation-delete-char
         hippie-expand-no-case-fold
