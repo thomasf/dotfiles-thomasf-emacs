@@ -7534,6 +7534,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :config
   (progn
     (use-package redshank
+      :disabled t
       :ensure t
       :commands (redshank-mode
                  turn-on-redshank-mode)
