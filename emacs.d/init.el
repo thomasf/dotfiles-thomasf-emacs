@@ -9854,6 +9854,10 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package anzu
   :ensure t
+  :defer 2
+  :if (and
+       (not noninteractive)
+       (not degrade-p-minimalism))
   :commands (global-anzu-mode)
   :init (global-anzu-mode 1)
   :diminish "")
