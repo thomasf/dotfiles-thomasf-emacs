@@ -3380,6 +3380,7 @@ for the current buffer's file name, and the line number at point."
     (use-package helm)))
 
 (use-package helm-package
+  :disabled t
   :ensure t
   :commands helm-package)
 
@@ -3435,6 +3436,7 @@ for the current buffer's file name, and the line number at point."
   :commands macrostep-expand)
 
 (use-package malabar-mode
+  :disabled t
   :ensure t
   :commands (malabar-mode malabar-java-mode malabar-groovy-mode)
   :init
@@ -5448,6 +5450,7 @@ See URL `https://github.com/golang/lint'."
   :config
   (progn
     (use-package gmail-message-mode
+      :disabled t
       :ensure t)
     (defun my-edit-server-start-hook ()
       "My edit-server mode hook."
