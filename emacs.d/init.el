@@ -3979,6 +3979,7 @@ for the current buffer's file name, and the line number at point."
          ("C-x C-n" . whole-line-mark-next)))
 
 (use-package whole-line-or-region
+  :disabled t
   :ensure t
   :commands (whole-line-org-region-mode)
   :bind (
@@ -3989,6 +3990,29 @@ for the current buffer's file name, and the line number at point."
   (progn
     (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim)
     ))
+
+
+(defun comment-or-uncomment-region-or-line ()
+  "Comments or uncomments the region or the current line if there's no active region."
+  (interactive)
+  (if (region-active-p)
+      (let ((beg (region-beginning))
+            (end (region-end)))
+        (save-excursion
+          (goto-char beg)
+          (beginning-of-line)
+          (setq beg (point))
+          (goto-char end)
+          (end-of-line)
+          (setq end (point))
+          (comment-or-uncomment-region beg end)))
+    (save-excursion
+      (call-interactively 'comment-line))))
+
+
+(define-key region-bindings-mode-map ";" 'comment-or-uncomment-region-or-line)
+(bind-key "C-c ;" 'comment-or-uncomment-region-or-line)
+
 
 (use-package with-editor
   :ensure t
