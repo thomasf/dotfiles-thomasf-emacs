@@ -5134,13 +5134,62 @@ otherwise use the subtree title."
   :commands po-mode
   :mode "\\.po\\'")
 
+(use-package company
+  :ensure t
+  :commands company-mode
+  :init
+  (progn
+    (setq company-tooltip-align-annotations t
+          company-tooltip-limit 15
+          company-tooltip-margin 1)
+    (add-hook 'go-mode-hook 'company-mode))
+  :config
+  (progn
+    (bind-key "C-<tab>" 'company-complete-common-or-cycle company-mode-map)
+
+    (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+    (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+    (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+    (define-key company-active-map (kbd "<backtab>") 'company-select-previous)
+
+    (bind-key "C-s" 'company-filter-candidates company-active-map)
+    (bind-key "C-M-s" 'company-search-candidates company-active-map)
+    (bind-key "M-v" 'company-previous-page company-active-map)
+    (bind-key "C-v" 'company-next-page company-active-map)
+    (bind-key "C-n" 'company-select-next-or-abort company-active-map)
+    (bind-key "C-p" 'company-select-previous-or-abort company-active-map)
+
+    (bind-key "M-v" 'company-previous-page company-search-map)
+    (bind-key "C-v" 'company-next-page company-search-map)
+    (bind-key "C-n" 'company-select-next company-search-map)
+    (bind-key "C-p" 'company-select-previous company-search-map)
+
+
+    ;; maybe these settings
+    (setq company-require-match nil)
+    (defun my-company-visible-and-explicit-action-p ()
+      (and (company-tooltip-visible-p)
+           (company-explicit-action-p)))
+
+    (setq company-auto-complete #'my-company-visible-and-explicit-action-p)
+    (setq company-frontends '(company-echo-metadata-frontend
+                              company-pseudo-tooltip-unless-just-one-frontend-with-delay
+                              company-preview-frontend))
+
+    (use-package company-lsp
+      :ensure t
+      :after company
+      :config
+      (progn
+        (push 'company-lsp company-backends)))))
+
 (use-package auto-complete
   :ensure t
   :if (not
        (or
         noninteractive
         (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
-  :commands (auto-complete-mode)
+  :commands (auto-complete-mode auto-complete-mode-maybe)
   :diminish ""
   :init
   (progn
@@ -5161,12 +5210,12 @@ otherwise use the subtree title."
      tab-always-indent t
      )
 
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-prog-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-css-like-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-html-like-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) my-html-like-mode-hooks-2)
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) '(json-mode-hook))
-    (hook-into-modes #'(lambda () (auto-complete-mode 1)) '(ein:notebook-mode-hook))
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-prog-mode-hooks)
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-css-like-mode-hooks)
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-html-like-mode-hooks)
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-html-like-mode-hooks-2)
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) '(json-mode-hook))
+    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) '(ein:notebook-mode-hook))
 
     (setq-default ac-sources '(ac-source-yasnippet
                                ac-source-abbrev
@@ -5237,13 +5286,15 @@ otherwise use the subtree title."
 
     (dolist
         (mode '(clojure-mode coffee-mode css-mode csv-mode
-                             espresso-mode fmagit-log-edit-mode go-mode
+                             espresso-mode fmagit-log-edit-mode
                              haml-mode haskell-mode html-mode json-mode
                              less-css-mode lisp-mode log-edit-mode gfm-mode markdown-mode
                              nxml-mode sass-mode scss-mode sh-mode
                              smarty-mode stylus-mode textile-mode tuareg-mode yaml-mode))
 
       (add-to-list 'ac-modes mode))
+
+    (setq ac-modes (remove 'go-mode ac-modes))
 
     ;; Exclude very large buffers from dabbrev
     (defun smp-dabbrev-friend-buffer (other-buffer)
@@ -5585,7 +5636,15 @@ See URL `https://github.com/golang/lint'."
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
     (require 'go-expanderr nil t)
+    (use-package lsp-go
+      :ensure t
+      :commands (lsp-go-enable)
+      :init
+      (progn
+        (add-hook 'go-mode-hook 'lsp-go-enable)))
+
     (use-package go-autocomplete
+      :disabled t
       :ensure t
       :init
       (progn
