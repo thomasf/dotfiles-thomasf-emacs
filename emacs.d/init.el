@@ -586,6 +586,11 @@ buffer-local wherever it is set."
     ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
     ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
+    (when (s-starts-with? "transwhale" system-name)
+      (setq my-monospaced-font "Pragmata Pro-12"
+            my-variable-pitch-font "Pt Sans-13"))
+
+
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "Pragmata Pro-13"
             my-variable-pitch-font "Pt Sans-13"))
@@ -618,6 +623,9 @@ buffer-local wherever it is set."
   :init
   (progn
     (setq nav-flash-delay 0.6)
+    (when (s-starts-with? "fogskum" system-name)
+      (setq my-monospaced-font "Pragmata Pro-13"
+            my-variable-pitch-font "Pt Sans-13"))
     (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
     (defun flash-defun()
       "Flash current defun"
