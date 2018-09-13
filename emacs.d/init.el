@@ -5641,6 +5641,7 @@ See URL `https://github.com/golang/lint'."
       :commands (lsp-go-enable)
       :init
       (progn
+        (setq lsp-go-gocode-completion-enabled t)
         (add-hook 'go-mode-hook 'lsp-go-enable)))
 
     (use-package go-autocomplete
