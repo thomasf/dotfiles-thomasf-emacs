@@ -74,7 +74,7 @@
 
 (setq
  abbrev-file-name (expand-file-name
-                   "abbrev_defs.el" user-lisp-directory)
+                   "abbrev_defs.el" user-data-directory)
 
  )
 
