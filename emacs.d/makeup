@@ -1,2 +1,12 @@
 #!/bin/sh
+
+(
+  set -e
+  cd elpa
+  git init -q .
+  echo '!*.elc' > .gitignore
+  git add -A .
+  git commit -q -m"update packages"
+)
+
 exec emacs --no-site -batch -l makeup.el
