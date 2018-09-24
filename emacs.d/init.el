@@ -2879,7 +2879,6 @@ for the current buffer's file name, and the line number at point."
 ;;  :commands amd-mode)
 
 (use-package anchored-transpose
-  :ensure t
   :commands anchored-transpose)
 
 (use-package anaphora
@@ -3043,7 +3042,6 @@ for the current buffer's file name, and the line number at point."
   :ensure t)
 
 (use-package dropdown-list
-  :ensure t
   :defer)
 
 (use-package ediff
@@ -4513,8 +4511,9 @@ If FILE already exists, signal an error."
   :diminish ""
   :config
   (progn
-    (use-package eldoc-extension
-      :ensure t)))
+    ;; (use-package eldoc-extension
+    ;;   :ensure t)
+    ))
 
 (use-package adoc-mode
   :ensure t
@@ -5319,7 +5318,6 @@ otherwise use the subtree title."
   :commands (lfe-mode))
 
 (use-package vkill
-  :ensure t
   :commands vkill
   :if (not noninteractive)
   :init
@@ -5551,7 +5549,6 @@ See URL `https://github.com/golang/lint'."
     (add-hook 'edit-server-start-hook 'my-edit-server-start-hook)))
 
 (use-package highlight-tail
-  :ensure t
   :commands highlight-tail-mode)
 
 (use-package go-mode
@@ -9702,7 +9699,6 @@ if submodules exists, grep submodules too."
   :commands (grizzl-completing-read grizzl-make-index))
 
 (use-package point-undo
-  :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (point-undo point-redo)
   :init
@@ -9891,13 +9887,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'python-mode-hook 'paren-face-add-keyword-other)
     (add-hook 'coffee-mode-hook 'paren-face-add-keyword)
     (add-hook 'coffee-mode-hook 'paren-face-add-keyword-other)))
-
-(use-package auto-install
-  :ensure t
-  :commands auto-install-from-url
-  :init
-  (progn
-    (setq auto-install-directory user-site-lisp-directory)))
 
 (use-package auto-package-update
   :disabled t

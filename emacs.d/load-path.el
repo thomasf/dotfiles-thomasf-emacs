@@ -59,7 +59,8 @@ See also `locate-user-emacs-file'.")
             (expand-file-name "~/.opt/extempore/extras")
             (expand-file-name "~/src/github.com/stapelberg/expanderr/lisp")
             (expand-file-name "/usr/local/opt/extempore/extras")
-            (concat user-site-lisp-directory "/emms/lisp")
+            (concat user-emacs-directory "/emms/lisp")
+            (concat user-emacs-directory "/site-lisp/emacswiki")
             "/usr/local/share/emacs/site-lisp/"
             "/usr/local/share/emacs/site-lisp/mu4e/"
             "/opt/local/share/emacs/site-lisp/"
