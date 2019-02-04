@@ -5138,6 +5138,10 @@ otherwise use the subtree title."
   :commands po-mode
   :mode "\\.po\\'")
 
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-mode))
+
 (use-package company
   :ensure t
   :commands company-mode
@@ -5180,12 +5184,15 @@ otherwise use the subtree title."
                               company-pseudo-tooltip-unless-just-one-frontend-with-delay
                               company-preview-frontend))
 
-    (use-package company-lsp
+    ))
+(use-package company-lsp
       :ensure t
-      :after company
-      :config
-      (progn
-        (push 'company-lsp company-backends)))))
+      ;; :after company
+      :commands company-lsp
+      ;; :config
+      ;; (progn
+      ;; (push 'company-lsp company-backends))
+      )
 
 (use-package auto-complete
   :ensure t
@@ -5638,13 +5645,16 @@ See URL `https://github.com/golang/lint'."
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
     (require 'go-expanderr nil t)
+
     (use-package lsp-go
+      :disabled t
       :ensure t
       :commands (lsp-go-enable)
       :init
       (progn
         (setq lsp-go-gocode-completion-enabled t)
         (add-hook 'go-mode-hook 'lsp-go-enable)))
+    (add-hook 'go-mode-hook 'lsp-mode)
 
     (use-package go-autocomplete
       :disabled t
@@ -6333,7 +6343,12 @@ See URL `https://github.com/golang/lint'."
     (add-hook 'gfm-mode-hook
               #'(lambda ()
                   (setq imenu-create-index-function
-                        'markdown-imenu-create-index)))))
+                        'markdown-imenu-create-index))))
+  :config
+  (progn
+    (unbind-key "`" gfm-mode-map)
+    )
+  )
 
 (use-package table
   :commands table-recognize)
