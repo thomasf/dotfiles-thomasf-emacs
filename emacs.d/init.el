@@ -168,6 +168,11 @@ re-downloaded in order to locate PACKAGE."
     (setq python-environment-directory "~/.virtualenvs/"
           python-environment-default-root-name "emacs-default")))
 
+(use-package pipenv
+  :ensure t
+  :commands (pipenv-mode pipenv-activate pipenv-run)
+  )
+
 ;; Try to load private el env
 (require 'private-init nil (not my-log-verbose))
 
