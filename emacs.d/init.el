@@ -562,6 +562,7 @@ buffer-local wherever it is set."
      sml/projectile-replacement-format ":p/%s:"
      sml/replacer-regexp-list
      '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
+       ("^~/\.local/share/virtualenvs/\\([^/]+\\)" ":e/\\1:")
        ("^/sudo:.*:" ":su:")
        ("^~/dropbox/" ":db:")))
     (sml/setup)))
@@ -2779,8 +2780,10 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq projectile-project-root-files-child-of
           '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            "~/\.local/share/virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
             "~/\.opt/[^/]+/?$"
             "~/\.virtualenvs/[^/]+/?$"
+            "~/\.local/share/virtualenvs/[^/]+/?$"
             "/var/log/?$"))
 
     (defun projectile-root-child-of (dir &optional list)
@@ -7104,6 +7107,7 @@ See URL `https://github.com/golang/lint'."
                 ("src" . "~/src/")
                 ("notes" . "~/notes/")
                 ("venv" . "~/.virtualenvs/")
+                ("venv" . "~/.local/share/virtualenvs/")
                 (".emacsp" . "~/.emacs.d/elpa/")
                 (".emacsd" . "~/.emacs.d/")
                 (".config" . "~/.config/")
@@ -8694,6 +8698,7 @@ Titus von der Malsburg."
        "~/\\.virthualenv/"
        "~/\\.virtualenv/"
        "~/\\.virtualenvs/"
+       "~/\\.local/share/virtualenvs/"
        "~/perl5/perlbrew/"
        )
      hardhat-fullpath-editable-regexps
