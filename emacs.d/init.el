@@ -5402,6 +5402,7 @@ otherwise use the subtree title."
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'arduino-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'sh-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
