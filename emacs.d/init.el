@@ -5143,7 +5143,58 @@ otherwise use the subtree title."
 
 (use-package lsp-mode
   :ensure t
-  :commands (lsp lsp-mode))
+  :commands (lsp lsp-mode)
+  :init
+  (progn
+    (add-hook 'go-mode-hook #'lsp)
+    (add-hook 'python-mode-hook #'lsp)
+    )
+  :config
+  (progn
+    (use-package lsp-clients
+      :defer
+      :config
+      (progn
+        (remhash 'gopls lsp-clients)))
+    (setq
+     lsp-prefer-flymake nil
+     lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1") user-data-directory))))
+
+(use-package lsp-ui
+  :ensure t
+  :commands (lsp-ui-mode)
+  :config
+  (progn
+    (setq
+     lsp-ui-doc-enable nil
+     lsp-ui-doc-delay 3
+     lsp-ui-sideline-delay 1.1
+     lsp-document-highlight-delay 1.1
+
+     lsp-ui-doc-header nil
+     lsp-ui-doc-include-signature nil
+     )
+    (use-package lsp-ui-flycheck
+      :defer t
+      :config
+      (progn
+        ;; disable lsp-ui-flycheck, it can't be done
+        (defun lsp-ui-flycheck-enable (_))
+        ))))
+
+(use-package dap-mode
+  :ensure t
+  :commands (dap-debug dap-debug-edit-template))
+
+
+(use-package company-lsp
+      :ensure t
+      ;; :after company
+      :commands company-lsp
+      ;; :config
+      ;; (progn
+      ;; (push 'company-lsp company-backends))
+      )
 
 (use-package company
   :ensure t
@@ -5188,14 +5239,7 @@ otherwise use the subtree title."
                               company-preview-frontend))
 
     ))
-(use-package company-lsp
-      :ensure t
-      ;; :after company
-      :commands company-lsp
-      ;; :config
-      ;; (progn
-      ;; (push 'company-lsp company-backends))
-      )
+
 
 (use-package auto-complete
   :ensure t
@@ -5245,18 +5289,18 @@ otherwise use the subtree title."
                  ac-source-words-in-buffer)))
      my-css-like-mode-hooks)
 
-    (add-hook
-     'python-mode-hook
-     #'(lambda ()
-         (jedi-mode 1)
-         (setq ac-sources
-               '(ac-source-yasnippet
-                 ac-source-jedi-direct
-                 ac-source-words-in-buffer
-                 ac-source-dictionary
-                 ac-source-abbrev
-                 ac-source-gtags))
-         (auto-complete-mode 1)))
+    ;; (add-hook
+    ;;  'python-mode-hook
+    ;;  #'(lambda ()
+    ;;      (jedi-mode 1)
+    ;;      (setq ac-sources
+    ;;            '(ac-source-yasnippet
+    ;;              ac-source-jedi-direct
+    ;;              ac-source-words-in-buffer
+    ;;              ac-source-dictionary
+    ;;              ac-source-abbrev
+    ;;              ac-source-gtags))
+    ;;      (auto-complete-mode 1)))
 
     (add-hook
      'ruby-mode-hook
@@ -5308,7 +5352,9 @@ otherwise use the subtree title."
 
       (add-to-list 'ac-modes mode))
 
+    ;; going over to use language server
     (setq ac-modes (remove 'go-mode ac-modes))
+    (setq ac-modes (remove 'python-mode ac-modes))
 
     ;; Exclude very large buffers from dabbrev
     (defun smp-dabbrev-friend-buffer (other-buffer)
@@ -5379,6 +5425,7 @@ otherwise use the subtree title."
     (setq
      flycheck-mode-line '(:eval (my-flycheck-mode-line-status-text))
      flycheck-highlighting-mode 'lines
+     flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint go-megacheck)
 
@@ -5623,13 +5670,14 @@ See URL `https://github.com/golang/lint'."
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
 
-    (defun my-go-jump-definition ()
-      (interactive)
-      (condition-case nil
-          (call-interactively 'go-guru-definition)
-        (error (call-interactively 'godef-jump))))
+    ;; (defun my-go-jump-definition ()
+    ;;   (interactive)
+    ;;   (condition-case nil
+    ;;       (call-interactively 'go-guru-definition)
+    ;;     (error (call-interactively 'godef-jump))))
 
-    (bind-key "M-." 'my-go-jump-definition)
+    ;; (bind-key "M-." 'my-go-jump-definition)
+
 
     (use-package go-direx
       :ensure t
@@ -5650,15 +5698,15 @@ See URL `https://github.com/golang/lint'."
 
     (require 'go-expanderr nil t)
 
-    (use-package lsp-go
-      :disabled t
-      :ensure t
-      :commands (lsp-go-enable)
-      :init
-      (progn
-        (setq lsp-go-gocode-completion-enabled t)
-        (add-hook 'go-mode-hook 'lsp-go-enable)))
-    (add-hook 'go-mode-hook 'lsp-mode)
+    ;; (use-package lsp-go
+    ;;   :disabled t
+    ;;   :ensure t
+    ;;   :commands (lsp-go-enable)
+    ;;   :init
+    ;;   (progn
+    ;;     (setq lsp-go-gocode-completion-enabled t)
+    ;;     (add-hook 'go-mode-hook 'lsp-go-enable)))
+    ;; (add-hook 'go-mode-hook 'lsp-mode)
 
     (use-package go-autocomplete
       :disabled t
@@ -6235,8 +6283,12 @@ See URL `https://github.com/golang/lint'."
        isearch)
      ahs-idle-interval 1.1)
     (defun my-ahs-on ()
-      (unless (eq major-mode 'go-mode)
-        (auto-highlight-symbol-mode)))
+      (unless (or
+               (eq major-mode 'go-mode)
+               (eq major-mode 'python-mode)
+               )
+        (auto-highlight-symbol-mode))
+      )
     (hook-into-modes #'my-ahs-on
                      my-prog-mode-hooks)))
 
@@ -7460,6 +7512,7 @@ minibuffer."
     (setq traad-save-unsaved-buffers 'always)))
 
 (use-package pymacs
+  :disabled t
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (pymacs-apply pymacs-call pymacs-eval pymacs-load pymacs-exec
@@ -7467,6 +7520,7 @@ minibuffer."
   :init
   (progn
     (use-package my-ropemacs
+      :disabled t
       :commands (ropemacs-mode rope-goto-project rope-close-project
                                rope-jump-to-global rope-rename rope-inline
                                rope-move rope-auto-import rope-open-project
@@ -7591,6 +7645,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
 
     (use-package jedi
+      :disabled t
       :ensure t
       :commands (jedi:setup
                  jedi:ac-setup
