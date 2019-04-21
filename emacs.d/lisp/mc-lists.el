@@ -233,6 +233,7 @@
         ibuffer
         ido-switch-buffer
         image-mouse-scroll-position
+        intelligent-close
         js2r-extract-var
         js2r-rename-var
         jump-between-source-and-test-files
@@ -243,12 +244,14 @@
         mc/add-cursor-on-click
         mc/add-cursors-to-all-matches
         multiple-cursors-mode
+        my-magit-status
         ns-prev-frame
         persp-switch
         phi-search
         picture-mouse-set-point
         projectile-ag
         projectile-find-file
+        python-cccc
         recenter-top-bottom-flash
         shell
         smex
