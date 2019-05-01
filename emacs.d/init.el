@@ -5151,14 +5151,15 @@ otherwise use the subtree title."
     )
   :config
   (progn
+    (setq
+     lsp-prefer-flymake nil
+     lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1") user-data-directory)
+     lsp-restart 'auto-restart)
     (use-package lsp-clients
       :defer
       :config
       (progn
-        (remhash 'gopls lsp-clients)))
-    (setq
-     lsp-prefer-flymake nil
-     lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1") user-data-directory))))
+        (remhash 'gopls lsp-clients)))))
 
 (use-package lsp-ui
   :ensure t
