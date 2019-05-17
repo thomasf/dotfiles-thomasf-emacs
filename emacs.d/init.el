@@ -7635,13 +7635,18 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :ensure t
       :commands (py-isort-buffer))
 
+    (use-package py-black
+      :commands (py-black-buffer))
+
     (defun python-cccc ()
       (interactive)
       (silent-save-some-buffers)
       (let ((exec-path (append exec-path
                                (list (expand-file-name "~/.virtualenvs/default/bin/")))))
+        (py-black-buffer)
         (py-isort-buffer)
-        (py-autopep8-buffer)))
+        ;; (py-autopep8-buffer)
+        ))
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
 
