@@ -7791,6 +7791,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :ensure t
   :commands (rinari-launch rinari-minor-mode))
 
+(use-package rust-mode
+  :ensure t
+  :mode (("\\.rss\\'" . rust-mode)))
+
 (use-package my-jumps
   :ensure jump
 
