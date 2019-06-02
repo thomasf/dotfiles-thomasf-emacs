@@ -6619,6 +6619,26 @@ See URL `https://github.com/golang/lint'."
         (call-interactively 'my-magit-status))))
   :config
   (progn
+    (use-package forge
+      :ensure t
+      :config
+      (progn
+        (setq forge-alist
+              '(("github.com" "api.github.com" "github.com" forge-github-repository)
+                ("gitlab.com" "gitlab.com/api/v4" "gitlab.com" forge-gitlab-repository)
+                ("gitlab.23c.se" "gitlab.23c.se/api/v4" "gitlab.23c.se" forge-gitlab-repository)
+                ("salsa.debian.org" "salsa.debian.org/api/v4" "salsa.debian.org" forge-gitlab-repository)
+                ("framagit.org" "framagit.org/api/v4" "framagit.org" forge-gitlab-repository)
+                ("codeberg.org" "codeberg.org/api/v1" "codeberg.org" forge-gitea-repository)
+                ("code.orgmode.org" "code.orgmode.org/api/v1" "code.orgmode.org" forge-gogs-repository)
+                ("bitbucket.org" "api.bitbucket.org/2.0" "bitbucket.org" forge-bitbucket-repository)
+                ("git.savannah.gnu.org" nil "git.savannah.gnu.org" forge-cgit*-repository)
+                ("git.kernel.org" nil "git.kernel.org" forge-cgit-repository)
+                ("repo.or.cz" nil "repo.or.cz" forge-repoorcz-repository)
+                ("git.suckless.org" nil "git.suckless.org" forge-stagit-repository)
+                ("git.sr.ht" nil "git.sr.ht" forge-srht-repository))
+              forge-database-file (expand-file-name "forge-database.sqlite" user-data-directory))))
+
     (defun my-git-commit-hook-fn ()
       "My git commit mode hook."
       (unless degrade-p-minimalism
