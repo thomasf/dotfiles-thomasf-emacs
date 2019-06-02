@@ -706,8 +706,8 @@ buffer-local wherever it is set."
 ;;;; server
 
 
-(defun workspace-prefix-file-name (name)
-  (concat name "." (or workspace-prefix-startup "DEFAULT")))
+(defun workspace-prefix-file-name (name &optional ext)
+  (concat name "." (or workspace-prefix-startup "DEFAULT") (or ext "")))
 
 (use-package server
   :commands server-start-maybe
@@ -3950,6 +3950,18 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :mode (("\\.toml\\'" . toml-mode)
          ("Gopkg\\.lock\\'" . toml-mode)))
+
+(use-package transient
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (setq transient-levels-file (expand-file-name (workspace-prefix-file-name "transient-levels" ".el")
+                                                  user-data-directory)
+          transient-history-file (expand-file-name (workspace-prefix-file-name "transient-history" ".el")
+                                                   user-data-directory)
+          transient-values-file (expand-file-name (workspace-prefix-file-name "transient-values" ".el")
+                                                  user-data-directory))))
 
 (use-package transmission
   :ensure t
