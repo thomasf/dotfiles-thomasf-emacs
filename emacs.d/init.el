@@ -7882,7 +7882,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands json-mode
   :mode (("\\.json\\'" . json-mode)
          ("\\.ipynb\\'" . json-mode)
-         ("\\.eslintrc\\'" . json-mode))
+         ("\\.eslintrc\\'" . json-mode)
+         ("\\Pipfile.lockc\\'" . json-mode))
   :config
   (progn
     (add-hook 'json-mode-hook
