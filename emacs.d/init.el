@@ -10151,6 +10151,7 @@ drag the viewpoint on the image buffer that the window displays."
                   (list (concat "--file-search-regexp=" (shell-quote-argument pattern))))))))
 
 (use-package bug-reference-github
+  :disabled t
   :ensure t
   :defer)
 
