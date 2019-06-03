@@ -623,70 +623,79 @@ buffer-local wherever it is set."
     (add-hook 'after-init-hook 'my-set-fonts t)))
 
 
+(defvar nav-flash-enabled nil)
 (use-package nav-flash
+  :disabled t
   :ensure t
   :commands (nav-flash-show)
   :init
   (progn
-    (setq nav-flash-delay 0.6)
-    (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "Pragmata Pro-13"
-            my-variable-pitch-font "Pt Sans-13"))
-    (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
-    (defun flash-defun()
-      "Flash current defun"
-      (interactive)
-      (save-restriction
-        (narrow-to-defun)
-        (nav-flash-show (point-min) (point-max))))
+    (when nav-flash-enabled
+      (setq nav-flash-delay 0.6)
+      (when (s-starts-with? "fogskum" system-name)
+        (setq my-monospaced-font "Pragmata Pro-13"
+              my-variable-pitch-font "Pt Sans-13"))
+      (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
+      (defun flash-defun()
+        "Flash current defun"
+        (interactive)
+        (save-restriction
+          (narrow-to-defun)
+          (nav-flash-show (point-min) (point-max))))
 
-    (defvar nav-flash-show-soon-timer nil)
-    (defun nav-flash-show-soon-cancel-timer ()
-      (when nav-flash-show-soon-timer
-        (cancel-timer nav-flash-show-soon-timer)
-        (setq nav-flash-show-soon nil)))
+      (defvar nav-flash-show-soon-timer nil)
+      (defun nav-flash-show-soon-cancel-timer ()
+        (when nav-flash-show-soon-timer
+          (cancel-timer nav-flash-show-soon-timer)
+          (setq nav-flash-show-soon nil)))
 
-    (defun nav-flash-show-soon (&optional later)
-      (nav-flash-show-soon-cancel-timer)
-      (setq nav-flash-show-soon-timer
-            (run-with-timer (if later 0.4 0.25) nil
-                            '(lambda ()
-                               (nav-flash-show)))))
+      (defun nav-flash-show-soon (&optional later)
+        (nav-flash-show-soon-cancel-timer)
+        (setq nav-flash-show-soon-timer
+              (run-with-timer (if later 0.4 0.25) nil
+                              '(lambda ()
+                                 (nav-flash-show)))))
 
-    (defun nav-flash-show-later ()
-      (nav-flash-show-soon t))
+      (defun nav-flash-show-later ()
+        (nav-flash-show-soon t))
 
-    (add-hook 'focus-in-hook 'nav-flash-show-later)
-    (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
+      (add-hook 'focus-in-hook 'nav-flash-show-later)
+      (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
 
-    (defun recenter-top-bottom-flash ()
-      (interactive)
-      (call-interactively 'recenter-top-bottom)
-      (nav-flash-show))
+      (defun recenter-top-bottom-flash ()
+        (interactive)
+        (call-interactively 'recenter-top-bottom)
+        (nav-flash-show))
 
-    (bind-key "C-l" 'recenter-top-bottom-flash)
+      (bind-key "C-l" 'recenter-top-bottom-flash)
 
-    (defun move-to-window-line-top-bottom-flash ()
-      (interactive)
-      (call-interactively 'move-to-window-line-top-bottom)
-      (nav-flash-show))
+      (defun move-to-window-line-top-bottom-flash ()
+        (interactive)
+        (call-interactively 'move-to-window-line-top-bottom)
+        (nav-flash-show))
 
-    (bind-key "M-r" 'move-to-window-line-top-bottom-flash)
+      (bind-key "M-r" 'move-to-window-line-top-bottom-flash)
 
-    (defun scroll-up-command-flash ()
-      (interactive)
-      (call-interactively 'scroll-up-command)
-      (nav-flash-show-soon))
+      (defun scroll-up-command-flash ()
+        (interactive)
+        (call-interactively 'scroll-up-command)
+        (nav-flash-show-soon))
 
-    (bind-key "M-v" 'scroll-down-command-flash)
+      (bind-key "M-v" 'scroll-down-command-flash)
 
-    (defun scroll-down-command-flash ()
-      (interactive)
-      (call-interactively 'scroll-down-command)
-      (nav-flash-show-soon))
+      (defun scroll-down-command-flash ()
+        (interactive)
+        (call-interactively 'scroll-down-command)
+        (nav-flash-show-soon))
+      (bind-key "C-v" 'scroll-up-command-flash))))
 
-    (bind-key "C-v" 'scroll-up-command-flash)))
 
+(defun nav-flash-show-maybe (&optional soon)
+  (and nav-flash-enabled
+       (fboundp 'nav-flash-show)
+       (fboundp 'nav-flash-show-soon)
+       (if soon (nav-flash-show-soon)
+         (nav-flash-show))))
 
 
 
@@ -1441,14 +1450,14 @@ buffer-local wherever it is set."
   "Save-some-buffers, then other frame."
   (interactive)
   (call-interactively 'other-frame)
-  (nav-flash-show)
+  (nav-flash-show-maybe)
   (silent-save-some-buffers))
 
 (defun save-some-buffers-other-window ()
   "Save-some-buffers, then other window."
   (interactive)
   (call-interactively 'other-window)
-  (nav-flash-show)
+  (nav-flash-show-maybe)
   (silent-save-some-buffers))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
@@ -4604,7 +4613,7 @@ If FILE already exists, signal an error."
     (defun goto-last-change-flash ()
       (interactive)
       (call-interactively 'goto-last-change)
-      (nav-flash-show-soon))))
+      (nav-flash-show-maybe t))))
 
 (use-package unbound
   :ensure t
@@ -5488,7 +5497,7 @@ otherwise use the subtree title."
       (interactive)
       (flycheck-error-list-goto-error pos)
       (recenter)
-      (nav-flash-show))
+      (nav-flash-show-maybe))
 
     (bind-key "RET" 'my-flycheck-error-list-goto-error flycheck-error-list-mode-map)
 
