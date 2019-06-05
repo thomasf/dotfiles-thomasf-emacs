@@ -6644,6 +6644,16 @@ See URL `https://github.com/golang/lint'."
       :ensure t
       :config
       (progn
+        (use-package forge-topic
+          :config
+          (progn
+            (defun my-forge-bug-reference-setup-condition (orig-fun &rest args)
+              (when (or (eq major-mode 'forge-topic-mode)
+                        (eq major-mode 'magit-staus-mode)
+                        (eq major-mode 'forge-issue-list-mode)
+                        (eq major-mode 'magit-log-mode))
+                (apply orig-fun args)))
+            (advice-add 'forge-bug-reference-setup :around #'my-forge-bug-reference-setup-condition)))
         (setq forge-alist
               '(("github.com" "api.github.com" "github.com" forge-github-repository)
                 ("gitlab.com" "gitlab.com/api/v4" "gitlab.com" forge-gitlab-repository)
