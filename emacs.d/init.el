@@ -55,11 +55,11 @@
                   (executable-find* "wsname"))
                  (shell-command-to-string "wsname -p"))))
     (and res
-         (not
-          (or
-           (null res)
-           (string= "" res)))
-         res)))
+       (not
+        (or
+         (null res)
+         (string= "" res)))
+       res)))
 
 (defvar workspace-prefix-startup
   (or
@@ -446,16 +446,16 @@ buffer-local wherever it is set."
 (setq-default ;; dired.c
  completion-ignored-extensions
  '("-min.css" "-min.js" ".a" ".annot" ".aux" ".bbl" ".bbl" ".bin" ".blg" ".blg"
- ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt" ".cmti" ".cmx" ".cmxa" ".cp"
- ".cp" ".cps" ".cps" ".d64fsl" ".dfsl" ".dx32fsl" ".dx64fsl" ".dxl" ".elc"
- ".fas" ".fasl" ".fmt" ".fn" ".fn" ".fns" ".fns" ".fsl" ".fx32fsl" ".fx64fsl"
- ".git/" ".glo" ".glo" ".gmo" ".hg/" ".hi" ".idx" ".idx" ".ky" ".ky" ".kys"
- ".kys" ".la" ".lbin" ".lib" ".ln" ".lo" ".lof" ".lof" ".lot" ".lot" ".lx32fsl"
- ".lx64fsl" ".map" ".mem" ".min.css" ".min.js" ".mo" ".o" ".p64fsl" ".pfsl"
- ".pg" ".pg" ".pgs" ".pgs" ".pyc" ".pyo" ".pyx" ".rbc" ".sass-cache" ".so"
- ".sparcf" ".svn/" ".sx32fsl" ".sx64fsl" ".test" ".tfm" ".toc" ".tp" ".tp"
- ".tps" ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl" ".x86f"
- "CVS/" "_MTN/" "_darcs/" "~"))
+   ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt" ".cmti" ".cmx" ".cmxa" ".cp"
+   ".cp" ".cps" ".cps" ".d64fsl" ".dfsl" ".dx32fsl" ".dx64fsl" ".dxl" ".elc"
+   ".fas" ".fasl" ".fmt" ".fn" ".fn" ".fns" ".fns" ".fsl" ".fx32fsl" ".fx64fsl"
+   ".git/" ".glo" ".glo" ".gmo" ".hg/" ".hi" ".idx" ".idx" ".ky" ".ky" ".kys"
+   ".kys" ".la" ".lbin" ".lib" ".ln" ".lo" ".lof" ".lof" ".lot" ".lot" ".lx32fsl"
+   ".lx64fsl" ".map" ".mem" ".min.css" ".min.js" ".mo" ".o" ".p64fsl" ".pfsl"
+   ".pg" ".pg" ".pgs" ".pgs" ".pyc" ".pyo" ".pyx" ".rbc" ".sass-cache" ".so"
+   ".sparcf" ".svn/" ".sx32fsl" ".sx64fsl" ".test" ".tfm" ".toc" ".tp" ".tp"
+   ".tps" ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl" ".x86f"
+   "CVS/" "_MTN/" "_darcs/" "~"))
 (setq-default ;; xterm.c
  x-underline-at-descent-line t)
 
@@ -1091,7 +1091,7 @@ buffer-local wherever it is set."
   (interactive)
   (next-error arg reset)
   (recenter)
-)
+  )
 
 
 (defun my-previous-error (&optional n)
@@ -1387,18 +1387,18 @@ buffer-local wherever it is set."
   "find file in notes, FAST."
   (interactive)
   (let* ((default-directory user-notes-directory)
-        (files (->> (-concat (f-entries "agenda/" nil t)
-                            (f-entries "org/" nil t)
-                            (f-entries "library/" nil t)
-                            (directory-files "sheet/" t))
-                 (--map (s-chop-prefix (s-concat default-directory "/") it))
-                 (projectile-sort-by-recentf-first)
-                 (projectile-sort-by-recently-active-first)
-                 (mapcar #'(lambda (x)
-                            (--map (if (s-suffix? it x) x )
-                                   '(".md" ".markdown" ".s" ".org" ".txt" ".plu" ".org.gpg"))))
-                 (-flatten)
-                 (--filter (not (s-matches? "/reveal\.js/" it ))))))
+         (files (->> (-concat (f-entries "agenda/" nil t)
+                              (f-entries "org/" nil t)
+                              (f-entries "library/" nil t)
+                              (directory-files "sheet/" t))
+                     (--map (s-chop-prefix (s-concat default-directory "/") it))
+                     (projectile-sort-by-recentf-first)
+                     (projectile-sort-by-recently-active-first)
+                     (mapcar #'(lambda (x)
+                                 (--map (if (s-suffix? it x) x )
+                                        '(".md" ".markdown" ".s" ".org" ".txt" ".plu" ".org.gpg"))))
+                     (-flatten)
+                     (--filter (not (s-matches? "/reveal\.js/" it ))))))
     (if files
         (find-file (ido-completing-read "" files))
       (message "Err0#wr"))))
@@ -4513,8 +4513,8 @@ If FILE already exists, signal an error."
                     (workspace-prefix-file-name "savehist")
                     user-data-directory)
      savehist-additional-variables '(search ring regexp-search-ring
-                                     projectile-pt-file-pattern-history
-                                     projectile-pt-file-pattern-search-history)
+                                            projectile-pt-file-pattern-history
+                                            projectile-pt-file-pattern-search-history)
      savehist-autosave-interval 60))
   :config
   (progn
@@ -5251,13 +5251,13 @@ otherwise use the subtree title."
 
 
 (use-package company-lsp
-      :ensure t
-      ;; :after company
-      :commands company-lsp
-      ;; :config
-      ;; (progn
-      ;; (push 'company-lsp company-backends))
-      )
+  :ensure t
+  ;; :after company
+  :commands company-lsp
+  ;; :config
+  ;; (progn
+  ;; (push 'company-lsp company-backends))
+  )
 
 (use-package company
   :ensure t
@@ -5609,7 +5609,7 @@ otherwise use the subtree title."
               ("^F83.*$" . error)
               ("^D.*$" . info)
               ("^N.*$" . info))
-           )
+            )
 
       ;; this demotes go-golint from warning to info
       (flycheck-define-checker go-golint
@@ -5873,9 +5873,9 @@ See URL `https://github.com/golang/lint'."
       :ensure  t
       :commands (flx-ido-mode)
       :if (not (or
-             noninteractive
-             degrade-p-minimalism
-             (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
+                noninteractive
+                degrade-p-minimalism
+                (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
       :init
       (progn
         (flx-ido-mode 1)))
@@ -8567,11 +8567,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
             result)
         (while pointer
           (if (and (equal (downcase (car (mail-header-parse-address
-                                        (epg-user-id-string (car pointer)))))
-                        (downcase (car (mail-header-parse-address
-                                        recipient))))
-                 (not (memq (epg-user-id-validity (car pointer))
-                          '(revoked expired))))
+                                          (epg-user-id-string (car pointer)))))
+                          (downcase (car (mail-header-parse-address
+                                          recipient))))
+                   (not (memq (epg-user-id-validity (car pointer))
+                              '(revoked expired))))
               (setq result t
                     pointer nil)
             (setq pointer (cdr pointer))))
@@ -10081,8 +10081,8 @@ drag the viewpoint on the image buffer that the window displays."
     (setq
      auto-package-update-interval 7
      apu--last-update-day-path
-          (expand-file-name apu--last-update-day-filename
-                            user-data-directory))))
+     (expand-file-name apu--last-update-day-filename
+                       user-data-directory))))
 
 (use-package sauron
   :ensure t
@@ -10352,44 +10352,46 @@ drag the viewpoint on the image buffer that the window displays."
             (error "docker-compose up failed")))))
 
     (prodigy-define-tag
-       :name 'bin
-       :hide t
-       :path (lambda ()
-               (file-truename default-directory)))
+     :name 'bin
+     :hide t
+     :path (lambda ()
+             (file-truename default-directory)))
 
     (prodigy-define-tag
-      :name 'go-build
-      :hide t
-      :init  (prodigy-callback (service) (prodigy-go-build service))
-      :tags '(bin))
+     :name 'go-build
+     :hide t
+     :init  (prodigy-callback (service) (prodigy-go-build service))
+     :tags '(bin))
 
     (prodigy-define-tag
-      :name 'docker-compose-up
-      :command "docker-compose"
-      :args '("logs")
-      :hide t
-      :init (prodigy-callback (service) (prodigy-docker-compose-up service)))
+     :name 'docker-compose-up
+     :command "docker-compose"
+     :args '("logs")
+     :hide t
+     :init (prodigy-callback (service) (prodigy-docker-compose-up service)))
 
     (prodigy-define-tag
-      :name 'webpack
-      :hide t
-      :command "webpack"
-      :args (prodigy-callback (service)
-              (let ((config (or(plist-get service :webpack-config ) "webpack.config.js")) )
-                (-concat (list "--config" config "--watch"  "--debug")
-                         (plist-get service :webpack-args)))))
+     :name 'webpack
+     :hide t
+     :command "webpack"
+     :args (prodigy-callback
+            (service)
+            (let ((config (or(plist-get service :webpack-config ) "webpack.config.js")) )
+              (-concat (list "--config" config "--watch"  "--debug")
+                       (plist-get service :webpack-args)))))
 
     (setq my-prodigy-truncate-amount 5000
           my-prodigy-truncate-threshold 15000)
     ;; NOTE overriden
     (defun prodigy-truncate-buffer (service _)
       "Truncate SERVICE process view buffer to its maximum size."
-      (prodigy-with-service-process-buffer service
-        (when (>  (line-number-at-pos (point-max)) my-prodigy-truncate-threshold)
-          (save-excursion
-            (goto-char (point-min))
-            (forward-line my-prodigy-truncate-amount)
-            (delete-region (point-min) (point))))))
+      (prodigy-with-service-process-buffer
+       service
+       (when (>  (line-number-at-pos (point-max)) my-prodigy-truncate-threshold)
+         (save-excursion
+           (goto-char (point-min))
+           (forward-line my-prodigy-truncate-amount)
+           (delete-region (point-min) (point))))))
 
     (defun my-prodigy-view-mode-hook ()
       (compilation-minor-mode))
@@ -10405,7 +10407,7 @@ drag the viewpoint on the image buffer that the window displays."
               (popwin:close-popup-window)
               (display-buffer buffer)
               (with-current-buffer buffer
-                  (prodigy-view-mode)))
+                (prodigy-view-mode)))
           (message "Nothing to show for %s" (plist-get service :name)))))
     (bind-key "RET" 'my-prodigy-display-process prodigy-mode-map)))
 
@@ -10427,7 +10429,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 ;;; Display Emacs load time
 (when (and load-file-name
-         (not noninteractive))
+           (not noninteractive))
   (let ((file-name (file-name-nondirectory load-file-name)))
     (let ((elapsed (float-time (time-subtract (current-time)
                                               emacs-start-time))))
@@ -10470,7 +10472,7 @@ drag the viewpoint on the image buffer that the window displays."
                #'(lambda ()
                    (run-with-idle-timer
                     0 nil '(lambda ()
-                           (tool-bar-mode -1))) nil)))
+                             (tool-bar-mode -1))) nil)))
 
 
 ;;; File local vars
