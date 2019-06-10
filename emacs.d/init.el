@@ -2789,9 +2789,11 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq projectile-project-root-files-child-of
           '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            "~/\.virtualenvs-cmd/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
             "~/\.local/share/virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
             "~/\.opt/[^/]+/?$"
             "~/\.virtualenvs/[^/]+/?$"
+            "~/\.virtualenvs-cmd/[^/]+/?$"
             "~/\.local/share/virtualenvs/[^/]+/?$"
             "/var/log/?$"))
 
@@ -2824,7 +2826,38 @@ for the current buffer's file name, and the line number at point."
      '(projectile-root-bottom-up
        projectile-root-top-down
        projectile-root-top-down-recurring
-       projectile-root-child-of))
+       projectile-root-child-of)
+     projectile-project-root-files
+     '(
+       ;; "rebar.config"
+       ;; "project.clj"
+       ;; "build.boot"
+       ;; "deps.edn"
+       "go.mod"
+       "SConstruct"
+       "pom.xml"
+       ;; "build.sbt"
+       "gradlew"
+       "build.gradle"
+       ;; ".ensime"
+       "Gemfile"
+       ;; "requirements.txt"
+       "setup.py"
+       "tox.ini"
+       "pyproject.toml"
+       ;; "composer.json"
+       "Cargo.toml"
+       ;; "mix.exs"
+       ;; "stack.yaml"
+       ;; "info.rkt"
+       ;; "DESCRIPTION"
+       ;; "TAGS"
+       ;; "GTAGS"
+       "configure.in"
+       "configure.ac"
+       "cscope.out"
+       )
+     )
     (bind-key "A" 'projectile-pt-file-pattern region-bindings-mode-map)
 
     (defadvice projectile-mode (before maybe-use-cache activate)
@@ -5173,14 +5206,22 @@ otherwise use the subtree title."
   :config
   (progn
     (setq
+     lsp-auto-guess-root t
      lsp-prefer-flymake nil
      lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1") user-data-directory)
-     lsp-restart 'auto-restart)
+     lsp-restart 'auto-restart
+     lsp-clients-go-library-directories
+     (list
+      "/usr"
+      (expand-file-name "~/.opt/go")
+      (expand-file-name "~/pkg/mod")
+      ))
     (use-package lsp-clients
       :defer
-      :config
-      (progn
-        (remhash 'gopls lsp-clients)))))
+      ;; :config
+      ;; (progn
+      ;;   (remhash 'gopls lsp-clients))
+      )))
 
 (use-package lsp-ui
   :ensure t
