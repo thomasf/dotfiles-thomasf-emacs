@@ -2788,9 +2788,11 @@ for the current buffer's file name, and the line number at point."
   :init
   (progn
     (setq projectile-project-root-files-child-of
-          '("~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
-            "~/\.virtualenvs-cmd/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
-            "~/\.local/share/virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+          '(
+            "/lib/python[^/]*/\\(site\\|dist\\)-packages/?$"
+            ;; "~/\.virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            ;; "~/\.virtualenvs-cmd/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
+            ;; "~/\.local/share/virtualenvs/[^/]+/\\(local/\\)?lib/python[^/]*/site-packages/?$"
             "~/\.opt/[^/]+/?$"
             "~/\.virtualenvs/[^/]+/?$"
             "~/\.virtualenvs-cmd/[^/]+/?$"
