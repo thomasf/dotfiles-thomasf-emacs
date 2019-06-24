@@ -10184,10 +10184,15 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :commands phi-search-dired)
 
+(use-package deadgrep
+  :ensure t
+  :commands (deadgrep)
+  :bind (("M-o a" . deadgrep)))
+
 (use-package pt
   :ensure t
   :commands (pt-regexp projectile-pt projectile-pt-file-pattern)
-  :bind (("M-o a" . projectile-pt-file-pattern))
+  ;; :bind (("M-o a" . projectile-pt-file-pattern))
   :init
   (progn
     (setq pt-arguments
