@@ -623,9 +623,9 @@ buffer-local wherever it is set."
     (add-hook 'after-init-hook 'my-set-fonts t)))
 
 
-(defvar nav-flash-enabled nil)
+(defvar nav-flash-enabled t)
 (use-package nav-flash
-  :disabled t
+  ;; :disabled t
   :ensure t
   :commands (nav-flash-show)
   :init
