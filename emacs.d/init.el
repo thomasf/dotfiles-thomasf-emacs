@@ -10187,6 +10187,9 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package deadgrep
   :ensure t
   :commands (deadgrep)
+  :config
+  (progn
+    (setq deadgrep-project-root-function 'project-root-function))
   :bind (("M-o a" . deadgrep)))
 
 (use-package pt
