@@ -5643,7 +5643,10 @@ See URL `https://github.com/golang/lint'."
   :config
   (progn
     (require 'editorconfig-core)
-    (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash)))
+    (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash)
+    (and (not noninteractive)
+       (buffer-file-name)
+       (editorconfig-apply))))
 
 (use-package edit-server
   :ensure t
