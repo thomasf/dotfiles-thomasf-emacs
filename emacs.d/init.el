@@ -6006,8 +6006,27 @@ See URL `https://github.com/golang/lint'."
      web-mode-enable-current-element-highlight t))
   :config
   (progn
+    (defun my-web-mode-hook ()
+      "Hooks for Web mode."
+      (let ((project-root (project-root-function)))
+        (when project-root
+          (let* ((locate-dominating-stop-dir-regexp (regexp-quote project-root))
+                 (package-json (locate-dominating-file buffer-file-name "package.json"))
+                 (manage-py (locate-dominating-file buffer-file-name "manage.py"))
+                 (package-json-len (length package-json))
+                 (manage-py-len (length manage-py))
+
+                (engine (cond
+                         ((and (> manage-py-len 0)
+                             (> manage-py-len package-json-len)
+                             (string-match-p (regexp-quote "/templates/") default-directory)
+                             ) "django")
+                         (t nil))))
+            (when engine
+                  (web-mode-set-engine engine))))))
+    (add-hook 'web-mode-hook  'my-web-mode-hook)
+
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
-    (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
     ;; (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
