@@ -6181,6 +6181,7 @@ See URL `https://github.com/golang/lint'."
           ("*Ido Completions*" :noselect t :position bottom)
           (direx:direx-mode :position left :width .25 :dedicated t)
           ("*Messages*" :height .40 :tail t)
+          (deadgrep-mode :height .40 :stick t)
           ("*pt-search*" :height .40 :stick t)
           ("*go-traceback*" :height .40 :stick t)
           ("*prodigy*" :height .40)
