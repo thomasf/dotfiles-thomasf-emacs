@@ -5204,6 +5204,9 @@ otherwise use the subtree title."
   (progn
     (add-hook 'go-mode-hook #'lsp)
     (add-hook 'python-mode-hook #'lsp)
+    (add-hook 'js2-mode-hook #'lsp)
+    (add-hook 'js2-jsx-mode-hook #'lsp)
+    (add-hook 'js-mode-hook #'lsp)
     )
   :config
   (progn
@@ -5417,9 +5420,12 @@ otherwise use the subtree title."
 
       (add-to-list 'ac-modes mode))
 
-    ;; going over to use language server
+    ;; going over to use language server lsp
     (setq ac-modes (remove 'go-mode ac-modes))
     (setq ac-modes (remove 'python-mode ac-modes))
+    (setq ac-modes (remove 'js2-mode ac-modes))
+    (setq ac-modes (remove 'js2-jsx-mode ac-modes))
+    (setq ac-modes (remove 'js-jsx-mode ac-modes))
 
     ;; Exclude very large buffers from dabbrev
     (defun smp-dabbrev-friend-buffer (other-buffer)
