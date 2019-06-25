@@ -6019,10 +6019,10 @@ See URL `https://github.com/golang/lint'."
     (bind-key "s-k" 'tagedit-kill-attribute tagedit-mode-map)
     (bind-key "s-<return>" 'tagedit-toggle-multiline-tag tagedit-mode-map)))
 
-(use-package haml-mode
-  :ensure t
-  :disabled t
-  :mode (("\\.haml\\'" . haml-mode)))
+;; (use-package haml-mode
+;;   :ensure t
+;;   :disabled t
+;;   :mode (("\\.haml\\'" . haml-mode)))
 
 (use-package apache-mode
   :ensure t
@@ -6033,26 +6033,26 @@ See URL `https://github.com/golang/lint'."
          ("apache2?/access\\.conf\\'" . apache-mode)
          ("apache2?//sites-\\(available\\|enabled\\)/" . apache-mode)))
 
-(use-package coffee-mode
-  :ensure t
-  :commands coffee-mode
-  :mode (("\\.coffee\\'" . coffee-mode)
-         ("Cakefile\\'" . coffee-mode))
-  :init
-  (progn
-    (setq
-     coffee-cleanup-whitespace nil
-     coffee-tab-width 2
-     coffe-js-mode 'js2-mode))
-  :config
-  (progn
-    (smartrep-define-key
-        coffee-mode-map
-        "C-c"
-      '((">"   . coffee-indent-shift-right)
-        ("<"   . coffee-indent-shift-left)))
-    ;; (unbind-key "\C-m" coffee-mode-map)
-    ))
+;; (use-package coffee-mode
+;;   :ensure t
+;;   :commands coffee-mode
+;;   :mode (("\\.coffee\\'" . coffee-mode)
+;;          ("Cakefile\\'" . coffee-mode))
+;;   :init
+;;   (progn
+;;     (setq
+;;      coffee-cleanup-whitespace nil
+;;      coffee-tab-width 2
+;;      coffe-js-mode 'js2-mode))
+;;   :config
+;;   (progn
+;;     (smartrep-define-key
+;;         coffee-mode-map
+;;         "C-c"
+;;       '((">"   . coffee-indent-shift-right)
+;;         ("<"   . coffee-indent-shift-left)))
+;;     ;; (unbind-key "\C-m" coffee-mode-map)
+;;     ))
 
 (use-package gitignore-mode
   :ensure t
@@ -6279,9 +6279,9 @@ See URL `https://github.com/golang/lint'."
     ;;                    haskell-mode-hook))
     ))
 
-(use-package nav
-  :ensure t
-  :commands nav-toggle)
+;; (use-package nav
+;;   :ensure t
+;;   :commands nav-toggle)
 
 (use-package rainbow-mode
   :ensure t
@@ -6556,10 +6556,10 @@ See URL `https://github.com/golang/lint'."
 
     ))
 
-(use-package stylus-mode
-  :ensure t
-  :commands stylus-mode
-  :mode ("\\.styl\\'" . stylus-mode))
+;; (use-package stylus-mode
+;;   :ensure t
+;;   :commands stylus-mode
+;;   :mode ("\\.styl\\'" . stylus-mode))
 
 (use-package sws-mode
   :ensure t
@@ -7553,41 +7553,41 @@ See URL `https://github.com/golang/lint'."
   (progn
     (setq ielm-prompt "» ")))
 
-(use-package iflipb
-  :ensure t
-  :disabled t
-  :commands (iflipb-next-buffer
-             iflipb-previous-buffer
-             my-iflipb-next-buffer
-             my-iflipb-previous-buffer)
-  :init
-  (progn
-    (bind-key* "<f9>" 'iflipb-next-buffer)
-    (bind-key* "<f10>" 'iflipb-previous-buffer)
-    (setq
-     iflipb-ignore-buffers 'my-bs-ignore-buffer
-     iflipb-wrap-around t
-     iflipb-always-ignore-buffers
-     "\\`\\( \\|diary\\|ipa\\|\\.newsrc-dribble\\'\\)"))
-  :config
-  (progn
-    (defun iflipb-format-buffers (current-buffer buffers)
-      "Format buffer names for displaying them in the minibuffer."
-      (truncate-string-to-width
-       (mapconcat
-        (lambda (buffer)
-          (iflipb-format-buffer current-buffer buffer))
-        buffers
-        "   ")
-       (1- (window-width (minibuffer-window)))))
-    (defun iflipb-format-buffer (current-buffer buffer)
-      "Format a buffer name for inclusion in the buffer list in the
-minibuffer."
-      (let ((name (buffer-name buffer)))
-        (when (eq current-buffer buffer)
-          (setq name (format "[%s]" name))
-          (add-text-properties 1 (1- (length name)) '(face link) name))
-        name))))
+;; (use-package iflipb
+;;   :ensure t
+;;   :disabled t
+;;   :commands (iflipb-next-buffer
+;;              iflipb-previous-buffer
+;;              my-iflipb-next-buffer
+;;              my-iflipb-previous-buffer)
+;;   :init
+;;   (progn
+;;     (bind-key* "<f9>" 'iflipb-next-buffer)
+;;     (bind-key* "<f10>" 'iflipb-previous-buffer)
+;;     (setq
+;;      iflipb-ignore-buffers 'my-bs-ignore-buffer
+;;      iflipb-wrap-around t
+;;      iflipb-always-ignore-buffers
+;;      "\\`\\( \\|diary\\|ipa\\|\\.newsrc-dribble\\'\\)"))
+;;   :config
+;;   (progn
+;;     (defun iflipb-format-buffers (current-buffer buffers)
+;;       "Format buffer names for displaying them in the minibuffer."
+;;       (truncate-string-to-width
+;;        (mapconcat
+;;         (lambda (buffer)
+;;           (iflipb-format-buffer current-buffer buffer))
+;;         buffers
+;;         "   ")
+;;        (1- (window-width (minibuffer-window)))))
+;;     (defun iflipb-format-buffer (current-buffer buffer)
+;;       "Format a buffer name for inclusion in the buffer list in the
+;; minibuffer."
+;;       (let ((name (buffer-name buffer)))
+;;         (when (eq current-buffer buffer)
+;;           (setq name (format "[%s]" name))
+;;           (add-text-properties 1 (1- (length name)) '(face link) name))
+;;         name))))
 
 (use-package traad
   :ensure t
@@ -7606,59 +7606,59 @@ minibuffer."
   (progn
     (setq traad-save-unsaved-buffers 'always)))
 
-(use-package pymacs
-  :disabled t
-  :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :commands (pymacs-apply pymacs-call pymacs-eval pymacs-load pymacs-exec
-                          pymacs-autoload)
-  :init
-  (progn
-    (use-package my-ropemacs
-      :disabled t
-      :commands (ropemacs-mode rope-goto-project rope-close-project
-                               rope-jump-to-global rope-rename rope-inline
-                               rope-move rope-auto-import rope-open-project
-                               rope-organize-imports rope-analyze-module
-                               rope-analyze-modules
-                               rope-generate-autoimport-cache
-                               rope-goto-definition rope-extract-method
-                               rope-extract-variable)
-      :init
-      (progn
-        (setq
-         ropemacs-global-prefix nil
-         ropemacs-local-prefix "C-c r"
-         ropemacs-enable-shortcuts nil
-         ropemacs-codeassist-maxfixes 5
-         ropemacs-guess-project t
-         ropemacs-enable-autoimport t
-         ropemacs-confirm-saving nil
-         ropemacs-autoimport-modules
-         '("os"
-           "shutilg"
-           "sys"
-           "logging"
-           "django.*"
-           "rest_framework.*"
-           "immutablemodel.*"
-           "kivy.*"))
-        (defun my-rope-open-project ()
-          "Opens project, fill caches"
-          (interactive)
-          (call-interactively 'rope-open-project)
-          (rope-analyze-modules)
-          (rope-generate-autoimport-cache)))
-      :config
-      (progn
-        (condition-case nil
-            (progn
-              (pymacs-load "ropemacs" "rope-")
-              (bind-key "C-c j" 'rope-jump-to-global ropemacs-local-keymap)
-              (bind-key "C-c i" 'rope-auto-import ropemacs-local-keymap)
-              (bind-key "C-c o" 'rope-find-occurrences ropemacs-local-keymap)
-              (ropemacs-mode))
-          (error (message "Loading/Configuring of ropemacs failed")))))))
+;; (use-package pymacs
+;;   :disabled t
+;;   :ensure t
+;;   :if (and (not noninteractive) (not degrade-p-minimalism))
+;;   :commands (pymacs-apply pymacs-call pymacs-eval pymacs-load pymacs-exec
+;;                           pymacs-autoload)
+;;   :init
+;;   (progn
+;;     (use-package my-ropemacs
+;;       :disabled t
+;;       :commands (ropemacs-mode rope-goto-project rope-close-project
+;;                                rope-jump-to-global rope-rename rope-inline
+;;                                rope-move rope-auto-import rope-open-project
+;;                                rope-organize-imports rope-analyze-module
+;;                                rope-analyze-modules
+;;                                rope-generate-autoimport-cache
+;;                                rope-goto-definition rope-extract-method
+;;                                rope-extract-variable)
+;;       :init
+;;       (progn
+;;         (setq
+;;          ropemacs-global-prefix nil
+;;          ropemacs-local-prefix "C-c r"
+;;          ropemacs-enable-shortcuts nil
+;;          ropemacs-codeassist-maxfixes 5
+;;          ropemacs-guess-project t
+;;          ropemacs-enable-autoimport t
+;;          ropemacs-confirm-saving nil
+;;          ropemacs-autoimport-modules
+;;          '("os"
+;;            "shutilg"
+;;            "sys"
+;;            "logging"
+;;            "django.*"
+;;            "rest_framework.*"
+;;            "immutablemodel.*"
+;;            "kivy.*"))
+;;         (defun my-rope-open-project ()
+;;           "Opens project, fill caches"
+;;           (interactive)
+;;           (call-interactively 'rope-open-project)
+;;           (rope-analyze-modules)
+;;           (rope-generate-autoimport-cache)))
+;;       :config
+;;       (progn
+;;         (condition-case nil
+;;             (progn
+;;               (pymacs-load "ropemacs" "rope-")
+;;               (bind-key "C-c j" 'rope-jump-to-global ropemacs-local-keymap)
+;;               (bind-key "C-c i" 'rope-auto-import ropemacs-local-keymap)
+;;               (bind-key "C-c o" 'rope-find-occurrences ropemacs-local-keymap)
+;;               (ropemacs-mode))
+;;           (error (message "Loading/Configuring of ropemacs failed")))))))
 
 (use-package python
   :commands python-mode
@@ -8272,9 +8272,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands rotate-layout
   :bind (("M-o M-c" . rotate-layout)))
 
-(use-package workgroups2
-  :ensure t
-  :commands workgroups-mode)
+;; (use-package workgroups2
+;;   :ensure t
+;;   :commands workgroups-mode)
 
 (use-package transpose-frame
   :commands (flip-frame flop-frame)
@@ -8303,9 +8303,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (progn
         (add-to-list 'ac-modes 'slime-repl-mode)))))
 
-(use-package actionscript-mode
-  :ensure t
-  :mode (("\\.as\\'"  . actionscript-mode)))
+;; (use-package actionscript-mode
+;;   :ensure t
+;;   :mode (("\\.as\\'"  . actionscript-mode)))
 
 (use-package buffer-move
   :ensure t
