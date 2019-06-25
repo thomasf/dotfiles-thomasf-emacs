@@ -5631,7 +5631,7 @@ See URL `https://github.com/golang/lint'."
   :commands describe-unbound-keys)
 
 (use-package editorconfig
-  :commands editorconfig-mode
+  :commands (editorconfig-mode editorconfig-apply)
   :ensure t
   :diminish editorconfig-mode
   :init
