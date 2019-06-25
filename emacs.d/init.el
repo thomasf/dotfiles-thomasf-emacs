@@ -6008,6 +6008,7 @@ See URL `https://github.com/golang/lint'."
   (progn
     (bind-key "C-c ;" 'web-mode-comment-or-uncomment web-mode-map)
     (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
+    ;; (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
 
