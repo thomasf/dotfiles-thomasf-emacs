@@ -5499,8 +5499,15 @@ otherwise use the subtree title."
      flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint go-megacheck)
-
      flycheck-completion-system 'ido)
+
+    (defun my-node_modules-flycheck-hook ()
+      (setq-local flycheck-executable-find #'flycheck-node_modules-executable-find))
+
+    (add-hook 'js2-mode-hook 'my-node_modules-flycheck-hook)
+    (add-hook 'js-mode-hook 'my-node_modules-flycheck-hook)
+    (add-hook 'web-mode-hook 'my-node_modules-flycheck-hook)
+
     (defun flycheck-turn-on-maybe ()
       (unless
           (or
@@ -5524,6 +5531,16 @@ otherwise use the subtree title."
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
+
+    (defun flycheck-node_modules-executable-find (executable)
+      (or
+       (let* ((base (locate-dominating-file buffer-file-name "node_modules"))
+              (cmd  (if base (expand-file-name (concat "node_modules/.bin/" executable)  base))))
+         (if (and cmd (file-exists-p cmd))
+             cmd))
+       (flycheck-default-executable-find executable)))
+
+
     (defun my-flycheck-mode-line-status-text (&optional status)
       (let ((text (pcase (or status flycheck-last-status-change)
                     (`not-checked "")
