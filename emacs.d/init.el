@@ -9663,7 +9663,13 @@ already present."
      tramp-persistency-file-name (expand-file-name
                                   "tramp" user-data-directory)
      tramp-backup-directory-alist backup-directory-alist
-     tramp-adb-sdk-dir (getenv "ANDROID_SDK")))
+     tramp-adb-sdk-dir (getenv "ANDROID_SDK")
+     tramp-remote-path '(tramp-default-remote-path
+                         "/bin" "/usr/bin" "/sbin" "/usr/sbin"
+                         "/usr/local/bin" "/usr/local/sbin" "/local/bin" "/local/freeware/bin"
+                         "/local/gnu/bin" "/usr/freeware/bin" "/usr/pkg/bin" "/usr/contrib/bin"
+                         "/opt/bin" "/opt/sbin" "/opt/local/bin"
+                         "/snap/bin/")))
   :config
   (progn
     (setq tramp-completion-function-alist-ssh
