@@ -5532,6 +5532,16 @@ otherwise use the subtree title."
   :config
   (progn
 
+
+    ;; hotfix until https://github.com/flycheck/flycheck/pull/1588 is resolved
+    (defun flycheck-eslint-config-exists-p ()
+    "Whether there is a valid eslint config for the current buffer."
+    (let* ((executable (flycheck-find-checker-executable 'javascript-eslint))
+           (exitcode (and executable (call-process executable nil nil nil
+                                                 "--print-config" "./__placeholder__.js"))))
+      (eq exitcode 0)))
+
+
     (defun flycheck-node_modules-executable-find (executable)
       (or
        (let* ((base (locate-dominating-file buffer-file-name "node_modules"))
