@@ -8558,6 +8558,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
   :config
   (progn
+    (defun js-cccc ()
+      (interactive)
+      (silent-save-some-buffers)
+      (prettier-js))
+
+    (bind-key "C-c C-c" 'js-cccc js2-mode-map)
+
     (when (and (not noninteractive) window-system)
       (font-lock-add-keywords
        'js2-mode `(("\\(function *\\)("
@@ -10392,6 +10399,10 @@ drag the viewpoint on the image buffer that the window displays."
              figlet-preview-fonts
              figlet-figletify-region
              figlet-figletify-region-comment))
+
+(use-package prettier-js
+  :ensure t
+  :commands (prettier-js))
 
 (use-package prodigy
   :disabled t
