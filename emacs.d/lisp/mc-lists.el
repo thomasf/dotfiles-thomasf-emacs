@@ -173,12 +173,14 @@
         simpleclip-paste
         skeleton-pair-insert-maybe
         slime-space
+        smart-shift-right
         sp--cua-replace-region
         sp--self-insert-command
         sp-backward-delete-char
         sp-backward-kill-word
         sp-delete-char
         sp-kill-hybrid-sexp
+        sp-kill-region
         sp-remove-active-pair-overlay
         sp-self-insert-command
         subtract-number-at-point
@@ -201,6 +203,7 @@
         touch-buffer-file
         transpose-params
         transpose-sexps
+        upcase-region
         wdired-next-line
         whole-line-or-region-comment-dwim
         whole-line-or-region-kill-region
@@ -222,6 +225,7 @@
         describe-key
         dired-toggle-read-only
         edebug-next-mode
+        ediff-next-difference
         end-of-buffer
         eval-buffer
         eval-expression
