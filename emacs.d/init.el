@@ -3101,7 +3101,12 @@ for the current buffer's file name, and the line number at point."
   :init
   (progn
     (setq
-     ediff-diff-options "-w"
+     ;; ediff-diff-options "-w"
+     ediff-diff-options ""
+     ediff-before-flag-bol "❱"
+     ediff-after-flag-eol "❰"
+     ediff-before-flag-mol "»»»"
+     ediff-after-flag-mol "«««"
      ediff-window-setup-function 'ediff-setup-windows-plain
      ediff-split-window-function (if (string= system-name "transwhale") 'split-window-vertically
                                    'split-window-horizontally)
