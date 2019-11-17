@@ -466,7 +466,9 @@ buffer-local wherever it is set."
 
 (use-package solarized-theme
   :ensure t
-  :if window-system
+  :if (or
+       window-system
+       (equal "xterm-24bit" (getenv-internal "TERM" initial-environment)))
   :init
   (progn
     (setq solarized-use-less-bold t
@@ -480,18 +482,16 @@ buffer-local wherever it is set."
     (setq theme-dark 'my-solarized-dark
           theme-bright 'my-solarized-light)))
 
-(use-package zenburn-theme
-  :ensure t
-  :if (not window-system)
-  :config
-  (progn
-    (use-package anti-zenburn-theme
-      :ensure t
-      :config
-      (load "anti-zenburn-theme-autoloads" nil t))
-    (load "zenburn-theme-autoloads" nil t)
-    (setq theme-dark 'zenburn
-          theme-bright 'anti-zenburn)))
+;; (use-package zenburn-theme
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (load "zenburn-theme-autoloads" nil t)))
+
+;; (use-package anti-zenburn-theme
+;;       :ensure t
+;;       :config
+;;       (load "anti-zenburn-theme-autoloads" nil t))
 
 (defun post-change-theme ()
   (set-face-inverse-video-p 'vertical-border nil)
