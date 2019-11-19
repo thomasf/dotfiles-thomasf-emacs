@@ -10127,10 +10127,6 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq-default docker-use-sudo nil)))
 
-(use-package clojure-cheatsheet
-  :ensure t
-  :commands clojure-cheatsheet)
-
 (use-package parenface-plus
   :ensure t
   :if (and (not noninteractive) (not (not window-system)) (not degrade-p-minimalism))
