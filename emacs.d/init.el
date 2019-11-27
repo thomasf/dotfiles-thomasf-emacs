@@ -9422,6 +9422,12 @@ Titus von der Malsburg."
   :if (not noninteractive)
   :commands (backup-walker-start))
 
+(use-package bazel-mode
+  :ensure t
+  :commands (bazel-mode)
+  :mode "drone\\.star\\'")
+
+
 (use-package ws-trim
   :disabled t
   :ensure t)
