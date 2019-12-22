@@ -245,6 +245,7 @@
         loccur-current
         magit-goto-next-section
         magit-status
+        magit-submodule
         mc/add-cursor-on-click
         mc/add-cursors-to-all-matches
         multiple-cursors-mode
@@ -259,6 +260,7 @@
         recenter-top-bottom-flash
         shell
         smex
+        transient-quit-one
         undo-tree-visualize
         wdired-finish-edit
         wgrep-change-to-wgrep-mode
