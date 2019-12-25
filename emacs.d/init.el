@@ -596,6 +596,10 @@ buffer-local wherever it is set."
       (setq my-monospaced-font "Pragmata Pro-12"
             my-variable-pitch-font "Pt Sans-13"))
 
+    (when (s-starts-with? "prizza" system-name)
+      (setq my-monospaced-font "Pragmata Pro-13"
+            my-variable-pitch-font "Pt Sans-14"))
+
 
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "Pragmata Pro-13"
