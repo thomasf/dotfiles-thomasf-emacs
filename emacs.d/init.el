@@ -8397,6 +8397,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands (gist-region gist-buffer gist-region-or-buffer
                          gist-region-or-buffer-private))
 
+(use-package graphql-mode
+  :ensure t
+  :mode (("\\.graphql\\'" . graphql-mode)))
+
 ;; TODO: init
 (use-package highlight
   :ensure t
