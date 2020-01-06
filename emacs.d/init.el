@@ -708,10 +708,17 @@ buffer-local wherever it is set."
 ;; misc Emacs settings not directly related to loading a package
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; (and (eq system-type 'darwin)
-;;    window-system
-;;    (setq mac-option-modifier nil
-;;          mac-command-modifier 'meta))
+(and (eq system-type 'darwin)
+     window-system
+     (setq
+      mac-command-modifier 'meta
+      mac-right-command-modifier 'super
+      ;; mac-control-modifier
+      ;; mac-right-control-modifier
+      ;; mac-function-modifier
+      mac-option-modifier 'super
+      mac-right-option-modifier nil
+      ))
 
 (defvar my-normal-cursor-type 'bar)
 
