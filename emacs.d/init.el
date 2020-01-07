@@ -8155,6 +8155,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
     (smartparens-global-mode t)
+    (add-hook 'prog-mode-hook
+              (lambda ()
+                (when (> (buffer-size) (* 1 1024 1024))
+                  (turn-off-smartparens-mode)
+                  (turn-off-show-smartparens-mode))))
+
     (show-smartparens-global-mode t)))
 
 (use-package android-mode
