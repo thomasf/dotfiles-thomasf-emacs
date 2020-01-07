@@ -9043,7 +9043,10 @@ Titus von der Malsburg."
 
 (use-package typescript-mode
   :ensure t
-  :commands (typescript-mode))
+  :commands (typescript-mode)
+  :mode (("\\.ts\\'" . typescript-mode)
+         ("\\.tsx\\'" . typescript-mode)))
+
 
 (use-package fold-this
   :ensure t
