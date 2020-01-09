@@ -7750,7 +7750,7 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     ;; (setq python-shell-interpreter "ipython")
-
+    (setq python-indent-guess-indent-offset-verbose nil)
     (defun my-python-mode-hook ()
       (setq-local idle-update-delay 2)
       ;;;; TODO lets try to disable this because of new indentation engine
