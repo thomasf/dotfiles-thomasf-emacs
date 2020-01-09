@@ -5222,6 +5222,7 @@ otherwise use the subtree title."
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
+    (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
     )
   :config
@@ -8590,6 +8591,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (prettier-js))
 
     (bind-key "C-c C-c" 'js-cccc js2-mode-map)
+    (bind-key "M-." 'xref-find-definitions js2-mode-map)
 
     (when (and (not noninteractive) window-system)
       (font-lock-add-keywords
@@ -9045,8 +9047,14 @@ Titus von der Malsburg."
   :ensure t
   :commands (typescript-mode)
   :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.tsx\\'" . typescript-mode)))
-
+         ("\\.tsx\\'" . typescript-mode))
+  :config
+  (progn
+    (defun typescript-cccc ()
+      (interactive)
+      (silent-save-some-buffers)
+      (prettier-js))
+    (bind-key "C-c C-c" 'typescript-cccc typescript-mode-map)))
 
 (use-package fold-this
   :ensure t
