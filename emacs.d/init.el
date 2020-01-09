@@ -5248,6 +5248,9 @@ otherwise use the subtree title."
 (use-package lsp-ui
   :ensure t
   :commands (lsp-ui-mode)
+  :init
+  (progn
+    (add-hook 'lsp-mode-hook 'lsp-ui-mode))
   :config
   (progn
     (setq
@@ -5258,14 +5261,18 @@ otherwise use the subtree title."
 
      lsp-ui-doc-header nil
      lsp-ui-doc-include-signature nil
+     lsp-ui-sideline-show-hover t
+     lsp-ui-sideline-show-diagnostics nil
+     lsp-ui-sideline-show-actions t
+     lsp-ui-sideline-show-symbol t
+     lsp-ui-sideline-ignore-duplicate t
      )
     (use-package lsp-ui-flycheck
       :defer t
       :config
       (progn
-        ;; disable lsp-ui-flycheck, it can't be done
-        (defun lsp-ui-flycheck-enable (_))
-        ))))
+        ;; disable lsp-ui-flycheck hard. (might not be needed anymore)
+        (defun lsp-ui-flycheck-enable (_))))))
 
 (use-package dap-mode
   :ensure t
