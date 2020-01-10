@@ -6,6 +6,7 @@
         (custom-theme-set-faces
          theme-name
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
+         ;; `(lsp-ui-sideline-global ((,class (:underline ,s-line :height 0.8))))
          )
         (custom-theme-set-variables
          theme-name

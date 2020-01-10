@@ -5253,6 +5253,12 @@ otherwise use the subtree title."
     (add-hook 'lsp-mode-hook 'lsp-ui-mode))
   :config
   (progn
+
+    ;; (defun lsp-ui-sideline--align (&rest lengths)
+    ;;   """OVerride  """
+    ;;   (+ (floor (* (apply '+ lengths) 0.75))
+    ;;       (if (display-graphic-p) 1 2)))
+
     (setq
      lsp-ui-doc-enable nil
      lsp-ui-doc-delay 3
