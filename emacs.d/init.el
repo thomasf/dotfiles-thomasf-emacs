@@ -1018,33 +1018,29 @@ re-downloaded in order to locate PACKAGE."
        "Excalibur Monospace" "Courier New" "Courier" "Cousine" "Lekton"
        "Ubuntu Mono" "Liberation Mono" "BPmono" "Anonymous Pro"
        "ProFontWindows")
-     dynamic-fonts-preferred-monospace-point-size 11
+     dynamic-fonts-preferred-monospace-point-size 12
      dynamic-fonts-preferred-proportional-fonts
-     '("PT Sans" "Lucida Grande" "Segoe UI" "DejaVu Sans" "Bitstream Vera"
+     '("Go" "PT Sans" "Lucida Grande" "Segoe UI" "DejaVu Sans" "Bitstream Vera"
        "Tahoma" "Verdana" "Helvetica" "Arial Unicode MS" "Arial")
-     dynamic-fonts-preferred-proportional-point-size 11)
+     dynamic-fonts-preferred-proportional-point-size 12.5)
 
-    (defvar my-monospaced-font "Pragmata Pro-11")
-    (defvar my-variable-pitch-font "Pt Sans-13")
+    (defvar my-monospaced-font "Pragmata Pro-12")
+    (defvar my-variable-pitch-font "Go-12.5")
     ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
     ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
     (when (s-starts-with? "transwhale" system-name)
       (setq my-monospaced-font "Pragmata Pro-12"
-            my-variable-pitch-font "Pt Sans-13"))
+            my-variable-pitch-font "Go-12.5"))
 
     (when (s-starts-with? "prizza" system-name)
       (setq my-monospaced-font "Pragmata Pro-13"
-            my-variable-pitch-font "Pt Sans-14"))
+            my-variable-pitch-font "Go-13.5"))
 
 
     (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "Pragmata Pro-13"
-            my-variable-pitch-font "Pt Sans-13"))
-
-    (when (s-starts-with? "blopp" system-name)
-      (setq my-monospaced-font "Pragmata Pro-15"
-            my-variable-pitch-font "Pt Sans-15"))
+      (setq my-monospaced-font "PragmataPro-13"
+            my-variable-pitch-font "Go-13.5"))
 
     (defun my-set-fonts  ()
       (interactive)
@@ -1077,7 +1073,7 @@ re-downloaded in order to locate PACKAGE."
       (setq nav-flash-delay 0.6)
       (when (s-starts-with? "fogskum" system-name)
         (setq my-monospaced-font "Pragmata Pro-13"
-              my-variable-pitch-font "Pt Sans-13"))
+              my-variable-pitch-font "Go-13"))
       (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
       (defun flash-defun()
         "Flash current defun"
@@ -1584,47 +1580,13 @@ re-downloaded in order to locate PACKAGE."
         (set-face-attribute 'variable-pitch frame :font variable-font)
       (error (message "Cannot set font '%s'" variable-font)))))
 
-(defun fonts-set-terminus (arg)
-  "Set Terminus/PT Sans for selected frame."
-  (interactive "P")
-  (let ((size (if arg arg 10)))
-    (fonts-set (format "Terminus-%s" size)
-               (format "PT Sans-%s" size)
-               (selected-frame))))
-
-(defun fonts-set-consolas (arg)
-  "Set Consolas/PT Sans for selected frame."
-  (interactive "P")
-  (let ((size (if arg arg 11)))
-    (fonts-set (format "Consolas-%s" size)
-               (format "PT Sans-%s" size)
-               (selected-frame))))
-
 (defun fonts-set-pragmata (arg)
   "Set PragmataPro/PT Sans for selected frame."
   (interactive "P")
-  (let ((size (if arg arg 11)))
+  (let ((size (if arg arg 12)))
     (fonts-set (format "Pragmata Pro-%s" size)
-               (format "PT Sans-%s" size)
+               (format "Go-%s" size)
                (selected-frame))))
-
-(defun fonts-set-anonymouspro (arg)
-  "Set Anonymous Pro/PT Sans for selected frame."
-  (interactive "P")
-  (let ((size (if arg arg 11)))
-    (fonts-set (format "Anonymous Pro-%s" size)
-               (format "PT Sans-%s" size)
-               (selected-frame))))
-
-(defun fonts-set-consolas-large ()
-  "Set Consolas-15 / PT Sans-15 for selected frame."
-  (interactive)
-  (fonts-set-consolas 15))
-
-(defun fonts-set-consolas-huge ()
-  "Set Consolas-20 / PT Sans-20 for selected frame."
-  (interactive)
-  (fonts-set-consolas 20))
 
 
 ;;;;;; smaller fonts in certain modes
@@ -1955,13 +1917,9 @@ This is special to my xmonad configuration which floats windows named floating"
   "Some kind of minimal frame, for logs etc"
   (interactive)
   (let ((frame (make-frame '((name . "minimal-frame")
-                             (minibuffer . nil))))
-        (size 10))
+                             (minibuffer . nil)))))
     (select-frame frame)
-
-    (fonts-set (format "Anonymous Pro-%s" size)
-               (format "PT Sans-%s" size)
-               frame)
+    (my-set-fonts)
     (with-selected-frame frame
       (hide-fringes)
       (hidden-mode-line-mode 1))))
