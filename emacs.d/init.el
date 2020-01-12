@@ -1,6 +1,9 @@
 ;;; init.el --- Thomas Frössman emacs init
+
 ;;; Commentary:
+
 ;;
+
 
 ;;; Code:
 
@@ -10,14 +13,18 @@
 ;; You may delete these explanatory comments.
 ;; (package-initialize)
 
+
 ;;; bootstrap
+
 ;;;; record init-start-time
+
 (eval-and-compile
   (defvar init-times `(("before-init" ,before-init-time)))
   (push `("init-start" ,(current-time)) init-times))
 
 
 ;;;; compilation utlities
+
 (eval-when-compile
   (defmacro executable-find* (command)
     "Macro form of executable-find..."
@@ -25,12 +32,14 @@
 
 
 ;;;; gc
+
 (setq-default ;; alloc.c
  gc-cons-threshold (* 20 1204 1204)
  gc-cons-percentage 0.5)
 
 
 ;;;; disable menu/scroll/toolbars
+
 (and (fboundp 'menu-bar-mode)
    menu-bar-mode
    (not (eq system-type 'darwin))
@@ -48,11 +57,13 @@
 
 
 ;;;; define feature inhibition variable
+
 (defvar degrade-p-minimalism nil
   "If set to non nil a lighter emacs config is used. ")
 
 
 ;;;; emacs version requirement check
+
 (and
  (not noninteractive)
  (or (not (boundp 'emacs-version)) (string< emacs-version "25.1"))
@@ -60,6 +71,7 @@
 
 
 ;;;; workspace-prefix
+
 (defun workspace-prefix ()
   (let ((res (if (and
                   (eq window-system 'x)
@@ -82,13 +94,16 @@
 (defun workspace-prefix-file-name (name &optional ext)
   (concat name "." (or workspace-prefix-startup "DEFAULT") (or ext "")))
 
+
 ;;;; load-path
+
 (when load-file-name
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
 
 
 ;;;; verbose start up/compile logging
+
 (eval-and-compile
   (defvar my-log-verbose nil)
   ;; (setq my-log-verbose t)
@@ -100,7 +115,9 @@
         use-package-enable-imenu-support t
         use-package-minimum-reported-time 0.01))
 
+
 ;;;; package.el + early package install
+
 ;; set up package.el and make sure that some essential packages and features
 ;; are loaded early.
 (eval-and-compile (push `("packages-start" ,(current-time)) init-times))
@@ -198,10 +215,14 @@ re-downloaded in order to locate PACKAGE."
 
 (eval-and-compile (push `("packages-end" ,(current-time)) init-times))
 
+
 ;;;; load private-init
+
 (require 'private-init nil (not my-log-verbose))
 
+
 ;;;; startup.el
+
 (defun display-startup-echo-area-message ())
 (setq
  auto-save-list-file-prefix (expand-file-name
@@ -225,6 +246,7 @@ re-downloaded in order to locate PACKAGE."
 
 ")
 
+
 ;;;; initial-mode
 
 (defvar initial-mode-map
@@ -241,7 +263,7 @@ re-downloaded in order to locate PACKAGE."
   (setq-local text-mode-variant t)
   (setq-local indent-line-function 'indent-relative))
 
-
+
 ;;;; backups and auto saves
 
 (defconst backup-dir
@@ -263,29 +285,43 @@ re-downloaded in order to locate PACKAGE."
  backup-directory-alist (list (cons "." backup-dir))
  auto-save-file-name-transforms `((".*" ,autosave-dir t)))
 
+
 ;;;; lread.c
+
 (add-to-list 'load-suffixes ".el.gpg")
 
+
 ;;;; load-custom-file
+
 (setq custom-file (expand-file-name
                    "custom-set-variables.el" user-data-directory))
 (load custom-file 'noerror 'nomessage)
 
+
 ;;;; environment vars
+
 (setenv "NODE_NO_READLINE" "1") ;; nodejs
+
+
 ;;;; enable disabled commands
+
 (--each '(narrow-to-defun narrow-to-page narrow-to-region
                           upcase-region downcase-region
                           scroll-left dired-find-alternate-file erase-buffer)
   (put it 'disabled nil))
 
+
 ;;;; key bindings
+
 ;;;; global unset
+
 (global-unset-key (kbd "M-o"))
 (global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "C-x C-z"))
 
+
 ;;;; define and bind custom key maps
+
 (defvar my-files-map)
 (defvar my-dirs-map)
 (defvar my-buffers-map)
@@ -307,11 +343,14 @@ re-downloaded in order to locate PACKAGE."
     region-bindings-mode-map)
   "Keymaps for command `region-bindings-mode-map'.")
 
+
 ;;; mode hook lists
+
 (defmacro hook-into-modes (func modes)
   "Add hook `FUNC' to multiple `MODES'."
   `(dolist (mode-hook ,modes)
      (add-hook mode-hook ,func)))
+
 
 ;;;; prog modes
 
@@ -330,7 +369,9 @@ re-downloaded in order to locate PACKAGE."
     qml-mode-hook
     ruby-mode-hook))
 
+
 ;;;; lisp modes
+
 (defvar my-lisp-modes
   '(clojure-mode
     emacs-lisp-mode
@@ -348,13 +389,17 @@ re-downloaded in order to locate PACKAGE."
               (concat (symbol-name mode) "-hook"))))
           my-lisp-modes))
 
+
 ;;;; significant whitespace
+
 (defvar my-significant-whitespace-mode-hooks
   '(haskell-mode-hook
     kivy-mode-hook
     python-mode-hook))
 
+
 ;;;; markup modes
+
 (defvar my-markup-mode-hooks-1
   '(gfm-mode-hook
     rst-mode-hook))
@@ -363,7 +408,9 @@ re-downloaded in order to locate PACKAGE."
 (defvar my-markup-mode-hooks-2
   '(org-mode-hook))
 
+
 ;;;; my-html-like-modes
+
 (defvar my-html-like-modes
   '(handlebars
     html-mode
@@ -377,7 +424,9 @@ re-downloaded in order to locate PACKAGE."
     nxml-mode-hook
     web-mode-hook))
 
+
 ;;;; my-css-like modes
+
 (defvar my-css-like-modes
   '(css-mode
     scss-mode))
@@ -386,46 +435,71 @@ re-downloaded in order to locate PACKAGE."
   '(css-mode-hook
     scss-mode-hook))
 
+
 ;;; core
+
 ;; configuration for things that ar built in to emacs and are not available
 ;; throuigh a feature that can be require'ed.
+
+
 ;;;; custom variables
+
 (defvar my-normal-cursor-type 'bar)
 
 
 ;;;; defined in elisp source
+
 ;;;;; ansi-color
+
 (setq ansi-color-for-comint-mode t)
 
+
 ;;;;; apropos
+
 (setq apropos-do-all t)
 
+
 ;;;;; bookmark
+
 (setq bookmark-default-file (expand-file-name
                              "bookmarks" user-data-directory))
+
+
 ;;;;; browse-url
+
 (when (eq 'gnu/linux system-type)
   (setq
    browse-url-browser-function 'browse-url-generic
    browse-url-generic-program "sensible-browser"))
 
+
 ;;;;; cedet
+
 (setq srecode-map-save-file (expand-file-name
                              "srecode-map.el" user-data-directory))
+
+
 ;;;;; eshell
+
 (setq eshell-directory-name (expand-file-name user-data-directory))
 
+
 ;;;;; files.el
+
 (setq confirm-kill-emacs 'yes-or-no-p)
 
+
 ;;;;; font locking
+
 ;; (setq font-lock-global-modes '(not web-mode))
 (unless noninteractive
   (setq font-lock-maximum-decoration t)
   ;; (global-font-lock-mode t)
   )
 
+
 ;;;;; jit-lock
+
 (setq jit-lock-stealth-time nil
       jit-lock-stealth-nice 0.03
       jit-lock-stealth-load 200
@@ -434,10 +508,14 @@ re-downloaded in order to locate PACKAGE."
       ;; jit-lock-defer-time 0.05
       )
 
+
 ;;;;; man
+
 (setq Man-notify-method 'pushy)
 
+
 ;;;;; message (for gmail)
+
 ;; set up for gmail
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-stream-type 'starttls
@@ -445,12 +523,16 @@ re-downloaded in order to locate PACKAGE."
       smtpmail-smtp-server "smtp.gmail.com"
       smtpmail-smtp-service 587)
 
+
 ;;;;; minibuffer
+
 (when (boundp 'completion-styles)
   (add-to-list ;; add initials to complete list
    'completion-styles 'initials t))
 
+
 ;;;;; mule / conding.c
+
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
@@ -460,14 +542,19 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; paragraphs
+
 (setq sentence-end-double-space nil)
 
+
 ;;;;; silence successful auto saving
+
 (defadvice do-auto-save (around do-auto-save-silent activate)
   (ad-set-arg 0 t)
   ad-do-it)
 
+
 ;;;;; simple
+
 (setq column-number-mode t
       kill-whole-line nil
       shift-select-mode nil
@@ -479,11 +566,15 @@ re-downloaded in order to locate PACKAGE."
      (setq interprogram-paste-function
            'x-cut-buffer-or-selection-value))
 
+
 ;;;;; subr
+
 ;; misc Emacs settings not directly related to loading a package
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+
 ;;;;; tooltip
+
 (setq tooltip-delay 0.8
       ;;tooltip-hide-delay 10
       ;;tooltip-recent-seconds 1
@@ -491,25 +582,31 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; tracking
+
 (setq tracking-most-recent-first t)
 
 
 ;;;;; url
+
 (setq url-configuration-directory (expand-file-name
                                    "url/" user-data-directory))
 
+
 ;;;;; whitespace-mode
+
 (setq-default whitespace-line-column nil)
 (bind-key "M-o m w" 'whitespace-mode)
 
 
 ;;;;; window
+
 (setq switch-to-buffer-preserve-window-point t)
 
 
 ;;;; defined in c source
 
 ;;;;; buffer.c
+
 (setq-default tab-width 4
               indicate-empty-lines nil
               transient-mark-mode t
@@ -518,6 +615,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; coding.c
+
 (setq-default locale-coding-system 'utf-8)
 (transient-mark-mode 1)
 (make-variable-buffer-local 'transient-mark-mode)
@@ -525,6 +623,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; dired.c
+
 (setq-default completion-ignored-extensions
               '("-min.css" "-min.js" ".a" ".annot" ".aux" ".bbl" ".bbl" ".bin"
               ".blg" ".blg" ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt"
@@ -540,44 +639,58 @@ re-downloaded in order to locate PACKAGE."
               ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl"
               ".x86f" "CVS/" "_MTN/" "_darcs/" "~"))
 
+
 ;;;;; dispnew.c
+
 (setq-default visible-bell nil)
 
 
 ;;;;; fileio.c
+
 (setq-default delete-by-moving-to-trash t)
 
 
 ;;;;; filelock.c
+
 (setq-default create-lockfiles nil)
 
 
 ;;;;; fns.c
+
 (setq-default use-dialog-box nil)
 
+
 ;;;;; indent.c
+
 (setq-default indent-tabs-mode nil)
 
 
 ;;;;; keyboard.c
+
 (setq-default echo-keystrokes 0.1)
 
 
 ;;;;; lread.c
+
 (setq-default load-prefer-newer t)
 
 
 ;;;;; minibuf.c
+
 (setq-default enable-recursive-minibuffers nil) ;; NOTE
                                                 ;; enable-recursive-minibuffers
                                                 ;; this can be quite confusing
 
+
 ;;;;; undo.c
+
 (setq-default undo-limit (* 80 1024 1024)
               undo-strong-limit (* 200 1024 1024)
               undo-outer-limit (* 50 1024 1024))
 
+
 ;;;;; xdisp.c
+
 (setq-default frame-title-format
               '((:eval (if (buffer-file-name)
                            (concat
@@ -600,15 +713,19 @@ re-downloaded in order to locate PACKAGE."
  ;; scroll-preserve-screen-position t
  scroll-preserve-screen-position 1)
 
+
 ;;;;; xdisp.c
+
 (setq-default truncate-partial-width-windows 50)
 
 
 ;;;;; xfns.c
+
 (setq-default x-gtk-file-dialog-help-text nil)
 
 
 ;;;;; xterm.c
+
 (setq-default x-underline-at-descent-line t)
 
 
@@ -741,23 +858,33 @@ re-downloaded in order to locate PACKAGE."
  ("s" . transpose-sentences)
  ("p" . transpose-paragraphs))
 
+
 ;;; gui packages
+
 ;; it's important to set up ui before the bulk of the settings because theme
 ;; and fonts should load asap
+
+
 ;;;; set vertical border char
+
 (eval
  '(set-display-table-slot standard-display-table
                           'vertical-border
                           (make-glyph-code ?┃)))
+
+
 ;;;; theme
+
 ;;;;; define theme-bright / theme-dark
 
 (defvar theme-bright nil "A light theme.")
 (defvar theme-dark nil "A dark theme.")
 
+
 ;;;;; install solarized-theme
 
 ;;;;; solarized-theme
+
 (use-package solarized-theme
   :ensure t
   :if (or
@@ -787,7 +914,9 @@ re-downloaded in order to locate PACKAGE."
 ;;       :config
 ;;       (load "anti-zenburn-theme-autoloads" nil t))
 
+
 ;;;;; post-change-theme
+
 (defun post-change-theme ()
   "Set some stuff that"
   (set-face-inverse-video-p 'vertical-border nil)
@@ -795,6 +924,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; dark-theme
+
 (defun dark-theme ()
   "Switch to dark mode (dark color theme)."
   (interactive)
@@ -803,7 +933,9 @@ re-downloaded in order to locate PACKAGE."
     (setq dark-theme-on t)
     (post-change-theme)))
 
+
 ;;;;; bright-theme
+
 (defun bright-theme ()
   "Switch to light mode (light color theme)."
   (interactive)
@@ -812,7 +944,9 @@ re-downloaded in order to locate PACKAGE."
     (setq dark-theme-on nil)
     (post-change-theme)))
 
+
 ;;;;; toggle-dark-theme
+
 (defun toggle-dark-theme ()
   "Toggle between light and dark modes."
   (interactive)
@@ -821,7 +955,9 @@ re-downloaded in order to locate PACKAGE."
     (dark-theme))
   (post-change-theme))
 
+
 ;;;;; global darkmode
+
 (and (not (boundp 'dark-theme-on))
      (not noninteractive)
      (not degrade-p-minimalism)
@@ -835,7 +971,9 @@ re-downloaded in order to locate PACKAGE."
                   (when (not dark-theme-on) (dark-theme))
                 (when dark-theme-on (bright-theme)))))
 
+
 ;;;; smart-mode-line
+
 (setq sml/theme nil)
 (use-package smart-mode-line
   :ensure t
@@ -862,7 +1000,10 @@ re-downloaded in order to locate PACKAGE."
        ("^/sudo:.*:" ":su:")
        ("^~/dropbox/" ":db:")))
     (sml/setup)))
+
+
 ;;;; dynamic-fonts
+
 (use-package dynamic-fonts
   :ensure t
   :commands (dynamic-fonts-setup)
@@ -922,7 +1063,9 @@ re-downloaded in order to locate PACKAGE."
              (dynamic-fonts-setup))))))
     (add-hook 'after-init-hook 'my-set-fonts t)))
 
+
 ;;;; nav-flash
+
 (defvar nav-flash-enabled t)
 (use-package nav-flash
   ;; :disabled t
@@ -1001,6 +1144,8 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;; functions
+
+
 ;;;; misc...
 
 (defun my-next-error (&optional arg reset)
@@ -1018,7 +1163,9 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;; functions: buffers
+
 ;;;;; bufferswitch
+
 (defvar my-bs-always-show-regexps
   (list (regexp-opt (list "*scratch*" "*info*"))
         "*magit:.+" "*Man" "*Org Agenda.+")
@@ -1056,7 +1203,9 @@ re-downloaded in order to locate PACKAGE."
               (frame-selected-window x))))
           (visible-frame-list)))))
 
+
 ;;;;; get-buffers-matching-mode
+
 (defun get-buffers-matching-mode (mode)
   "Returns a list of buffers where their major-mode is equal to MODE."
   (let ((buffer-mode-matches '()))
@@ -1066,7 +1215,9 @@ re-downloaded in order to locate PACKAGE."
             (add-to-list 'buffer-mode-matches buf))))
     buffer-mode-matches))
 
+
 ;;;;; kill buffers based on mode
+
 (defun kill-buffers (mode)
   "Kill buffers."
   (save-excursion
@@ -1097,7 +1248,9 @@ re-downloaded in order to locate PACKAGE."
   (kill-buffers 'org-mode)
   (kill-buffers 'dired-mode))
 
+
 ;;;;; kill this buffer if not modified
+
 (defun kill-this-buffer-if-not-modified ()
   (interactive)
   ;; taken from menu-bar.el
@@ -1105,7 +1258,9 @@ re-downloaded in order to locate PACKAGE."
       (kill-buffer-if-not-modified (current-buffer))
     (abort-recursive-edit)))
 
+
 ;;;;; switch to minibuffer
+
 (defun switch-to-minibuffer ()
   "Switch to minibuffer window."
   (interactive)
@@ -1113,6 +1268,8 @@ re-downloaded in order to locate PACKAGE."
       (select-window (active-minibuffer-window))
     (error "Minibuffer is not active")))
 ;; (bind-key "C-c o" 'switch-to-minibuffer)
+
+
 ;;;;; stop-using-minibuffer
 
 (defun stop-using-minibuffer ()
@@ -1122,7 +1279,9 @@ re-downloaded in order to locate PACKAGE."
 ;; NOTE this is slightly annoying
 ;; (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
+
 ;;;;; recursive-minibuffer-minor-mode
+
 (define-minor-mode recursive-minibuffer-mode
   "Minor mode to enable recursive minibuffer"
   :init-value nil
@@ -1134,10 +1293,16 @@ re-downloaded in order to locate PACKAGE."
         (minibuffer-depth-indicate-mode))
     (setq enable-recursive-minibuffers nil)))
 ;; (recursive-minibuffer-mode)
+
+
 ;;; functions
+
 ;;;; files / directories
+
 ;;;;; predicates
+
 ;;;;;; current-buffer-remote-p
+
 (defun current-buffer-remote-p ()
   (--any? (and it (file-remote-p it))
           (list
@@ -1150,6 +1315,8 @@ re-downloaded in order to locate PACKAGE."
   ;;              list-buffers-directory
   ;;              default-directory)))
   )
+
+
 ;;;;; dired jump commands
 
 (defun dired-project-root ()
@@ -1208,6 +1375,8 @@ re-downloaded in order to locate PACKAGE."
       ((virtual-env (getenv "VIRTUAL_ENV")))
     (when (not (equal virtual-env 'nil))
       (dired virtual-env))))
+
+
 ;;;;; file jump commands
 
 (defun find-custom-set-variables ()
@@ -1262,7 +1431,9 @@ re-downloaded in order to locate PACKAGE."
 (bind-key "C-x f n" 'find-notes)
 (bind-key "C-h n" 'find-notes)
 
+
 ;;;;; sudo-edit
+
 (defun sudo-edit-current-file ()
   (interactive)
   (let ((my-file-name) ; fill this with the file to open
@@ -1289,7 +1460,9 @@ re-downloaded in order to locate PACKAGE."
                  (tramp-file-name-host vec))))
     (concat "/sudo:root@localhost:" tempfile)))
 
+
 ;;;;; buffer saving
+
 (defun silent-save-some-buffers ()
   "Save buffers..."
   (save-window-excursion
@@ -1319,14 +1492,18 @@ re-downloaded in order to locate PACKAGE."
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
 
+
 ;;;;; touch-file
+
 (defun touch-file ()
   "updates mtime on the file for the current buffer"
   (interactive)
   (shell-command (concat "touch " (shell-quote-argument (buffer-file-name))))
   (clear-visited-file-modtime))
 
+
 ;;;;; shell command after save
+
 (defvar shell-command-after-save-cmd nil
   "This string will be executed as a shell command after saving
   the buffer.")
@@ -1344,7 +1521,9 @@ re-downloaded in order to locate PACKAGE."
     (read-string "After save shell command:" shell-command-after-save-cmd)))
   (setq-local shell-command-after-save-cmd cmd))
 
+
 ;;;;; make-script-executable
+
 (defun my-make-script-executable ()
   "If file starts with a shebang, make `buffer-file-name' executable"
   (save-excursion
@@ -1360,7 +1539,9 @@ re-downloaded in order to locate PACKAGE."
 (when (not noninteractive)
   (add-hook 'after-save-hook 'my-make-script-executable))
 
+
 ;;;; calling external commands
+
 (defun pip-freeze ()
   "Run pip freeze"
   (interactive)
@@ -1376,8 +1557,11 @@ re-downloaded in order to locate PACKAGE."
   (with-current-buffer "*identify*"
     (read-only-mode 1)))
 
+
 ;;;; faces, themes, fonts, looks
+
 ;;;;; adding line-prefix
+
 (defun my-set-line-prefix ()
   (interactive)
   (setq line-prefix (propertize "│" 'face 'vertical-border)))
@@ -1385,7 +1569,9 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;;; setting fonts
+
 ;;;;;; fonts-set
+
 (defun fonts-set (fixed-font variable-font &optional frame)
   (when window-system
     (condition-case nil
@@ -1439,6 +1625,7 @@ re-downloaded in order to locate PACKAGE."
   "Set Consolas-20 / PT Sans-20 for selected frame."
   (interactive)
   (fonts-set-consolas 20))
+
 
 ;;;;;; smaller fonts in certain modes
 
@@ -1496,7 +1683,9 @@ re-downloaded in order to locate PACKAGE."
 ;; (add-hook 'window-configuration-change-hook 'my-set-text-scale-smaller-maybe)
 (add-hook 'comint-mode-hook 'my-set-text-scale-smaller-maybe)
 
+
 ;;;;; toggle line spacing
+
 (defun toggle-line-spacing ()
   "Toggle line spacing between no extra space to extra half line height."
   (interactive)
@@ -1505,7 +1694,9 @@ re-downloaded in order to locate PACKAGE."
     (setq-default line-spacing nil))
   (redraw-display))
 
+
 ;;;;; jit-lock-defer-fontification
+
 (defun jit-lock-defer-fontification ()
   (interactive)
   (make-local-variable 'jit-lock-stealth-timer)
@@ -1516,7 +1707,9 @@ re-downloaded in order to locate PACKAGE."
   (font-lock-mode -1)
   (font-lock-mode 1))
 
+
 ;;;;; scrolling
+
 (hook-into-modes
  #'(lambda () (setq-local scroll-margin 3))
  my-prog-mode-hooks)
@@ -1530,7 +1723,9 @@ re-downloaded in order to locate PACKAGE."
 
 ;; (add-hook 'magit-mode-hook 'set-browse-scrolling)
 
+
 ;;;;; hide mode line
+
 (defvar hidden-mode-line-mode)
 (make-variable-buffer-local 'hidden-mode-line-mode)
 
@@ -1562,16 +1757,19 @@ re-downloaded in order to locate PACKAGE."
   (setq mode-line-format nil)
   (setq header-line-format nil))
 
+
 ;;;;; rename-modeline
+
 (defmacro rename-modeline (package-name mode new-name)
   `(eval-after-load ,package-name
      '(defadvice ,mode (after rename-modeline activate)
         (setq mode-name ,new-name))))
 
+
 ;;;;; colors
 
-
 ;;;;;; color processing
+
 (defun color-blend-name (color1 color2 alpha)
   "Blends COLOR1 onto COLOR2 using alpha "
   (apply 'color-rgb-to-hex
@@ -1586,7 +1784,9 @@ re-downloaded in order to locate PACKAGE."
                     (face-attribute 'default :foreground)
                     (or degree 0.8)))
 
+
 ;;;;;; randomize buffer background
+
 (defun randomize-buffer-background ()
   "changes current buffer's background to a random color (close to the defualt of this face)"
   (interactive)
@@ -1601,6 +1801,7 @@ re-downloaded in order to locate PACKAGE."
                (color-name-to-rgb (face-background 'default))))
     (setq new-color (color-rgb-to-hex (car rgb) (car (cdr rgb)) (car (cdr (cdr rgb)))))
     (set-face-background face-symbol new-color) (message (concat "color changed to " new-color))))
+
 
 ;;;;;; wash out faces
 
@@ -1636,6 +1837,7 @@ re-downloaded in order to locate PACKAGE."
 (defun wash-out-faces ()
   (interactive)
   (wash-out-fontlock-faces 0.9))
+
 
 ;;;;; cursor-style
 
@@ -1680,8 +1882,11 @@ re-downloaded in order to locate PACKAGE."
 (defadvice hardhat-local-hook (after cursor-style-update activate)
   (cursor-style-update))
 
+
 ;;;; windows / frames
+
 ;;;;; windows
+
 ;;;;;; dedicated-mode
 
 (defvar dedicated-mode nil
@@ -1700,7 +1905,9 @@ re-downloaded in order to locate PACKAGE."
 
 (bind-key "M-o m d" 'dedicated-mode)
 
+
 ;;;;;; select next/prev window
+
 (defun select-next-window ()
   "Switch to the next window"
   (interactive)
@@ -1711,7 +1918,9 @@ re-downloaded in order to locate PACKAGE."
   (interactive)
   (other-window -1))
 
+
 ;;;;;; swap with master
+
 (defun win/master-window ()
   "Get the master window, for now equal to the largest window."
   (get-largest-window))
@@ -1730,8 +1939,11 @@ re-downloaded in order to locate PACKAGE."
 
 (defalias 'w-swap-master 'win/swap-with-master)
 
+
 ;;;;; frames
+
 ;;;;;; creating frames
+
 (defun new-floating-frame ()
   "Creates a new floating frame.
 This is special to my xmonad configuration which floats windows named floating"
@@ -1788,7 +2000,9 @@ named floating-center"
       (select-frame frame)
       (find-file file))))
 
+
 ;;;;;; intelligent close frame
+
 (defun intelligent-close ()
   "quit a frame the same way no matter what kind of frame you are on.
 
@@ -1816,7 +2030,9 @@ all cases (even in an emacs -nw session).
     (if (yes-or-no-p "Close window?")
         (delete-frame (selected-frame)))))
 
+
 ;;;;;; x urgency hint
+
 ;; let emacs blink when something interesting happens.
 ;; in KDE this marks the active Emacs icon in the tray.
 (defun x-urgency-hint (frame arg &optional source)
@@ -1854,9 +2070,11 @@ display, depending on the window manager)."
   (bind-key "s-w" 'intelligent-close)
   )
 
+
 ;;;; editing/inserting/in buffer navigation
 
 ;;;;; enable "regular" backspace behaviour in isearch
+
 (defun isearch-delete-something ()
   "Delete non-matching text or the last character."
   (interactive)
@@ -1930,7 +2148,9 @@ region-end is used."
 
 (bind-key "Y" 'duplicate-region region-bindings-mode-map)
 
+
 ;;;;; open line above/below
+
 (defun open-line-below ()
   "Open a line below the line the point is at.
 Then move to that line and indent accordning to mode"
@@ -1993,6 +2213,7 @@ Then move to that line and indent accordning to mode"
     (indent-for-tab-command)))
 (bind-key "<M-return>" 'new-line-dwim)
 
+
 ;;;;; join line
 
 (defun my-join-line ()
@@ -2001,7 +2222,9 @@ Then move to that line and indent accordning to mode"
   (save-excursion
     (join-line -1)))
 
+
 ;;;;; join-region
+
 (defun join-region (beg end)
   "Apply join-line over region."
   (interactive "r")
@@ -2012,7 +2235,9 @@ Then move to that line and indent accordning to mode"
         (while (< (point) end)
           (join-line 1)))))
 
+
 ;;;;; character coding conversion
+
 (defun has-revisit-file-with-coding-windows-1252 ()
   "Re-opens currently visited file with the windows-1252 coding. (By: hassansrc at gmail dot com)
     Example:
@@ -2029,13 +2254,17 @@ Then move to that line and indent accordning to mode"
         (current-prefix-arg nil))
     (find-alternate-file buffer-file-name)))
 
+
 ;;;;; align
+
 (defun align= (begin end)
   "Align region to equal signs"
   (interactive "r")
   (align-regexp begin end "\\(\\s-*\\)[=|:]" 1 1))
 
+
 ;;;;; insert date/time formatted strings
+
 (defvar current-date-time-format "%Y-%m-%d %H:%M"
   "Format of date to insert with `insert-current-date-time' func
 See help of `format-time-string' for possible replacements")
@@ -2074,7 +2303,9 @@ Uses `current-date-time-format' for the formatting the date/time."
   (interactive)
   (insert (number-to-string (week-number (calendar-current-date)))))
 
+
 ;;;;; CamelCase transform
+
 (defun backward-hyphenated-or-underscore-word ()
   (interactive)
   (backward-word)
@@ -2104,7 +2335,9 @@ Default separator is underscore."
         (replace-match (concat (match-string 1) sep
                                (downcase (match-string 2))) nil 'literal)))))
 
+
 ;;;;; eval-and-replace
+
 (defun eval-and-replace ()
   "Replace the preceding sexp with its value."
   (interactive)
@@ -2117,6 +2350,7 @@ Default separator is underscore."
 
 
 ;;;;; beginning of line or indentation
+
 (defun beginning-of-line-or-indentation ()
   "move to beginning of line, or indentation"
   (interactive)
@@ -2124,7 +2358,9 @@ Default separator is underscore."
       (back-to-indentation)
     (beginning-of-line)))
 
+
 ;;;;; delete trailing blank lines
+
 (defun my-delete-trailing-blank-lines ()
   "Deletes all blank lines at the end of the file, even the last one"
   (interactive)
@@ -2138,17 +2374,23 @@ Default separator is underscore."
             (progn
               (delete-char trailnewlines)))))))
 
+
 ;;;;; collapse blank lines
+
 (defun collapse-blank-lines (start end)
   (interactive "r")
   (replace-regexp "^\n\\{2,\\}" "\n" nil start end))
 
+
 ;;;;; flush blank lines
+
 (defun flush-blank-lines (start end)
   (interactive "r")
   (flush-lines "^\\s-*$" start end nil))
 
+
 ;;;;; swap-string
+
 (defun swap-string (rit lft)
   "Swaps rit to lft."
   (interactive "sChange this:
@@ -2160,7 +2402,9 @@ sTo this: ")
                                            (regexp-quote lft)) (region-end) t)
       (replace-match (if (equal rit (match-string 0)) lft rit) t nil))))
 
+
 ;;;;; clean buffer
+
 (defun cleanup-buffer ()
   "Perform a bunch of operations on the whitespace content of a buffer."
   (interactive)
@@ -2180,7 +2424,9 @@ sTo this: ")
       (narrow-to-region (region-beginning) (region-end))
       (delete-trailing-whitespace))))
 
+
 ;;;;; sort-words
+
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.
     Prefixed with negative \\[universal-argument], sorts in reverse.
@@ -2191,14 +2437,21 @@ sTo this: ")
     See `sort-regexp-fields'."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "\\w+" "\\&" beg end))
+
+
 ;;;;; sort-symbols
+
 (defun sort-symbols (reverse beg end)
   "Sort symbols in region alphabetically, in REVERSE if negative.
     See `sort-words'."
   (interactive "*P\nr")
   (sort-regexp-fields reverse "\\(\\sw\\|\\s_\\)+" "\\&" beg end))
+
+
 ;;;; MISC
+
 ;;;;; cycle ispell languages
+
 ;; Languages for spellinc cycling
 (let ((langs '("svenska" "english")))
   (setq lang-ring (make-ring (length langs)))
@@ -2214,6 +2467,7 @@ sTo this: ")
                (eq flyspell-mode t))
       (flyspell-buffer))))
 
+
 ;;;;; goto line with feedback
 
 (defun goto-line-with-feedback ()
@@ -2227,6 +2481,7 @@ sTo this: ")
 
 
 ;;;;; menu-bar-go
+
 (defvar menu-bar-go-active nil)
 (defun menu-bar-go-post ()
   (remove-hook 'pre-command-hook 'menu-bar-go-post)
@@ -2246,7 +2501,9 @@ sTo this: ")
                (add-hook 'pre-command-hook 'menu-bar-go-post)))))
 (bind-key "M-o M-m" 'menu-bar-go)
 
+
 ;;;;; centering margins + easy-read-mode
+
 (defun auto-window-margins ()
   "Set window margins according to fill column."
   (when (not (or
@@ -2308,7 +2565,9 @@ sTo this: ")
     (auto-window-margins-mode -1)
     (set-face-attribute 'default (selected-frame)  :height font-normal-height)))
 
+
 ;;;;; init magit status
+
 (defun init-magit-status (path)
   "Magit status, no other windows.
 Used to launch magit status from command line."
@@ -2318,7 +2577,9 @@ Used to launch magit status from command line."
   (kill-buffer "*scratch*")
   (kill-buffer "*Messages*"))
 
+
 ;;;;; my notify
+
 (defvar my-notify-method nil)
 
 (defun my-notify-setup nil
@@ -2354,7 +2615,9 @@ Used to launch magit status from command line."
   (unless my-notify-method (my-notify-setup))
   (funcall my-notify-method summary body))
 
+
 ;;;;; invert-shift-number-keys-mode
+
 (define-minor-mode invert-shift-number-keys-mode
   "..."
   ;; The initial value.
@@ -2390,6 +2653,8 @@ Used to launch magit status from command line."
     ("8" . "*")
     ("9" . "(")
     ("0" . ")")))
+
+
 ;;;;; helm popup frame
 
 (defvar popup-frame--frame  nil)
@@ -2417,7 +2682,9 @@ Used to launch magit status from command line."
   (popup-frame 'helm-for-files))
 ;; (bind-key "<menu>" 'popup-frame-helm-for-files)
 
+
 ;;;;; flash caps lock
+
 (defvar flash-scroll-lock-enabled t)
 (defvar flash-scroll-lock-active nil)
 (defvar flash-scroll-lock-initialized nil)
@@ -2455,7 +2722,9 @@ Used to launch magit status from command line."
 
 (setq ring-bell-function #'ignore)
 
+
 ;;;;; get-dwim-at-point
+
 (defun get-dwim-at-point ()
   "If there's an active selection, return that.
 Otherwise, get the symbol at point, as a string."
@@ -2465,7 +2734,9 @@ Otherwise, get the symbol at point, as a string."
          (substring-no-properties
           (symbol-name (symbol-at-point))))))
 
+
 ;;;; ////uncategorized////
+
 (defun create-temp-selective-display-keymap ()
   (set-temporary-overlay-map
    (let ((map (make-sparse-keymap)))
@@ -2568,11 +2839,15 @@ for the current buffer's file name, and the line number at point."
 (hook-into-modes #'(lambda () (setq-local fill-column 120))
                  my-html-like-mode-hooks)
 
+
 ;;; use-package
+
 ;; main package configuration section
 (eval-and-compile (push `("use-package-start" ,(current-time)) init-times))
 
+
 ;;;; abbrev
+
 (use-package abbrev
   :defer
   :diminish ""
@@ -2581,6 +2856,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ac-cider
+
 (use-package ac-cider
   :ensure t
   :commands (ac-cider-setup)
@@ -2597,6 +2873,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ac-nrepl
+
 (use-package ac-nrepl
   :ensure t
   :disabled t
@@ -2613,6 +2890,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ac-slime
+
 (use-package ac-slime
   :ensure t
   :commands (set-up-slime-ac)
@@ -2635,6 +2913,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ace-jump-mode
+
 (use-package ace-jump-mode
   :ensure t
   :commands (ace-jump-word-mode
@@ -2652,6 +2931,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ack-and-a-half
+
 (use-package ack-and-a-half
   :disabled t
   :ensure t
@@ -2679,6 +2959,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; adaptive-wrap
+
 (use-package adaptive-wrap
   :ensure t
   :disabled t
@@ -2695,18 +2976,21 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; adoc-mode
+
 (use-package adoc-mode
   :ensure t
   :mode (("\\.adoc\\'" . adoc-mode)))
 
 
 ;;;; aes
+
 (use-package aes
   :ensure t
   :commands (aes-insert-password))
 
 
 ;;;; ag
+
 (use-package ag
   :disabled t
   :ensure t
@@ -2728,6 +3012,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ahg
+
 (use-package ahg
   :ensure t
   :commands (ahg-log ahg-short-log ahg-status))
@@ -2735,18 +3020,22 @@ for the current buffer's file name, and the line number at point."
 (eval-and-compile
   (setq magit-last-seen-setup-instructions "1.4.0"))
 
+
 ;;;; anaphora
+
 (use-package anaphora
   :ensure t
   :defer)
 
 
 ;;;; anchored-transpose
+
 (use-package anchored-transpose
   :commands anchored-transpose)
 
 
 ;;;; android-mode
+
 (use-package android-mode
   :ensure t
   :commands (android-mode android-logcat android-start-emulator
@@ -2759,6 +3048,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; ansi
+
 (use-package ansi
   :ensure t
   :commands (with-ansi
@@ -2768,6 +3058,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; anzu
+
 (use-package anzu
   :ensure t
   :defer 2
@@ -2780,6 +3071,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; apache-mode
+
 (use-package apache-mode
   :ensure t
   :commands apache-mode
@@ -2789,19 +3081,23 @@ for the current buffer's file name, and the line number at point."
          ("apache2?/access\\.conf\\'" . apache-mode)
          ("apache2?//sites-\\(available\\|enabled\\)/" . apache-mode)))
 
+
 ;;;; archive-region
+
 (use-package archive-region
   :ensure t
   :commands (archive-region))
 
 
 ;;;; arduino-mode
+
 (use-package arduino-mode
   :ensure t
   :mode (("\\.ino\\'" . arduino-mode)))
 
 
 ;;;; artbollocks-mode
+
 (use-package artbollocks-mode
   :commands artbollocks-mode
   :ensure t
@@ -2813,6 +3109,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; auth-source
+
 (use-package auth-source
   :defer
   :init
@@ -2822,6 +3119,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; auto-complete
+
 (use-package auto-complete
   :ensure t
   :if (not
@@ -2947,6 +3245,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; auto-highlight-symbol
+
 (use-package auto-highlight-symbol
   :ensure t
   :if (and
@@ -2980,6 +3279,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; auto-package-update
+
 (use-package auto-package-update
   :disabled t
   :ensure t
@@ -2994,6 +3294,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; autorevert
+
 (use-package autorevert
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :defer
@@ -3013,6 +3314,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; back-button
+
 (use-package back-button
   :disabled t
   :ensure t
@@ -3029,6 +3331,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; backup-walker
+
 (use-package backup-walker
   :ensure t
   :if (not noninteractive)
@@ -3036,26 +3339,29 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; bazel-mode
+
 (use-package bazel-mode
   :ensure t
   :commands (bazel-mode)
   :mode "drone\\.star\\'")
 
 
-
 ;;;; bbdb-loaddefs
+
 (use-package bbdb-loaddefs
   :disabled t
   :commands bbdb)
 
 
 ;;;; bf-mode
+
 (use-package bf-mode
   :ensure t
   :commands bf-mode)
 
 
 ;;;; bm
+
 (use-package bm
   :ensure t
   :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
@@ -3068,7 +3374,9 @@ for the current buffer's file name, and the line number at point."
   :init
   (progn
 
+
 ;;;;; helm-bm
+
     (use-package helm-bm
       :ensure t
       :commands helm-bm
@@ -3088,18 +3396,21 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; browse-kill-ring
+
 (use-package browse-kill-ring
   :ensure t
   :bind (("M-y" . browse-kill-ring)))
 
 
 ;;;; buffer-move
+
 (use-package buffer-move
   :ensure t
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
 
 
 ;;;; bug-reference-github
+
 (use-package bug-reference-github
   :disabled t
   :ensure t
@@ -3107,12 +3418,14 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; butler
+
 (use-package butler
   :ensure t
   :commands (butler-status))
 
 
 ;;;; calendar
+
 (use-package calendar
   :defer
   :init
@@ -3127,6 +3440,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; calfw
+
 (use-package calfw
   :ensure t
   :commands cfw:open-calendar-buffer
@@ -3151,12 +3465,14 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; capture
+
 (use-package capture
   :ensure t
   :commands (capture-mode))
 
 
 ;;;; cdnjs
+
 (use-package cdnjs
   :ensure t
   :commands (cdnjs-list-packages
@@ -3167,18 +3483,21 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; cider
+
 (use-package cider
   :ensure t
   :commands (cider-jack-in cider))
 
 
 ;;;; clj-refactor
+
 (use-package clj-refactor
   :ensure t
   :commands clj-refactor-mode)
 
 
 ;;;; clojure-mode
+
 (use-package clojure-mode
   :ensure t
   :commands clojure-mode
@@ -3194,6 +3513,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; cmake-mode
+
 (use-package cmake-mode
   :ensure t
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
@@ -3201,6 +3521,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; code-library
+
 (use-package code-library
   :ensure t
   :commands code-library-save-code
@@ -3222,6 +3543,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; col-highlight
+
 (use-package col-highlight
   :ensure t
   :disabled t
@@ -3234,12 +3556,14 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; color-identifiers-mode
+
 (use-package color-identifiers-mode
   :ensure t
   :commands color-identifiers-mode)
 
 
 ;;;; color-moccur
+
 (let ((ad-redefinition-action 'accept))
   (use-package color-moccur
     :ensure t
@@ -3266,6 +3590,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; command-log-mode
+
 (use-package command-log-mode
   :ensure t
   :if (not noninteractive)
@@ -3273,6 +3598,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; company
+
 (use-package company
   :ensure t
   :commands company-mode
@@ -3317,7 +3643,9 @@ for the current buffer's file name, and the line number at point."
 
     ))
 
+
 ;;;;; company-lsp
+
 (use-package company-lsp
   :ensure t
   ;; :after company
@@ -3329,6 +3657,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; compile
+
 (use-package compile
   :defer
   :config
@@ -3405,17 +3734,21 @@ for the current buffer's file name, and the line number at point."
         (ansi-color-apply-on-region compilation-filter-start (point-max))))
     (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
 
+
 ;;;; conf-mode
+
 (use-package conf-mode
   :mode "\\.env\\'")
 
 
 ;;;; constants
+
 (use-package constants
   :commands (constants-get constants-insert constants-replace))
 
 
 ;;;; counsel
+
 (use-package counsel
   :ensure t
   :commands (counsel-mode
@@ -3426,12 +3759,14 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; csharp-mode
+
 (use-package csharp-mode
   :ensure t
   :mode "\\.cs\\'")
 
 
 ;;;; css-mode
+
 (use-package css-mode
   :commands css-mode
   :mode  ("\\.css\\'" . css-mode)
@@ -3441,12 +3776,14 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; csv-mode
+
 (use-package csv-mode
   :ensure t
   :mode (("\\.csv\\'" . csv-mode)))
 
 
 ;;;; cua-base
+
 (use-package cua-base
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
@@ -3477,6 +3814,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; cuda-mode
+
 (use-package cuda-mode
   :ensure t
   :mode (("\\.cu\\'" . cuda-mode)
@@ -3484,6 +3822,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; dart-mode
+
 (use-package dart-mode
   :disabled t
   :ensure t
@@ -3492,6 +3831,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; deadgrep
+
 (use-package deadgrep
   :ensure t
   :commands (deadgrep)
@@ -3502,6 +3842,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; debbugs
+
 (use-package debbugs
   :ensure t
   :commands (debbugs-gnu)
@@ -3514,6 +3855,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; delsel
+
 (use-package delsel
   :defer t
   :init
@@ -3522,6 +3864,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; describe-number
+
 (use-package describe-number
   :ensure t
   :commands (describe-number
@@ -3529,6 +3872,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; diff-hl
+
 (use-package diff-hl
   :ensure t
   :commands (diff-hl-mode
@@ -3537,6 +3881,7 @@ for the current buffer's file name, and the line number at point."
 
 
 ;;;; dired
+
 (use-package dired
   :commands (dired)
   :bind (("C-x d d" . ido-dired))
@@ -3762,12 +4107,14 @@ If FILE already exists, signal an error."
 
 
 ;;;; dired-k
+
 (use-package dired-k
   :ensure t
   :commands dired-k)
 
 
 ;;;; dired-toggle-sudo
+
 (use-package dired-toggle-sudo
   :ensure t
   :if (not noninteractive)
@@ -3775,6 +4122,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; direx
+
 (use-package direx
   :ensure t
   :commands (direx:jump-to-directory direx:jump-to-directory-noselect
@@ -3820,6 +4168,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; docker
+
 (use-package docker
   :ensure t
   :commands (docker-ps
@@ -3828,6 +4177,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; dockerfile-mode
+
 (use-package dockerfile-mode
   :ensure t
   :mode (("Dockerfile\\'" . dockerfile-mode))
@@ -3837,6 +4187,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; download-region
+
 (use-package download-region
   :ensure t
   :commands download-region-as-url
@@ -3845,6 +4196,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; downplay-mode
+
 (use-package downplay-mode
   :ensure t
   :commands downplay-mode
@@ -3856,23 +4208,27 @@ If FILE already exists, signal an error."
 
 
 ;;;; dpaste
+
 (use-package dpaste
   :commands (dpaste-region dpaste-buffer dpaste-region-or-buffer)
   :ensure t)
 
 
 ;;;; drag-stuff
+
 (use-package drag-stuff
   :ensure t
   :commands (drag-stuff-global-mode drag-stuff-mode))
 
 
 ;;;; dropdown-list
+
 (use-package dropdown-list
   :defer)
 
 
 ;;;; easy-kill
+
 (use-package easy-kill
   :ensure t
   :commands easy-kill
@@ -3882,6 +4238,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; ecb-autoloads
+
 (use-package ecb-autoloads
   :disabled t
   :ensure ecb
@@ -3915,6 +4272,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; eclim
+
 (use-package eclim
   :disabled t
   :ensure t
@@ -3938,6 +4296,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; edbi
+
 (use-package edbi
   :disabled t
   :ensure t
@@ -3945,6 +4304,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; ediff
+
 (use-package ediff
   :defer
   :init
@@ -3983,17 +4343,20 @@ If FILE already exists, signal an error."
 
 
 ;;;; edit-color-stamp
+
 (use-package edit-color-stamp
   :ensure t
   :commands edit-color-stamp)
 
 
 ;;;; edit-env
+
 (use-package edit-env
   :commands edit-env)
 
 
 ;;;; edit-server
+
 (use-package edit-server
   :ensure t
   :commands edit-server-start
@@ -4025,11 +4388,13 @@ If FILE already exists, signal an error."
 
 
 ;;;; edit-var
+
 (use-package edit-var
   :commands edit-variable)
 
 
 ;;;; editorconfig
+
 (use-package editorconfig
   :commands (editorconfig-mode editorconfig-apply)
   :ensure t
@@ -4049,6 +4414,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; eimp
+
 (use-package eimp
   :ensure t
   :commands (eimp-mode eimp-fit-image-to-window)
@@ -4076,6 +4442,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; eldoc
+
 (use-package eldoc
   :defer
   :diminish ""
@@ -4087,6 +4454,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; electric
+
 (use-package electric
   :defer
   :config
@@ -4096,12 +4464,14 @@ If FILE already exists, signal an error."
 
 
 ;;;; elfeed
+
 (use-package elfeed
   :ensure t
   :commands elfeed)
 
 
 ;;;; elisp-slime-nav
+
 (use-package elisp-slime-nav
   :ensure t
   :commands (elisp-slime-nav-mode)
@@ -4112,6 +4482,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; emamux
+
 (use-package emamux
   :ensure t
   :commands (emamux:run-command emamux:get-sessions emamux:send-keys)
@@ -4121,18 +4492,21 @@ If FILE already exists, signal an error."
 
 
 ;;;; erlang
+
 (use-package erlang
   :ensure t
   :commands (erlang-mode))
 
 
 ;;;; eval-sexp-fu
+
 (use-package eval-sexp-fu
   :ensure t
   :commands (eval-sexp-fu-flash-mode))
 
 
 ;;;; evil
+
 (use-package evil
   :disabled t
   :ensure t
@@ -4146,6 +4520,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; eww
+
 (use-package eww
   :defer
   :init
@@ -4154,6 +4529,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; expand-region
+
 (use-package expand-region
   :ensure t
   :commands (er/expand-region
@@ -4168,6 +4544,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; extempore
+
 (use-package extempore
   :requires extempore
   :mode ("\\.xtm\\'" . extempore-mode)
@@ -4181,6 +4558,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; face-remap
+
 (use-package face-remap
   :bind (("M-o m b" . buffer-face-toggle))
   :init
@@ -4195,18 +4573,21 @@ If FILE already exists, signal an error."
 
 
 ;;;; fancy-narrow
+
 (use-package fancy-narrow
   :ensure t
   :defer)
 
 
 ;;;; feature-mode
+
 (use-package feature-mode
   :ensure t
   :mode (("\\.feature\\'" . feature-mode)))
 
 
 ;;;; fic-ext-mode
+
 (use-package fic-ext-mode
   :disabled t
   :ensure t
@@ -4222,6 +4603,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; figlet
+
 (use-package figlet
   :ensure t
   :commands (figlet
@@ -4232,6 +4614,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; fill-column-indicator
+
 (use-package fill-column-indicator
   :ensure t
   :commands (fci-mode
@@ -4289,6 +4672,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; find-file
+
 (use-package find-file
   :defer
   :bind (("C-h C-o" . cc-other-file))
@@ -4341,6 +4725,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; fixmee
+
 (use-package fixmee
   :ensure t
   :disabled t
@@ -4375,12 +4760,15 @@ If FILE already exists, signal an error."
 
 
 ;;;; floobits
+
 (use-package floobits
   :ensure t
   :commands (floobits-join-workspace floobits-share-dir-public
                                      floobits-share-dir-private))
 
+
 ;;;; flx-isearch
+
 (use-package flx-isearch
   :ensure t
   :disabled t
@@ -4389,6 +4777,7 @@ If FILE already exists, signal an error."
 
 
 ;;;; flycheck
+
 (use-package flycheck
   :ensure t
   :if (not noninteractive)
@@ -4557,6 +4946,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; flyspell
+
 (use-package flyspell
   :defer
   :diminish ((flyspell-mode . "fls"))
@@ -4566,12 +4956,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; focus
+
 (use-package focus
   :ensure t
   :commands focus-mode)
 
 
 ;;;; fold-this
+
 (use-package fold-this
   :ensure t
   :commands (fold-this)
@@ -4581,12 +4973,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; font-utils
+
 (use-package font-utils
   :ensure t
   :commands (font-utils-first-existing-font))
 
 
 ;;;; geben
+
 (use-package geben
   :ensure t
   :commands (geben
@@ -4594,6 +4988,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gist
+
 (use-package gist
   :ensure t
   :commands (gist-region gist-buffer gist-region-or-buffer
@@ -4601,6 +4996,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; git-gutter
+
 (use-package git-gutter
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
@@ -4650,12 +5046,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; git-timemachine
+
 (use-package git-timemachine
   :ensure t
   :commands git-timemachine)
 
 
 ;;;; gitconfig-mode
+
 (use-package gitconfig-mode
   :ensure t
   :mode (("/\\.gitconfig\\'" . gitconfig-mode)
@@ -4663,6 +5061,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gitignore-mode
+
 (use-package gitignore-mode
   :ensure t
   :mode (("/\\.gitignore_global\\'" . gitignore-mode)
@@ -4671,6 +5070,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gitlab
+
 (use-package gitlab
   :ensure t
   :commands (gitlab-version)
@@ -4684,12 +5084,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gl-conf-mode
+
 (use-package gl-conf-mode
   :commands gl-conf-mode
   :mode ("gitolite\\.conf\\'" . gl-conf-mode))
 
 
 ;;;; glsl-mode
+
 (use-package glsl-mode
   :ensure t
   :mode (("\\.glsl\\'" . glsl-mode)
@@ -4699,12 +5101,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gnomenm
+
 (use-package gnomenm
   :ensure t
   :commands (gnomenm-disconnect gnomenm-status gnomenm-connect))
 
 
 ;;;; gnuplot-mode
+
 (use-package gnuplot-mode
   :ensure t
   :commands (gnuplot-mode)
@@ -4713,6 +5117,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; go-mode
+
 (use-package go-mode
   :ensure t
   :mode "\\.go\\'"
@@ -4833,25 +5238,28 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;;; go-traceback
+
 (use-package go-traceback
   :commands (go-traceback)
   :mode ("goroutines\\.txt\\'" . go-traceback-mode))
 
 
-
 ;;;;; go-rename
+
 (use-package go-rename
   :ensure t
   :commands go-rename)
 
 
 ;;;;; go-scratch
+
 (use-package go-scratch
   :ensure t
   :commands go-scratch)
 
 
 ;;;; god-mode
+
 (use-package god-mode
   :disabled t
   :ensure t
@@ -4875,12 +5283,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; google-c-style
+
 (use-package google-c-style
   :ensure t
   :commands (google-set-c-style google-make-newline-indent))
 
 
 ;;;; google-this
+
 (use-package google-this
   :ensure t
   :commands (google-this
@@ -4894,6 +5304,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; google-translate
+
 (use-package google-translate
   :ensure t
   :commands (google-translate-at-point
@@ -4904,6 +5315,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; goto-chg
+
 (use-package goto-chg
   :ensure t
   :if (not noninteractive)
@@ -4918,13 +5330,16 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; graphql-mode
+
 (use-package graphql-mode
   :ensure t
   :mode (("\\.graphql\\'" . graphql-mode)))
 
 ;; TODO: init
 
+
 ;;;; graphviz-dot-mode
+
 (use-package graphviz-dot-mode
   :ensure t
   :commands graphviz-dot-mode
@@ -4933,12 +5348,14 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; grizzl
+
 (use-package grizzl
   :ensure t
   :commands (grizzl-completing-read grizzl-make-index))
 
 
 ;;;; groovy-mode
+
 (use-package groovy-mode
   :ensure t
   :mode (("\\.groovy\\'" . groovy-mode)
@@ -4946,18 +5363,21 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; gtags
+
 (use-package gtags
   :ensure t
   :commands (gtags-mode))
 
 
 ;;;; ham-mode
+
 (use-package ham-mode
   :ensure t
   :commands (ham-mode))
 
 
 ;;;; handlebars-mode
+
 (use-package handlebars-mode
   :ensure t
   :commands handlebars-mode
@@ -4965,6 +5385,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; hardhat
+
 (use-package hardhat
   :ensure t
   :commands (hardhat-mode
@@ -5092,6 +5513,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; haskell-mode
+
 (use-package haskell-mode
   :ensure t
   :commands (haskell-mode)
@@ -5112,6 +5534,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; header2
+
 (use-package header2
   :ensure t
   :commands (make-header make-revision make-divider make-box-comment
@@ -5119,6 +5542,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; helm
+
 (use-package helm
   :ensure t
   :defer 16
@@ -5187,6 +5611,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; helm-ag
+
 (use-package helm-ag
   :disabled t
   :ensure t
@@ -5196,18 +5621,21 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; helm-ag-r
+
 (use-package helm-ag-r
   :ensure t
   :bind ("M-o M-a" . helm-ag-r))
 
 
 ;;;; helm-chrome
+
 (use-package helm-chrome
   :ensure t
   :commands helm-chrome-bookmarks)
 
 
 ;;;; helm-css-scss
+
 (use-package helm-css-scss
   :ensure t
   :commands (helm-css-scss helm-css-scss-multi)
@@ -5222,6 +5650,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; helm-dash
+
 (use-package helm-dash
   :ensure t
   :commands (helm-dash helm-dash-at-point)
@@ -5319,6 +5748,7 @@ See URL `https://github.com/golang/lint'."
 
 
 ;;;; helm-git-grep
+
 (use-package helm-git-grep
   :ensure t
   :commands (helm-git-grep
@@ -5338,6 +5768,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-github-stars
+
 (use-package helm-github-stars
   :ensure t
   :commands helm-github-stars
@@ -5348,6 +5779,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-go-package
+
 (use-package helm-go-package
   :ensure t
   :commands helm-go-package
@@ -5366,12 +5798,14 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-orgcard
+
 (use-package helm-orgcard
   :ensure t
   :commands helm-orgcard)
 
 
 ;;;; helm-package
+
 (use-package helm-package
   :disabled t
   :ensure t
@@ -5379,6 +5813,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-projectile
+
     (use-package helm-projectile
       :ensure t
       :commands (helm-projectile)
@@ -5386,12 +5821,14 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-pydoc
+
 (use-package helm-pydoc
   :ensure t
   :commands helm-pydoc)
 
 
 ;;;; helm-recoll
+
 (use-package helm-recoll
   :ensure t
   :commands (helm-recoll helm-recoll-all)
@@ -5402,6 +5839,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; helm-swoop
+
 (use-package helm-swoop
   :ensure t
   :commands (helm-swoop
@@ -5413,6 +5851,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; highlight
+
 (use-package highlight
   :ensure t
   :commands (hlt-choose-default-face hlt-highlighter
@@ -5422,6 +5861,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; highlight-indentation
+
 (use-package highlight-indentation
   ;; :disabled t
   :ensure t
@@ -5439,6 +5879,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; highlight-symbol
+
 (use-package highlight-symbol
   :ensure t
   :if (and
@@ -5452,11 +5893,13 @@ if submodules exists, grep submodules too."
 
 
 ;;;; highlight-tail
+
 (use-package highlight-tail
   :commands highlight-tail-mode)
 
 
 ;;;; howdoi
+
 (use-package howdoi
   :ensure t
   :commands (howdoi-query
@@ -5475,6 +5918,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; htmlize
+
 (use-package htmlize
   :ensure t
   :commands (htmlize-buffer
@@ -5485,12 +5929,14 @@ if submodules exists, grep submodules too."
 
 
 ;;;; hy-mode
+
 (use-package hy-mode
   :ensure t
   :mode "\\.hy\\'")
 
 
 ;;;; ibuffer
+
 (use-package ibuffer
   :defer
   :bind (("C-x b n" . ibuffer)
@@ -5892,7 +6338,9 @@ if submodules exists, grep submodules too."
          (ido-find-file-in-dir default-directory))))
     (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
 
+
 ;;;; ido
+
 (use-package ido
   :commands ido-mode
   :if (and
@@ -6022,11 +6470,14 @@ if submodules exists, grep submodules too."
 
 
 ;;;; ido-completing-read+
+
 (use-package ido-completing-read+
   :ensure t
   :defer t)
 
+
 ;;;; ido-load-library
+
 (use-package ido-load-library
   :ensure t
   :commands (ido-load-library ido-load-library-find)
@@ -6039,6 +6490,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; ielm
+
 (use-package ielm
   :defer
   :init
@@ -6047,12 +6499,14 @@ if submodules exists, grep submodules too."
 
 
 ;;;; ietf-docs
+
 (use-package ietf-docs
   :ensure t
   :commands ietf-docs-open-at-point)
 
 
 ;;;; image-mode
+
 (use-package image-mode
   :defer
   :config
@@ -6109,6 +6563,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; imenu
+
 (use-package imenu
   :bind (("M-o i" . ido-goto-symbol))
   :init
@@ -6167,6 +6622,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; indent-guide
+
 (use-package indent-guide
   :ensure t
   :disabled t
@@ -6181,18 +6637,21 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; indicators
+
 (use-package indicators
   :ensure t
   :commands (indicators-mode))
 
 
 ;;;; interaction-log
+
 (use-package interaction-log
   :ensure t
   :commands interaction-log-mode)
 
 
 ;;;; irony
+
 (use-package irony
   :ensure t
   :commands (irony-mode)
@@ -6221,8 +6680,8 @@ drag the viewpoint on the image buffer that the window displays."
         (add-hook 'arduino-mode-hook 'irony-cdb-autosetup-compile-options)))))
 
 
-
 ;;;; iswitchb
+
 (use-package iswitchb
   :disabled t
   :if (not noninteractive)
@@ -6232,6 +6691,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; ivy
+
 (use-package ivy
   :ensure t
   :defer t
@@ -6241,12 +6701,14 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; jade-mode
+
 (use-package jade-mode
   :ensure t
   :commands jade-mode)
 
 
 ;;;; js
+
 (use-package js
   :disabled t
   :defer
@@ -6256,6 +6718,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; js-comint
+
 (use-package js-comint
   :commands inferior-js-mode
   :ensure t
@@ -6265,6 +6728,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; js2-mode
+
 (use-package js2-mode
   :ensure t
   :commands (js2-mode js2-jsx-mode)
@@ -6349,6 +6813,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; js2-refactor
+
 (use-package js2-refactor
   :ensure t
   :commands (js2r-add-keybindings-with-modifier
@@ -6367,6 +6832,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; json-mode
+
 (use-package json-mode
   :ensure t
   :commands json-mode
@@ -6382,12 +6848,14 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; jss
+
 (use-package jss
   :ensure t
   :commands jss-connect)
 
 
 ;;;; jump-char
+
 (use-package jump-char
   :disabled t
   :ensure t
@@ -6399,6 +6867,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; jumpc
+
 (use-package jumpc
   :disabled t
   :ensure t
@@ -6408,6 +6877,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; keep-buffers
+
 (use-package keep-buffers
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (keep-buffers-mode)
@@ -6422,6 +6892,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; key-chord
+
 (use-package key-chord
   :disabled t
   :ensure t
@@ -6505,6 +6976,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; keyfreq
+
 (use-package keyfreq
   :ensure t
   :if (not noninteractive)
@@ -6521,6 +6993,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; kite
+
 (use-package kite
   :disabled t
   :ensure t
@@ -6533,6 +7006,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; kite-mini
+
 (use-package kite-mini
   :disabled t
   :ensure t
@@ -6545,6 +7019,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; kivy-mode
+
 (use-package kivy-mode
   :ensure t
   :mode (("\\.kv\\'" . kivy-mode))
@@ -6555,6 +7030,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; know-your-http-well
+
 (use-package know-your-http-well
   :ensure t
   :commands (http-header
@@ -6564,6 +7040,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; langtool
+
 (use-package langtool
   :ensure t
   :commands (langtool-check langtool-correct-buffer)
@@ -6578,18 +7055,21 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; launch
+
 (use-package launch
   :ensure t
   :commands (global-launch-mode turn-on-launch-mode launch-file))
 
 
 ;;;; less-css-mode
+
 (use-package less-css-mode
   :ensure t
   :mode "\\.less\\'")
 
 
 ;;;; lexbind-mode
+
 (use-package lexbind-mode
   :ensure t
   :commands (lexbind-toggle-lexical-binding lexbind-lexscratch
@@ -6597,11 +7077,13 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; lfe-mode
+
 (use-package lfe-mode
   :commands (lfe-mode))
 
 
 ;;;; lib-requires
+
 (use-package lib-requires
   :ensure t
   :commands (libreq-requires-tree libreq-requires-list
@@ -6609,12 +7091,14 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; libmpdee
+
 (use-package libmpdee
   :ensure t
   :defer)
 
 
 ;;;; lisp-mode
+
 (use-package lisp-mode
   :defer t
   :init
@@ -6660,12 +7144,14 @@ drag the viewpoint on the image buffer that the window displays."
 
 
 ;;;; litable
+
 (use-package litable
   :ensure t
   :commands (litable-mode))
 
 
 ;;;; loccur
+
 (use-package loccur
   :ensure t
   :commands (loccur loccur-mode loccur-current loccur-no-highlight)
@@ -6683,31 +7169,37 @@ declaration in a Python file."
 
 
 ;;;; log4j-mode
+
 (use-package log4j-mode
   :disabled t
   :mode ("\\.log\\'" . log4j-mode))
 
 
 ;;;; logito
+
 (use-package logito
   :ensure t
   :commands (logito-log logito-should-log logito-insert-log))
 
 
 ;;;; look-mode
+
 (use-package look-mode
   :ensure t
   :commands (look-at-files look-at-this-file))
 
 
 ;;;; lorem-ipsum
+
 (use-package lorem-ipsum
   :ensure t
   :commands (lorem-ipsum-insert-paragraphs
              lorem-ipsum-insert-sentences
              lorem-ipsum-insert-list))
 
+
 ;;;; lsp-mode
+
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-mode)
@@ -6743,6 +7235,7 @@ declaration in a Python file."
 
 
 ;;;;; lsp-ui
+
 (use-package lsp-ui
   :ensure t
   :commands (lsp-ui-mode)
@@ -6781,12 +7274,14 @@ declaration in a Python file."
 
 
 ;;;;; dap-mode
+
 (use-package dap-mode
   :ensure t
   :commands (dap-debug dap-debug-edit-template))
 
 
 ;;;; lusty-explorer
+
 (use-package lusty-explorer
   :ensure t
   :disabled t
@@ -6865,12 +7360,14 @@ already present."
 
 
 ;;;; macrostep
+
 (use-package macrostep
   :ensure t
   :commands macrostep-expand)
 
 
 ;;;; magit
+
 (use-package magit
   :ensure t
   :defer 19
@@ -7031,6 +7528,7 @@ already present."
 
 
 ;;;; malabar-mode
+
 (use-package malabar-mode
   :disabled t
   :ensure t
@@ -7048,12 +7546,14 @@ already present."
 
 
 ;;;; manage-minor-mode
+
 (use-package manage-minor-mode
   :ensure t
   :commands manage-minor-mode)
 
 
 ;;;; markdown-mode
+
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
@@ -7125,6 +7625,7 @@ already present."
 
 
 ;;;; melpa-upstream-visit
+
 (use-package melpa-upstream-visit
   :disabled t
   :ensure t
@@ -7136,12 +7637,14 @@ already present."
 
 
 ;;;; memory-usage
+
 (use-package memory-usage
   :ensure t
   :commands memory-usage)
 
 
 ;;;; mingus
+
 (use-package mingus
   :commands (mingus mingus-stop mingus-dired-add mingus-dired-add-and-play)
   :ensure t
@@ -7170,11 +7673,13 @@ already present."
 
 
 ;;;; misc
+
 (use-package misc
   :bind (("M-z" . zap-up-to-char)))
 
 
 ;;;; mml2015
+
 (use-package mml2015
   :defer
   :init
@@ -7185,6 +7690,7 @@ already present."
 
 
 ;;;; mo-git-blame
+
 (use-package mo-git-blame
   :ensure t
   :commands mo-git-blame-current
@@ -7194,6 +7700,7 @@ already present."
 
 
 ;;;; mouse
+
 (use-package mouse
   :defer
   :init
@@ -7202,17 +7709,20 @@ already present."
 
 
 ;;;; mouse-drag
+
 (use-package mouse-drag
   :bind ("<down-mouse-3>" . mouse-drag-drag))
 
 
 ;;;; mouse-slider-mode
+
 (use-package mouse-slider-mode
   :ensure t
   :commands mouse-slider-mode)
 
 
 ;;;; moz
+
 (use-package moz
   :ensure t
   :commands moz-minor-mode)
@@ -7325,6 +7835,7 @@ Titus von der Malsburg."
 
 
 ;;;; multi-term
+
 (use-package multi-term
   :ensure t
   :commands (multi-term)
@@ -7335,12 +7846,14 @@ Titus von der Malsburg."
 
 
 ;;;; multi-web-mode
+
 (use-package multi-web-mode
   :ensure t
   :commands (multi-web-global-mode))
 
 
 ;;;; multiple-cursors
+
 (use-package multiple-cursors
   :ensure t
   :commands (multiple-cursors-mode mc/edit-lines mc/mark-next-like-this
@@ -7404,6 +7917,7 @@ Titus von der Malsburg."
 
 
 ;;;; nginx-mode
+
 (use-package nginx-mode
   :ensure t
   :commands nginx-mode
@@ -7413,11 +7927,13 @@ Titus von der Malsburg."
 
 
 ;;;; notifications
+
 (use-package notifications
   :commands notifications-notify)
 
 
 ;;;; nrepl-eval-sexp-fu
+
 (use-package nrepl-eval-sexp-fu
   :ensure t
   :disabled t
@@ -7428,6 +7944,7 @@ Titus von der Malsburg."
 
 
 ;;;; nsm
+
 (use-package nsm
   :defer t
   :init
@@ -7437,6 +7954,7 @@ Titus von der Malsburg."
 
 
 ;;;; nxml-mode
+
 (use-package nxml-mode
   :defer t
   :config
@@ -7445,6 +7963,7 @@ Titus von der Malsburg."
 
 
 ;;;; nyan-mode
+
 (use-package nyan-mode
   :ensure t
   :if (and
@@ -7459,6 +7978,7 @@ Titus von der Malsburg."
 
 
 ;;;; oauth2
+
 (use-package oauth2
   :ensure t
   ;; :commands ()
@@ -7470,6 +7990,7 @@ Titus von der Malsburg."
 
 
 ;;;; openwith
+
 (use-package openwith
   :ensure t
   :commands (openwith-mode openwith-open-unix open-terminal)
@@ -7497,6 +8018,7 @@ Titus von der Malsburg."
 
 
 ;;;; org
+
 (use-package org
   :ensure org-plus-contrib
   :defer 28
@@ -7963,6 +8485,7 @@ otherwise use the subtree title."
 
 
 ;;;; org-ehtml
+
 (use-package org-ehtml
   :disabled t
   :ensure t
@@ -7970,32 +8493,40 @@ otherwise use the subtree title."
 
 
 ;;;; org-import-icalendar
+
 (use-package org-import-icalendar
   :commands org-icalendar-import-buffer)
 
 
 ;;;; org-screenshot
+
 (use-package org-screenshot
   :commands org-screenshot-take)
 
 
 ;;;; osc
+
 (use-package osc
   :defer
   :ensure t)
 
 
 ;;;; outline
+
 (use-package outline
   :defer
   :diminish ((outline-minor-mode . "")))
 
+
 ;;;; outshine
+
 (use-package outshine
   :ensure t
   :commands (outshine-mode))
 
+
 ;;;; page-break-lines
+
 (use-package page-break-lines
   :ensure t
   :commands (turn-on-page-break-lines-mode
@@ -8012,6 +8543,7 @@ otherwise use the subtree title."
 
 
 ;;;; pager
+
 (use-package pager
   :ensure t
   :disabled t ;; is scroll-preserve-screen-position enough?
@@ -8026,6 +8558,7 @@ otherwise use the subtree title."
 
 
 ;;;; pandoc-mode
+
 (use-package pandoc-mode
   :ensure t
   :commands (turn-on-pandoc
@@ -8033,6 +8566,7 @@ otherwise use the subtree title."
 
 
 ;;;; parenface-plus
+
 (use-package parenface-plus
   :ensure t
   :if (and (not noninteractive) (not (not window-system)) (not degrade-p-minimalism))
@@ -8051,31 +8585,35 @@ otherwise use the subtree title."
 
 
 ;;;; peep-dired
+
 (use-package peep-dired
   :ensure t
   :commands peep-dired)
 
 
-
 ;;;; perspective
+
 (use-package perspective
   :ensure t
   :commands persp-mode)
 
 
 ;;;; phi-search
+
 (use-package phi-search
   :ensure t
   :commands (phi-search phi-search-backwards))
 
 
 ;;;; phi-search-dired
+
 (use-package phi-search-dired
   :ensure t
   :commands phi-search-dired)
 
 
 ;;;; php-mode
+
 (use-package php-mode
   :ensure t
   :commands php-mode
@@ -8083,6 +8621,7 @@ otherwise use the subtree title."
 
 
 ;;;; pip-requirements
+
 (use-package pip-requirements
   :ensure t
   :mode (("\\.pip\\'" . pip-requirements-mode)
@@ -8090,11 +8629,14 @@ otherwise use the subtree title."
 
 
 ;;;; pipenv
+
 (use-package pipenv
   :ensure t
   :commands (pipenv-mode
              pipenv-activate
              pipenv-run))
+
+
 ;;;; plantuml-mode
 
 (progn
@@ -8112,6 +8654,7 @@ otherwise use the subtree title."
 
 
 ;;;; platformio-mode
+
 (use-package platformio-mode
   :ensure t
   :commands (platformio-mode
@@ -8125,20 +8668,24 @@ otherwise use the subtree title."
 
 
 ;;;; po-mode
+
 (use-package po-mode
   :disabled t ;; crashes emacs on some larger po-files
   :commands po-mode
   :mode "\\.po\\'")
 
 
-
 ;;;; poetry
+
 (use-package poetry
   :ensure t
   :commands (poetry-venv-workon
              poetry-venv-deactivate
              poetry-venv-toggle))
+
+
 ;;;; point-undo
+
 (use-package point-undo
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :commands (point-undo point-redo)
@@ -8154,18 +8701,21 @@ otherwise use the subtree title."
 
 
 ;;;; popup-ruler
+
 (use-package popup-ruler
   :commands (popup-ruler
              popup-ruler-vertical))
 
 
 ;;;; popup-switcher
+
 (use-package popup-switcher
   :ensure t
   :commands (psw-switch-buffer))
 
 
 ;;;; popwin
+
 (use-package popwin
   :ensure t
   :if (not noninteractive)
@@ -8211,18 +8761,21 @@ otherwise use the subtree title."
 
 
 ;;;;; import-popwin
+
 (use-package import-popwin
   :ensure t
   :commands (import-popwin))
 
 
 ;;;; prettier-js
+
 (use-package prettier-js
   :ensure t
   :commands (prettier-js))
 
 
 ;;;; prodigy
+
 (use-package prodigy
   :disabled t
   :ensure t
@@ -8315,8 +8868,8 @@ otherwise use the subtree title."
     (bind-key "RET" 'my-prodigy-display-process prodigy-mode-map)))
 
 
-
 ;;;; prog-mode
+
 (use-package prog-mode
   :defer
   :init
@@ -8548,8 +9101,8 @@ otherwise use the subtree title."
     (global-prettify-symbols-mode)))
 
 
-
 ;;;; projectile
+
 (use-package projectile
   :ensure t
   :defer 1.4
@@ -8650,7 +9203,10 @@ otherwise use the subtree title."
                    list-buffers-directory
                    default-directory))
         (setq-local projectile-enable-caching t)))
+
+
 ;;;;; persp-projectile
+
     (use-package persp-projectile
       :ensure t
       :commands projectile-persp-switch-project)
@@ -8669,12 +9225,14 @@ otherwise use the subtree title."
 
 
 ;;;; protobuf-mode
+
 (use-package protobuf-mode
   :ensure t
   :mode (("\\.proto\\'" . protobuf-mode)))
 
 
 ;;;; pt
+
 (use-package pt
   :ensure t
   :commands (pt-regexp projectile-pt projectile-pt-file-pattern)
@@ -8705,12 +9263,14 @@ otherwise use the subtree title."
 
 
 ;;;; pushbullet
+
 (use-package pushbullet
   :ensure t
   :commands pushbullet)
 
 
 ;;;; python
+
 (use-package python
   :commands python-mode
   :mode ("\\.py\\'" . python-mode)
@@ -8850,6 +9410,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;;; py-smart-operator
+
 (use-package py-smart-operator
   :commands (py-smart-operator-mode)
   :init
@@ -8859,6 +9420,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; python-django
+
 (use-package python-django
   :ensure t
 
@@ -8877,6 +9439,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; python-environment
+
 (use-package python-environment
   :ensure t
   :defer
@@ -8886,15 +9449,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
           python-environment-default-root-name "emacs-default")))
 
 
-
-
 ;;;; qml-mode
+
 (use-package qml-mode
   :ensure t
   :mode (("\\.qml\\'" . qml-mode)))
 
 
 ;;;; quick-buffer-switch
+
 (use-package quick-buffer-switch
   :ensure t
   :commands (quick-buffer-switch)
@@ -8988,6 +9551,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; quick-jump
+
 (use-package quick-jump
   :commands (quick-jump-default-keybinding
              quick-jump-push-marker
@@ -8997,6 +9561,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; quickrun
+
 (use-package quickrun
   :ensure t
   :if (not noninteractive)
@@ -9009,12 +9574,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rainbow-blocks
+
 (use-package rainbow-blocks
   :ensure t
   :commands rainbow-blocks-mode)
 
 
 ;;;; rainbow-delimiters
+
 (use-package rainbow-delimiters
   :ensure t
   :commands rainbow-delimiters-mode
@@ -9030,6 +9597,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rainbow-identifiers
+
 (use-package rainbow-identifiers
   :ensure t
   :commands rainbow-identifiers-mode
@@ -9045,6 +9613,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rainbow-mode
+
 (use-package rainbow-mode
   :ensure t
   :if (and
@@ -9059,6 +9628,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; real-auto-save
+
 (use-package real-auto-save
   :ensure t
   :disabled t
@@ -9073,6 +9643,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; realgud
+
 (use-package realgud
   :ensure realgud
   :commands (realgud-pdb realgud-gdb pdb)
@@ -9085,6 +9656,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; recentf
+
 (use-package recentf
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :bind (("C-x f R" . find-recent-file))
@@ -9173,12 +9745,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; regex-tool
+
 (use-package regex-tool
   :ensure t
   :commands (regex-tool))
 
 
 ;;;; region-bindings-mode
+
 (use-package region-bindings-mode
   :if (and
        (not noninteractive)
@@ -9235,6 +9809,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; request
+
 (use-package request
   :ensure t
   :defer
@@ -9245,12 +9820,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; restclient
+
 (use-package restclient
   :ensure t
   :commands restclient-mode)
 
 
 ;;;; revbufs
+
 (use-package revbufs
   :commands revbufs
   ;; :bind (("M-o r" . revbufs))
@@ -9258,12 +9835,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rinari
+
 (use-package rinari
   :ensure t
   :commands (rinari-launch rinari-minor-mode))
 
 
 ;;;; rings
+
 (use-package rings
   :ensure t
   :if (not noninteractive)
@@ -9295,6 +9874,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rotate
+
 (use-package rotate
   :ensure t
   :commands rotate-layout
@@ -9302,6 +9882,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ruby-block
+
 (use-package ruby-block
   :ensure t
   :commands ruby-block-mode
@@ -9314,6 +9895,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ruby-electric
+
 (use-package ruby-electric
   :ensure t
   :commands ruby-electric-mode
@@ -9327,6 +9909,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ruby-mode
+
 (use-package ruby-mode
   :commands ruby-mode
   :mode (("\\.rake\\'" . ruby-mode)
@@ -9338,12 +9921,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; rust-mode
+
 (use-package rust-mode
   :ensure t
   :mode (("\\.rss\\'" . rust-mode)))
 
 
 ;;;; rvm
+
 (use-package rvm
   :ensure t
   :commands (rvm-use
@@ -9351,6 +9936,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; sauron
+
 (use-package sauron
   :ensure t
   :if (and window-system (eq system-type 'gnu/linux))
@@ -9358,6 +9944,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; savehist
+
 (use-package savehist
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
@@ -9376,6 +9963,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; saveplace
+
 (use-package saveplace
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
@@ -9390,6 +9978,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; sclang
+
 (use-package sclang
   :disabled t
   :commands (sclang-start
@@ -9399,6 +9988,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; scratch
+
 (use-package scratch
   :ensure t
   :commands (scratch
@@ -9406,6 +9996,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; scroll-restore
+
 (use-package scroll-restore
   :ensure t
   :if (not noninteractive)
@@ -9431,6 +10022,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; scss-mode
+
 (use-package scss-mode
   :ensure t
   :commands scss-mode
@@ -9444,6 +10036,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; semantic
+
 (use-package semantic
   :commands (my-semantic-setup)
   :init
@@ -9467,6 +10060,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; server
+
 (use-package server
   :commands server-start-maybe
   :init
@@ -9485,6 +10079,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; sgml-mode
+
 (use-package sgml-mode
   :commands html-mode
   :init
@@ -9497,6 +10092,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; sh-script
+
 (use-package sh-script
   :defer
   :init
@@ -9505,12 +10101,16 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      sh-basic-offset 2
      sh-indentation 2)))
 
+
 ;;;; sheet-mode
+
 (use-package sheet-mode
   :commands (sheet-mode)
   :mode "notes/cheat/.*$")
 
+
 ;;;; shift-text
+
 (use-package shift-text
   :ensure t
   :bind (("S-<down>" . shift-text-down)
@@ -9537,6 +10137,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; shm
+
 (use-package shm
   :ensure t
   :if (not noninteractive)
@@ -9544,6 +10145,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; show-css
+
 (use-package show-css
   :ensure t
   :disabled t
@@ -9560,6 +10162,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; shr
+
 (use-package shr
   :defer
   :init
@@ -9568,12 +10171,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; simple-call-tree
+
 (use-package simple-call-tree
   :ensure t
   :defer)
 
 
 ;;;; simple-httpd
+
 (use-package simple-httpd
   :ensure t
   :commands httpd-start
@@ -9589,6 +10194,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; simpleclip
+
 (use-package simpleclip
   :ensure t
   :commands (simpleclip-mode simpleclip-set-contents
@@ -9616,12 +10222,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; simplezen
+
 (use-package simplezen
   :ensure t
   :commands (simplezen-expand))
 
 
 ;;;; skewer-mode
+
 (use-package skewer-mode
   :ensure t
   :commands (skewer-mode skewer-reload-page)
@@ -9633,10 +10241,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :config
   (progn
 
+
 ;;;;; skewer-html
+
     (use-package skewer-html)
 
+
 ;;;;; skewer-css
+
     (use-package skewer-css)
 
     (defun skewer-reload-page ()
@@ -9673,12 +10285,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; slim-mode
+
 (use-package slim-mode
   :ensure t
   :mode ("\\.slim\\'" . slim-mode))
 
 
 ;;;; slime
+
 (use-package slime
   :ensure t
   :commands (slime slime-connect)
@@ -9688,6 +10302,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; smart-forward
+
 (use-package smart-forward
   :ensure t
   :disabled t
@@ -9698,6 +10313,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; smart-shift
+
 (use-package smart-shift
   :ensure t
   :commands smart-shift-mode
@@ -9706,6 +10322,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; smartparens
+
 (use-package smartparens
   :ensure t
   ;; :pin "melpa-stable"
@@ -9797,6 +10414,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; smeargle
+
 (use-package smeargle
   :ensure t
   :commands (smeargle
@@ -9805,6 +10423,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; smex
+
 (use-package smex
   :ensure t
   :if (and (not degrade-p-minimalism))
@@ -9826,23 +10445,27 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; solarized-theme-utils
+
 (use-package solarized-theme-utils
   :commands solarized-import-faces)
 
 
 ;;;; sos
+
 (use-package sos
   :ensure t
   :commands sos)
 
 
 ;;;; sourcetalk
+
 (use-package sourcetalk
   :ensure t
   :commands (sourcetalk-start-external-conference))
 
 
 ;;;; speedbar
+
 (use-package speedbar
   :defer
   :init
@@ -9927,32 +10550,36 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ))
 
 
-
 ;;;; sqlite
+
 (use-package sqlite
   :ensure t
   :defer)
 
 
 ;;;; string-edit
+
 (use-package string-edit
   :ensure t
   :commands (string-edit-at-point))
 
 
 ;;;; string-inflection
+
 (use-package string-inflection
   :ensure t
   :commands string-inflection-cycle)
 
 
 ;;;; stripe-buffer
+
 (use-package stripe-buffer
   :ensure t
   :commands (stripe-buffer-mode))
 
 
 ;;;; subword
+
 (use-package subword
   :defer t
   :diminish ""
@@ -9960,7 +10587,10 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (unless noninteractive
       (global-subword-mode))))
+
+
 ;;;; sunrise-commander
+
 (use-package sunrise-commander
   :disabled t
   :ensure t
@@ -9969,18 +10599,22 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; swift-mode
+
 (use-package swift-mode
   :ensure t
   :mode (("\\.swift\\'" . swift-mode)))
 
 
 ;;;; swiper
+
 (use-package swiper
   :ensure t
   :commands (swiper-isearch
              swiper-isearch-backward))
 
+
 ;;;; switch-window
+
 (use-package switch-window
   :ensure t
   :disabled t
@@ -9988,6 +10622,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; swoop
+
 (use-package swoop
   :ensure t
   :disabled t
@@ -9995,12 +10630,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; sws-mode
+
 (use-package sws-mode
   :ensure t
   :commands sws-mode)
 
 
 ;;;; sx-load
+
 (use-package sx-load
   :ensure sx
   :commands (sx-inbox sx-search)
@@ -10011,6 +10648,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; syslog-mode
+
 (use-package syslog-mode
   :ensure t
   :mode (("var/log/syslog.*\\'" . syslog-mode)
@@ -10020,6 +10658,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tabbar
+
 (use-package tabbar
   :disabled t
   :ensure t
@@ -10041,11 +10680,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; table
+
 (use-package table
   :commands table-recognize)
 
 
 ;;;; tagedit
+
 (use-package tagedit
   :ensure t
   :commands (tagedit-mode)
@@ -10064,8 +10705,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (bind-key "s-<return>" 'tagedit-toggle-multiline-tag tagedit-mode-map)))
 
 
-
 ;;;; tagedit
+
 (use-package tagedit
   :ensure t
   :commands (tagedit-forward-slurp-tag tagedit-forward-barf-tag
@@ -10073,12 +10714,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tex
+
 (use-package tex
   :ensure auctex
   :defer)
 
 
 ;;;; textile-mode
+
 (use-package textile-mode
   :ensure t
   :commands textile-mode
@@ -10086,10 +10729,12 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; thingopt
+
 (use-package thingopt :ensure t :defer)
 
 
 ;;;; todotxt
+
 (use-package todotxt
   :ensure t
   :commands todotxt
@@ -10100,6 +10745,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; toggle-quotes
+
 (use-package toggle-quotes
   :ensure t
   :commands (toggle-quotes)
@@ -10107,6 +10753,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; toml-mode
+
 (use-package toml-mode
   :ensure t
   :mode (("\\.toml\\'" . toml-mode)
@@ -10114,12 +10761,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tox
+
 (use-package tox
   :ensure t
   :commands (tox-current-test tox-current-cast))
 
 
 ;;;; traad
+
 (use-package traad
   :ensure t
   :commands (
@@ -10137,7 +10786,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (setq traad-save-unsaved-buffers 'always)))
 
+
 ;;;; tramp
+
 (use-package tramp
   :defer
   :init
@@ -10149,6 +10800,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tramp
+
 (use-package tramp
   :defer
   :init
@@ -10174,6 +10826,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; transient
+
 (use-package transient
   :ensure t
   :defer t
@@ -10188,12 +10841,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; transmission
+
 (use-package transmission
   :ensure t
   :commands transmission)
 
 
 ;;;; transpose-frame
+
 (use-package transpose-frame
   :commands (flip-frame flop-frame)
   :bind (("M-o M-f" . flop-frame))
@@ -10204,12 +10859,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tree-mode
+
 (use-package tree-mode
   :ensure t
   :defer)
 
 
 ;;;; truthy
+
 (use-package truthy
   :ensure t
   :commands (truthy
@@ -10218,12 +10875,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; tuareg
+
 (use-package tuareg
   :ensure t
   :mode ("\\.ml[ip]?\\'" . tuareg-mode))
 
 
 ;;;; type-break
+
 (use-package type-break
   :defer
   :disabled t
@@ -10246,6 +10905,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; typescript-mode
+
 (use-package typescript-mode
   :ensure t
   :commands (typescript-mode)
@@ -10261,12 +10921,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; unbound
+
 (use-package unbound
   :ensure t
   :commands describe-unbound-keys)
 
 
 ;;;; undo-tree
+
 (use-package undo-tree
   :ensure t
   :if (not noninteractive)
@@ -10300,6 +10962,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; unfill
+
 (use-package unfill
   :ensure t
   :commands (unfill-region unfill-paragraph toggle-fill-unfill)
@@ -10307,6 +10970,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; uniquify
+
 (use-package uniquify
   :if (and (not degrade-p-minimalism) (not noninteractive))
   :init
@@ -10320,12 +10984,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; vagrant
+
 (use-package vagrant
   :ensure t
   :commands (vagrant-up vagrant-ssh))
 
 
 ;;;; vc
+
 (use-package vc
   :defer
   :init
@@ -10366,6 +11032,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; virtualenvwrapper
+
 (use-package virtualenvwrapper
   :ensure t
   :commands (venv-workon
@@ -10386,6 +11053,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; visible-mark
+
 (use-package visible-mark
   :ensure t
   :commands (visible-mark-mode global-visible-mark-mode)
@@ -10398,6 +11066,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; visual-regexp
+
 (use-package visual-regexp
   :ensure t
   :commands (vr/replace vr/query-replace)
@@ -10409,6 +11078,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; vkill
+
 (use-package vkill
   :commands vkill
   :if (not noninteractive)
@@ -10426,6 +11096,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; volatile-highlights
+
 (use-package volatile-highlights
   :ensure t
   :commands volatile-highlights-mode
@@ -10439,6 +11110,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; volume
+
 (use-package volume
   :ensure t
   :commands (volume volume-mode volume-set volume-set-to-0% volume-or-set-card)
@@ -10464,6 +11136,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; w3m
+
 (use-package w3m
   :ensure t
   :disabled t
@@ -10540,6 +11213,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; wakatime-mode
+
 (use-package wakatime-mode
   :ensure t
   :if (and (not noninteractive) (not degrade-p-minimalism))
@@ -10557,6 +11231,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; web-mode
+
 (use-package web-mode
   :ensure t
   :mode (("\\.phtml\\'" . web-mode) ("\\.erb\\'" . web-mode)
@@ -10606,12 +11281,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; websocket
+
 (use-package websocket
   :ensure t
   :commands websocket-open)
 
 
 ;;;; weechat
+
 (use-package weechat
   :ensure t
   :commands (weechat-connect)
@@ -10646,12 +11323,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; wgrep
+
 (use-package wgrep
   :ensure t
   :commands (wgrep-setup))
 
 
 ;;;; which-func
+
 (use-package which-func
   :commands (which-func-mode)
   :if (and (not noninteractive) (not degrade-p-minimalism))
@@ -10675,11 +11354,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; whitespace
+
 (use-package whitespace
   :bind (("M-o w" . whitespace-cleanup)))
 
 
 ;;;; whitespace-cleanup-mode
+
 (use-package whitespace-cleanup-mode
   :disabled t
   :ensure t
@@ -10689,7 +11370,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (global-whitespace-cleanup-mode)))
 
+
 ;;;; whole-line-funcs
+
 (use-package whole-line-funcs
   :commands (whole-line-mark-previous
              whole-line-mark-next)
@@ -10698,6 +11381,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; whole-line-or-region
+
 (use-package whole-line-or-region
   :disabled t
   :ensure t
@@ -10734,8 +11418,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (bind-key "C-c ;" 'comment-or-uncomment-region-or-line)
 
 
-
 ;;;; windmove
+
 (use-package windmove
   :if (not noninteractive)
   :commands windmove-find-other-window
@@ -10751,12 +11435,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; window-layout
+
 (use-package window-layout
   :ensure t
   :commands (wlf:layout))
 
 
 ;;;; winner
+
 (use-package winner
   :if (and (not degrade-p-minimalism) (not noninteractive))
   :bind (("M-N" . winner-redo)
@@ -10776,6 +11462,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; with-editor
+
 (use-package with-editor
   :ensure t
   :defer t
@@ -10787,6 +11474,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ws-butler
+
 (use-package ws-butler
   ;; :disabled t ;; FIXME something else prohibits restoring point after save
   ;; NOTE It seems like ws-butler has started working again
@@ -10802,12 +11490,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ws-trim
+
 (use-package ws-trim
   :disabled t
   :ensure t)
 
 
 ;;;; xkcd
+
 (use-package xkcd
   :ensure t
   :commands (xkcd-get
@@ -10820,6 +11510,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; xterm-color
+
 (use-package xterm-color
   :ensure t
   :disabled t
@@ -10832,6 +11523,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; yaml-mode
+
 (use-package yaml-mode
   :ensure t
   :commands yaml-mode
@@ -10848,6 +11540,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; yasnippet
+
 (use-package yasnippet
   :ensure t
   :commands (yas-reload-all yas-global-mode yas-minor-mode snippet-mode
@@ -10897,6 +11590,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;;; autoinsert
+
     (use-package autoinsert
       :disabled t
       :if (not noninteractive)
@@ -11031,6 +11725,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; zeal-at-point
+
 (use-package zeal-at-point
   :ensure t
   :commands zeal-at-point
@@ -11073,6 +11768,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; zencoding-mode
+
 (use-package zencoding-mode
   :ensure t
   :if (not degrade-p-minimalism)
@@ -11088,6 +11784,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 
 ;;;; ztree
+
 (use-package ztree
   :disabled t
   :ensure t
@@ -11097,12 +11794,15 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;; settings that might have been set by loading libraries
 
 ;;;; set cursor options
+
 (setq-default blink-cursor-mode t
               blink-cursor-interval 0.6
               cursor-type 'bar)
 (blink-cursor-mode)
 
+
 ;;; workspace-hook
+
 (defun  my-workspace-hook()
   "workspace specific hook function."
   t
@@ -11132,7 +11832,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                     0 nil '(lambda ()
                              (tool-bar-mode -1))) nil)))
 
+
 ;;; print start up times to *emacslog*
+
 (when (and load-file-name
            (not noninteractive))
   (add-hook 'after-init-hook
@@ -11158,6 +11860,8 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                                  (setq prev v))
                              times))))))
             t))
+
+
 ;;; File local vars
 
 ;; Local Variables:
@@ -11166,5 +11870,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;; End:
 
 (provide 'init)
+
 
 ;;; init.el ends here
