@@ -3330,6 +3330,16 @@ for the current buffer's file name, and the line number at point."
     (back-button-mode 1)))
 
 
+;;;; backline
+
+(use-package backline
+  :ensure t
+  :after outline
+  :config
+  (progn
+    (advice-add 'outline-flag-region :after 'backline-update)))
+
+
 ;;;; backup-walker
 
 (use-package backup-walker
@@ -7728,17 +7738,6 @@ already present."
   :commands moz-minor-mode)
 
 
-;;;; outline-minor-faces
-
-(use-package outline-minor-faces
-  :ensure t
-  :after outline
-  :config
-  (progn
-    (add-hook 'outline-minor-mode-hook
-              'outline-minor-faces-add-font-lock-keywords)))
-
-
 ;;;; mu4e
 
 (use-package mu4e
@@ -7888,16 +7887,6 @@ Titus von der Malsburg."
   (progn
     (bind-key "C-s" 'phi-search mc/keymap)
     (bind-key "C-r" 'phi-search-backward mc/keymap)))
-
-
-;;;; backline
-
-(use-package backline
-  :ensure t
-  :after outline
-  :config
-  (progn
-    (advice-add 'outline-flag-region :after 'backline-update)))
 
 
 ;;;; mwe-log-commands
@@ -8516,6 +8505,17 @@ otherwise use the subtree title."
 (use-package outline
   :defer
   :diminish ((outline-minor-mode . "")))
+
+
+;;;; outline-minor-faces
+
+(use-package outline-minor-faces
+  :ensure t
+  :after outline
+  :config
+  (progn
+    (add-hook 'outline-minor-mode-hook
+              'outline-minor-faces-add-font-lock-keywords)))
 
 
 ;;;; outshine
