@@ -7218,7 +7218,19 @@ already present."
   :commands moz-minor-mode)
 
 
+;;;; outline-minor-faces
+
+(use-package outline-minor-faces
+  :ensure t
+  :after outline
+  :config
+  (progn
+    (add-hook 'outline-minor-mode-hook
+              'outline-minor-faces-add-font-lock-keywords)))
+
+
 ;;;; mu4e
+
 (use-package mu4e
   :if (file-exists-p "~/.mail/gmail")
   :commands (mu4e
@@ -7365,13 +7377,26 @@ Titus von der Malsburg."
     (bind-key "C-r" 'phi-search-backward mc/keymap)))
 
 
+;;;; backline
+
+(use-package backline
+  :ensure t
+  :after outline
+  :config
+  (progn
+    (advice-add 'outline-flag-region :after 'backline-update)))
+
+
 ;;;; mwe-log-commands
+
 (use-package mwe-log-commands
   :ensure t
-  :commands (mwe:log-keyboard-commands mwe:open-command-log-buffer))
+  :commands (mwe:log-keyboard-commands
+             mwe:open-command-log-buffer))
 
 
 ;;;; my-jumps
+
 (use-package my-jumps
   :ensure jump
 
@@ -11137,7 +11162,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;; Local Variables:
 ;; eval: (outline-minor-mode 1)
-;; eval: (outshine-mode 1)
 ;; eval: (require 'use-package)
 ;; End:
 
