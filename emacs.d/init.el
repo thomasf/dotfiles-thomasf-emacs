@@ -3750,22 +3750,7 @@ for the current buffer's file name, and the line number at point."
      cua-rectangle-mark-key [(control return)])
     ;; cua-mode seems to prohibit mark to be deactivated properly on the emacs-25 branch (2016-04-08 18:33)
     ;; (cua-mode t)
-    )
-  :config
-  (progn
-    ;; smartparens references cua-replace-region (cua-base.el), which has been
-    ;; removed in Emacs 24.3.50.2
-    (unless (fboundp 'cua-replace-region)
-      (defun cua-replace-region ()
-        "Replace the active region with the character you type."
-        (interactive)
-        (let ((not-empty (and cua-delete-selection (cua-delete-region))))
-          (unless (eq this-original-command this-command)
-            (let ((overwrite-mode
-                   (and overwrite-mode
-                        not-empty
-                        (not (eq this-original-command 'self-insert-command)))))
-              (cua--fallback))))))))
+    ))
 
 
 ;;;; cuda-mode
