@@ -807,7 +807,6 @@ re-downloaded in order to locate PACKAGE."
 (bind-key "RET" 'reindent-then-newline-and-indent lisp-mode-shared-map)
 (bind-key "C-\\" 'lisp-complete-symbol lisp-mode-shared-map)
 (bind-key "C-c v" 'eval-buffer lisp-mode-shared-map)
-(bind-key "M-o !" 'my-emacs-cleanup)
 (bind-key* "M-j" 'my-join-line)
 (bind-key "C-a" 'beginning-of-line-or-indentation)
 (bind-key "H-n" 'my-scroll-other-window-up)
@@ -1137,10 +1136,7 @@ re-downloaded in order to locate PACKAGE."
          (nav-flash-show))))
 
 
-
-
-;;; functions
-
+;;; functions
 
 ;;;; misc...
 
@@ -1234,15 +1230,6 @@ re-downloaded in order to locate PACKAGE."
   "Kill all org buffers."
   (interactive)
   (kill-buffers 'org-mode))
-
-(defun my-emacs-cleanup ()
-  "Kill some buffers."
-  (interactive)
-  (kill-buffers 'emacs-lisp-mode)
-  (when (fboundp 'org-save-all-org-buffers)
-    (org-save-all-org-buffers))
-  (kill-buffers 'org-mode)
-  (kill-buffers 'dired-mode))
 
 
 ;;;;; kill this buffer if not modified
@@ -5173,36 +5160,7 @@ See URL `https://github.com/golang/lint'."
       (progn
         (add-hook 'go-mode-hook 'go-eldoc-setup)))
 
-    (require 'go-expanderr nil t)
-
-    ;; (use-package lsp-go
-    ;;   :disabled t
-    ;;   :ensure t
-    ;;   :commands (lsp-go-enable)
-    ;;   :init
-    ;;   (progn
-    ;;     (setq lsp-go-gocode-completion-enabled t)
-    ;;     (add-hook 'go-mode-hook 'lsp-go-enable)))
-    ;; (add-hook 'go-mode-hook 'lsp-mode)
-
-
-    (use-package go-autocomplete
-      :disabled t
-      :ensure t
-      :init
-      (progn
-
-        (use-package auto-complete :ensure t)
-        (add-hook 'go-mode-hook
-                  #'(lambda ()
-                      ;;; NOTE placing ac-source-yasnippet first is a work around.
-                      ;; This is probably still an issue for modes where ac-source-yasnippet is
-                      ;; not the last source.. (maybe) any source that has a prefix parser must
-                      ;; be placed last until this issue is resolved.
-                      ;; auto-complete/auto-complete#348 (comment)
-                      (setq ac-sources
-                            '(ac-source-yasnippet
-                              ac-source-go))))))))
+    (require 'go-expanderr nil t)))
 
 
 ;;;;; go-traceback
@@ -9641,65 +9599,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (recentf-mode 1)
       (if (find-file (ido-completing-read "Find recent file: " recentf-list))
           (message "Opening file...")
-        (message "Aborting"))))
-  :config
-  (progn
-    ;;; TODO: this doesnt seem to work as expected anymore
-    ;;   (defvar recentfs-list-on-last-sync nil
-    ;;       "List of recent files reference point.")
-
-    ;;     (defun recentfs-update-sync ()
-    ;;       "Load saved projects from `recentf-list'."
-    ;;       (setq recentfs-list-on-last-sync
-    ;;             (and (sequencep recentf-list)
-    ;;                (copy-sequence recentf-list))))
-
-    ;;     (defadvice recentf-load-list (after recentfs-loaded-sync activate)
-    ;;       (recentfs-update-sync))
-
-    ;;     (defadvice recentf-save-list (around recentfs activate)
-    ;;       (recentfs-merge-lists)
-    ;;       ad-do-it
-    ;;       (recentfs-update-sync))
-
-    ;;     (defun recentfs-load-list ()
-    ;;       "Load a previously saved recent list and return it as a value
-    ;; instead of setting it."
-    ;;       (let ((file (expand-file-name recentf-save-file))
-    ;;             (recentf-filter-changer-current nil) ;; ignored atm
-    ;;             (recentf-list nil))
-    ;;         (when (file-readable-p file)
-    ;;           (load-file file))
-    ;;         recentf-list))
-
-    ;;     (defun recentfs-merge-lists ()
-    ;;       "Merge any change from `recentf-list'.
-
-    ;; This enables multiple Emacs processes to make changes without
-    ;; overwriting each other's changes."
-    ;;       (let* ((known-now recentf-list)
-    ;;              (known-on-last-sync recentfs-list-on-last-sync)
-    ;;              (known-on-file (recentfs-load-list))
-    ;;              (removed-after-sync (-difference known-on-last-sync known-now))
-    ;;              (removed-in-other-process
-    ;;               (-difference known-on-last-sync known-on-file))
-    ;;              (new-in-other-process
-    ;;               (-difference
-    ;;                known-on-file
-    ;;                (-concat removed-after-sync removed-in-other-process known-now)))
-    ;;              (result (-distinct
-    ;;                       (-difference
-    ;;                        (-concat new-in-other-process known-now)
-    ;;                        (-concat removed-after-sync removed-in-other-process)))))
-    ;;         (setq recentf-list result)))
-
-    ;;     (cl-letf (((symbol-function 'message)
-    ;;                (lambda (fmt &rest _))))
-    ;;       (recentf-mode 1))
-
-    )
-
-  )
+        (message "Aborting")))))
 
 
 ;;;; regex-tool
@@ -9761,9 +9661,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (define-key region-bindings-mode-map "x" 'exchange-dot-and-mark)
     (define-key region-bindings-mode-map "d" 'er/mark-defun)
     (define-key region-bindings-mode-map "g" 'keyboard-quit)
-    (define-key region-bindings-mode-map "s" search-map))
-
-  )
+    (define-key region-bindings-mode-map "s" search-map)))
 
 
 ;;;; request
