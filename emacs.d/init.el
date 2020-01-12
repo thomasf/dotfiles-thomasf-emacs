@@ -394,12 +394,26 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;;; defined in elisp source
-;;;;; subr
-;; misc Emacs settings not directly related to loading a package
-(defalias 'yes-or-no-p 'y-or-n-p)
+;;;;; ansi-color
+(setq ansi-color-for-comint-mode t)
 
 ;;;;; apropos
 (setq apropos-do-all t)
+
+;;;;; bookmark
+(setq bookmark-default-file (expand-file-name
+                             "bookmarks" user-data-directory))
+;;;;; browse-url
+(when (eq 'gnu/linux system-type)
+  (setq
+   browse-url-browser-function 'browse-url-generic
+   browse-url-generic-program "sensible-browser"))
+
+;;;;; cedet
+(setq srecode-map-save-file (expand-file-name
+                             "srecode-map.el" user-data-directory))
+;;;;; eshell
+(setq eshell-directory-name (expand-file-name user-data-directory))
 
 ;;;;; files.el
 (setq confirm-kill-emacs 'yes-or-no-p)
@@ -411,11 +425,6 @@ re-downloaded in order to locate PACKAGE."
   ;; (global-font-lock-mode t)
   )
 
-;;;;; silence successful auto saving
-(defadvice do-auto-save (around do-auto-save-silent activate)
-  (ad-set-arg 0 t)
-  ad-do-it)
-
 ;;;;; jit-lock
 (setq jit-lock-stealth-time nil
       jit-lock-stealth-nice 0.03
@@ -425,24 +434,9 @@ re-downloaded in order to locate PACKAGE."
       ;; jit-lock-defer-time 0.05
       )
 
-;;;;; ansi-color
-(setq ansi-color-for-comint-mode t)
+;;;;; man
+(setq Man-notify-method 'pushy)
 
-;;;;; mule / conding.c
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
-(set-selection-coding-system 'utf-8)
-(prefer-coding-system 'utf-8)
-(set-language-environment "UTF-8")
-(define-coding-system-alias 'UTF-8 'utf-8)
-
-
-;;;;; bookmark
-(setq bookmark-default-file (expand-file-name
-                             "bookmarks" user-data-directory))
-;;;;; cedet
-(setq srecode-map-save-file (expand-file-name
-                             "srecode-map.el" user-data-directory))
 ;;;;; message (for gmail)
 ;; set up for gmail
 (setq message-send-mail-function 'smtpmail-send-it
@@ -456,12 +450,22 @@ re-downloaded in order to locate PACKAGE."
   (add-to-list ;; add initials to complete list
    'completion-styles 'initials t))
 
-;;;;; tooltip
-(setq tooltip-delay 0.8
-      ;;tooltip-hide-delay 10
-      ;;tooltip-recent-seconds 1
-      x-gtk-use-system-tooltips nil)
+;;;;; mule / conding.c
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+(set-language-environment "UTF-8")
+(define-coding-system-alias 'UTF-8 'utf-8)
 
+
+;;;;; paragraphs
+(setq sentence-end-double-space nil)
+
+;;;;; silence successful auto saving
+(defadvice do-auto-save (around do-auto-save-silent activate)
+  (ad-set-arg 0 t)
+  ad-do-it)
 
 ;;;;; simple
 (setq column-number-mode t
@@ -475,24 +479,24 @@ re-downloaded in order to locate PACKAGE."
      (setq interprogram-paste-function
            'x-cut-buffer-or-selection-value))
 
-;;;;; browse-url
-(when (eq 'gnu/linux system-type)
-  (setq
-   browse-url-browser-function 'browse-url-generic
-   browse-url-generic-program "sensible-browser"))
+;;;;; subr
+;; misc Emacs settings not directly related to loading a package
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;;;;; tooltip
+(setq tooltip-delay 0.8
+      ;;tooltip-hide-delay 10
+      ;;tooltip-recent-seconds 1
+      x-gtk-use-system-tooltips nil)
+
+
+;;;;; tracking
+(setq tracking-most-recent-first t)
+
 
 ;;;;; url
 (setq url-configuration-directory (expand-file-name
                                    "url/" user-data-directory))
-
-;;;;; man
-(setq Man-notify-method 'pushy)
-
-;;;;; paragraphs
-(setq sentence-end-double-space nil)
-
-;;;;; eshell
-(setq eshell-directory-name (expand-file-name user-data-directory))
 
 ;;;;; whitespace-mode
 (setq-default whitespace-line-column nil)
@@ -503,34 +507,7 @@ re-downloaded in order to locate PACKAGE."
 (setq switch-to-buffer-preserve-window-point t)
 
 
-;;;;; tracking
-(setq tracking-most-recent-first t)
-
-
-
 ;;;; defined in c source
-;;;;; keyboard.c
-(setq-default echo-keystrokes 0.1)
-
-
-;;;;; minibuf.c
-(setq-default enable-recursive-minibuffers nil) ;; NOTE
-                                                ;; enable-recursive-minibuffers
-                                                ;; this can be quite confusing
-
-;;;;; fns.c
-(setq-default use-dialog-box nil)
-
-;;;;; xfns.c
-(setq-default x-gtk-file-dialog-help-text nil)
-
-
-;;;;; coding.c
-(setq-default locale-coding-system 'utf-8)
-(transient-mark-mode 1)
-(make-variable-buffer-local 'transient-mark-mode)
-(put 'transient-mark-mode 'permanent-local t)
-
 
 ;;;;; buffer.c
 (setq-default tab-width 4
@@ -540,13 +517,65 @@ re-downloaded in order to locate PACKAGE."
               fringes-outside-margins t)
 
 
-;;;;; indent.c
-(setq-default indent-tabs-mode nil)
+;;;;; coding.c
+(setq-default locale-coding-system 'utf-8)
+(transient-mark-mode 1)
+(make-variable-buffer-local 'transient-mark-mode)
+(put 'transient-mark-mode 'permanent-local t)
 
+
+;;;;; dired.c
+(setq-default completion-ignored-extensions
+              '("-min.css" "-min.js" ".a" ".annot" ".aux" ".bbl" ".bbl" ".bin"
+              ".blg" ".blg" ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt"
+              ".cmti" ".cmx" ".cmxa" ".cp" ".cp" ".cps" ".cps" ".d64fsl"
+              ".dfsl" ".dx32fsl" ".dx64fsl" ".dxl" ".elc" ".fas" ".fasl" ".fmt"
+              ".fn" ".fn" ".fns" ".fns" ".fsl" ".fx32fsl" ".fx64fsl" ".git/"
+              ".glo" ".glo" ".gmo" ".hg/" ".hi" ".idx" ".idx" ".ky" ".ky"
+              ".kys" ".kys" ".la" ".lbin" ".lib" ".ln" ".lo" ".lof" ".lof"
+              ".lot" ".lot" ".lx32fsl" ".lx64fsl" ".map" ".mem" ".min.css"
+              ".min.js" ".mo" ".o" ".p64fsl" ".pfsl" ".pg" ".pg" ".pgs" ".pgs"
+              ".pyc" ".pyo" ".pyx" ".rbc" ".sass-cache" ".so" ".sparcf" ".svn/"
+              ".sx32fsl" ".sx64fsl" ".test" ".tfm" ".toc" ".tp" ".tp" ".tps"
+              ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl"
+              ".x86f" "CVS/" "_MTN/" "_darcs/" "~"))
 
 ;;;;; dispnew.c
 (setq-default visible-bell nil)
 
+
+;;;;; fileio.c
+(setq-default delete-by-moving-to-trash t)
+
+
+;;;;; filelock.c
+(setq-default create-lockfiles nil)
+
+
+;;;;; fns.c
+(setq-default use-dialog-box nil)
+
+;;;;; indent.c
+(setq-default indent-tabs-mode nil)
+
+
+;;;;; keyboard.c
+(setq-default echo-keystrokes 0.1)
+
+
+;;;;; lread.c
+(setq-default load-prefer-newer t)
+
+
+;;;;; minibuf.c
+(setq-default enable-recursive-minibuffers nil) ;; NOTE
+                                                ;; enable-recursive-minibuffers
+                                                ;; this can be quite confusing
+
+;;;;; undo.c
+(setq-default undo-limit (* 80 1024 1024)
+              undo-strong-limit (* 200 1024 1024)
+              undo-outer-limit (* 50 1024 1024))
 
 ;;;;; xdisp.c
 (setq-default frame-title-format
@@ -575,39 +604,143 @@ re-downloaded in order to locate PACKAGE."
 (setq-default truncate-partial-width-windows 50)
 
 
-;;;;; fileio.c
-(setq-default delete-by-moving-to-trash t)
+;;;;; xfns.c
+(setq-default x-gtk-file-dialog-help-text nil)
 
-
-;;;;; filelock.c
-(setq-default create-lockfiles nil)
-
-
-;;;;; lread.c
-(setq-default load-prefer-newer t)
-
-
-;;;;; dired.c
-(setq-default completion-ignored-extensions
-              '("-min.css" "-min.js" ".a" ".annot" ".aux" ".bbl" ".bbl" ".bin"
-              ".blg" ".blg" ".bzr/" ".class" ".cma" ".cmi" ".cmo" ".cmt"
-              ".cmti" ".cmx" ".cmxa" ".cp" ".cp" ".cps" ".cps" ".d64fsl"
-              ".dfsl" ".dx32fsl" ".dx64fsl" ".dxl" ".elc" ".fas" ".fasl" ".fmt"
-              ".fn" ".fn" ".fns" ".fns" ".fsl" ".fx32fsl" ".fx64fsl" ".git/"
-              ".glo" ".glo" ".gmo" ".hg/" ".hi" ".idx" ".idx" ".ky" ".ky"
-              ".kys" ".kys" ".la" ".lbin" ".lib" ".ln" ".lo" ".lof" ".lof"
-              ".lot" ".lot" ".lx32fsl" ".lx64fsl" ".map" ".mem" ".min.css"
-              ".min.js" ".mo" ".o" ".p64fsl" ".pfsl" ".pg" ".pg" ".pgs" ".pgs"
-              ".pyc" ".pyo" ".pyx" ".rbc" ".sass-cache" ".so" ".sparcf" ".svn/"
-              ".sx32fsl" ".sx64fsl" ".test" ".tfm" ".toc" ".tp" ".tp" ".tps"
-              ".tps" ".ufsl" ".vr" ".vr" ".vrs" ".vrs" ".wx32fsl" ".wx64fsl"
-              ".x86f" "CVS/" "_MTN/" "_darcs/" "~"))
 
 ;;;;; xterm.c
 (setq-default x-underline-at-descent-line t)
 
 
 ;;; key-bindings
+
+(and (eq system-type 'darwin)
+     window-system
+     (setq
+      mac-command-modifier 'meta
+      mac-right-command-modifier 'super
+      ;; mac-control-modifier
+      ;; mac-right-control-modifier
+      ;; mac-function-modifier
+      mac-option-modifier 'super
+      mac-right-option-modifier nil
+      ))
+
+;; This is very special because what I have done to my caps lock key.
+(define-key special-event-map (kbd "<key-17>") 'ignore)
+(define-key special-event-map (kbd "<M-key-17>") 'ignore)
+;; (unbind-key "C-x C-l") ;; downcase region
+;; (unbind-key "C-x C-u") ;; upcase region
+;; (unbind-key "M-l") ;; downcase word
+;; (unbind-key "M-u") ;; upcase word
+;; (unbind-key "M-c") ;; capitalize word
+(unbind-key "<mouse-3>")
+
+;; make home/end behave the same as elsewhere on 'darwin
+(bind-key "<home>" 'beginning-of-line)
+(bind-key "<end>" 'end-of-line)
+(bind-key "C-h B" 'describe-personal-keybindings)
+(bind-key "C-h I" 'info)
+(bind-key "C-h s" (lambda nil (interactive) (switch-to-buffer "*scratch*")))
+(bind-key "C-?" 'undo)
+(bind-key "C-_" 'redo)
+(bind-key* "C-." 'undo) ;; NOTE this does not work in terminals
+(bind-key* "C-," 'redo) ;; NOTE this does not work in terminals
+(bind-key "<f5>" (lambda nil (interactive) (jump-to-register ?5)))
+(bind-key "<f6>" (lambda nil (interactive) (jump-to-register ?6)))
+(bind-key "<f7>" (lambda nil (interactive) (jump-to-register ?7)))
+(bind-key "<f8>" (lambda nil (interactive) (jump-to-register ?8)))
+(bind-key "C-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
+(bind-key "C-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
+(bind-key "C-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
+(bind-key "C-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
+(bind-key "S-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
+(bind-key "S-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
+(bind-key "S-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
+(bind-key "S-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
+
+;; (bind-key "<f9>" 'previous-buffer)
+;; (bind-key "<f10>" 'next-buffer)
+;; (bind-key "<f11>" 'switch-to-buffer)
+(bind-key "<f12>" 'ibuffer)
+;; (bind-key "<f5>" 'ibuffer)
+(bind-key "C-H-n" 'forward-paragraph)
+(bind-key "C-H-p" 'backward-paragraph)
+
+(bind-key "M-H-n" 'my-next-error)
+(bind-key "M-H-p" 'my-previous-error)
+
+(bind-key "C-s-n" 'forward-paragraph)
+(bind-key "C-s-p" 'backward-paragraph)
+(bind-key "M-s-n" 'my-next-error)
+(bind-key "M-s-p" 'my-previous-error)
+
+;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
+;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
+;; (bind-key "S-C-<down>" 'shrink-window)
+;; (bind-key "S-C-<up>" 'enlarge-window)
+(unbind-key "C-<prior>")
+(unbind-key "C-<next>")
+(bind-key "<M-prior>" 'previous-error)
+(bind-key "<M-next>" 'next-error)
+;; lisp-mode TODO: maybe move?
+;;(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+(bind-key "M-o l"  'toggle-truncate-lines)
+;; (bind-key "C-c l" "lambda" lisp-mode-shared-map)
+(bind-key "RET" 'reindent-then-newline-and-indent lisp-mode-shared-map)
+(bind-key "C-\\" 'lisp-complete-symbol lisp-mode-shared-map)
+(bind-key "C-c v" 'eval-buffer lisp-mode-shared-map)
+(bind-key "M-o !" 'my-emacs-cleanup)
+(bind-key* "M-j" 'my-join-line)
+(bind-key "C-a" 'beginning-of-line-or-indentation)
+(bind-key "H-n" 'my-scroll-other-window-up)
+(bind-key "H-p" 'my-scroll-other-window-down)
+(bind-key "C-x 4 n" 'clone-buffer-and-narrow-to-function)
+(bind-key "C-x o" 'save-some-buffers-other-window)
+(bind-key "C-x C-o" 'save-some-buffers-other-frame)
+
+;; NOTE while being handy using smartrep with other-*
+;;      functions is a bit slow for some reason.
+;;
+;; (smartrep-define-key
+;;     global-map
+;;     "C-x"
+;;   '(("o" . save-some-buffers-other-window)
+;;     ("C-o" . save-some-buffers-other-frame)))
+
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
+(bind-key "C-x f f" 'find-file)
+(bind-key "C-x b b" 'switch-to-buffer)
+(bind-key "C-x C-b" 'switch-to-buffer)
+
+(bind-key "C-x b ." 'ibuffer)
+
+(bind-key "C-x b C-<SPC>" 'previous-buffer)
+(bind-key "C-x b C-n" 'next-buffer)
+
+(bind-key "C-s"  'isearch-forward-regexp)
+(bind-key "C-r"  'isearch-backward-regexp)
+(bind-key "C-M-s"  'isearch-forward)
+(bind-key "C-M-r"  'isearch-backward)
+(global-set-key (kbd "C-x C-1") 'delete-other-windows)
+(global-set-key (kbd "C-x C-2") 'split-window-below)
+(global-set-key (kbd "C-x C-3") 'split-window-right)
+(global-set-key (kbd "C-x C-0") 'delete-window)
+
+(unbind-key "M-t")
+(bind-keys
+ ;; :map undo-tree-visualizer-mode-map
+ :prefix-map my-transpose-map
+ :prefix "M-t"
+ ("c" . transpose-chars)
+ ("w" . transpose-words)
+ ("t" . transpose-words)
+ ("M-t" . transpose-words)
+ ("l" . transpose-lines)
+ ("e" . transpose-sexps)
+ ("s" . transpose-sentences)
+ ("p" . transpose-paragraphs))
+
 ;;; gui packages
 ;; it's important to set up ui before the bulk of the settings because theme
 ;; and fonts should load asap
@@ -866,133 +999,6 @@ re-downloaded in order to locate PACKAGE."
 
 
 
-
-(and (eq system-type 'darwin)
-     window-system
-     (setq
-      mac-command-modifier 'meta
-      mac-right-command-modifier 'super
-      ;; mac-control-modifier
-      ;; mac-right-control-modifier
-      ;; mac-function-modifier
-      mac-option-modifier 'super
-      mac-right-option-modifier nil
-      ))
-
-;; This is very special because what I have done to my caps lock key.
-(define-key special-event-map (kbd "<key-17>") 'ignore)
-(define-key special-event-map (kbd "<M-key-17>") 'ignore)
-;; (unbind-key "C-x C-l") ;; downcase region
-;; (unbind-key "C-x C-u") ;; upcase region
-;; (unbind-key "M-l") ;; downcase word
-;; (unbind-key "M-u") ;; upcase word
-;; (unbind-key "M-c") ;; capitalize word
-(unbind-key "<mouse-3>")
-
-;; make home/end behave the same as elsewhere on 'darwin
-(bind-key "<home>" 'beginning-of-line)
-(bind-key "<end>" 'end-of-line)
-(bind-key "C-h B" 'describe-personal-keybindings)
-(bind-key "C-h I" 'info)
-(bind-key "C-h s" (lambda nil (interactive) (switch-to-buffer "*scratch*")))
-(bind-key "C-?" 'undo)
-(bind-key "C-_" 'redo)
-(bind-key* "C-." 'undo) ;; NOTE this does not work in terminals
-(bind-key* "C-," 'redo) ;; NOTE this does not work in terminals
-(bind-key "<f5>" (lambda nil (interactive) (jump-to-register ?5)))
-(bind-key "<f6>" (lambda nil (interactive) (jump-to-register ?6)))
-(bind-key "<f7>" (lambda nil (interactive) (jump-to-register ?7)))
-(bind-key "<f8>" (lambda nil (interactive) (jump-to-register ?8)))
-(bind-key "C-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
-(bind-key "C-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
-(bind-key "C-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
-(bind-key "C-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
-(bind-key "S-<f5>" (lambda nil (interactive) (window-configuration-to-register ?5)))
-(bind-key "S-<f6>" (lambda nil (interactive) (window-configuration-to-register ?6)))
-(bind-key "S-<f7>" (lambda nil (interactive) (window-configuration-to-register ?7)))
-(bind-key "S-<f8>" (lambda nil (interactive) (window-configuration-to-register ?8)))
-
-;; (bind-key "<f9>" 'previous-buffer)
-;; (bind-key "<f10>" 'next-buffer)
-;; (bind-key "<f11>" 'switch-to-buffer)
-(bind-key "<f12>" 'ibuffer)
-;; (bind-key "<f5>" 'ibuffer)
-(bind-key "C-H-n" 'forward-paragraph)
-(bind-key "C-H-p" 'backward-paragraph)
-
-(bind-key "M-H-n" 'my-next-error)
-(bind-key "M-H-p" 'my-previous-error)
-
-(bind-key "C-s-n" 'forward-paragraph)
-(bind-key "C-s-p" 'backward-paragraph)
-(bind-key "M-s-n" 'my-next-error)
-(bind-key "M-s-p" 'my-previous-error)
-
-;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
-;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
-;; (bind-key "S-C-<down>" 'shrink-window)
-;; (bind-key "S-C-<up>" 'enlarge-window)
-(unbind-key "C-<prior>")
-(unbind-key "C-<next>")
-(bind-key "<M-prior>" 'previous-error)
-(bind-key "<M-next>" 'next-error)
-;; lisp-mode TODO: maybe move?
-;;(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-(bind-key "M-o l"  'toggle-truncate-lines)
-;; (bind-key "C-c l" "lambda" lisp-mode-shared-map)
-(bind-key "RET" 'reindent-then-newline-and-indent lisp-mode-shared-map)
-(bind-key "C-\\" 'lisp-complete-symbol lisp-mode-shared-map)
-(bind-key "C-c v" 'eval-buffer lisp-mode-shared-map)
-(bind-key "M-o !" 'my-emacs-cleanup)
-(bind-key* "M-j" 'my-join-line)
-(bind-key "C-a" 'beginning-of-line-or-indentation)
-(bind-key "H-n" 'my-scroll-other-window-up)
-(bind-key "H-p" 'my-scroll-other-window-down)
-(bind-key "C-x 4 n" 'clone-buffer-and-narrow-to-function)
-(bind-key "C-x o" 'save-some-buffers-other-window)
-(bind-key "C-x C-o" 'save-some-buffers-other-frame)
-
-;; NOTE while being handy using smartrep with other-*
-;;      functions is a bit slow for some reason.
-;;
-;; (smartrep-define-key
-;;     global-map
-;;     "C-x"
-;;   '(("o" . save-some-buffers-other-window)
-;;     ("C-o" . save-some-buffers-other-frame)))
-
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
-(bind-key "C-x f f" 'find-file)
-(bind-key "C-x b b" 'switch-to-buffer)
-(bind-key "C-x C-b" 'switch-to-buffer)
-
-(bind-key "C-x b ." 'ibuffer)
-
-(bind-key "C-x b C-<SPC>" 'previous-buffer)
-(bind-key "C-x b C-n" 'next-buffer)
-
-(bind-key "C-s"  'isearch-forward-regexp)
-(bind-key "C-r"  'isearch-backward-regexp)
-(bind-key "C-M-s"  'isearch-forward)
-(bind-key "C-M-r"  'isearch-backward)
-(global-set-key (kbd "C-x C-1") 'delete-other-windows)
-(global-set-key (kbd "C-x C-2") 'split-window-below)
-(global-set-key (kbd "C-x C-3") 'split-window-right)
-(global-set-key (kbd "C-x C-0") 'delete-window)
-
-(unbind-key "M-t")
-(bind-keys
- ;; :map undo-tree-visualizer-mode-map
- :prefix-map my-transpose-map
- :prefix "M-t"
- ("c" . transpose-chars)
- ("w" . transpose-words)
- ("t" . transpose-words)
- ("M-t" . transpose-words)
- ("l" . transpose-lines)
- ("e" . transpose-sexps)
- ("s" . transpose-sentences)
- ("p" . transpose-paragraphs))
 
 ;;; functions
 ;;;; misc...
@@ -1563,6 +1569,8 @@ re-downloaded in order to locate PACKAGE."
         (setq mode-name ,new-name))))
 
 ;;;;; colors
+
+
 ;;;;;; color processing
 (defun color-blend-name (color1 color2 alpha)
   "Blends COLOR1 onto COLOR2 using alpha "
@@ -2107,17 +2115,6 @@ Default separator is underscore."
     (error (message "Invalid expression")
            (insert (current-kill 0)))))
 
-;;;;; insert lorem ipsum
-(defun lorem (paragraphs)
-  "Inserts up to 5 paragraphs of lorem ipsum filler text."
-  (interactive "nParagraphs: ")
-  (let ((lorems '("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enimad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                  "\n\nIn non elit turpis, quis accumsan tortor. Vestibulum enim mi, tincidunt eget fringilla a, euismod nec mi. Integer dictum diam sed ante posuere feugiat. Aenean convallis sapien tincidunt leo aliquam posuere. Mauris porta facilisis metus, non commodo mauris interdum sed. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce a diam nec augue tristique placerat eu at odio. Sed fermentum, nunc non condimentum accumsan, dolor nisl mollis quam, sed condimentum massa massa at nisi. Etiam quis ante neque. Mauris feugiat lacus nec lorem vulputate sagittis. Fusce congue ullamcorper nulla, in lacinia felis euismod eu. Integer arcu dolor, tempus eget scelerisque sit amet, fermentum at elit. Maecenas dignissim mollis sapien, nec elementum enim feugiat vel. Mauris lobortis sodales sem vitae venenatis. Aliquam a risus arcu. Aliquam bibendum pretium velit in tempor. Aliquam erat volutpat."
-                  "\n\nSed ut nisi ante. Sed sollicitudin blandit tortor eu cursus. Praesent sem augue, cursus vitae sodales a, aliquam eget enim. Nullam velit nulla, ornare vitae vulputate sit amet, blandit ut nisl. Vivamus sodales blandit pretium. In faucibus risus nec purus dapibus laoreet. Aliquam erat volutpat. Phasellus a sem sit amet metus pharetra euismod. Nunc sit amet vehicula purus. Donec lorem metus, feugiat vel ultrices vel, sagittis nec odio. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; In scelerisque, justo eu pretium ultricies, elit eros varius mauris, quis scelerisque lacus lacus sed metus. Phasellus hendrerit, quam in accumsan ullamcorper, magna enim vehicula sem, et vulputate massa dolor eu augue. Pellentesque sed nibh sit amet mi vulputate porttitor at ac tortor. Ut ac augue risus, tincidunt ornare sapien. Suspendisse gravida est lacinia urna interdum scelerisque ut non sem. Sed quis lectus lectus."
-                  "\n\nNam et consectetur nisl. Pellentesque rhoncus velit a elit mollis cursus nec ut orci. Vestibulum a purus ligula. Cras blandit, felis et venenatis interdum, urna libero cursus sapien, at auctor sem purus eget quam. Suspendisse pretium sollicitudin leo, quis imperdiet sem faucibus vel. Vestibulum mollis imperdiet urna, pretium porttitor lorem posuere at. Integer aliquam, velit id luctus lobortis, odio ipsum convallis urna, sit amet eleifend lacus mi et leo. Phasellus quis ante in dolor tincidunt lobortis. Proin in massa purus, vitae dignissim elit. Curabitur non enim sit amet lectus volutpat tristique."
-                  "\n\nPellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed vel neque a nibh tincidunt luctus id a eros. Curabitur leo odio, sodales id malesuada ac, commodo et augue. Aenean auctor justo a nulla lobortis ut tempor mauris mollis. Duis a purus consequat enim vestibulum pretium. Vestibulum diam urna, luctus at pulvinar sed, rhoncus id risus. Maecenas sit amet velit vitae libero viverra aliquet sit amet non mauris. Suspendisse potenti. Duis eu lectus sem. Maecenas aliquam erat vitae tortor congue ut imperdiet lacus consectetur. Praesent nisl ipsum, fermentum id venenatis eu, lobortis eu nunc. Fusce ut enim tellus, ac semper turpis. Proin in ante massa. Curabitur velit lacus, pharetra vel dapibus egestas, posuere quis dui. Morbi aliquet congue nisl, dictum fringilla velit dictum sed. Integer eu consequat nisl. Curabitur aliquam suscipit magna vel pharetra. Duis eget erat vel purus mattis dignissim. Donec mattis, nulla nec imperdiet scelerisque, leo elit tincidunt dui, eget ullamcorper tortor neque nec erat. Aliquam libero augue, suscipit vitae scelerisque vitae, rutrum vitae quam.")))
-    (loop for p from 0 to (- paragraphs 1)
-          do (insert (nth p lorems)))))
 
 ;;;;; beginning of line or indentation
 (defun beginning-of-line-or-indentation ()
@@ -2183,40 +2180,6 @@ sTo this: ")
       (narrow-to-region (region-beginning) (region-end))
       (delete-trailing-whitespace))))
 
-;;;;; cycle characters
-;; TODO not quite ready
-(defun cycle-characters--delete-and-extract-sexp ()
-  (let* ((beg (point))
-         (end (progn (paredit-forward)
-                     (point)))
-         (contents (buffer-substring beg end)))
-    (delete-region beg end)
-    contents))
-
-(defun cycle-brackets ()
-  "convert expression at (point) from (x) -> {x} -> [x] -> (x) recur"
-  (interactive)
-  (save-excursion
-    (while (and
-            (> (point) 1)
-            (not (eq (string-to-char "(") (char-after)))
-            (not (eq (string-to-char "{") (char-after)))
-            (not (eq (string-to-char "[") (char-after))))
-      (backward-char))
-
-    (cond
-     ((eq (string-to-char "(") (char-after))
-      (insert "{" (substring (cycle-characters--delete-and-extract-sexp) 1 -1) "}"))
-
-     ((eq (string-to-char "{") (char-after))
-      (insert "[" (substring [cycle-characters--delete-and-extract-sexp] 1 -1) "]"))
-
-     ((eq (string-to-char "[") (char-after))
-      (insert "(" (substring (cycle-characters--delete-and-extract-sexp) 1 -1) ")"))
-
-     ((equal 1 (point))
-      (message "beginning of file reached, this was probably a mistake.")))))
-
 ;;;;; sort-words
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.
@@ -2252,6 +2215,7 @@ sTo this: ")
       (flyspell-buffer))))
 
 ;;;;; goto line with feedback
+
 (defun goto-line-with-feedback ()
   "Show line numbers temporarily, while prompting for the line number input"
   (interactive)
@@ -2260,6 +2224,7 @@ sTo this: ")
         (linum-mode 1)
         (call-interactively 'goto-line))
     (linum-mode -1)))
+
 
 ;;;;; menu-bar-go
 (defvar menu-bar-go-active nil)
@@ -6735,6 +6700,13 @@ declaration in a Python file."
   :commands (look-at-files look-at-this-file))
 
 
+;;;; lorem-ipsum
+(use-package lorem-ipsum
+  :ensure t
+  :commands (lorem-ipsum-insert-paragraphs
+             lorem-ipsum-insert-sentences
+             lorem-ipsum-insert-list))
+
 ;;;; lsp-mode
 (use-package lsp-mode
   :ensure t
@@ -9613,10 +9585,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (defadvice simpleclip-copy (after clipboard activate)
       (if (use-region-p)
-          (if (fboundp 'rectangle-mark-mode) ; New in 24.4
-              (with-no-warnings
-                (kill-ring-save (region-beginning) (region-end) t))
-            (kill-ring-save (region-beginning) (region-end)))))))
+          (with-no-warnings
+            (kill-ring-save (region-beginning) (region-end) t))
+        (kill-ring-save (region-beginning) (region-end))))))
 
 
 ;;;; simplezen
@@ -10270,12 +10241,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands describe-unbound-keys)
 
 
-;;;; unbound
-(use-package unbound
-  :ensure t
-  :commands describe-unbound-keys)
-
-
 ;;;; undo-tree
 (use-package undo-tree
   :ensure t
@@ -10290,10 +10255,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      (list (cons "." (expand-file-name
                       (concat "undo-tree-save/" (user-real-login-name) "/")
                       user-data-directory))))
-
-    ;; TODO undo-tree-save-history must not write to messages buffer
-    ;; (unless (string< emacs-version "24.3")
-    ;;   (setq undo-tree-auto-save-history t))
 
     (global-undo-tree-mode)
 
@@ -11176,6 +11137,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 ;; Local Variables:
 ;; eval: (outline-minor-mode 1)
+;; eval: (outshine-mode 1)
 ;; eval: (require 'use-package)
 ;; End:
 
