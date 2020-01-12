@@ -11482,26 +11482,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       :commands yas-popup-isearch-prompt
       :config
       (progn
-        ;; ;; advice for whitespace-mode conflict
-        ;; (defvar my-prev-whitespace-mode nil)
-        ;; (make-variable-buffer-local 'my-prev-whitespace-mode)
-        ;; (defadvice popup-draw (before my-turn-off-whitespace)
-        ;;   "Turn off whitespace mode before showing autocomplete box"
-        ;;   (make-local-variable 'my-prev-whitespace-mode)
-        ;;   (if whitespace-mode
-        ;;       (progn
-        ;;         (setq my-prev-whitespace-mode t)
-        ;;         (whitespace-mode -1))
-        ;;     (setq my-prev-whitespace-mode nil)))
 
-        ;; (defadvice popup-delete (after my-restore-whitespace)
-        ;;   "Restore previous whitespace mode when deleting autocomplete box"
-        ;;   (if my-prev-whitespace-mode
-        ;;       (whitespace-mode 1)))
-        ;; (ad-activate 'popup-draw)
-        ;; (ad-activate 'popup-delete)
-
-        ;; FIXME this should be niced up and contributed back.
         (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
           (let ((group-max-len 0)
                 (key-max-len 0)
