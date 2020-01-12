@@ -248,6 +248,7 @@
         magit-submodule
         mc/add-cursor-on-click
         mc/add-cursors-to-all-matches
+        mouse-set-region
         multiple-cursors-mode
         my-magit-status
         ns-prev-frame
