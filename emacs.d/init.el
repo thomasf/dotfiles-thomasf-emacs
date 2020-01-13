@@ -50,6 +50,7 @@
 (and (fboundp 'scroll-bar-mode)
    scroll-bar-mode
    (scroll-bar-mode -1))
+
 (setq default-frame-alist '((vertical-scroll-bars . nil)
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
@@ -66,7 +67,7 @@
 
 (and
  (not noninteractive)
- (or (not (boundp 'emacs-version)) (string< emacs-version "25.1"))
+ (< emacs-major-version 25)
  (warn "Use a newer version of Emacs for a full featured environment!"))
 
 
@@ -122,9 +123,6 @@
 ;; are loaded early.
 (eval-and-compile (push `("packages-start" ,(current-time)) init-times))
 
-(require 'cl)
-(require 'subr-x)
-
 (eval-and-compile
   (setq
    package-enable-at-startup nil
@@ -159,6 +157,9 @@ re-downloaded in order to locate PACKAGE."
   (package-initialize t)
   (require-package 'use-package)
   (require 'use-package))
+
+(require 'cl)
+(require 'subr-x)
 
 (use-package dash
   :ensure t
@@ -356,7 +357,6 @@ re-downloaded in order to locate PACKAGE."
 
 (defvar my-prog-mode-hooks
   '(prog-mode-hook
-    actionscript-mode-hook
     clojure-mode-hook
     emacs-lisp-mode-hook
     go-mode-hook
@@ -1607,7 +1607,8 @@ re-downloaded in order to locate PACKAGE."
 
 
 (use-package helm
-  :defer
+  :defer t
+  :disabled t
   :commands (with-helm-buffer)
   :config
   (progn
@@ -2800,40 +2801,6 @@ for the current buffer's file name, and the line number at point."
   (progn))
 
 
-;;;; ac-cider
-
-(use-package ac-cider
-  :ensure t
-  :commands (ac-cider-setup)
-  :init
-  (progn
-    (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-    (add-hook 'cider-mode-hook 'ac-cider-setup)
-    (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-
-    (use-package auto-complete
-      :defer
-      :config
-      (add-to-list 'ac-modes 'cider-mode))))
-
-
-;;;; ac-nrepl
-
-(use-package ac-nrepl
-  :ensure t
-  :disabled t
-  :commands (ac-nrepl-setup)
-  :init
-  (progn
-    (add-hook 'nrepl-mode-hook 'ac-nrepl-setup)
-    (add-hook 'nrepl-interaction-mode-hook 'ac-nrepl-setup)
-
-    (use-package auto-complete
-      :defer
-      :config
-      (add-to-list 'ac-modes 'nrepl-mode))))
-
-
 ;;;; ac-slime
 
 (use-package ac-slime
@@ -2851,10 +2818,6 @@ for the current buffer's file name, and the line number at point."
       :config
       (progn
         (add-to-list 'ac-modes 'slime-repl-mode)))))
-
-;; (use-package actionscript-mode
-;;   :ensure t
-;;   :mode (("\\.as\\'"  . actionscript-mode)))
 
 
 ;;;; ace-jump-mode
@@ -2875,34 +2838,6 @@ for the current buffer's file name, and the line number at point."
         (unbind-key "C-c SPC" conf-mode-map)))))
 
 
-;;;; ack-and-a-half
-
-(use-package ack-and-a-half
-  :disabled t
-  :ensure t
-  :commands (ack-and-a-half ack-and-a-half-same
-                            my-ack-and-a-half-same ack-and-a-half-find-file
-                            ack-and-a-half-find-file-same)
-  :init
-  (progn
-    (setq ack-and-a-half-root-directory-functions '(project-root-function)
-          ack-and-a-half-regexp-search nil)
-    (defalias 'ack 'ack-and-a-half)
-    (defalias 'ack-same 'my-ack-and-a-half-same)
-    (defalias 'ack-find-file 'ack-and-a-half-find-file)
-    (defalias 'ack-find-file-same 'ack-and-a-half-find-file-same))
-  :config
-  (progn
-    (defun my-ack-and-a-half-same (pattern &optional regexp directory)
-      "ack same"
-      (interactive (ack-and-a-half-interactive))
-      (let ((type (ack-and-a-half-type))
-            (ack-and-a-half-use-environment nil))
-        (if type
-            (apply 'ack-and-a-half-run directory regexp pattern type)
-          (ack-and-a-half pattern regexp directory))))))
-
-
 ;;;; adaptive-wrap
 
 (use-package adaptive-wrap
@@ -2914,10 +2849,6 @@ for the current buffer's file name, and the line number at point."
     (hook-into-modes
      #'(lambda () (adaptive-wrap-prefix-mode 1))
      my-prog-mode-hooks)))
-
-;;(use-package amd-mode
-;;  :ensure t
-;;  :commands amd-mode)
 
 
 ;;;; adoc-mode
@@ -2964,13 +2895,6 @@ for the current buffer's file name, and the line number at point."
 
 (eval-and-compile
   (setq magit-last-seen-setup-instructions "1.4.0"))
-
-
-;;;; anaphora
-
-(use-package anaphora
-  :ensure t
-  :defer)
 
 
 ;;;; anchored-transpose
@@ -3039,18 +2963,6 @@ for the current buffer's file name, and the line number at point."
 (use-package arduino-mode
   :ensure t
   :mode (("\\.ino\\'" . arduino-mode)))
-
-
-;;;; artbollocks-mode
-
-(use-package artbollocks-mode
-  :commands artbollocks-mode
-  :ensure t
-  :init
-  (progn
-    (setq lexical-illusions nil)
-    ;; (add-hook 'markdown-mode-hook 'artbollocks-mode)
-    ))
 
 
 ;;;; auth-source
@@ -3160,8 +3072,8 @@ for the current buffer's file name, and the line number at point."
         (mode '(clojure-mode  css-mode csv-mode
                              espresso-mode fmagit-log-edit-mode
                              haskell-mode html-mode json-mode
-                             less-css-mode lisp-mode log-edit-mode gfm-mode markdown-mode
-                             nxml-mode scss-mode sh-mode
+                             less-css-mode lisp-mode log-edit-mode gfm-mode poly poly-gfm-mode
+                             markdown-mode nxml-mode scss-mode sh-mode
                              smarty-mode textile-mode tuareg-mode yaml-mode))
 
       (add-to-list 'ac-modes mode))
@@ -3223,21 +3135,6 @@ for the current buffer's file name, and the line number at point."
                      my-prog-mode-hooks)))
 
 
-;;;; auto-package-update
-
-(use-package auto-package-update
-  :disabled t
-  :ensure t
-  :commands (auto-package-update-now auto-package-update-if-needed)
-  :config
-  (progn
-    (setq
-     auto-package-update-interval 7
-     apu--last-update-day-path
-     (expand-file-name apu--last-update-day-filename
-                       user-data-directory))))
-
-
 ;;;; autorevert
 
 (use-package autorevert
@@ -3256,23 +3153,6 @@ for the current buffer's file name, and the line number at point."
       (unless (current-buffer-remote-p)
         (auto-revert-mode)))
     (add-hook 'find-file-hook 'auto-revert-turn-on-maybe)))
-
-
-;;;; back-button
-
-(use-package back-button
-  :disabled t
-  :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :commands (back-button-mode)
-  :diminish ""
-  :defer 18
-  :init
-  (progn
-    (setq back-button-show-toolbar-buttons nil))
-  :config
-  (progn
-    (back-button-mode 1)))
 
 
 ;;;; backline
@@ -3372,13 +3252,6 @@ for the current buffer's file name, and the line number at point."
   :defer)
 
 
-;;;; butler
-
-(use-package butler
-  :ensure t
-  :commands (butler-status))
-
-
 ;;;; calendar
 
 (use-package calendar
@@ -3424,31 +3297,6 @@ for the current buffer's file name, and the line number at point."
 (use-package capture
   :ensure t
   :commands (capture-mode))
-
-
-;;;; cdnjs
-
-(use-package cdnjs
-  :ensure t
-  :commands (cdnjs-list-packages
-             cdnjs-insert-url
-             cdnjs-select-and-insert-url
-             cdnjs-install-gocdnjs
-             cdnjs-update-package-cache))
-
-
-;;;; cider
-
-(use-package cider
-  :ensure t
-  :commands (cider-jack-in cider))
-
-
-;;;; clj-refactor
-
-(use-package clj-refactor
-  :ensure t
-  :commands clj-refactor-mode)
 
 
 ;;;; clojure-mode
@@ -4053,14 +3901,6 @@ If FILE already exists, signal an error."
   :commands dired-k)
 
 
-;;;; dired-toggle-sudo
-
-(use-package dired-toggle-sudo
-  :ensure t
-  :if (not noninteractive)
-  :commands dired-toggle-sudo)
-
-
 ;;;; direx
 
 (use-package direx
@@ -4111,9 +3951,7 @@ If FILE already exists, signal an error."
 
 (use-package docker
   :ensure t
-  :commands (docker-ps
-             docker-containers
-             docker-images))
+  :commands (docker))
 
 
 ;;;; dockerfile-mode
@@ -4124,27 +3962,6 @@ If FILE already exists, signal an error."
   :init
   (progn
     (setq-default docker-use-sudo nil)))
-
-
-;;;; download-region
-
-(use-package download-region
-  :ensure t
-  :commands download-region-as-url
-  :init
-  (setq download-region-max-downloads 5))
-
-
-;;;; downplay-mode
-
-(use-package downplay-mode
-  :ensure t
-  :commands downplay-mode
-  :diminish (downplay-mode . "")
-  :bind (("C-c z" . downplay))
-  :config
-  (progn
-    (downplay-mode 1)))
 
 
 ;;;; dpaste
@@ -4175,64 +3992,6 @@ If FILE already exists, signal an error."
   :init
   (progn
     (global-set-key [remap kill-ring-save] 'easy-kill)))
-
-
-;;;; ecb-autoloads
-
-(use-package ecb-autoloads
-  :disabled t
-  :ensure ecb
-  :commands (ecb-activate)
-  :init
-  (progn
-    (setq ecb-tip-of-the-day nil
-          ecb-layout-name "my-left1"
-          ecb-toggle-layout-sequence
-          '("left9" "left14" "left-analyse" "my-left1")
-          ;; ecb-history-make-buckets 'never
-          ecb-tree-indent 2))
-  :config
-  (progn
-    (require 'ecb-layout)
-    (ecb-layout-define "my-left1" left
-                       "This function creates the following layout:
-   ----------------------------------
-   | Sources |                      |
-   |---------|         Edit         |
-   | History |                      |
-   |--------------------------------|
-   |           Compilation          |
-   ----------------------------------"
-                       (ecb-set-sources-buffer)
-                       (variable-pitch-mode 1)
-                       (ecb-split-ver 0.3)
-                       (ecb-set-history-buffer)
-                       (variable-pitch-mode 1)
-                       (select-window (next-window)))))
-
-
-;;;; eclim
-
-(use-package eclim
-  :disabled t
-  :ensure t
-  :commands (eclim-mode
-             global-eclim-mode)
-  :init
-  (progn
-    (setq
-     eclim-eclipse-dirs '("~/.opt/eclipse" "~/.opt/eclipse/jee-mars/eclipse")
-     eclim-executable "~/.opt/eclipse/eclim"))
-  :config
-  (progn
-
-    (use-package eclim-java)
-    (use-package eclim-ant)
-    (use-package eclim-maven)
-    (use-package eclim-problems)
-    (use-package eclim-project)
-    (use-package eclimd)
-    (use-package eclim-completion)))
 
 
 ;;;; edbi
@@ -4285,6 +4044,7 @@ If FILE already exists, signal an error."
 ;;;; edit-color-stamp
 
 (use-package edit-color-stamp
+  :disabled t ;; color chooser widget does not compile atm
   :ensure t
   :commands edit-color-stamp)
 
@@ -4313,17 +4073,21 @@ If FILE already exists, signal an error."
 
     (defun my-edit-server-start-hook ()
       "My edit-server mode hook."
-      ;; TODO: support enabling org-mode, markdown-mode, rest-mode
-      (when
-          (string-match
-           (rx
-            (and line-start
-                 (* "www.")
-                 (or "skunk.cc" "facebook.com")))
-           edit-server-url )
+
+      (when (string-match (rx (and line-start (* "www.") (or "github.com")))
+                          edit-server-url)
+        (gfm-mode))
+
+      (when (string-match (rx (and line-start (* "www.") (or "skunk.cc" "facebook.com")))
+                          edit-server-url)
         (ispell-change-dictionary "svenska"))
+
+      (when (string-match (rx (and line-start (* "www.") (or "github.com")))
+           edit-server-url)
+        (ispell-change-dictionary "english"))
       (flyspell-mode 1)
       (flyspell-buffer))
+
     (add-hook 'edit-server-start-hook 'my-edit-server-start-hook)))
 
 
@@ -4421,16 +4185,6 @@ If FILE already exists, signal an error."
     (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))))
 
 
-;;;; emamux
-
-(use-package emamux
-  :ensure t
-  :commands (emamux:run-command emamux:get-sessions emamux:send-keys)
-  :config
-  (progn
-    (defun emamux:in-tmux-p () t)))
-
-
 ;;;; erlang
 
 (use-package erlang
@@ -4510,13 +4264,6 @@ If FILE already exists, signal an error."
       '((t :inherit fixed-pitch :font "Anonymous Pro"))
       "face for headers.")
     (setq buffer-face-mode-face 'fixed-pitch-terminal)))
-
-
-;;;; fancy-narrow
-
-(use-package fancy-narrow
-  :ensure t
-  :defer)
 
 
 ;;;; feature-mode
@@ -4919,14 +4666,6 @@ See URL `https://github.com/golang/lint'."
   :commands (font-utils-first-existing-font))
 
 
-;;;; geben
-
-(use-package geben
-  :ensure t
-  :commands (geben
-             geben-mode))
-
-
 ;;;; gist
 
 (use-package gist
@@ -5084,12 +4823,6 @@ See URL `https://github.com/golang/lint'."
       (progn
         (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
 
-    (defun gopath-set-here ()
-      (interactive)
-      (message (or (buffer-file-name) default-directory))
-      (setenv "GOPATH"
-              (f-expand (or (buffer-file-name) default-directory))))
-
     (setq gofmt-command (cond
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
@@ -5115,23 +4848,6 @@ See URL `https://github.com/golang/lint'."
       (flycheck-buffer))
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
-
-    ;; (defun my-go-jump-definition ()
-    ;;   (interactive)
-    ;;   (condition-case nil
-    ;;       (call-interactively 'go-guru-definition)
-    ;;     (error (call-interactively 'godef-jump))))
-
-    ;; (bind-key "M-." 'my-go-jump-definition)
-
-
-
-    (use-package go-direx
-      :ensure t
-      :commands go-direx-pop-to-buffer
-      :init
-      (progn
-        (bind-key "C-c d" 'go-direx-pop-to-buffer go-mode-map)))
 
 
     (use-package go-stacktracer
@@ -5212,17 +4928,6 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     (define-key search-map "G" 'google-this-region)))
-
-
-;;;; google-translate
-
-(use-package google-translate
-  :ensure t
-  :commands (google-translate-at-point
-             google-translate-query-translate)
-  :init
-  (progn
-    (define-key region-bindings-mode-map "t" 'google-translate-at-point)))
 
 
 ;;;; goto-chg
@@ -5809,25 +5514,6 @@ if submodules exists, grep submodules too."
   :commands highlight-tail-mode)
 
 
-;;;; howdoi
-
-(use-package howdoi
-  :ensure t
-  :commands (howdoi-query
-             howdoi-query-region)
-  :init
-  (progn
-    (define-key region-bindings-mode-map "H" 'howdoi-query-region))
-  :config
-  (progn
-    (defun howdoi-query-region()
-      (interactive)
-      (let ((query (buffer-substring-no-properties
-                    (region-beginning)
-                    (region-end))))
-        (howdoi-request query 'howdoi-pop-answer-to-buffer-callback)))))
-
-
 ;;;; htmlize
 
 (use-package htmlize
@@ -6151,7 +5837,6 @@ if submodules exists, grep submodules too."
                        (mode . js-mode)
                        (mode . js2-mode)
                        (mode . js2-jsx-mode)
-                       (mode . actionscript-mode)
                        (mode . java-mode)
                        (mode . sh-mode)
                        (mode . haskell-mode)
@@ -6191,6 +5876,8 @@ if submodules exists, grep submodules too."
                             (mode . rst-mode)
                             (mode . markdown-mode)
                             (mode . gfm-mode)
+                            (mode . poly-gfm-mode)
+                            (mode . poly-markdown-mode)
                             ))
               ;; -------------------------------------------------
               ;; media
@@ -7325,21 +7012,10 @@ already present."
     (defadvice magit-version (around skipit activate)
       "900000000")
 
-
-    (use-package magit-stgit
-      :ensure t
-      :commands (magit-stgit-mode
-                 turn-on-magit-stgit))
-
     (use-package magit-svn
       :ensure t
       :commands (magit-svn-mode
                  turn-on-magit-svn))
-
-    (use-package magit-topgit
-      :ensure t
-      :commands (magit-topgit-mode
-                 turn-on-magit-topgit))
 
     (use-package magit-blame
       :commands magit-blame-mode)
@@ -7438,24 +7114,6 @@ already present."
     ))
 
 
-;;;; malabar-mode
-
-(use-package malabar-mode
-  :disabled t
-  :ensure t
-  :commands (malabar-mode malabar-java-mode malabar-groovy-mode)
-  :init
-  (progn
-    (add-hook 'groovy-mode-hook 'malabar-groovy-mode)
-    (add-hook 'java-mode-hook   'malabar-java-mode))
-  :config
-  (progn
-    (add-hook 'malabar-mode-hook
-              (lambda ()
-                (add-hook 'after-save-hook 'malabar-compile-file-silently
-                          nil t)))))
-
-
 ;;;; manage-minor-mode
 
 (use-package manage-minor-mode
@@ -7468,12 +7126,12 @@ already present."
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
-  :mode (("\\.markdown\\'" . gfm-mode)
-         ("\\.md\\'" . gfm-mode)
-         ("\\.mdwn\\'" . gfm-mode)
-         ("\\.mkd\\'" . gfm-mode)
-         ("\\.mkdown\\'" . gfm-mode)
-         ("\\.mdtext\\'" . gfm-mode))
+  ;; :mode (("\\.markdown\\'" . gfm-mode)
+  ;;        ("\\.md\\'" . gfm-mode)
+  ;;        ("\\.mdwn\\'" . gfm-mode)
+  ;;        ("\\.mkd\\'" . gfm-mode)
+  ;;        ("\\.mkdown\\'" . gfm-mode)
+  ;;        ("\\.mdtext\\'" . gfm-mode))
   :init
   (progn
     (setq markdown-command "pandoc -f markdown -t html"
@@ -7945,19 +7603,6 @@ Titus von der Malsburg."
       :bind ("C-c C-l" . org-annotate-file))
 
 
-    (use-package org-readme
-      :disabled t ;; requires org-html package which is not in org anymore (?)
-      :ensure t
-      :commands (org-readme-edit
-                 org-readme-convert-to-markdown
-                 org-readme-git))
-
-
-    (use-package org-dashboard
-      :ensure t
-      :commands (org-dashboard-display))
-
-
     (use-package org-journal
       :ensure t
       :commands (org-journal-new-entry)
@@ -7975,9 +7620,6 @@ Titus von der Malsburg."
                                  org-id org-info org-man org-w3m))
     ;; org-git-link
     ;; (require 'ox-reveal)
-
-    (use-package ox-reveal
-      :ensure t)
 
     (use-package orgbox
       :ensure t)
@@ -8443,21 +8085,6 @@ otherwise use the subtree title."
       )))
 
 
-;;;; pager
-
-(use-package pager
-  :ensure t
-  :disabled t ;; is scroll-preserve-screen-position enough?
-  :bind (("C-v" . pager-page-down)
-         ("<next>" . pager-page-down)
-         ("M-v" . pager-page-up)
-         ("<prior>" . pager-page-up)
-         ("M-<up>" . pager-row-up)
-         ("M-<kp-8>" . pager-row-up)
-         ("M-<down>" . pager-row-down)
-         ("M-<kp-2>" . pager-row-down)))
-
-
 ;;;; pandoc-mode
 
 (use-package pandoc-mode
@@ -8599,6 +8226,25 @@ otherwise use the subtree title."
       '(("u" . point-undo)
         ("r" . point-redo)))
     (require 'point-undo)))
+
+
+;;;; polymode
+
+(use-package polymode
+  :ensure t
+  :defer t)
+
+
+;;;;; poly-markdown
+
+(use-package poly-markdown
+  :ensure t
+  :mode (("\\.markdown\\'" . poly-gfm-mode)
+          ("\\.md\\'" . poly-gfm-mode)
+          ("\\.mdwn\\'" . poly-gfm-mode)
+          ("\\.mkd\\'" . poly-gfm-mode)
+          ("\\.mkdown\\'" . poly-gfm-mode)
+          ("\\.mdtext\\'" . poly-gfm-mode)))
 
 
 ;;;; popup-ruler
@@ -9163,13 +8809,6 @@ otherwise use the subtree title."
                   (list (concat "--file-search-regexp=" (shell-quote-argument pattern))))))))
 
 
-;;;; pushbullet
-
-(use-package pushbullet
-  :ensure t
-  :commands pushbullet)
-
-
 ;;;; python
 
 (use-package python
@@ -9324,7 +8963,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package python-django
   :ensure t
-
   :commands (python-django-open-project)
   :bind (("C-x j" . python-django-open-project))
   :init
@@ -9675,13 +9313,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   )
 
 
-;;;; rinari
-
-(use-package rinari
-  :ensure t
-  :commands (rinari-launch rinari-minor-mode))
-
-
 ;;;; rings
 
 (use-package rings
@@ -9722,33 +9353,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :bind (("M-o M-c" . rotate-layout)))
 
 
-;;;; ruby-block
-
-(use-package ruby-block
-  :ensure t
-  :commands ruby-block-mode
-  :diminish ruby-block-mode
-  :init
-  (progn
-    (setq
-     ruby-block-highlight-toggle t)
-    (add-hook 'ruby-mode-hook 'ruby-block-mode)))
-
-
-;;;; ruby-electric
-
-(use-package ruby-electric
-  :ensure t
-  :commands ruby-electric-mode
-  :diminish ruby-electric-mode
-  :init
-  (progn
-    (setq
-     ruby-block-highlight-toggle t
-     ruby-block-delay 0.8)
-    (add-hook 'ruby-mode-hook 'ruby-electric-mode)))
-
-
 ;;;; ruby-mode
 
 (use-package ruby-mode
@@ -9774,14 +9378,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :ensure t
   :commands (rvm-use
              rvm-use-default))
-
-
-;;;; sauron
-
-(use-package sauron
-  :ensure t
-  :if (and window-system (eq system-type 'gnu/linux))
-  :commands (sauron-start sauron-start-hidden))
 
 
 ;;;; savehist
@@ -9836,7 +9432,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
              scratch-list-modes))
 
 
-;;;; scroll-restore
+;;;; scroll-restore (?)
 
 (use-package scroll-restore
   :ensure t
@@ -9943,13 +9539,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      sh-indentation 2)))
 
 
-;;;; sheet-mode
-
-(use-package sheet-mode
-  :commands (sheet-mode)
-  :mode "notes/cheat/.*$")
-
-
 ;;;; shift-text
 
 (use-package shift-text
@@ -9975,14 +9564,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
                       scheme-mode))
               1)
              (t tab-width))))))
-
-
-;;;; shm
-
-(use-package shm
-  :ensure t
-  :if (not noninteractive)
-  :commands structured-haskell-mode)
 
 
 ;;;; show-css
@@ -10011,13 +9592,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (setq shr-external-browser 'browse-url-generic)))
 
 
-;;;; simple-call-tree
-
-(use-package simple-call-tree
-  :ensure t
-  :defer)
-
-
 ;;;; simple-httpd
 
 (use-package simple-httpd
@@ -10030,7 +9604,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      httpd-port 7348))
   :config
   (progn
-
     (use-package skewer-mode)))
 
 
@@ -10123,23 +9696,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (bind-key "C-<right>" 'skewer-scroll-right)
       ;; (bind-key "<f5>" 'skewer-reload-page)
       )))
-
-
-;;;; slim-mode
-
-(use-package slim-mode
-  :ensure t
-  :mode ("\\.slim\\'" . slim-mode))
-
-
-;;;; slime
-
-(use-package slime
-  :ensure t
-  :commands (slime slime-connect)
-  :config
-  (progn
-    (slime-setup)))
 
 
 ;;;; smart-forward
@@ -10291,20 +9847,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands solarized-import-faces)
 
 
-;;;; sos
-
-(use-package sos
-  :ensure t
-  :commands sos)
-
-
-;;;; sourcetalk
-
-(use-package sourcetalk
-  :ensure t
-  :commands (sourcetalk-start-external-conference))
-
-
 ;;;; speedbar
 
 (use-package speedbar
@@ -10412,13 +9954,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :commands string-inflection-cycle)
 
 
-;;;; stripe-buffer
-
-(use-package stripe-buffer
-  :ensure t
-  :commands (stripe-buffer-mode))
-
-
 ;;;; subword
 
 (use-package subword
@@ -10428,15 +9963,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (unless noninteractive
       (global-subword-mode))))
-
-
-;;;; sunrise-commander
-
-(use-package sunrise-commander
-  :disabled t
-  :ensure t
-  :commands (sunrise
-             sunrise-cd))
 
 
 ;;;; swift-mode
@@ -10454,38 +9980,11 @@ super-method of this class, e.g. super(Classname, self).method(args)."
              swiper-isearch-backward))
 
 
-;;;; switch-window
-
-(use-package switch-window
-  :ensure t
-  :disabled t
-  :commands switch-window)
-
-
-;;;; swoop
-
-(use-package swoop
-  :ensure t
-  :disabled t
-  :commands (swoop swoop-multi))
-
-
 ;;;; sws-mode
 
 (use-package sws-mode
   :ensure t
   :commands sws-mode)
-
-
-;;;; sx-load
-
-(use-package sx-load
-  :ensure sx
-  :commands (sx-inbox sx-search)
-  :preface
-  (progn
-    (setq sx-cache-directory
-          (expand-file-name "sx" user-data-directory))))
 
 
 ;;;; syslog-mode
@@ -10496,62 +9995,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
          ("var/log/auth.*\\'" . syslog-mode)
          ("var/log/kern.*\\'" . syslog-mode)
          ("var/log/dmesg.*\\'" . syslog-mode)))
-
-
-;;;; tabbar
-
-(use-package tabbar
-  :disabled t
-  :ensure t
-  :commands (tabbar-mode tabbar-reset)
-  :config
-  (progn
-
-    (use-package tabbar-ruler
-      :ensure t
-      :init
-      (progn
-        (setq
-         tabbar-ruler-invert-deselected nil
-         tabbar-ruler-fancy-tab-separator nil
-         tabbar-ruler-fancy-close-image nil))
-      :config
-      (progn
-        (tabbar-ruler-group-by-projectile-project)))))
-
-
-;;;; table
-
-(use-package table
-  :commands table-recognize)
-
-
-;;;; tagedit
-
-(use-package tagedit
-  :ensure t
-  :commands (tagedit-mode)
-  :init
-  (progn
-    ;; (hook-into-modes #'tagedit-mode my-html-like-mode-hooks)
-    )
-  :config
-  (progn
-    (bind-key "C-<right>" 'tagedit-forward-slurp-tag tagedit-mode-map)
-    (bind-key "C-)" 'tagedit-forward-slurp-tag tagedit-mode-map)
-    (bind-key "C-<left>" 'tagedit-forward-barf-tag tagedit-mode-map)
-    (bind-key "C-}" 'tagedit-forward-barf-tag tagedit-mode-map)
-    (bind-key "M-r" 'tagedit-raise-tag tagedit-mode-map)
-    (bind-key "s-k" 'tagedit-kill-attribute tagedit-mode-map)
-    (bind-key "s-<return>" 'tagedit-toggle-multiline-tag tagedit-mode-map)))
-
-
-;;;; tagedit
-
-(use-package tagedit
-  :ensure t
-  :commands (tagedit-forward-slurp-tag tagedit-forward-barf-tag
-                                       tagedit-raise-tag tagedit-kill-attribute))
 
 
 ;;;; tex
@@ -10631,21 +10074,14 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 ;;;; tramp
 
 (use-package tramp
+  :ensure t
   :defer
   :init
   (progn
     (setq vc-ignore-dir-regexp
           (format "\\(%s\\)\\|\\(%s\\)"
                   vc-ignore-dir-regexp
-                  tramp-file-name-regexp))))
-
-
-;;;; tramp
-
-(use-package tramp
-  :defer
-  :init
-  (progn
+                  tramp-file-name-regexp))
     (setq
      ;; tramp-default-method "scpx"
      tramp-persistency-file-name (expand-file-name
@@ -10697,13 +10133,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (defalias 'w-flip-frame 'flip-frame)
     (defalias 'w-flop-frame 'flop-frame)))
-
-
-;;;; tree-mode
-
-(use-package tree-mode
-  :ensure t
-  :defer)
 
 
 ;;;; truthy
@@ -10824,13 +10253,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      uniquify-ignore-buffers-re "^\\*")))
 
 
-;;;; vagrant
-
-(use-package vagrant
-  :ensure t
-  :commands (vagrant-up vagrant-ssh))
-
-
 ;;;; vc
 
 (use-package vc
@@ -10893,19 +10315,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ))
 
 
-;;;; visible-mark
-
-(use-package visible-mark
-  :ensure t
-  :commands (visible-mark-mode global-visible-mark-mode)
-  :init
-  (progn
-    ;; (hook-into-modes
-    ;;  #'(lambda () (visible-mark-mode 1))
-    ;;  my-prog-mode-hooks)
-    ))
-
-
 ;;;; visual-regexp
 
 (use-package visual-regexp
@@ -10948,109 +10357,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
       (volatile-highlights-mode 1))
     (hook-into-modes #'turn-on-volatile-highlights-mode
                      my-prog-mode-hooks)))
-
-
-;;;; volume
-
-(use-package volume
-  :ensure t
-  :commands (volume volume-mode volume-set volume-set-to-0% volume-or-set-card)
-  :bind (("M-o v" . volume-or-set-card)
-         ("M-o V" . volume-set-card))
-  :config
-  (progn
-    (defun volume-set-card ()
-      "Set which alsa card is controlled by volume."
-      (interactive)
-      (switch-to-buffer "*alsa cards*")
-      (insert-file-contents "/proc/asound/cards")
-      (setq-default volume-amixer-card (read-number "Card number? "))
-      (kill-buffer))
-    (defun volume-or-set-card ()
-      "Set volume."
-      (interactive)
-      (condition-case nil
-          (volume)
-        (error (progn
-                 (volume-set-card)
-                 (call-interactively 'volume)))))))
-
-
-;;;; w3m
-
-(use-package w3m
-  :ensure t
-  :disabled t
-  :defines (w3m-profile-directory)
-  :if (and
-       (executable-find* "w3m")
-       (locate-library "w3m-load"))
-  :commands (w3m w3m-search w3m-find-file w3m-browse-url
-                 w3m-browse-url-new-session)
-  :bind (("M-o w w" . wikipedia-query)
-         ("M-o w e" . goto-emacswiki)
-         ("M-o w a" . wolfram-alpha-query)
-         ("M-o w p" . pypi-query))
-  :init
-  (progn
-    (setq w3m-coding-system 'utf-8
-          w3m-file-coding-system 'utf-8
-          w3m-file-name-coding-system 'utf-8
-          w3m-input-coding-system 'utf-8
-          w3m-output-coding-system 'utf-8
-          w3m-terminal-coding-system 'utf-8))
-  :config
-  (progn
-
-    (use-package w3m)
-
-    (use-package w3m-session
-      :commands (w3m-session-crash-recovery-remove))
-
-    (use-package w3m-lnum
-      :commands (w3m-link-numbering-mode
-                 w3m-lnum-mode)
-      :init
-      (progn
-        (w3m-lnum-mode 1)))
-    (defun show-browser ()
-      (interactive)
-      (let ((w3m-buf
-             (catch 'found
-               (dolist (buf (buffer-list))
-                 (if (string-match "\\*w3m" (buffer-name buf))
-                     (throw 'found buf))))))
-        (if w3m-buf
-            (switch-to-buffer-other-window w3m-buf)
-          (call-interactively 'w3m-find-file))))
-
-    (defun wikipedia-query (term)
-      (interactive
-       (list (read-string "Wikipedia search: " (thing-at-point 'word))))
-      (require 'w3m-search)
-      (w3m-search "en.wikipedia" term))
-
-    (eval-when-compile
-      (autoload 'w3m-search-escape-query-string "w3m-search"))
-
-    (defun wolfram-alpha-query (term)
-      (interactive
-       (list (read-string "Ask Wolfram Alpha: " (thing-at-point 'word))))
-      (require 'w3m-search)
-      (w3m-browse-url (format "http://m.wolframalpha.com/input/?i=%s"
-                              (w3m-search-escape-query-string term))))
-
-    (defun pypi-query (term)
-      (interactive
-       (list (read-string "Search pypi: " (thing-at-point 'word))))
-      (require 'w3m-search)
-      (w3m-browse-url
-       (format "https://pypi.python.org/pypi?:action=search&term=%s"
-               (w3m-search-escape-query-string term))))
-
-    (defun goto-emacswiki ()
-      (interactive)
-      (w3m-browse-url "http://www.emacswiki.org"))))
 
 
 ;;;; wakatime-mode
@@ -11200,18 +10506,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :bind (("M-o w" . whitespace-cleanup)))
 
 
-;;;; whitespace-cleanup-mode
-
-(use-package whitespace-cleanup-mode
-  :disabled t
-  :ensure t
-  :commands (whitespace-cleanup-mode
-             global-whitespace-cleanup-mode)
-  :init
-  (progn
-    (global-whitespace-cleanup-mode)))
-
-
 ;;;; whole-line-funcs
 
 (use-package whole-line-funcs
@@ -11328,26 +10622,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     (hook-into-modes #'ws-butler-mode my-prog-mode-hooks)
     (hook-into-modes #'ws-butler-mode my-css-like-mode-hooks)
     (hook-into-modes #'ws-butler-mode my-html-like-mode-hooks)))
-
-
-;;;; ws-trim
-
-(use-package ws-trim
-  :disabled t
-  :ensure t)
-
-
-;;;; xkcd
-
-(use-package xkcd
-  :ensure t
-  :commands (xkcd-get
-             xkcd-get-latest
-             xkcd-get-latest-cached)
-  :init
-  (progn
-    (setq xkcd-cache-dir
-          (expand-file-name "xkcd/" user-cache-directory))))
 
 
 ;;;; xterm-color
@@ -11555,8 +10829,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   :init
   (progn
     (setq zeal-at-point-mode-alist
-          '((actionscript-mode . "actionscript")
-            (arduino-mode . "arduino")
+          '((arduino-mode . "arduino")
             (c++-mode . "cpp")
             (c-mode . "c")
             (clojure-mode . "clojure")
@@ -11603,14 +10876,6 @@ super-method of this class, e.g. super(Classname, self).method(args)."
   (progn
     (bind-key "C-c C-c" 'zencoding-expand-line zencoding-mode-keymap)
     (unbind-key "C-j" zencoding-mode-keymap)))
-
-
-;;;; ztree
-
-(use-package ztree
-  :disabled t
-  :ensure t
-  :commands (ztree-diff ztree-dir))
 
 
 ;;; settings that might have been set by loading libraries

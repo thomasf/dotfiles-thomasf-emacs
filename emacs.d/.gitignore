@@ -10,3 +10,4 @@ org-gcal/
 /.lsp-session-v1
 /.extension/
 /transient/
+/.cache/

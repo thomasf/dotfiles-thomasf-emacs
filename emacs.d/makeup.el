@@ -118,7 +118,7 @@
 (byte-compile-file "load-path.el" nil)
 (mapc (lambda (f)
         (byte-compile-file f nil))
-      (f-glob "init*.el"))
+      (append '("early-init.el") (f-glob "init*.el")))
 (yas-recompile-all)
 
 
