@@ -67,7 +67,7 @@
 
 (and
  (not noninteractive)
- (< emacs-major-version 25)
+ (< emacs-major-version 25) ;; compat
  (warn "Use a newer version of Emacs for a full featured environment!"))
 
 
