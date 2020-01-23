@@ -7061,7 +7061,8 @@ already present."
         (call-interactively 'my-magit-status))))
   :config
   (progn
-
+    (use-package magit-section
+      :ensure t)
     (use-package forge
       :ensure t
       :config
