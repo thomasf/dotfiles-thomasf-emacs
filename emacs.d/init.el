@@ -9450,8 +9450,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package scratch
   :ensure t
-  :commands (scratch
-             scratch-list-modes))
+  :commands (scratch))
 
 
 ;;;; scroll-restore (?)
