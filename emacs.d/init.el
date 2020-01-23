@@ -3154,8 +3154,8 @@ for the current buffer's file name, and the line number at point."
     (setq auto-revert-check-vc-info nil
           auto-revert-verbose nil)
     (if (not (not window-system))
-        (setq auto-revert-mode-text " ♻"
-              auto-revert-tail-mode-text " ♻~")
+        (setq auto-revert-mode-text " ◉"
+              auto-revert-tail-mode-text " ◉╮")
       (setq auto-revert-mode-text " ar"
             auto-revert-tail-mode-text " ar~"))
     (defun auto-revert-turn-on-maybe ()
@@ -5020,7 +5020,7 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     (setq
-     hardhat-mode-lighter " h"
+     hardhat-mode-lighter " "
      hardhat-basename-protected-regexps
      '(
        "-autoloads\\.el\\'"
@@ -9249,6 +9249,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
        (not degrade-p-minimalism))
   :ensure t
   :commands (region-bindings-mode-enable)
+  :diminish "▒▒"
   :init
   (progn
     (setq region-bindings-mode-disabled-modes
