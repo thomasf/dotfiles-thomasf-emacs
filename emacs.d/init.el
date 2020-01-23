@@ -7021,6 +7021,14 @@ already present."
     (defadvice magit-version (around skipit activate)
       "900000000")
 
+    (use-package magit-circleci
+      :ensure t
+      :commands magit-circleci-mode
+      :init
+      (progn
+        (setq magit-circleci-n-builds 15)
+        (magit-circleci-mode)))
+
     (use-package magit-svn
       :ensure t
       :commands (magit-svn-mode
