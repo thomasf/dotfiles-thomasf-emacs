@@ -1917,7 +1917,8 @@ This is special to my xmonad configuration which floats windows named floating"
     (my-set-fonts)
     (with-selected-frame frame
       (hide-fringes)
-      (hidden-mode-line-mode 1))))
+      (hidden-mode-line-mode 1))
+    frame))
 
 (defun make-frame-no-minibuffer ()
   "Some kind of minimal frame, for logs etc"
@@ -1925,7 +1926,8 @@ This is special to my xmonad configuration which floats windows named floating"
   (let ((frame (make-frame '((name . "minimal-frame")
                              (minibuffer . nil)))))
     (select-frame frame)
-    (my-set-fonts)))
+    (my-set-fonts)
+    frame))
 
 (bind-key "C-x 5 3" 'make-frame-no-minibuffer)
 
