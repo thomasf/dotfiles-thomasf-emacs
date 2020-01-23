@@ -7156,7 +7156,7 @@ already present."
   :init
   (progn
     (setq markdown-command "pandoc -f markdown -t html"
-          markdown-fontify-code-blocks-natively t)
+          markdown-fontify-code-blocks-natively nil)
     (defun markdown-imenu-create-index ()
       (let* ((root '(nil . nil))
              cur-alist
