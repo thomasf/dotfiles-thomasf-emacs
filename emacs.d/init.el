@@ -10007,6 +10007,13 @@ super-method of this class, e.g. super(Classname, self).method(args)."
          ("var/log/dmesg.*\\'" . syslog-mode)))
 
 
+;;;; terraform-mode
+
+(use-package terraform-mode
+  :ensure t
+  :mode (("\\.tf\\(vars\\)?\\'" . terraform-mode)))
+
+
 ;;;; tex
 
 (use-package tex
