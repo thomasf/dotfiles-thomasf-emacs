@@ -10914,7 +10914,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 (add-hook 'after-init-hook 'my-workspace-hook t)
 
 ;; this thing just nuges emacs to adjust it's window size, some times it starts
-;; in 80x35.
+;; in 80x35. compat
 
 (and load-file-name
      window-system
