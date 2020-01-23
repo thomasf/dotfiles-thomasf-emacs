@@ -9379,7 +9379,7 @@ super-method of this class, e.g. super(Classname, self).method(args)."
 
 (use-package rust-mode
   :ensure t
-  :mode (("\\.rss\\'" . rust-mode)))
+  :mode (("\\.rs\\'" . rust-mode)))
 
 
 ;;;; rvm
