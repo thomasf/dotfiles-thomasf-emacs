@@ -6317,11 +6317,18 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; js
 
 (use-package js
-  :disabled t
   :defer
   :init
   (progn
-    (rename-modeline "js" js-mode "js")))
+    (rename-modeline "js" js-mode "js"))
+  :config
+  (progn
+    (defun js-mode-cccc ()
+      (interactive)
+      (silent-save-some-buffers)
+      (prettier-js))
+
+    (bind-key "C-c C-c" 'js-mode-cccc js-mode-map)))
 
 
 ;;;; js-comint
@@ -6338,12 +6345,14 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package js2-mode
   :ensure t
-  :commands (js2-mode js2-jsx-mode)
-  :mode (("\\.js\\'" . js2-mode)
-         ("\\.jsx\\'" . js2-jsx-mode)
-         )
+  :commands (js2-mode js2-jsx-mode js2-minor-mode)
+
   :init
   (progn
+    (if (>= emacs-major-version 27) ;; compat
+        (add-hook 'js-mode-hook 'js2-minor-mode)
+      (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+      (add-to-list 'auto-mode-alist '("\\.jsx\\'" . js2-jsx-mode)))
     (rename-modeline "js2-mode" js2-mode "js2")
     (setq js2-strict-missing-semi-warning nil
           js2-strict-trailing-comma-warning nil
@@ -6355,12 +6364,12 @@ drag the viewpoint on the image buffer that the window displays."
 
   :config
   (progn
-    (defun js-cccc ()
+    (defun js2-mode-cccc ()
       (interactive)
       (silent-save-some-buffers)
       (prettier-js))
 
-    (bind-key "C-c C-c" 'js-cccc js2-mode-map)
+    (bind-key "C-c C-c" 'js2-mode-cccc js2-mode-map)
     (bind-key "M-." 'xref-find-definitions js2-mode-map)
 
     (when (and (not noninteractive) window-system)
@@ -6446,12 +6455,7 @@ drag the viewpoint on the image buffer that the window displays."
   :mode (("\\.json\\'" . json-mode)
          ("\\.ipynb\\'" . json-mode)
          ("\\.eslintrc\\'" . json-mode)
-         ("\\Pipfile.lockc\\'" . json-mode))
-  :config
-  (progn
-    (add-hook 'json-mode-hook
-              #'(lambda ()
-                  (setq-local js-indent-level 2)))))
+         ("\\Pipfile.lock\\'" . json-mode)))
 
 
 ;;;; jss
