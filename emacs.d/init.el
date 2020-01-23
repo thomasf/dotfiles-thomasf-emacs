@@ -704,7 +704,7 @@ re-downloaded in order to locate PACKAGE."
                 " [%m] "
                 (:eval (if (buffer-modified-p) " •")))
               scroll-step 1
-              scroll-margin 0
+              scroll-margin 2
               scroll-conservatively 10000
               scroll-up-aggressively 0.01
               scroll-down-aggressively 0.01
