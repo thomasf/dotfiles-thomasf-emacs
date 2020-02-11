@@ -1038,8 +1038,8 @@ re-downloaded in order to locate PACKAGE."
 
 
     (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "PragmataPro-13"
-            my-variable-pitch-font "Go-13.5"))
+      (setq my-monospaced-font "Pragmata Pro-15"
+            my-variable-pitch-font "Go-15.5"))
 
     (defun my-set-fonts  ()
       (interactive)
@@ -1070,9 +1070,6 @@ re-downloaded in order to locate PACKAGE."
   (progn
     (when nav-flash-enabled
       (setq nav-flash-delay 0.6)
-      (when (s-starts-with? "fogskum" system-name)
-        (setq my-monospaced-font "Pragmata Pro-13"
-              my-variable-pitch-font "Go-13"))
       (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
       (defun flash-defun()
         "Flash current defun"
