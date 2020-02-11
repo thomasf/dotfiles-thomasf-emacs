@@ -731,17 +731,17 @@ re-downloaded in order to locate PACKAGE."
 
 ;;; key-bindings
 
-(and (eq system-type 'darwin)
-     window-system
-     (setq
-      mac-command-modifier 'meta
-      mac-right-command-modifier 'super
-      ;; mac-control-modifier
-      ;; mac-right-control-modifier
-      ;; mac-function-modifier
-      mac-option-modifier 'super
-      mac-right-option-modifier nil
-      ))
+;; (and (eq system-type 'darwin)
+;;      window-system
+;;      (setq
+;;       mac-command-modifier 'meta
+;;       mac-right-command-modifier 'super
+;;       ;; mac-control-modifier
+;;       ;; mac-right-control-modifier
+;;       ;; mac-function-modifier
+;;       mac-option-modifier 'super
+;;       mac-right-option-modifier nil
+;;       ))
 
 ;; This is very special because what I have done to my caps lock key.
 (define-key special-event-map (kbd "<key-17>") 'ignore)
