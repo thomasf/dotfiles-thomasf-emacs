@@ -1401,14 +1401,14 @@ re-downloaded in order to locate PACKAGE."
                      (mapcar #'(lambda (x)
                                  (if (s-matches-p
                                       (rx
-                                       (or (and (literal ".")
+                                       (or (and "."
                                                 (or "md" "markdown" "org" "txt" "plu" "org.gpg")
                                                 eol)
                                            (and bol "elisp/" (* any) (group "el" eol))))
                                       x)
                                      x)))
                      (-flatten)
-                     (--filter (not (s-matches? (rx (literal "/reveal.js/")) it )))
+                     (--filter (not (s-matches? (rx "/reveal.js/") it )))
                      (projectile-sort-by-recentf-first)
                      (projectile-sort-by-recently-active-first)
                      )))
