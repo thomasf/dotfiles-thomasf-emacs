@@ -51,7 +51,8 @@
    scroll-bar-mode
    (scroll-bar-mode -1))
 
-(setq default-frame-alist '((vertical-scroll-bars . nil)
+(setq frame-inhibit-implied-resize t
+      default-frame-alist '((vertical-scroll-bars . nil)
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
                             (fullscreen . nil)))
