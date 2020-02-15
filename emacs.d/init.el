@@ -6886,7 +6886,12 @@ declaration in a Python file."
 
 (use-package dap-mode
   :ensure t
-  :commands (dap-debug dap-debug-edit-template))
+  :commands (dap-debug dap-debug-edit-template)
+  :init
+  (progn
+    (setq dap-breakpoints-file (expand-file-name
+                                (workspace-prefix-file-name "dap-breakpoints" ".el")
+                                user-data-directory))))
 
 
 ;;;; lusty-explorer
@@ -7063,6 +7068,11 @@ already present."
       :ensure t)
     (use-package forge
       :ensure t
+
+      :init
+      (progn
+        (setq forge-database-file  (expand-file-name "forge/database.sqlite" user-data-directory)
+              forge-post-directory (expand-file-name "forge/posts/" user-data-directory)))
       :config
       (progn
 
