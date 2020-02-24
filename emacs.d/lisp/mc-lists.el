@@ -32,6 +32,7 @@
         coffee-indent-shift-left
         coffee-indent-shift-right
         coffee-newline-and-indent
+        comment-or-uncomment-region-or-line
         cua-cancel
         cua-copy-region
         cua-cut-region
