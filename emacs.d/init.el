@@ -4500,6 +4500,7 @@ If FILE already exists, signal an error."
     (add-hook 'js2-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'js-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'web-mode-hook 'my-node_modules-flycheck-hook)
+    (add-hook 'typescript-mode 'my-node_modules-flycheck-hook)
 
     (defun flycheck-turn-on-maybe ()
       (unless
