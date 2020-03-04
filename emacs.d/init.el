@@ -2642,46 +2642,6 @@ Used to launch magit status from command line."
 ;; (bind-key "<menu>" 'popup-frame-helm-for-files)
 
 
-;;;;; flash caps lock
-
-(defvar flash-scroll-lock-enabled t)
-(defvar flash-scroll-lock-active nil)
-(defvar flash-scroll-lock-initialized nil)
-(defun flash-scroll-lock ()
-  (interactive)
-  (unless flash-scroll-lock-initialized
-    (unless (and
-             ;; (eq window-system 'x)
-             (executable-find* "xset"))
-      (setq flash-scroll-lock-enabled nil))
-    (setq flash-scroll-lock-initialized t))
-  (when (and
-         (not flash-scroll-lock-active)
-         flash-scroll-lock-enabled)
-    (setq flash-scroll-lock-active t)
-    (deferred:$
-      (deferred:$
-        (deferred:process  "xset" "led" "named" "Scroll Lock")
-        (deferred:nextc it
-          (lambda ()
-            (deferred:wait 300)))
-        (deferred:nextc it
-          (lambda ()
-            (deferred:process  "xset" "-led" "named" "Scroll Lock")))
-        (deferred:nextc it
-          (lambda ()
-            (deferred:wait 200)))
-        (deferred:nextc it
-          (lambda ()
-            (setq flash-scroll-lock-active nil))))
-      (deferred:error it
-        (lambda (err)
-          (setq flash-scroll-lock-active nil)
-          (setq flash-scroll-lock-enabled nil))))))
-
-(setq ring-bell-function #'ignore)
-
-
 ;;;;; get-dwim-at-point
 
 (defun get-dwim-at-point ()
