@@ -8860,45 +8860,10 @@ otherwise use the subtree title."
     (setq python-indent-guess-indent-offset-verbose nil)
     (defun my-python-mode-hook ()
       ;; (setq-local idle-update-delay 2)
-      ;; TODO lets try to disable this because of new indentation engine
-      ;; which was pushed to the emacs24 branch today 2015-01-27 13:09
-      ;; (local-set-key (kbd "<return>") 'newline-and-indent)
-      ;; (if (bound-and-true-p electric-indent-mode)
-      ;;     (electric-indent-local-mode -1))
       )
     (add-hook 'python-mode-hook 'my-python-mode-hook)
 
-    (rename-modeline "python" python-mode "py")
-    (defconst python-class-start-re "^class[ \t]*\\([a-zA-Z_0-9]+\\)"
-      "Regular expression for finding a class name.")
-    (defconst python-method-start-re
-      "^[ \t]*def[ \t]+\\([a-zA-Z_0-9]+\\)[ \t]*([ \t]*\\([a-zA-Z_0-9]+\\)[ \t]*,?[ \t]*\\([^:]+\\)"
-      "Start of a def, matches name in #1, name of self in #2 and the rest in #3,
- up to but excluding :")
-    (defun python-insert-super ()
-      "When used inside a def of a class, insert a call using super to the
-super-method of this class, e.g. super(Classname, self).method(args)."
-      (interactive "*")
-      (let* ((class-name (save-excursion
-                           (re-search-backward python-class-start-re)
-                           (match-string 1)))
-             (method-name (save-excursion
-                            ;; Ensure that we won't search past start of class
-                            (re-search-backward python-method-start-re
-                                                (match-end 1))
-                            (match-string 1)))
-             (self-name (match-string 2))
-             (method-args (match-string 3)))
-        ;; Clean up method-args for default values. This is not perfect;
-        ;; it will not correctly catch x=[1,2,3] but will stop at the
-        ;; first comma
-        (while (string-match "[ \t]*=[ \t]*?[^,)]+" method-args)
-          (setq method-args (replace-match "" t t method-args)))
-        ;; (indent-for-tab-command)
-        (insert (format "super(%s, %s).%s(%s"
-                        class-name self-name method-name method-args))
-        ;; (newline-and-indent)
-        )))
+    (rename-modeline "python" python-mode "py"))
   :config
   (progn
 
