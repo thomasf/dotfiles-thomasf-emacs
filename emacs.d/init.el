@@ -10540,6 +10540,19 @@ super-method of this class, e.g. super(Classname, self).method(args)."
     ))
 
 
+;;;; which-key
+
+(use-package which-key
+  :ensure t
+  :commands (which-key-mode)
+  :defer 0.9
+  :init
+  (progn
+    (setq which-key-idle-delay 1.0
+          which-key--secondary-timer-active nil)
+    (which-key-mode)))
+
+
 ;;;; whitespace
 
 (use-package whitespace
