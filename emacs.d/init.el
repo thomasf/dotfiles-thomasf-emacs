@@ -569,7 +569,7 @@ re-downloaded in order to locate PACKAGE."
       kill-whole-line nil
       shift-select-mode nil
       eval-expression-print-level nil
-      idle-update-delay 1)
+      idle-update-delay 0.5)
 
 (and (fboundp 'x-cut-buffer-or-selection-value)
      (eq system-type 'gnu/linux)
@@ -3391,7 +3391,10 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq company-tooltip-align-annotations t
           company-tooltip-limit 15
-          company-tooltip-margin 1)
+          company-tooltip-margin 1
+          company-minimum-prefix-length 1
+          company-idle-delay 0.3
+          )
     (add-hook 'emacs-lisp-mode-hook 'company-mode)
     (add-hook 'slime-repl-mode-hook 'company-mode)
     )
@@ -6794,6 +6797,7 @@ declaration in a Python file."
   :commands (lsp lsp-mode)
   :init
   (progn
+    (setq lsp-idle-delay 0.2)
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
@@ -8855,7 +8859,7 @@ otherwise use the subtree title."
     ;; (setq python-shell-interpreter "ipython")
     (setq python-indent-guess-indent-offset-verbose nil)
     (defun my-python-mode-hook ()
-      (setq-local idle-update-delay 2)
+      ;; (setq-local idle-update-delay 2)
       ;; TODO lets try to disable this because of new indentation engine
       ;; which was pushed to the emacs24 branch today 2015-01-27 13:09
       ;; (local-set-key (kbd "<return>") 'newline-and-indent)
