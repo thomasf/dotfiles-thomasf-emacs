@@ -3107,7 +3107,13 @@ for the current buffer's file name, and the line number at point."
        isearch)
      ahs-idle-interval 1.1)
     (defun my-ahs-on ()
+      ;; disable in lsp-mode modes
       (unless (or
+               (eq major-mode 'js-mode)
+               (eq major-mode 'js2-mode)
+               (eq major-mode 'js2-jsx-mode)
+               (eq major-mode 'typescript-mode)
+               (eq major-mode 'rust-mode)
                (eq major-mode 'go-mode)
                (eq major-mode 'python-mode)
                )
@@ -6791,7 +6797,6 @@ declaration in a Python file."
 
 
 ;;;; lsp-mode
-
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-mode)
@@ -6807,8 +6812,7 @@ declaration in a Python file."
     (when (executable-find* "html-languageserver"
                             "yarn global add vscode-html-languageserver-bin")
       (add-hook 'html-mode-hook #'lsp)
-      (add-hook 'web-mode-hook #'lsp)
-      )
+      (add-hook 'web-mode-hook #'lsp))
 
     (when (executable-find* "gopls")
       (add-hook 'go-mode-hook #'lsp))
