@@ -10522,7 +10522,8 @@ otherwise use the subtree title."
   :init
   (progn
     (setq which-key-idle-delay 1.0
-          which-key--secondary-timer-active nil)
+          which-key--secondary-timer-active nil
+          which-key-popup-type 'minibuffer)
     (which-key-mode)))
 
 
