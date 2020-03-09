@@ -28,7 +28,10 @@
 (eval-when-compile
   (defmacro executable-find* (command)
     "Macro form of executable-find..."
-    (executable-find command)))
+    (let ((v (executable-find command)) )
+      (unless v
+        (message "did not find executable %s" command))
+      v)))
 
 
 ;;;; gc
