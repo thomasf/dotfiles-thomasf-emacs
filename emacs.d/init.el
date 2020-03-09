@@ -26,11 +26,11 @@
 ;;;; compilation utlities
 
 (eval-when-compile
-  (defmacro executable-find* (command)
+  (defmacro executable-find* (command &optional help)
     "Macro form of executable-find..."
     (let ((v (executable-find command)) )
       (unless v
-        (message "did not find executable %s" command))
+        (message "executable '%s' not found: %s" command (or help "")))
       v)))
 
 
@@ -4545,10 +4545,10 @@ If FILE already exists, signal an error."
         (select-window (get-buffer-window "*Flycheck errors*"))))
 
     (flycheck-add-mode 'javascript-eslint 'web-mode)
-    (setq flycheck-javascript-jshint-executable
-          (cond
-           ((executable-find* "jsxhint") "jsxhint")
-           (t "jshint")))
+    ;; (setq flycheck-javascript-jshint-executable
+    ;;       (cond
+    ;;        ((executable-find* "jsxhint" "yarn global add jsxhint") "jsxhint")
+    ;;        (t "jshint")))
 
     (use-package helm-flycheck
       :ensure t
@@ -6798,17 +6798,26 @@ declaration in a Python file."
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
 
+    (when (executable-find* "html-languageserver"
+                            "yarn global add vscode-html-languageserver-bin")
+      (add-hook 'html-mode-hook #'lsp)
+      (add-hook 'web-mode-hook #'lsp)
+      )
+
     (when (executable-find* "gopls")
       (add-hook 'go-mode-hook #'lsp))
 
-    (when (executable-find* "rls")
+    (when (executable-find* "rls"
+                            "rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu")
       (add-hook 'rust-mode-hook #'lsp))
 
-    (when (executable-find* "css-languageserver")
+    (when (executable-find* "css-languageserver"
+                            "yarn global add vscode-css-languageserver-bin")
       (add-hook 'scss-mode-hook #'lsp)
       (add-hook 'css-mode-hook #'lsp))
 
-    (when (executable-find* "yaml-language-server")
+    (when (executable-find* "yaml-language-server"
+                            "yarn global add yaml-language-server")
       (add-hook 'yaml-mode-hook #'lsp))
 
     )
