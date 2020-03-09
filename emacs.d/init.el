@@ -4650,7 +4650,12 @@ See URL `https://github.com/golang/lint'."
   :commands (fold-this)
   :bind (("C-c C-f" . fold-this-all)
          ("C-c C-F" . fold-this)
-         ("C-c M-f" . fold-this-unfold-all)))
+         ("C-c M-f" . fold-this-unfold-all))
+  :init
+  (progn
+    (setq
+     ;; fold-this-overlay-text "░▒▓▒░"
+     fold-this-overlay-text "╾━╳━╼")))
 
 
 ;;;; font-utils
