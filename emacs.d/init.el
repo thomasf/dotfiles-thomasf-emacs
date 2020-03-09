@@ -2787,6 +2787,7 @@ for the current buffer's file name, and the line number at point."
   (progn
 
     (use-package auto-complete
+      :disabled t
       :defer
       :config
       (progn
@@ -2952,6 +2953,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package auto-complete
   :ensure t
+  :disabled t
   :if (not
        (or
         noninteractive
@@ -3042,12 +3044,12 @@ for the current buffer's file name, and the line number at point."
     (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
     (dolist
-        (mode '(clojure-mode  css-mode csv-mode
-                             espresso-mode fmagit-log-edit-mode
+        (mode '(clojure-mode css-mode csv-mode
+                             magit-log-edit-mode
                              haskell-mode html-mode json-mode
-                             less-css-mode lisp-mode log-edit-mode gfm-mode poly poly-gfm-mode
+                             lisp-mode log-edit-mode gfm-mode poly poly-gfm-mode
                              markdown-mode nxml-mode scss-mode sh-mode
-                             smarty-mode textile-mode tuareg-mode yaml-mode))
+                             smarty-mode textile-mode tuareg-mode ))
 
       (add-to-list 'ac-modes mode))
 
@@ -3057,6 +3059,10 @@ for the current buffer's file name, and the line number at point."
     (setq ac-modes (remove 'js2-mode ac-modes))
     (setq ac-modes (remove 'js2-jsx-mode ac-modes))
     (setq ac-modes (remove 'js-jsx-mode ac-modes))
+    (setq ac-modes (remove 'typescript-mode ac-modes))
+    (setq ac-modes (remove 'css-mode ac-modes))
+    (setq ac-modes (remove 'scss-mode ac-modes))
+    (setq ac-modes (remove 'yaml-mode ac-modes))
 
     ;; Exclude very large buffers from dabbrev
     (defun smp-dabbrev-friend-buffer (other-buffer)
@@ -3383,7 +3389,9 @@ for the current buffer's file name, and the line number at point."
     (setq company-tooltip-align-annotations t
           company-tooltip-limit 15
           company-tooltip-margin 1)
-    (add-hook 'go-mode-hook 'company-mode))
+    (add-hook 'emacs-lisp-mode-hook 'company-mode)
+    (add-hook 'slime-repl-mode-hook 'company-mode)
+    )
   :config
   (progn
     (bind-key "C-<tab>" 'company-complete-common-or-cycle company-mode-map)
@@ -6787,6 +6795,10 @@ declaration in a Python file."
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
+    (add-hook 'rust-mode-hook #'lsp)
+    (add-hook 'scss-mode-hook #'lsp)
+    (add-hook 'css-mode-hook #'lsp)
+    (add-hook 'yaml-mode-hook #'lsp)
     )
   :config
   (progn
@@ -10679,8 +10691,9 @@ super-method of this class, e.g. super(Classname, self).method(args)."
      yas-snippet-dirs (list my-yas-snippets-dir)
      ;; Disable yasnippet prompt by default
      ;; (using auto-complete to prompt)
-     yas-prompt-functions '(yas-popup-isearch-prompt
-                            yas-ido-prompt yas-completing-prompt yas-no-prompt))
+     ;; yas-prompt-functions '(yas-popup-isearch-prompt
+                            ;; yas-ido-prompt yas-completing-prompt yas-no-prompt)
+     )
     (add-to-list 'auto-mode-alist
                  (cons
                   (concat (regexp-quote my-yas-snippets-dir) ".*\\'")
