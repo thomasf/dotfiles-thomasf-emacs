@@ -4794,6 +4794,7 @@ See URL `https://github.com/golang/lint'."
 
     (use-package go-guru
       :ensure t
+      :disabled t
       :commands (go-guru-hl-identifier-mode
                  go-guru-peers go-guru-callees
                  go-guru-callers
@@ -4806,7 +4807,8 @@ See URL `https://github.com/golang/lint'."
                  go-guru-implements)
       :init
       (progn
-        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
+        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+        ))
 
     (setq gofmt-command (cond
                          ((executable-find* "goimports") "goimports")
