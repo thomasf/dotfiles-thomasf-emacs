@@ -6789,17 +6789,27 @@ declaration in a Python file."
   :commands (lsp lsp-mode)
   :init
   (progn
-    (add-hook 'go-mode-hook #'lsp)
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
-    (add-hook 'rust-mode-hook #'lsp)
-    (add-hook 'scss-mode-hook #'lsp)
-    (add-hook 'css-mode-hook #'lsp)
-    (add-hook 'yaml-mode-hook #'lsp)
+
+    (when "/home/thomasf/bin/gopls"
+      (add-hook 'go-mode-hook #'lsp))
+
+    (when (executable-find* "rls")
+      (add-hook 'rust-mode-hook #'lsp))
+
+    (when (executable-find* "css-languageserver")
+      (add-hook 'scss-mode-hook #'lsp)
+      (add-hook 'css-mode-hook #'lsp))
+
+    (when (executable-find* "yaml-language-server")
+      (add-hook 'yaml-mode-hook #'lsp))
+
     )
+
   :config
   (progn
     (setq
