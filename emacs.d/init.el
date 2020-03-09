@@ -10519,6 +10519,7 @@ otherwise use the subtree title."
   :ensure t
   :commands (which-key-mode)
   :defer 0.9
+  :diminish ""
   :init
   (progn
     (setq which-key-idle-delay 1.0
