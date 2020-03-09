@@ -6798,7 +6798,7 @@ declaration in a Python file."
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
 
-    (when "/home/thomasf/bin/gopls"
+    (when (executable-find* "gopls")
       (add-hook 'go-mode-hook #'lsp))
 
     (when (executable-find* "rls")
