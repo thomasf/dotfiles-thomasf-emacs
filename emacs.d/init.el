@@ -6803,6 +6803,7 @@ declaration in a Python file."
 
 
 ;;;; lsp-mode
+
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-mode)
