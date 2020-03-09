@@ -5394,6 +5394,7 @@ if submodules exists, grep submodules too."
 
 (use-package helm-go-package
   :ensure t
+  :disabled t
   :commands helm-go-package
   :init
   (progn
