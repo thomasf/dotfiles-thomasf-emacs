@@ -2785,16 +2785,7 @@ for the current buffer's file name, and the line number at point."
   :init
   (progn
     (add-hook 'slime-mode-hook 'set-up-slime-ac)
-    (add-hook 'slime-repl-mode-hook 'set-up-slime-ac))
-  :config
-  (progn
-
-    (use-package auto-complete
-      :disabled t
-      :defer
-      :config
-      (progn
-        (add-to-list 'ac-modes 'slime-repl-mode)))))
+    (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)))
 
 
 ;;;; ace-jump-mode
@@ -2950,137 +2941,6 @@ for the current buffer's file name, and the line number at point."
   (progn
     (setq ;; auth.el
      auth-sources '("~/.authinfo.gpg"))))
-
-
-;;;; auto-complete
-
-(use-package auto-complete
-  :ensure t
-  :disabled t
-  :if (not
-       (or
-        noninteractive
-        (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
-  :commands (auto-complete-mode auto-complete-mode-maybe)
-  :diminish ""
-  :init
-  (progn
-    (setq
-     ac-dictionary-directories (list (expand-file-name
-                                      "dict" user-emacs-directory))
-     ac-comphist-file (expand-file-name
-                       "ac-comphist.dat" user-data-directory)
-     ac-flycheck-poll-completion-end-interval 1.0
-     ac-delay 0.3
-     ;; To get pop-ups with docs even if a word is uniquely completed
-     ac-dwim nil
-     ac-auto-show-menu 0.7
-     ac-menu-height 15
-     ;; NOTE: the combination of (setq tab-always-indent 'complete) and (setq
-     ;; completion-at-point-functions '(auto-complete)) makes auto-complete
-     ;; fall back on itself which is bad
-     tab-always-indent t
-     )
-
-    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-prog-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-css-like-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) my-html-like-mode-hooks)
-    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) '(json-mode-hook))
-    (hook-into-modes #'(lambda () (auto-complete-mode-maybe)) '(ein:notebook-mode-hook))
-
-    (setq-default ac-sources '(ac-source-yasnippet
-                               ac-source-abbrev
-                               ac-source-dictionary
-                               ac-source-words-in-buffer))
-
-    (hook-into-modes
-     #'(lambda ()
-         (setq ac-sources
-               '(ac-source-yasnippet
-                 ac-source-css-property
-                 ac-source-dictionary
-                 ac-source-words-in-buffer)))
-     my-css-like-mode-hooks)
-
-
-    (add-hook
-     'ruby-mode-hook
-     #'(lambda ()
-         (setq ac-sources
-               '(ac-source-imenu
-                 ac-source-yasnippet
-                 ac-source-words-in-buffer
-                 ac-source-abbrev
-                 ac-source-gtags))))
-    (add-hook
-     'emacs-lisp-mode-hook
-     #'(lambda ()
-         (setq ac-sources
-               '(ac-source-features
-                 ac-source-functions
-                 ac-source-yasnippet
-                 ac-source-abbrev
-                 ac-source-variables
-                 ac-source-symbols)))))
-
-  :config
-  (progn
-
-    (use-package pos-tip
-      :ensure t
-      :if (not
-           (or
-            (not window-system)
-            noninteractive)))
-
-    (use-package yasnippet)
-
-
-    (use-package auto-complete-config)
-    (bind-key "C-n" 'ac-next ac-completing-map)
-    (bind-key "C-p" 'ac-previous ac-completing-map)
-    (bind-key "C-s" 'ac-isearch ac-completing-map)
-    (ac-set-trigger-key "TAB")
-
-    (defun set-auto-complete-as-completion-at-point-function ()
-      (setq completion-at-point-functions '(auto-complete)))
-    (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-
-    (dolist
-        (mode '(clojure-mode css-mode csv-mode
-                             magit-log-edit-mode
-                             haskell-mode html-mode json-mode
-                             lisp-mode log-edit-mode gfm-mode poly poly-gfm-mode
-                             markdown-mode nxml-mode scss-mode sh-mode
-                             smarty-mode textile-mode tuareg-mode ))
-
-      (add-to-list 'ac-modes mode))
-
-    ;; going over to use language server lsp
-    (setq ac-modes (remove 'go-mode ac-modes))
-    (setq ac-modes (remove 'python-mode ac-modes))
-    (setq ac-modes (remove 'js2-mode ac-modes))
-    (setq ac-modes (remove 'js2-jsx-mode ac-modes))
-    (setq ac-modes (remove 'js-jsx-mode ac-modes))
-    (setq ac-modes (remove 'typescript-mode ac-modes))
-    (setq ac-modes (remove 'css-mode ac-modes))
-    (setq ac-modes (remove 'scss-mode ac-modes))
-    (setq ac-modes (remove 'yaml-mode ac-modes))
-
-    ;; Exclude very large buffers from dabbrev
-    (defun smp-dabbrev-friend-buffer (other-buffer)
-      (< (buffer-size other-buffer) (* 1 1024 1024)))
-    (setq dabbrev-friend-buffer-function 'smp-dabbrev-friend-buffer)
-
-    (ac-flyspell-workaround)
-
-    (defun auto-complete-clear-functions-cache ()
-      "Clears the functions cache"
-      (interactive)
-      (setq ac-functions-cache nil))
-
-    (defadvice load-library (after invalidate-ac-functions-cache activate)
-      (auto-complete-clear-functions-cache))))
 
 
 ;;;; auto-highlight-symbol
@@ -4806,24 +4666,6 @@ See URL `https://github.com/golang/lint'."
       :ensure t
       :commands go-impl)
 
-    (use-package go-guru
-      :ensure t
-      :disabled t
-      :commands (go-guru-hl-identifier-mode
-                 go-guru-peers go-guru-callees
-                 go-guru-callers
-                 go-guru-freevars go-guru-pointsto
-                 go-guru-describe
-                 go-guru-callstack go-guru-set-scope
-                 go-guru-whicherrs
-                 go-guru-callgraph go-guru-referrers
-                 go-guru-definition
-                 go-guru-implements)
-      :init
-      (progn
-        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
-        ))
-
     (setq gofmt-command (cond
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
@@ -5395,39 +5237,11 @@ if submodules exists, grep submodules too."
           (expand-file-name "hgs-cache" user-cache-directory))))
 
 
-;;;; helm-go-package
-
-(use-package helm-go-package
-  :ensure t
-  :disabled t
-  :commands helm-go-package
-  :init
-  (progn
-
-    (use-package go-mode
-      :defer
-      :config
-      (progn
-        (define-key go-mode-map (kbd "C-c i") 'helm-go-package))))
-  :config
-  (progn
-
-    (use-package helm)))
-
-
 ;;;; helm-orgcard
 
 (use-package helm-orgcard
   :ensure t
   :commands helm-orgcard)
-
-
-;;;; helm-package
-
-(use-package helm-package
-  :disabled t
-  :ensure t
-  :commands helm-package)
 
 
 ;;;; helm-projectile
@@ -6596,19 +6410,6 @@ drag the viewpoint on the image buffer that the window displays."
     ))
 
 
-;;;; kite
-
-(use-package kite
-  :disabled t
-  :ensure t
-  :commands
-  (kite-console kite-debug kite-dom kite-scratch kite-memory)
-  :bind (("M-o k d" . kite-dom)
-         ("M-o k c" . kite-console)
-         ("M-o k m" . kite-memory)
-         ("M-o k s" . kite-scratch)))
-
-
 ;;;; kite-mini
 
 (use-package kite-mini
@@ -6710,17 +6511,6 @@ drag the viewpoint on the image buffer that the window displays."
     (rename-modeline "lisp-mode" emacs-lisp-mode "el"))
   :config
   (progn
-
-    (use-package redshank
-      :disabled t
-      :ensure t
-      :commands (redshank-mode
-                 turn-on-redshank-mode)
-      :init
-      (progn
-        (setq redshank-prefix-key "C-c r")
-        (add-hook 'emacs-lisp-mode-hook 'redshank-mode))
-      :diminish redshank-mode)
 
     (use-package erefactor
       :ensure t
@@ -6910,85 +6700,6 @@ declaration in a Python file."
     (setq dap-breakpoints-file (expand-file-name
                                 (workspace-prefix-file-name "dap-breakpoints" ".el")
                                 user-data-directory))))
-
-
-;;;; lusty-explorer
-
-(use-package lusty-explorer
-  :ensure t
-  :disabled t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :commands (lusty-explorer-mode lusty-buffer-explorer lusty-file-explorer)
-  :config
-  (progn
-
-    (defun my-lusty-setup-hook ()
-      (bind-key "SPC" 'lusty-select-match lusty-mode-map)
-      (bind-key "C-d" 'exit-minibuffer lusty-mode-map))
-
-    (add-hook 'lusty-setup-hook 'my-lusty-setup-hook)
-
-    (defun lusty-open-this ()
-      "Open the given file/directory/buffer, creating it if not
-already present."
-      (interactive)
-      (when lusty--active-mode
-        (ecase lusty--active-mode
-          (:file-explorer
-           (let* ((path (minibuffer-contents-no-properties))
-                  (last-char (aref path (1- (length path)))))
-             (lusty-select-match)
-             (lusty-select-current-name)))
-          (:buffer-explorer (lusty-select-match)))))
-
-    (defvar lusty-only-directories nil)
-
-    (defun lusty-file-explorer-matches (path)
-      (let* ((dir (lusty-normalize-dir (file-name-directory path)))
-             (file-portion (file-name-nondirectory path))
-             (files
-              (and dir
-                   ;; NOTE: directory-files is quicker but
-                   ;;       doesn't append slash for directories.
-                   ;;(directory-files dir nil nil t)
-                   (file-name-all-completions "" dir)))
-             (filtered (lusty-filter-files
-                        file-portion
-                        (if lusty-only-directories
-                            (loop for f in files
-                                  when (= ?/ (aref f (1- (length f))))
-                                  collect f)
-                          files))))
-        (if (or (string= file-portion "")
-                (string= file-portion "."))
-            (sort filtered 'string<)
-          (lusty-sort-by-fuzzy-score filtered file-portion))))
-
-    (defun lusty-read-directory ()
-      "Launch the file/directory mode of LustyExplorer."
-      (interactive)
-      (let ((lusty--active-mode :file-explorer))
-        (lusty--define-mode-map)
-        (let* ((lusty--ignored-extensions-regex
-                (concat
-                 "\\(?:" (regexp-opt completion-ignored-extensions) "\\)$"))
-               (minibuffer-local-filename-completion-map lusty-mode-map)
-               (lusty-only-directories t))
-          (lusty--run 'read-directory-name default-directory ""))))
-
-    (defun lusty-read-file-name ()
-      "Launch the file/directory mode of LustyExplorer."
-      (interactive)
-      (let ((lusty--active-mode :file-explorer))
-        (lusty--define-mode-map)
-        (let* ((lusty--ignored-extensions-regex
-                (concat
-                 "\\(?:" (regexp-opt completion-ignored-extensions) "\\)$"))
-               (minibuffer-local-filename-completion-map lusty-mode-map)
-               (lusty-only-directories nil))
-          (lusty--run 'read-file-name default-directory "")))))
-  :bind (("C-x C-f" . lusty-file-explorer)
-         ("C-x f f" . lusty-file-explorer)))
 
 
 ;;;; macrostep
@@ -8911,46 +8622,6 @@ otherwise use the subtree title."
         ))
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
-
-
-    (use-package jedi
-      :disabled t
-      :ensure t
-      :commands (jedi:setup
-                 jedi:ac-setup
-                 jedi-mode)
-      :init
-      (progn
-        (setq
-         ;; NOTE enabling jedi:install-imenu causes buffer revert errors
-         ;; see https://github.com/tkf/emacs-jedi/issues/234
-         jedi:install-imenu nil
-         jedi:complete-on-dot t)
-
-
-        (use-package jedi-direx
-          ;; NOTE enabling jedi-direx causes buffer revert errors
-          ;; see https://github.com/tkf/emacs-jedi/issues/234
-          :disabled t
-          :ensure t
-          :commands (jedi-direx:pop-to-buffer
-                     jedi-direx:switch-to-buffer
-                     jedi-direx:setup)
-          :init
-          (progn
-            ;; (bind-key "C-x C-d" 'jedi-direx:pop-to-buffer python-mode-map)
-            (add-hook 'jedi-mode-hook 'jedi-direx:setup)))
-        (add-hook 'python-mode-hook
-                  #'(lambda ()
-                      (delay-mode-hooks
-                        (jedi:setup)))))
-      :config
-      (progn
-        (bind-key "M-<SPC>" 'jedi:complete jedi-mode-map)
-        (bind-key "M-." 'jedi:goto-definition jedi-mode-map)
-        (bind-key "M-," 'jedi:goto-definition-pop-marker jedi-mode-map)
-        (bind-key "C-c d" 'jedi:show-doc jedi-mode-map)
-        (bind-key "C-c r" 'helm-jedi-related-names jedi-mode-map)))
 
     (smartrep-define-key
         python-mode-map
