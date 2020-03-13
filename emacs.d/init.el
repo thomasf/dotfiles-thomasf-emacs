@@ -1147,6 +1147,8 @@ re-downloaded in order to locate PACKAGE."
 
 ;;;; misc...
 
+;;;;; next/prev error
+
 (defun my-next-error (&optional arg reset)
   ""
   (interactive)
@@ -1284,8 +1286,6 @@ re-downloaded in order to locate PACKAGE."
     (setq enable-recursive-minibuffers nil)))
 ;; (recursive-minibuffer-mode)
 
-
-;;; functions
 
 ;;;; files / directories
 
@@ -2034,6 +2034,20 @@ display, depending on the window manager)."
 
 
 ;;;; editing/inserting/in buffer navigation
+
+;;;;; yank-selection
+
+(defun yank-selection ()
+  "Insert the primary selection"
+  (interactive)
+  (when select-active-regions
+    (let (select-active-regions)
+      (deactivate-mark)))
+  (let ((primary (gui-get-selection)))
+    (push-mark)
+    (insert-for-yank primary)))
+(bind-key "C-s-v" 'yank-selection)
+
 
 ;;;;; enable "regular" backspace behaviour in isearch
 
