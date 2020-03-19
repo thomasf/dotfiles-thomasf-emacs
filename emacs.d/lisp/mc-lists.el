@@ -224,6 +224,7 @@
         cleanup-buffer
         compile-goto-error
         describe-key
+        dired-jump
         dired-toggle-read-only
         edebug-next-mode
         ediff-next-difference
@@ -247,6 +248,7 @@
         magit-goto-next-section
         magit-status
         magit-submodule
+        mark-whole-buffer
         mc/add-cursor-on-click
         mc/add-cursors-to-all-matches
         mouse-drag-drag
