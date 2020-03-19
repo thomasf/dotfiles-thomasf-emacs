@@ -4106,8 +4106,8 @@ If FILE already exists, signal an error."
 
 ;;;; extempore
 
-(use-package extempore
-  :requires extempore
+(use-package extempore-mode
+  :ensure t
   :mode ("\\.xtm\\'" . extempore-mode)
   :config
   (progn
