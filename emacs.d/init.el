@@ -3596,6 +3596,7 @@ for the current buffer's file name, and the line number at point."
 
 
     (use-package dired-avfs
+      :disabled t
       :ensure t
       :if (executable-find* "mountavfs"))
 
