@@ -1051,6 +1051,10 @@ re-downloaded in order to locate PACKAGE."
       (setq my-monospaced-font "Pragmata Pro-15"
             my-variable-pitch-font "Go-15.5"))
 
+    (when (s-starts-with? "dennis" system-name)
+      (setq my-monospaced-font "Pragmata Pro-17"
+            my-variable-pitch-font "Go-17"))
+
     (defun my-set-fonts  ()
       (interactive)
       (when window-system
