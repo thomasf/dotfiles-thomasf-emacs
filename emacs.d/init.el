@@ -6646,7 +6646,14 @@ declaration in a Python file."
                             "yarn global add yaml-language-server")
       (add-hook 'yaml-mode-hook #'lsp))
 
-    )
+    (use-package lsp-haskell
+      :ensure t
+      :after haskell
+      :init
+      (progn
+        (when (executable-find* "hie-wrapper"
+                                "install haskell-ide-engine https://github.com/haskell/haskell-ide-engine")
+          (add-hook 'haskell-mode-hook #'lsp)))))
 
   :config
   (progn
