@@ -4686,6 +4686,7 @@ See URL `https://github.com/golang/lint'."
       :commands go-impl)
 
     (setq gofmt-command (cond
+                         ;; ((executable-find* "gofumports") "gofumports")
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
 
