@@ -6646,6 +6646,11 @@ declaration in a Python file."
                             "yarn global add yaml-language-server")
       (add-hook 'yaml-mode-hook #'lsp))
 
+    (when (executable-find* "terraform-lsp"
+                            "https://github.com/juliosueiras/terraform-lsp")
+      (add-hook 'terraform-mode-hook #'lsp))
+
+
     (use-package lsp-haskell
       :ensure t
       :after haskell
