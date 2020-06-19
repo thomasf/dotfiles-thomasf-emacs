@@ -6619,6 +6619,7 @@ declaration in a Python file."
   :commands (lsp lsp-mode)
   :init
   (progn
+    (setq lsp-gopls-codelens nil)
     (setq lsp-idle-delay 0.2)
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
