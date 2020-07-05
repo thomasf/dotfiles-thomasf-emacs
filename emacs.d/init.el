@@ -6620,8 +6620,12 @@ declaration in a Python file."
   :commands (lsp lsp-mode)
   :init
   (progn
-    (setq lsp-gopls-codelens nil)
-    (setq lsp-idle-delay 0.2)
+    (setq lsp-gopls-codelens nil
+          lsp-idle-delay 0.2
+          ;; lsp-auto-configure nil
+           lsp-diagnostic-package :none
+           ;; lsp-diagnostic-package :flycheck
+           )
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
