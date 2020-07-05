@@ -3271,6 +3271,7 @@ for the current buffer's file name, and the line number at point."
 (use-package company
   :ensure t
   :commands company-mode
+  :diminish ""
   :init
   (progn
     (setq company-tooltip-align-annotations t
