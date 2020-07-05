@@ -267,6 +267,7 @@
         shell
         smex
         transient-quit-one
+        typescript-cccc
         undo-tree-visualize
         wdired-finish-edit
         wgrep-change-to-wgrep-mode
