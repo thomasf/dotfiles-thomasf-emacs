@@ -6623,9 +6623,14 @@ declaration in a Python file."
     (setq lsp-gopls-codelens nil
           lsp-idle-delay 0.2
           ;; lsp-auto-configure nil
-           lsp-diagnostic-package :none
-           ;; lsp-diagnostic-package :flycheck
-           )
+           lsp-diagnostic-package :none)
+    (defun lsp-switch-flycheck-diagnostic ()
+      (interactive)
+      (if (equal lsp-diagnostic-package :none)
+          (setq lsp-diagnostic-package :flycheck)
+        (setq lsp-diagnostic-package :none))
+      (message "%s"  lsp-diagnostic-package))
+
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
