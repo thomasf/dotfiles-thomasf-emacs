@@ -6187,7 +6187,8 @@ drag the viewpoint on the image buffer that the window displays."
           js2-include-node-externs t
           js2-idle-timer-delay 0.1
           js2-highlight-level 3
-          js2-show-parse-errors nil ;; Let flycheck handle parse errors
+          js2-mode-show-parse-errors nil ;; Let flycheck handle parse errors
+          js2-mode-show-strict-warnings nil ;; Let flycheck handle parse errors
           ))
 
   :config
