@@ -6675,6 +6675,7 @@ declaration in a Python file."
 
   :config
   (progn
+    (load "lsp-mode-autoloads" nil t)
     (setq
      lsp-auto-guess-root t
      lsp-prefer-flymake nil
