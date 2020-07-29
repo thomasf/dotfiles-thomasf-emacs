@@ -171,6 +171,12 @@ re-downloaded in order to locate PACKAGE."
 (require 'cl)
 (require 'subr-x)
 
+(use-package sql-mode
+  :defer t
+  :init
+  (progn
+    (add-hook 'sql-mode-hook '(lambda () (define-key sql-mode-map (kbd "TAB") 'self-insert-command)))))
+
 (use-package dash
   :ensure t
   :demand
