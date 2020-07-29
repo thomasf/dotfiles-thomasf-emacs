@@ -10099,12 +10099,13 @@ otherwise use the subtree title."
 
 (use-package wakatime-mode
   :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) (not degrade-p-minimalism) (executable-find* "wakatime"))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
   :defer 4
   :init
   (progn
+    (setq wakatime-disable-on-error t)
     ;; (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
     )
   :config
