@@ -3,10 +3,10 @@
 # expand-env: ()
 # --
 ${1:$$(yas-choose-value '(
-"Improve source readability"
-"Improve source formatting"
-"Improve documentation"
-"Fix pep8 issues"
-"Remove unused code"
-"Gofmt'd"
+"improve source readability"
+"improve source formatting"
+"improve documentation"
+"fix pep8 issues"
+"remove unused code"
+"gofmt'd"
 ))}$0
