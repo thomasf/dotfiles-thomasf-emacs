@@ -2,4 +2,4 @@
 # key: dis
 # expand-env: ()
 # --
-Disable $0
+disable $0

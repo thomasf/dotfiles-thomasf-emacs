@@ -3,4 +3,4 @@
 # binding: 
 # expand-env: ()
 # --
-Set $0
+set $0

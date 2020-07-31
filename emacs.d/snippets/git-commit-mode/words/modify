@@ -2,4 +2,4 @@
 # key: mod
 # expand-env: ()
 # --
-Modify $0
+modify $0

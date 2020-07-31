@@ -3,4 +3,4 @@
 # binding: 
 # expand-env: ()
 # --
-Remove $0
+remove $0
