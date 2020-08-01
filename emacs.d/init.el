@@ -9732,7 +9732,15 @@ otherwise use the subtree title."
 
 (use-package terraform-mode
   :ensure t
-  :mode (("\\.tf\\(vars\\)?\\'" . terraform-mode)))
+  :mode (("\\.tf\\(vars\\)?\\'" . terraform-mode))
+  :config
+  (progn
+    (defun terraform-cccc ()
+      (interactive)
+      (terraform-format-buffer)
+      (silent-save-some-buffers))
+
+    (bind-key "C-c C-c" 'terraform-cccc terraform-mode-map)))
 
 
 ;;;; tex
