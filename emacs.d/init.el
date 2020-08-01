@@ -8665,12 +8665,8 @@ otherwise use the subtree title."
     (defun python-cccc ()
       (interactive)
       (silent-save-some-buffers)
-      (let ((exec-path (append exec-path
-                               (list (expand-file-name "~/.virtualenvs/default/bin/")))))
-        (py-black-buffer)
-        (py-isort-buffer)
-        ;; (py-autopep8-buffer)
-        ))
+      (py-black-buffer)
+      (py-isort-buffer))
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
 
