@@ -1046,20 +1046,31 @@ re-downloaded in order to locate PACKAGE."
 
     (when (s-starts-with? "transwhale" system-name)
       (setq my-monospaced-font "Pragmata Pro-12"
-            my-variable-pitch-font "Go-12.5"))
+            my-variable-pitch-font "Go-12.5"
+            dynamic-fonts-preferred-monospace-point-size 12
+            dynamic-fonts-preferred-proportional-point-size 12.5
+            ))
 
     (when (s-starts-with? "prizza" system-name)
-      (setq my-monospaced-font "Pragmata Pro-13"
-            my-variable-pitch-font "Go-13.5"))
-
+      (setq my-monospaced-font "Pragmata Pro-15"
+            my-variable-pitch-font "Go-15.5"
+            dynamic-fonts-preferred-monospace-point-size 15
+            dynamic-fonts-preferred-proportional-point-size 15.5
+            ))
 
     (when (s-starts-with? "fogskum" system-name)
       (setq my-monospaced-font "Pragmata Pro-15"
-            my-variable-pitch-font "Go-15.5"))
+            my-variable-pitch-font "Go-15.5"
+            dynamic-fonts-preferred-monospace-point-size 15
+            dynamic-fonts-preferred-proportional-point-size 15.5
+            ))
 
-    (when (s-starts-with? "dennis" system-name)
+    (when (s-starts-with? "crangy" system-name)
       (setq my-monospaced-font "Pragmata Pro-17"
-            my-variable-pitch-font "Go-17"))
+            my-variable-pitch-font "Go-17"
+            dynamic-fonts-preferred-monospace-point-size 17
+            dynamic-fonts-preferred-proportional-point-size 17
+            ))
 
     (defun my-set-fonts  ()
       (interactive)
