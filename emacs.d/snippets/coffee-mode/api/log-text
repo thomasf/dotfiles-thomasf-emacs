@@ -1,5 +1,0 @@
-# -*- coding: utf-8; mode: snippet -*-
-# name: console.log ""
-# key: lot
-# --
-console.log "$0"

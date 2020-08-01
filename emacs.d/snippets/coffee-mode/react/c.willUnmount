@@ -1,5 +1,0 @@
-# name: componentWillUnmount
-# expand-env: ((yas-indent-line 'fixed))
-# --
-componentWillUnmount: () ->
-$>$0

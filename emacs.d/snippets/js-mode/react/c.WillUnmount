@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: componentWillUnmount
-# --
-componentWillUnmount: function() {
-$0
-},

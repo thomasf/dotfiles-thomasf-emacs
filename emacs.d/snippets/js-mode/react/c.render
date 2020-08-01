@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: component render
-# --
-render: function() {
-	return ( $0 )
-},

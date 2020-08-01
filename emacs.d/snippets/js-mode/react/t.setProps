@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: this#setProps
-# --
-this.setProps({
-    $0
-})

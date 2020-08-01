@@ -1,9 +1,0 @@
-# -*- coding: utf-8; mode: snippet -*-
-# name: try
-# key: try
-# expand-env: ((yas-indent-line 'fixed))
-# --
-try
-$>$0
-catch err
-$>console.log "Exception", err

@@ -1,5 +1,0 @@
-# name: componentWillMount
-# expand-env: ((yas-indent-line 'fixed))
-# --
-componentWillMount: () ->
-$>$0

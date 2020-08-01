@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: React renderComponent
-# --
-React.renderComponent(
-$1,
-$0
-);

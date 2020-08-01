@@ -1,5 +1,0 @@
-# name: componentWillReceiveProps
-# expand-env: ((yas-indent-line 'fixed))
-# --
-componentWillReceiveProps: (nextProps) ->
-$>$0

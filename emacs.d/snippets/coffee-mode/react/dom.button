@@ -1,4 +1,0 @@
-# name: dom.button
-# key: button
-# --
-(dom.button {$0})

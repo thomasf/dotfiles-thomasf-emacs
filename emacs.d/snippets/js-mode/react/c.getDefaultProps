@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: component getDefaultProps
-# --
-getDefaultProps: function() {
-	return {
-    	$0
-    }
-},

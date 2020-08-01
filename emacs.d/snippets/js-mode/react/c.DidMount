@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: componentDidMount
-# --
-componentDidMount: function(${1:rootNode}) {
-$0
-},

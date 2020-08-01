@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: componentWillMount
-# --
-componentWillMount: function() {
-$0
-},

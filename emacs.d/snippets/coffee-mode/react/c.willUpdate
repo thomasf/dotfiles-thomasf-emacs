@@ -1,5 +1,0 @@
-# name: componentWillUpdate
-# expand-env: ((yas-indent-line 'fixed))
-# --
-componentWillUpdate: (nextProps, nextState) ->
-$>$0

@@ -1,7 +1,0 @@
-# -*- coding: utf-8; mode: snippet -*-
-# name: class function
-# key: cfn
-# expand-env: ((yas-indent-line 'fixed))
-# --
-$1: () ->
-$>$0

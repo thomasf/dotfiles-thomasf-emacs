@@ -1,7 +1,0 @@
-# name: setter
-# key: setter
-# binding: 
-# expand-env: ((yas-indent-line 'fixed))
-# --
-set$1: ($2) ->
-$>@$2 = $2
