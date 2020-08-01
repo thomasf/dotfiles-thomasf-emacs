@@ -2,6 +2,7 @@
 
 clean() {
   (
+    set -e
     cd $1
     find . -name \*.elc -exec rm {} \;
     find . -name .yas-compiled-snippets.el -exec rm {} \;
@@ -10,10 +11,8 @@ clean() {
 
 rm -f ~/*.elc
 rm -f *.elc
-clean lib
 clean lisp
 clean site-lisp
-clean override
 clean snippets
 clean themes
 
