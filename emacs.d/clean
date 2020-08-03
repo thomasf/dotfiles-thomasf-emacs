@@ -15,4 +15,4 @@ clean lisp
 clean site-lisp
 clean snippets
 clean themes
-
+clean ~/.config-private/emacs
