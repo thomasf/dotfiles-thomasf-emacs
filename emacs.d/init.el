@@ -1002,13 +1002,13 @@ re-downloaded in order to locate PACKAGE."
     (load "smart-mode-line-autoloads" t t))
   :init
   (progn
+    (customize-set-variable 'sml/projectile-replacement-format ":p/%s:")
     (setq
      sml/modified-char "m"
      sml/read-only-char "r"
      sml/outside-modified-char "M"
      sml/mule-info ""
      sml/shorten-modes nil
-     sml/projectile-replacement-format ":p/%s:"
      sml/replacer-regexp-list
      '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
        ("^~/\.local/share/virtualenvs/\\([^/]+\\)" ":e/\\1:")
