@@ -4755,13 +4755,6 @@ See URL `https://github.com/golang/lint'."
       :ensure t
       :commands (go-stacktracer-region))
 
-
-    (use-package go-eldoc
-      :ensure t
-      :init
-      (progn
-        (add-hook 'go-mode-hook 'go-eldoc-setup)))
-
     (require 'go-expanderr nil t)))
 
 
