@@ -991,6 +991,7 @@ re-downloaded in order to locate PACKAGE."
 
 (setq sml/theme nil)
 (use-package smart-mode-line
+  :disabled t
   :ensure t
   :if (and
        (not noninteractive)
