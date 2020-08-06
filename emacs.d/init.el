@@ -1006,6 +1006,32 @@ re-downloaded in order to locate PACKAGE."
                 (when dark-theme-on (bright-theme)))))
 
 
+;;;; simple-modeline
+
+(use-package simple-modeline
+  :ensure t
+  :commands (simple-modeline-mode)
+  :init
+  (progn
+    (simple-modeline-mode))
+  :config
+  (progn
+    (setq simple-modeline--mode-line
+          '((:eval
+             (simple-modeline--format
+              '(simple-modeline-segment-modified
+                simple-modeline-segment-position
+                simple-modeline-segment-buffer-name)
+              '(simple-modeline-segment-minor-modes
+                simple-modeline-segment-input-method
+                simple-modeline-segment-eol
+                simple-modeline-segment-encoding
+                simple-modeline-segment-vc
+                ;; simple-modeline-segment-misc-info
+                simple-modeline-segment-process
+                simple-modeline-segment-major-mode)))))))
+
+
 ;;;; smart-mode-line
 
 (setq sml/theme nil)
