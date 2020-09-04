@@ -31,7 +31,12 @@
     (let ((v (executable-find command)) )
       (unless v
         (message "executable '%s' not found: %s" command (or help "")))
-      v)))
+      v))
+
+  (defmacro file-exists-p* (filename)
+    "Macro form of file-exists-p which expands the file name and returns the expenaded file name instead of t."
+    (let ((f (expand-file-name filename)) )
+      (if (file-exists-p filename) filename))))
 
 
 ;;;; gc
@@ -8028,7 +8033,10 @@ otherwise use the subtree title."
 ;;;; plantuml-mode
 
 (progn
-  (setq plantuml-jar-path (f-expand "~/.opt/plantuml.jar")
+  (setq plantuml-jar-path
+        (or
+         (file-exists-p* "~/.opt/plantuml.jar")
+         (file-exists-p* "/usr/share/plantuml/plantuml.jar"))
         org-plantuml-jar-path plantuml-jar-path))
 
 (use-package plantuml-mode
@@ -8037,8 +8045,12 @@ otherwise use the subtree title."
   :mode (("\\.plu\\'" . plantuml-mode))
   :config
   (progn
+    (setq
+     plantuml-server-url nil
+     plantuml-default-exec-mode 'jar
+     )
     (require 'cl-lib))
-  :if (file-exists-p plantuml-jar-path))
+  :if plantuml-jar-path)
 
 
 ;;;; platformio-mode
