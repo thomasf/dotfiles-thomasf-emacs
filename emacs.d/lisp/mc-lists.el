@@ -252,6 +252,7 @@
         mc/add-cursor-on-click
         mc/add-cursors-to-all-matches
         mouse-drag-drag
+        mouse-drag-header-line
         mouse-set-region
         multiple-cursors-mode
         my-go-go-command
