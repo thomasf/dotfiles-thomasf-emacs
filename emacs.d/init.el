@@ -7699,6 +7699,7 @@ Argument FILENAME File to insert."
 
 
     (use-package ob-http :ensure t)
+    (use-package ob-go :ensure t)
 
     (org-babel-do-load-languages
      'org-babel-load-languages
@@ -7711,6 +7712,7 @@ Argument FILENAME File to insert."
        (ditaa . t)
        (plantuml . t)
        (sql . t)
+       (go . t)
        (http . t)))
 
     (setq-default org-src-lang-modes
