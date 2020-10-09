@@ -9384,7 +9384,7 @@ otherwise use the subtree title."
   :defer
   :init
   (progn
-    (setq shr-external-browser 'browse-url-generic)))
+    (setq browse-url-secondary-browser-function 'browse-url-generic)))
 
 
 ;;;; simple-httpd
