@@ -275,6 +275,7 @@
         wgrep-finish-edit
         wgrep-save-all-buffers
         winner-undo
+        xref-find-definitions
         xwidget-webkit-scroll-forward
         xwidget-webkit-scroll-up
         yas-expand
