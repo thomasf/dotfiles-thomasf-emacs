@@ -6684,6 +6684,7 @@ declaration in a Python file."
   (progn
     (setq lsp-gopls-codelens nil
           lsp-idle-delay 0.2
+          lsp-file-watch-threshold 15000
           ;; lsp-auto-configure nil
            lsp-diagnostic-package :none)
     (defun lsp-switch-flycheck-diagnostic ()
