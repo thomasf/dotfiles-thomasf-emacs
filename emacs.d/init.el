@@ -4857,6 +4857,10 @@ See URL `https://github.com/golang/lint'."
 
 ;;;; goto-chg
 
+(use-package undo-tree
+  :ensure t
+  :if (not noninteractive))
+
 (use-package goto-chg
   :ensure t
   :if (not noninteractive)
