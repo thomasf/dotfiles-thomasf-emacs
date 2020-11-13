@@ -144,7 +144,7 @@
    package-archives
    '(("melpa-stable" . "https://stable.melpa.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
-     ("marmalade"   . "https://marmalade-repo.org/packages/")
+     ;; ("marmalade"   . "https://marmalade-repo.org/packages/")
      ("org"         . "http://orgmode.org/elpa/")
      ("gnu"         . "https://elpa.gnu.org/packages/")
      ;; ("sc"   . "http://joseito.republika.pl/sunrise-commander/")
@@ -4911,6 +4911,7 @@ See URL `https://github.com/golang/lint'."
 
 (use-package gtags
   :ensure t
+  :disabled t
   :commands (gtags-mode))
 
 
@@ -5082,6 +5083,7 @@ See URL `https://github.com/golang/lint'."
 
 (use-package header2
   :ensure t
+  :disabled t
   :commands (make-header make-revision make-divider make-box-comment
                          update-file-header))
 
@@ -6578,6 +6580,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package lib-requires
   :ensure t
+  :disabled t
   :commands (libreq-requires-tree libreq-requires-list
                                   libreq-insert-lib-requires-as-comment))
 
@@ -7969,6 +7972,7 @@ otherwise use the subtree title."
 
 (use-package parenface-plus
   :ensure t
+  :disabled t
   :if (and (not noninteractive) (not (not window-system)) (not degrade-p-minimalism))
   :config
   (progn
@@ -10009,6 +10013,7 @@ otherwise use the subtree title."
 
 (use-package unbound
   :ensure t
+  :disabled t
   :commands describe-unbound-keys)
 
 
