@@ -7325,6 +7325,7 @@ Titus von der Malsburg."
 
 (use-package mwe-log-commands
   :ensure t
+  :disable t
   :commands (mwe:log-keyboard-commands
              mwe:open-command-log-buffer))
 
