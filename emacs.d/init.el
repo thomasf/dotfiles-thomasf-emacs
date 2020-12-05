@@ -4613,6 +4613,13 @@ See URL `https://github.com/golang/lint'."
   :commands (font-utils-first-existing-font))
 
 
+;;;; gdscript-mode
+
+(use-package gdscript-mode
+             :ensure t
+             :mode "\\.gd\\'")
+
+
 ;;;; gist
 
 (use-package gist
