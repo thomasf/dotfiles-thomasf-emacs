@@ -267,6 +267,7 @@
         recenter-top-bottom-flash
         shell
         smex
+        terraform-cccc
         transient-quit-one
         typescript-cccc
         undo-tree-visualize
