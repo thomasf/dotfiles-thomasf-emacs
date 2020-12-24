@@ -1015,6 +1015,7 @@ re-downloaded in order to locate PACKAGE."
 
 (use-package simple-modeline
   :ensure t
+  ;; :disabled t
   :commands (simple-modeline-mode)
   :init
   (progn
@@ -1070,6 +1071,36 @@ re-downloaded in order to locate PACKAGE."
 
 ;;;; dynamic-fonts
 
+(defvar my-monospaced-font "Pragmata Pro-12")
+(defvar my-variable-pitch-font "Go-12.5")
+;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
+;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
+
+(cond
+ ((string-prefix-p "transwhale" system-name)
+  (setq my-monospaced-font "Pragmata Pro-12"
+        my-variable-pitch-font "Go-12.5"
+        dynamic-fonts-preferred-monospace-point-size 12
+        dynamic-fonts-preferred-proportional-point-size 12.5))
+
+ ((string-prefix-p "prizza" system-name)
+  (setq my-monospaced-font "Pragmata Pro-15"
+        my-variable-pitch-font "Go-15.5"
+        dynamic-fonts-preferred-monospace-point-size 15
+        dynamic-fonts-preferred-proportional-point-size 15.5))
+
+ ((string-prefix-p "fogskum" system-name)
+  (setq my-monospaced-font "Pragmata Pro-15"
+        my-variable-pitch-font "Go-15.5"
+        dynamic-fonts-preferred-monospace-point-size 15
+        dynamic-fonts-preferred-proportional-point-size 15.5))
+
+ ((string-prefix-p "crangy" system-name)
+  (setq my-monospaced-font "Pragmata Pro-17"
+        my-variable-pitch-font "Go-17"
+        dynamic-fonts-preferred-monospace-point-size 17
+        dynamic-fonts-preferred-proportional-point-size 17)))
+
 (use-package dynamic-fonts
   :ensure t
   :commands (dynamic-fonts-setup)
@@ -1090,38 +1121,7 @@ re-downloaded in order to locate PACKAGE."
        "Tahoma" "Verdana" "Helvetica" "Arial Unicode MS" "Arial")
      dynamic-fonts-preferred-proportional-point-size 12.5)
 
-    (defvar my-monospaced-font "Pragmata Pro-12")
-    (defvar my-variable-pitch-font "Go-12.5")
-    ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
-    ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
-    (when (s-starts-with? "transwhale" system-name)
-      (setq my-monospaced-font "Pragmata Pro-12"
-            my-variable-pitch-font "Go-12.5"
-            dynamic-fonts-preferred-monospace-point-size 12
-            dynamic-fonts-preferred-proportional-point-size 12.5
-            ))
-
-    (when (s-starts-with? "prizza" system-name)
-      (setq my-monospaced-font "Pragmata Pro-15"
-            my-variable-pitch-font "Go-15.5"
-            dynamic-fonts-preferred-monospace-point-size 15
-            dynamic-fonts-preferred-proportional-point-size 15.5
-            ))
-
-    (when (s-starts-with? "fogskum" system-name)
-      (setq my-monospaced-font "Pragmata Pro-15"
-            my-variable-pitch-font "Go-15.5"
-            dynamic-fonts-preferred-monospace-point-size 15
-            dynamic-fonts-preferred-proportional-point-size 15.5
-            ))
-
-    (when (s-starts-with? "crangy" system-name)
-      (setq my-monospaced-font "Pragmata Pro-17"
-            my-variable-pitch-font "Go-17"
-            dynamic-fonts-preferred-monospace-point-size 17
-            dynamic-fonts-preferred-proportional-point-size 17
-            ))
 
     (defun my-set-fonts  ()
       (interactive)
@@ -6751,6 +6751,13 @@ declaration in a Python file."
 
   :config
   (progn
+    (use-package lsp-headerline
+      :defer
+      :config
+      (progn
+        (set-face-attribute 'lsp-headerline-breadcrumb-symbols-face nil :font my-variable-pitch-font)
+        (set-face-attribute 'lsp-headerline-breadcrumb-path-face nil :font my-variable-pitch-font)))
+
     (load "lsp-mode-autoloads" nil t)
     (setq
      lsp-auto-guess-root t
@@ -6762,14 +6769,7 @@ declaration in a Python file."
       "/usr"
       (expand-file-name "~/.opt/go")
       (expand-file-name "~/pkg/mod")
-      ))
-
-    (use-package lsp-clients
-      :defer
-      ;; :config
-      ;; (progn
-      ;;   (remhash 'gopls lsp-clients))
-      )))
+      ))))
 
 
 ;;;;; lsp-ui
@@ -6789,16 +6789,21 @@ declaration in a Python file."
     ;;       (if (display-graphic-p) 1 2)))
 
     (setq
-     lsp-ui-doc-enable nil
-     lsp-ui-doc-delay 3
+     lsp-ui-doc-delay 0.2
+     ;; lsp-ui-doc-delay 3
      lsp-ui-sideline-delay 1.1
      lsp-document-highlight-delay 1.1
 
+     lsp-ui-doc-enable t
      lsp-ui-doc-header nil
      lsp-ui-doc-include-signature nil
-     lsp-ui-sideline-show-hover t
+     lsp-ui-doc-show-with-mouse t
+     lsp-ui-doc-show-with-cursor nil
+
+     lsp-ui-sideline-enable t
+     lsp-ui-sideline-show-code-actions t
+     lsp-ui-sideline-show-hover nil
      lsp-ui-sideline-show-diagnostics nil
-     lsp-ui-sideline-show-actions t
      lsp-ui-sideline-show-symbol t
      lsp-ui-sideline-ignore-duplicate t
      )
@@ -9287,6 +9292,7 @@ otherwise use the subtree title."
 ;;;; semantic
 
 (use-package semantic
+  :disabled t
   :commands (my-semantic-setup)
   :init
   (progn
@@ -9304,7 +9310,7 @@ otherwise use the subtree title."
       (semantic-mode)
       (semantic-idle-scheduler-mode)
       ;; (semantic-decoration-mode)
-      (semantic-idle-breadcrumbs-mode)
+      ;; (semantic-idle-breadcrumbs-mode) ;; using lsp-mode for this instead
       )))
 
 
@@ -10308,24 +10314,30 @@ otherwise use the subtree title."
 ;;;; which-func
 
 (use-package which-func
+  :disabled t ;; using lsp breadcrumbs mode instead
   :commands (which-func-mode)
   :if (and (not noninteractive) (not degrade-p-minimalism))
   :init
   (progn
     (setq
-     which-func-modes '(emacs-lisp-mode coffee-mode go-mode))
+     which-func-modes '(emacs-lisp-mode))
     (when (boundp 'mode-line-misc-info)
-      (which-func-mode 1)))
+      (which-function-mode 1)))
   :config
   (progn
-    (setq mode-line-misc-info (delete (assoc 'which-func-mode
-                                             mode-line-misc-info) mode-line-misc-info)
-          which-func-header-line-format '(which-func-mode ("" which-func-format)))
-    (defadvice which-func-ff-hook (after header-line activate)
-      (when which-func-mode
-        (setq mode-line-misc-info (delete (assoc 'which-func-mode
-                                                 mode-line-misc-info) mode-line-misc-info)
-              header-line-format which-func-header-line-format)))
+
+    ;; using lsp breadcrumbs mode instead
+    ;;
+    ;;
+    ;; (setq mode-line-misc-info (delete (assoc 'which-func-mode
+    ;;                                          mode-line-misc-info) mode-line-misc-info)
+    ;;       which-func-header-line-format '(which-func-mode ("" which-func-format)))
+    ;; (defadvice which-func-ff-hook (after header-line activate)
+    ;;   (when which-func-mode
+    ;;     (setq mode-line-misc-info (delete (assoc 'which-func-mode
+    ;;                                              mode-line-misc-info) mode-line-misc-info)
+    ;;           header-line-format which-func-header-line-format)))
+
     ))
 
 
