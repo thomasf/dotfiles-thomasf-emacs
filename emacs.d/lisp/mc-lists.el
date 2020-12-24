@@ -223,6 +223,7 @@
         beginning-of-buffer
         cleanup-buffer
         compile-goto-error
+        deadgrep
         describe-key
         dired-jump
         dired-toggle-read-only
