@@ -6756,7 +6756,12 @@ declaration in a Python file."
       :config
       (progn
         (set-face-attribute 'lsp-headerline-breadcrumb-symbols-face nil :font my-variable-pitch-font)
-        (set-face-attribute 'lsp-headerline-breadcrumb-path-face nil :font my-variable-pitch-font)))
+        (set-face-attribute 'lsp-headerline-breadcrumb-path-face nil :font my-variable-pitch-font)
+        (set-face-attribute 'lsp-headerline-breadcrumb-project-prefix-face nil :font my-variable-pitch-font)
+
+        (set-face-attribute 'lsp-headerline-breadcrumb-symbols-face nil :height 0.95)
+        (set-face-attribute 'lsp-headerline-breadcrumb-path-face nil :height 0.95)
+        (set-face-attribute 'lsp-headerline-breadcrumb-project-prefix-face nil :height 1.0)))
 
     (load "lsp-mode-autoloads" nil t)
     (setq
