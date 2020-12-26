@@ -1556,8 +1556,9 @@ re-downloaded in order to locate PACKAGE."
   "Save-some-buffers, then other window."
   (interactive)
   (call-interactively 'other-window-or-prompt)
-  (nav-flash-show-maybe)
-  (silent-save-some-buffers))
+  (unless (window-minibuffer-p)
+    (nav-flash-show-maybe)
+    (silent-save-some-buffers)))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
 
@@ -1937,8 +1938,9 @@ the current one that frame will be gain focus."
 		 (minibuf-frame (window-frame minibuf)))
 
 	    (unless (equal minibuf-frame (selected-frame))
-	      (select-frame minibuf-frame)
-	      (raise-frame minibuf-frame))
+          (select-frame-set-input-focus minibuf-frame)
+	      ;; (select-frame minibuf-frame)
+	      ;; (raise-frame minibuf-frame))
 
 	    (when (window-live-p minibuf)
 	      (select-window minibuf))))
