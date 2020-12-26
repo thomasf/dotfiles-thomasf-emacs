@@ -1555,7 +1555,7 @@ re-downloaded in order to locate PACKAGE."
 (defun save-some-buffers-other-window ()
   "Save-some-buffers, then other window."
   (interactive)
-  (call-interactively 'other-window)
+  (call-interactively 'other-window-or-prompt)
   (nav-flash-show-maybe)
   (silent-save-some-buffers))
 
@@ -1922,6 +1922,28 @@ re-downloaded in order to locate PACKAGE."
 ;;;; windows / frames
 
 ;;;;; windows
+
+;;;;; other-window-or-prompt
+
+(defun other-window-or-prompt (count &optional all-frames)
+  "Calls `other-window' as you'd expect from \\[C-x o] with the exception when
+there is an active prompt. In this case the minibuffer
+window will become active. If the prompt was active on a different frame than
+the current one that frame will be gain focus."
+  (interactive "p")
+  (if (minibuffer-prompt)
+      (unwind-protect
+	  (let* ((minibuf (active-minibuffer-window))
+		 (minibuf-frame (window-frame minibuf)))
+
+	    (unless (equal minibuf-frame (selected-frame))
+	      (select-frame minibuf-frame)
+	      (raise-frame minibuf-frame))
+
+	    (when (window-live-p minibuf)
+	      (select-window minibuf))))
+    (other-window count all-frames)))
+
 
 ;;;;;; dedicated-mode
 
