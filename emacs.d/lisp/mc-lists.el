@@ -3,7 +3,6 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        ac-complete
         adv-dash
         adv-dot
         adv-enter
@@ -246,6 +245,7 @@
         jump-between-source-and-test-files
         kmacro-end-or-call-macro
         loccur-current
+        lsp-ui-doc--handle-mouse-movement
         magit-goto-next-section
         magit-status
         magit-submodule
@@ -281,4 +281,7 @@
         xwidget-webkit-scroll-forward
         xwidget-webkit-scroll-up
         yas-expand
+        other-window
+        ac-complete
+
         ))
