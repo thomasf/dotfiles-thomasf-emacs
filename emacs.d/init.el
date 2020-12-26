@@ -6724,13 +6724,14 @@ declaration in a Python file."
           lsp-idle-delay 0.2
           lsp-file-watch-threshold 15000
           ;; lsp-auto-configure nil
-           lsp-diagnostic-package :none)
+          lsp-diagnostic-package :none)
+
     (defun lsp-switch-flycheck-diagnostic ()
       (interactive)
-      (if (equal lsp-diagnostic-package :none)
-          (setq lsp-diagnostic-package :flycheck)
-        (setq lsp-diagnostic-package :none))
-      (message "%s"  lsp-diagnostic-package))
+      (if (equal lsp-diagnostics-provider :none)
+          (setq lsp-diagnostics-provider :flycheck)
+        (setq lsp-diagnostics-provider :none))
+      (message "%s" lsp-diagnostics-provider))
 
     (add-hook 'python-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
@@ -6842,7 +6843,8 @@ declaration in a Python file."
       :config
       (progn
         ;; disable lsp-ui-flycheck hard. (might not be needed anymore)
-        (defun lsp-ui-flycheck-enable (_))))))
+        ;; (defun lsp-ui-flycheck-enable (_))
+        ))))
 
 
 ;;;;; dap-mode
