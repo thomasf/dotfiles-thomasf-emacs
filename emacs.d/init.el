@@ -1343,6 +1343,8 @@ re-downloaded in order to locate PACKAGE."
 ;; NOTE this is slightly annoying
 ;; (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
 
+;; (add-hook 'focus-out-hook 'stop-using-minibuffer)
+
 
 ;;;;; recursive-minibuffer-minor-mode
 
@@ -1548,6 +1550,7 @@ re-downloaded in order to locate PACKAGE."
 (defun save-some-buffers-other-frame ()
   "Save-some-buffers, then other frame."
   (interactive)
+  ;; (stop-using-minibuffer)
   (call-interactively 'other-frame)
   (nav-flash-show-maybe)
   (silent-save-some-buffers))
@@ -1934,16 +1937,16 @@ the current one that frame will be gain focus."
   (interactive "p")
   (if (minibuffer-prompt)
       (unwind-protect
-	  (let* ((minibuf (active-minibuffer-window))
-		 (minibuf-frame (window-frame minibuf)))
+	      (let* ((minibuf (active-minibuffer-window))
+		         (minibuf-frame (window-frame minibuf)))
 
-	    (unless (equal minibuf-frame (selected-frame))
-          (select-frame-set-input-focus minibuf-frame)
-	      ;; (select-frame minibuf-frame)
-	      ;; (raise-frame minibuf-frame))
+	        (unless (equal minibuf-frame (selected-frame))
+              (select-frame-set-input-focus minibuf-frame))
+	        ;; (select-frame minibuf-frame)
+	        ;; (raise-frame minibuf-frame))
 
-	    (when (window-live-p minibuf)
-	      (select-window minibuf))))
+	        (when (window-live-p minibuf)
+	          (select-window minibuf))))
     (other-window count all-frames)))
 
 
