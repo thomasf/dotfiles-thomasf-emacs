@@ -3011,6 +3011,7 @@ for the current buffer's file name, and the line number at point."
 
 (use-package anzu
   :ensure t
+  :disabled t
   :defer 2
   :if (and
        (not noninteractive)
@@ -10232,6 +10233,7 @@ otherwise use the subtree title."
 
 (use-package weechat
   :ensure t
+  :disabled t
   :commands (weechat-connect)
   :bind  (("C-x b i" . weechat-switch-buffer)
           ("C-x b I" . weechat-monitor-buffer))
@@ -10304,6 +10306,7 @@ otherwise use the subtree title."
 
 (use-package which-key
   :ensure t
+  :disabled t
   :commands (which-key-mode)
   :defer 0.9
   :diminish ""
