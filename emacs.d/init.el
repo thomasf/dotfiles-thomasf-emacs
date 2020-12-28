@@ -3619,7 +3619,6 @@ for the current buffer's file name, and the line number at point."
     (delete-selection-mode)))
 
 
-
 ;;;; diff-hl
 
 (use-package diff-hl
@@ -5952,31 +5951,6 @@ if submodules exists, grep submodules too."
                "//" "~/"))
         (call-interactively 'self-insert-command)))
 
-    (defun ido-smart-select-text ()
-      "Select the current completed item.  Do NOT descend into directories."
-      (interactive)
-      (when (and (or (not ido-require-match)
-                     (if (memq ido-require-match
-                               '(confirm confirm-after-completion))
-                         (if (or (eq ido-cur-item 'dir)
-                                 (eq last-command this-command))
-                             t
-                           (setq ido-show-confirm-message t)
-                           nil))
-                     (ido-existing-item-p))
-                 (not ido-incomplete-regexp))
-        (when ido-current-directory
-          (setq ido-exit 'takeprompt)
-          (unless (and ido-text (= 0 (length ido-text)))
-            (let ((match (ido-name (car ido-matches))))
-              (throw 'ido
-                     (setq ido-selected
-                           (if match
-                               (replace-regexp-in-string "/\\'" "" match)
-                             ido-text)
-                           ido-text ido-selected
-                           ido-final-text ido-text)))))
-        (exit-minibuffer)))
 
     (defun my-ido-setup-bindings-hook ()
       ;; (unbind-key "C-a" ido-common-completion-map)
@@ -5987,7 +5961,7 @@ if submodules exists, grep submodules too."
       (bind-key "C-p" 'ido-prev-match ido-completion-map)
       (bind-key "<down>" 'ido-next-match ido-completion-map)
       (bind-key "<up>" 'ido-prev-match ido-completion-map)
-      ;; (bind-key "\C-m" 'ido-smart-select-text  ido-completion-map)
+
       )
     (add-hook 'ido-setup-hook 'my-ido-setup-bindings-hook)))
 
@@ -5995,21 +5969,9 @@ if submodules exists, grep submodules too."
 ;;;; ido-completing-read+
 
 (use-package ido-completing-read+
+  :disabled t
   :ensure t
   :defer t)
-
-
-;;;; ido-load-library
-
-(use-package ido-load-library
-  :ensure t
-  :commands (ido-load-library ido-load-library-find)
-  :init
-  (progn
-    (setq ido-load-library-less-feedback t)
-    ;; (defalias 'load-library 'ido-load-library)
-    ;; (defalias 'find-library 'ido-load-library-find)
-    ))
 
 
 ;;;; ielm
@@ -6159,13 +6121,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'ruby-mode-hook 'indent-guide-mode)))
 
 
-;;;; indicators
-
-(use-package indicators
-  :ensure t
-  :commands (indicators-mode))
-
-
 ;;;; interaction-log
 
 (use-package interaction-log
@@ -6194,16 +6149,6 @@ drag the viewpoint on the image buffer that the window displays."
       :init
       (progn
         (add-hook 'arduino-mode-hook 'irony-cdb-autosetup-compile-options)))))
-
-
-;;;; iswitchb
-
-(use-package iswitchb
-  :disabled t
-  :if (not noninteractive)
-  :init
-  (progn
-    (iswitchb-mode 1)))
 
 
 ;;;; ivy
@@ -6338,25 +6283,6 @@ drag the viewpoint on the image buffer that the window displays."
                                1 font-lock-warning-face t)))))
 
 
-;;;; js2-refactor
-
-(use-package js2-refactor
-  :ensure t
-  :commands (js2r-add-keybindings-with-modifier
-             js2r-add-keybindings-with-prefix js2r-add-to-globals-annotation
-             js2r-arguments-to-object js2r-contract-array
-             js2r-contract-function js2r-contract-object js2r-expand-array
-             js2r-expand-function js2r-expand-object js2r-extract-function
-             js2r-extract-method js2r-extract-var js2r-forward-barf
-             js2r-forward-slurp js2r-inject-global-in-iife js2r-inline-var
-             js2r-introduce-parameter js2r-localize-parameter js2r-log-this
-             js2r-move-line-down js2r-move-line-up js2r-rename-var
-             js2r-split-string js2r-split-var-declaration js2r-ternary-to-if
-             js2r-toggle-function-expression-and-declaration js2r-unwrap
-             js2r-use-strict js2r-var-to-this js2r-wrap-buffer-in-iife
-             js2r-wrap-in-for-loop))
-
-
 ;;;; json-mode
 
 (use-package json-mode
@@ -6385,16 +6311,6 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
     (setq jump-char-lazy-highlight-face nil)))
-
-
-;;;; jumpc
-
-(use-package jumpc
-  :disabled t
-  :ensure t
-  :commands (jumpc)
-  :bind (("C-<f9>" . jumpc-jump-backward)
-         ("C-<f10>" . jumpc-jump-forward)))
 
 
 ;;;; keep-buffers
@@ -7743,7 +7659,7 @@ Argument FILENAME File to insert."
       (progn
         (bind-key "h" 'ibuffer org-agenda-mode-map)
         (org-clock-persistence-insinuate)
-        (display-time-mode)
+        ;; (display-time-mode)
         (if (fboundp 'timeclock-mode-line-display)
             (timeclock-mode-line-display))
         (timeclock-modeline-display)))
@@ -8082,7 +7998,6 @@ otherwise use the subtree title."
   (progn
     (setq platformio-mode-silent t)
     (add-hook 'arduino-mode-hook 'platformio-mode)))
-
 
 
 ;;;; poetry
