@@ -3618,13 +3618,6 @@ for the current buffer's file name, and the line number at point."
     (delete-selection-mode)))
 
 
-;;;; describe-number
-
-(use-package describe-number
-  :ensure t
-  :commands (describe-number
-             describe-number-at-point))
-
 
 ;;;; diff-hl
 
@@ -4741,13 +4734,6 @@ See URL `https://github.com/golang/lint'."
       :ensure t
       :commands (helm-gitlab-issues
                  helm-gitlab-projects))))
-
-
-;;;; gl-conf-mode
-
-(use-package gl-conf-mode
-  :commands gl-conf-mode
-  :mode ("gitolite\\.conf\\'" . gl-conf-mode))
 
 
 ;;;; glsl-mode
@@ -6196,14 +6182,7 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (setq irony-user-dir (expand-file-name "irony" user-data-directory))
-    (add-hook 'arduino-mode-hook 'irony-mode)
-
-    (use-package flycheck-irony
-      :after flycheck
-      :commands flycheck-irony-setup
-      :config
-      (progn
-        (add-hook 'flycheck-mode-hook #'flycheck-irony-setup))))
+    (add-hook 'arduino-mode-hook 'irony-mode))
   :config
   (progn
     (add-to-list 'irony-supported-major-modes 'arduino-mode)
@@ -6602,12 +6581,6 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :commands (lexbind-toggle-lexical-binding lexbind-lexscratch
                                             lexbind-modeline-content lexbind-mode))
-
-
-;;;; lfe-mode
-
-(use-package lfe-mode
-  :commands (lfe-mode))
 
 
 ;;;; lib-requires
@@ -7727,22 +7700,7 @@ Argument FILENAME File to insert."
                      ;; ("calendar_public" . ?C)
                      (:newline)
                      ("waiting" . ?w))
-     org-capture-templates
-     '(("t" "todo" entry (file org-default-notes-file)
-        "* TODO %?\n%U\n%a\n  %i" :clock-in t :clock-resume t)
-       ("n" "note" entry (file org-default-notes-file)
-        "* %? :note:\n%U\n%a\n  %i" :clock-in t :clock-resume t)
-       ("j" "Journal" entry
-        (file+datetree (expand-file-name "org/diary.org" user-notes-directory))
-        "* %?\n%U\n  %i" :clock-in t :clock-resume t)
-       ("w" "org-protocol" entry (file org-default-notes-file)
-        "* TODO Review %c\n%U\n  %i" :immediate-finish t)
-       ("u" "org-protocol url" entry
-        (file (expand-file-name "agenda/refile-url.org" user-notes-directory))
-        "* NOTE %c :note:\n%U\n  %i" :immediate-finish t)
-       ("p" "Phone call" entry (file org-default-notes-file)
-        "* PHONE %? :phone:\n%U" :clock-in t :clock-resume t))
-
+     org-capture-templates nil
      )
 
     ;; Disable default key bindings for include/remove from org agenda
@@ -8125,13 +8083,6 @@ otherwise use the subtree title."
     (add-hook 'arduino-mode-hook 'platformio-mode)))
 
 
-;;;; po-mode
-
-(use-package po-mode
-  :disabled t ;; crashes emacs on some larger po-files
-  :commands po-mode
-  :mode "\\.po\\'")
-
 
 ;;;; poetry
 
@@ -8175,13 +8126,6 @@ otherwise use the subtree title."
           ("\\.mkd\\'" . poly-gfm-mode)
           ("\\.mkdown\\'" . poly-gfm-mode)
           ("\\.mdtext\\'" . poly-gfm-mode)))
-
-
-;;;; popup-ruler
-
-(use-package popup-ruler
-  :commands (popup-ruler
-             popup-ruler-vertical))
 
 
 ;;;; popup-switcher
@@ -8800,16 +8744,6 @@ otherwise use the subtree title."
     (unbind-key "C-c C-j" python-mode-map)))
 
 
-;;;;; py-smart-operator
-
-(use-package py-smart-operator
-  :commands (py-smart-operator-mode)
-  :init
-  (progn
-    ;; (add-hook 'python-mode-hook 'py-smart-operator-mode)
-    ))
-
-
 ;;;; python-django
 
 (use-package python-django
@@ -8938,16 +8872,6 @@ otherwise use the subtree title."
            (t
             (switch-to-buffer value)))
           (eval (qbs:predicate-post-search predicate)))))))
-
-
-;;;; quick-jump
-
-(use-package quick-jump
-  :commands (quick-jump-default-keybinding
-             quick-jump-push-marker
-             quick-jump-go-back
-             quick-jump-go-forward
-             quick-jump-clear-all-marker))
 
 
 ;;;; quickrun
@@ -9994,6 +9918,7 @@ otherwise use the subtree title."
 ;;;; transpose-frame
 
 (use-package transpose-frame
+  :ensure t
   :commands (flip-frame flop-frame)
   :bind (("M-o M-f" . flop-frame))
   :init
