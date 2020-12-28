@@ -176,7 +176,7 @@ re-downloaded in order to locate PACKAGE."
 (require 'cl)
 (require 'subr-x)
 
-(use-package sql-mode
+(use-package sql
   :defer t
   :init
   (progn

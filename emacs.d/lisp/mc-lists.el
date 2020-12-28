@@ -155,7 +155,6 @@
         paredit-wrap-round
         paredit-wrap-round-from-behind
         paredit-wrap-square
-        point-undo
         python-indent-dedent-line-backspace
         python-indent-electric-colon
         python-indent-shift-left
@@ -169,9 +168,7 @@
         shift-text-left
         shift-text-right
         shift-text-up
-        simpleclip-copy
-        simpleclip-paste
-        skeleton-pair-insert-maybe
+         skeleton-pair-insert-maybe
         slime-space
         smart-shift-right
         sp--cua-replace-region
@@ -218,6 +215,10 @@
 
 (setq mc/cmds-to-run-once
       '(
+       simpleclip-copy
+        simpleclip-paste
+        point-undo
+        ac-complete
         adv-insert-new-number
         beginning-of-buffer
         cleanup-buffer
@@ -259,6 +260,7 @@
         my-go-go-command
         my-magit-status
         ns-prev-frame
+        other-window
         persp-switch
         phi-search
         picture-mouse-set-point
@@ -281,7 +283,4 @@
         xwidget-webkit-scroll-forward
         xwidget-webkit-scroll-up
         yas-expand
-        other-window
-        ac-complete
-
         ))
