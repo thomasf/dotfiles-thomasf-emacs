@@ -465,7 +465,7 @@ re-downloaded in order to locate PACKAGE."
 
 ;;;; custom variables
 
-(defvar my-normal-cursor-type 'bar)
+(defvar my-normal-cursor-type '(bar . 3))
 
 
 ;;;; defined in elisp source
@@ -1885,7 +1885,7 @@ re-downloaded in order to locate PACKAGE."
   (when (bound-and-true-p cua-normal-cursor-color)
     (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
            (cursor-style (cond
-                          ((bound-and-true-p region-bindings-mode) (list "#d33682" '(bar . 8) t))
+                          ((bound-and-true-p region-bindings-mode) (list "#d33682" '(bar . 10) t))
                           ((bound-and-true-p god-local-mode) (list "#268bd2" 'box nil))
                           ((bound-and-true-p buffer-read-only) (list "#859900" 'box nil))
                           (t (list cua-normal-cursor-color my-normal-cursor-type t)))))
@@ -10618,7 +10618,7 @@ otherwise use the subtree title."
 
 (setq-default blink-cursor-mode t
               blink-cursor-interval 0.6
-              cursor-type 'bar)
+              cursor-type '(bar . 3))
 (blink-cursor-mode)
 
 
