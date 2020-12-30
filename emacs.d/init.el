@@ -3939,12 +3939,6 @@ If FILE already exists, signal an error."
   :commands (drag-stuff-global-mode drag-stuff-mode))
 
 
-;;;; dropdown-list
-
-(use-package dropdown-list
-  :defer)
-
-
 ;;;; easy-kill
 
 (use-package easy-kill
@@ -4111,11 +4105,7 @@ If FILE already exists, signal an error."
 (use-package eldoc
   :defer
   :diminish ""
-  :config
-  (progn
-    ;; (use-package eldoc-extension
-    ;;   :ensure t)
-    ))
+  )
 
 
 ;;;; electric
