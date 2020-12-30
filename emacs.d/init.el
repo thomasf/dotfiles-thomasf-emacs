@@ -5765,6 +5765,8 @@ if submodules exists, grep submodules too."
                        (mode . sh-mode)
                        (mode . haskell-mode)
                        (mode . kivy-mode)
+                       (mode . go-mode)
+                       (mode . rust-mode)
                        ))
               ;; -------------------------------------------------
               ;; programming languages #1
