@@ -580,7 +580,8 @@ re-downloaded in order to locate PACKAGE."
       kill-whole-line nil
       shift-select-mode nil
       eval-expression-print-level nil
-      idle-update-delay 0.5)
+      idle-update-delay 0.5
+      next-error-recenter '(4))
 
 (and (fboundp 'x-cut-buffer-or-selection-value)
      (eq system-type 'gnu/linux)
@@ -821,16 +822,16 @@ re-downloaded in order to locate PACKAGE."
 ;; (bind-key "<f11>" 'switch-to-buffer)
 (bind-key "<f12>" 'ibuffer)
 ;; (bind-key "<f5>" 'ibuffer)
+
 (bind-key "C-H-n" 'forward-paragraph)
 (bind-key "C-H-p" 'backward-paragraph)
-
-(bind-key "M-H-n" 'my-next-error)
-(bind-key "M-H-p" 'my-previous-error)
-
 (bind-key "C-s-n" 'forward-paragraph)
 (bind-key "C-s-p" 'backward-paragraph)
-(bind-key "M-s-n" 'my-next-error)
-(bind-key "M-s-p" 'my-previous-error)
+
+(bind-key "M-H-n" 'next-error)
+(bind-key "M-H-p" 'previous-error)
+(bind-key "M-s-n" 'next-error)
+(bind-key "M-s-p" 'previous-error)
 
 ;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
 ;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
@@ -863,6 +864,7 @@ re-downloaded in order to locate PACKAGE."
 ;;     "C-x"
 ;;   '(("o" . save-some-buffers-other-window)
 ;;     ("C-o" . save-some-buffers-other-frame)))
+
 
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 (bind-key "C-x f f" 'find-file)
@@ -1218,22 +1220,6 @@ re-downloaded in order to locate PACKAGE."
 ;;; functions
 
 ;;;; misc...
-
-;;;;; next/prev error
-
-(defun my-next-error (&optional arg reset)
-  ""
-  (interactive)
-  (next-error arg reset)
-  (recenter)
-  )
-
-
-(defun my-previous-error (&optional n)
-  ""
-  (interactive)
-  (my-next-error (- (or n 1))))
-
 
 ;;;; functions: buffers
 
