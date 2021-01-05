@@ -5321,8 +5321,7 @@ if submodules exists, grep submodules too."
                 (file-name-as-directory (file-truename (cdr it)))
                 (format "%12s" (concat (car it) my-ibufffer-separator))))
               '(
-                ("alkasir" . "~/src/gitlab.23c.se/alkasir/")
-                ("tracklib" . "~/src/github.com/tracklib/")
+                ("tracklib" . "~/src/gitlab.tracklib.com/")
                 ("23c" . "~/src/gitlab.23c.se/23c/")
                 ("tf@23c" . "~/src/gitlab.23c.se/thomasf")
                 ("23c" . "~/src/gitlab.23c.se/")
@@ -5337,7 +5336,6 @@ if submodules exists, grep submodules too."
                 (".config" . "~/.config/")
                 ("dotfiles" . "~/src/dotfiles/")
                 ("goroot" . "~/.opt/go/")
-                ("goroot" . "~/.opt/go-master/")
                 (".opt" . "~/.opt")
                 ("/usr" . "^/usr")
                 ("/var" . "^/var")
@@ -5694,7 +5692,6 @@ if submodules exists, grep submodules too."
                "//" "~/"))
         (call-interactively 'self-insert-command)))
 
-
     (defun my-ido-setup-bindings-hook ()
       ;; (unbind-key "C-a" ido-common-completion-map)
       (bind-key "~" 'my-ido-goto-home ido-completion-map)
@@ -5731,6 +5728,7 @@ if submodules exists, grep submodules too."
 
 
 ;;;; ietf-docs
+
 
 (use-package ietf-docs
   :ensure t
