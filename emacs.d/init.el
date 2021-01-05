@@ -9457,17 +9457,22 @@ otherwise use the subtree title."
 ;;;; whole-line-or-region
 
 (use-package whole-line-or-region
-  :disabled t
   :ensure t
-  :commands (whole-line-org-region-mode)
-  :bind (
-         ("C-c ;" . whole-line-or-region-comment-dwim)
-         ("C-w" . whole-line-or-region-kill-region)
-         ("C-y" . whole-line-or-region-yank))
+ :commands (whole-line-or-region-mode
+             whole-line-or-region-global-mode
+             whole-line-or-region-comment-dwim)
+  ;; :bind (
+  ;;        ("C-c ;" . whole-line-or-region-comment-dwim)
+  ;;        ("C-w" . whole-line-or-region-kill-region)
+  ;;        ("C-y" . whole-line-or-region-yank))
+  :defer 0.2
   :init
   (progn
-    (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim)
-    ))
+    (define-key region-bindings-mode-map ";" 'whole-line-or-region-comment-dwim))
+
+  :config
+  (progn
+    (whole-line-or-region-global-mode)))
 
 
 (defun comment-or-uncomment-region-or-line ()
