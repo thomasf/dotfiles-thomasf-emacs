@@ -2126,8 +2126,8 @@ display, depending on the window manager)."
     (x-urgency-hint frame (not arg))))
 
 (when window-system
-  ;; (unbind-key "C-x C-c")
-  (bind-key "C-x C-c" 'intelligent-close)
+  (unbind-key "C-x C-c")
+  ;; (bind-key "C-x C-c" 'intelligent-close)
   (bind-key "s-w" 'intelligent-close)
   )
 
