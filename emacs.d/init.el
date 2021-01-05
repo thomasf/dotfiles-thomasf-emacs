@@ -9427,7 +9427,7 @@ otherwise use the subtree title."
 
 (use-package which-key
   :ensure t
-  :disabled t
+  ;; :disabled t
   :commands (which-key-mode)
   :defer 0.9
   :diminish ""
