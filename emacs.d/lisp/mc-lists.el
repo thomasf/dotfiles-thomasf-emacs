@@ -66,6 +66,7 @@
         haskell-indentation-delete-char
         hippie-expand-no-case-fold
         html-wrap-in-tag
+        ignore
         indent-for-tab-command
         insert-postfix-whitespace
         isearch-abort
@@ -168,7 +169,7 @@
         shift-text-left
         shift-text-right
         shift-text-up
-         skeleton-pair-insert-maybe
+        skeleton-pair-insert-maybe
         slime-space
         smart-shift-right
         sp--cua-replace-region
@@ -215,9 +216,6 @@
 
 (setq mc/cmds-to-run-once
       '(
-       simpleclip-copy
-        simpleclip-paste
-        point-undo
         ac-complete
         adv-insert-new-number
         beginning-of-buffer
@@ -229,15 +227,18 @@
         dired-toggle-read-only
         edebug-next-mode
         ediff-next-difference
+        elisp-slime-nav-find-elisp-thing-at-point
         end-of-buffer
         eval-buffer
         eval-expression
         find-tag
+        flyspell-correct-word
         god-local-mode
         goto-line-with-feedback
         handle-switch-frame
         helm-descbinds
         ibuffer
+        ido-find-file
         ido-switch-buffer
         image-mouse-scroll-position
         intelligent-close
@@ -257,6 +258,7 @@
         mouse-drag-header-line
         mouse-set-region
         multiple-cursors-mode
+        my-flycheck-list-errors
         my-go-go-command
         my-magit-status
         ns-prev-frame
@@ -264,12 +266,16 @@
         persp-switch
         phi-search
         picture-mouse-set-point
+        point-undo
         projectile-ag
         projectile-find-file
         python-cccc
         recenter-top-bottom-flash
         shell
+        simpleclip-copy
+        simpleclip-paste
         smex
+        sql-send-paragraph
         terraform-cccc
         transient-quit-one
         typescript-cccc
