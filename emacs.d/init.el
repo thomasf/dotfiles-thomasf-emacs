@@ -2919,19 +2919,6 @@ for the current buffer's file name, and the line number at point."
         (unbind-key "C-c SPC" conf-mode-map)))))
 
 
-;;;; adaptive-wrap
-
-(use-package adaptive-wrap
-  :ensure t
-  :disabled t
-  :commands adaptive-wrap-prefix-mode
-  :init
-  (progn
-    (hook-into-modes
-     #'(lambda () (adaptive-wrap-prefix-mode 1))
-     my-prog-mode-hooks)))
-
-
 ;;;; adoc-mode
 
 (use-package adoc-mode
@@ -2944,28 +2931,6 @@ for the current buffer's file name, and the line number at point."
 (use-package aes
   :ensure t
   :commands (aes-insert-password))
-
-
-;;;; ag
-
-(use-package ag
-  :disabled t
-  :ensure t
-  :commands (ag
-             ag-dired
-             ag-files
-             ag-project
-             ag-project-files
-             ag-regexp
-             ag/search)
-  :init
-  (progn
-    (setq ag-highlight-search t
-          ag-arguments (list "--smart-case" "--nogroup" "--column" "-M 190" "--")))
-  :config
-  (progn
-    (use-package wgrep-ag
-      :ensure t)))
 
 
 ;;;; ahg
@@ -3143,13 +3108,6 @@ for the current buffer's file name, and the line number at point."
   :mode "drone\\.star\\'")
 
 
-;;;; bbdb-loaddefs
-
-(use-package bbdb-loaddefs
-  :disabled t
-  :commands bbdb)
-
-
 ;;;; bf-mode
 
 (use-package bf-mode
@@ -3204,14 +3162,6 @@ for the current buffer's file name, and the line number at point."
 (use-package buffer-move
   :ensure t
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
-
-
-;;;; bug-reference-github
-
-(use-package bug-reference-github
-  :disabled t
-  :ensure t
-  :defer)
 
 
 ;;;; calendar
@@ -3688,27 +3638,11 @@ for the current buffer's file name, and the line number at point."
         (bind-key "M-r" 'wdired-change-to-wdired-mode dired-mode-map)))
 
 
-    (use-package dired-avfs
-      :disabled t
-      :ensure t
-      :if (executable-find* "mountavfs"))
-
-
     (use-package dired-narrow
       :ensure t
       :commands (dired-narrow
                  dired-narrow-regexp
                  dired-narrow-fuzzy))
-
-
-    (use-package dired-rainbow
-      :ensure t
-      :disabled t
-      :commands dired-rainbow-define
-      :init
-      (progn
-        (dired-rainbow-define code "#859900" ("el" "py" "coffee" "js"))
-        (dired-rainbow-define doc "#6c71c4" ("org" "html" "md" "txt" "markdown"))))
 
 
     (use-package dired-subtree
@@ -4224,22 +4158,6 @@ If FILE already exists, signal an error."
   :mode (("\\.feature\\'" . feature-mode)))
 
 
-;;;; fic-ext-mode
-
-(use-package fic-ext-mode
-  :disabled t
-  :ensure t
-  :if (not noninteractive)
-  :commands (fic-ext-mode)
-  :bind ("M-o m f" . fic-ext-mode)
-  :init
-  (progn
-    (setq fic-highlighted-words '("FIXME" "TODO" "NOTE" "SHAME"))
-    (hook-into-modes #'fic-ext-mode my-prog-mode-hooks)
-    (hook-into-modes #'fic-ext-mode my-css-like-mode-hooks)
-    (hook-into-modes #'fic-ext-mode my-html-like-mode-hooks)))
-
-
 ;;;; figlet
 
 (use-package figlet
@@ -4357,44 +4275,8 @@ If FILE already exists, signal an error."
        ("\\.py\\'" (".kv"))
        ("\\.kv\\'" (".py"))
 
-       ("\\.coffee\\'" (".js"))
-       ("\\.js\\'" (".coffee"))
+
        ))))
-
-
-;;;; fixmee
-
-(use-package fixmee
-  :ensure t
-  :disabled t
-  :commands (fixmee-mode
-             global-fixmee-mode)
-  :bind (("M-o f" . fixmee-view-listing))
-  :diminish ""
-  :init
-  (progn
-    (setq
-     fixmee-notice-regexp
-     "\\(@@@+\\|\\_<\\(?:[Tt][Oo][Dd][Oo]+\\|[Ff][Ii][Xx][Mm][Ee]+\\|NOTE+\\|SHAME+\\|XXX+\\)\\)\\(?:[/:?!. \t\r\n\f\v]+\\|-+\\(?:\\s-\\|[\r\n\f\v]\\)\\|\\_>\\)"
-     fixmee-goto-prevmost-urgent-keystrokes nil
-     fixmee-goto-nextmost-urgent-keystrokes nil
-     fixmee-view-listing-keystrokes nil
-     fixmee-exclude-modes '(
-                            fundamental-mode
-                            Buffer-menu-mode
-                            bm-show-mode
-                            dired-mode
-                            wdired-mode
-                            eshell-mode
-                            gnus-article-mode
-                            mime/viewer-mode
-                            rmail-mode
-                            term-mode
-                            fixmee--listview-mode
-                            )))
-  :config
-  (progn
-    (global-fixmee-mode 1)))
 
 
 ;;;; floobits
@@ -4630,14 +4512,6 @@ See URL `https://github.com/golang/lint'."
              :mode "\\.gd\\'")
 
 
-;;;; gist
-
-(use-package gist
-  :ensure t
-  :commands (gist-region gist-buffer gist-region-or-buffer
-                         gist-region-or-buffer-private))
-
-
 ;;;; git-gutter
 
 (use-package git-gutter
@@ -4712,20 +4586,6 @@ See URL `https://github.com/golang/lint'."
          ("/\\.git/info/exclude\\'" . gitignore-mode)))
 
 
-;;;; gitlab
-
-(use-package gitlab
-  :ensure t
-  :commands (gitlab-version)
-  :init
-  (progn
-
-    (use-package helm-gitlab
-      :ensure t
-      :commands (helm-gitlab-issues
-                 helm-gitlab-projects))))
-
-
 ;;;; glsl-mode
 
 (use-package glsl-mode
@@ -4734,13 +4594,6 @@ See URL `https://github.com/golang/lint'."
          ("\\.vert\\'" . glsl-mode)
          ("\\.frag\\'" . glsl-mode)
          ("\\.geom\\'" . glsl-mode)))
-
-
-;;;; gnomenm
-
-(use-package gnomenm
-  :ensure t
-  :commands (gnomenm-disconnect gnomenm-status gnomenm-connect))
 
 
 ;;;; gnuplot-mode
@@ -4804,13 +4657,6 @@ See URL `https://github.com/golang/lint'."
 (use-package go-traceback
   :commands (go-traceback)
   :mode ("goroutines\\.txt\\'" . go-traceback-mode))
-
-
-;;;;; go-rename
-
-(use-package go-rename
-  :ensure t
-  :commands go-rename)
 
 
 ;;;;; go-scratch
@@ -4915,21 +4761,6 @@ See URL `https://github.com/golang/lint'."
   :ensure t
   :mode (("\\.groovy\\'" . groovy-mode)
          ("\\.gradle\\'" . groovy-mode)))
-
-
-;;;; gtags
-
-(use-package gtags
-  :ensure t
-  :disabled t
-  :commands (gtags-mode))
-
-
-;;;; ham-mode
-
-(use-package ham-mode
-  :ensure t
-  :commands (ham-mode))
 
 
 ;;;; handlebars-mode
@@ -5089,15 +4920,6 @@ See URL `https://github.com/golang/lint'."
     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
 
 
-;;;; header2
-
-(use-package header2
-  :ensure t
-  :disabled t
-  :commands (make-header make-revision make-divider make-box-comment
-                         update-file-header))
-
-
 ;;;; helm
 
 (use-package helm
@@ -5167,43 +4989,11 @@ See URL `https://github.com/golang/lint'."
       :bind ("C-h b" . helm-descbinds))))
 
 
-;;;; helm-ag
-
-(use-package helm-ag
-  :disabled t
-  :ensure t
-  :commands (helm-ag)
-  ;; :bind ("M-o M-a" . helm-ag)
-  )
-
-
-;;;; helm-ag-r
-
-(use-package helm-ag-r
-  :ensure t
-  :bind ("M-o M-a" . helm-ag-r))
-
-
 ;;;; helm-chrome
 
 (use-package helm-chrome
   :ensure t
   :commands helm-chrome-bookmarks)
-
-
-;;;; helm-css-scss
-
-(use-package helm-css-scss
-  :ensure t
-  :commands (helm-css-scss helm-css-scss-multi)
-  :init
-  (progn
-    (use-package scss-mode
-      :defer
-      :config
-      (progn
-        (bind-key "C-c C-c" 'helm-css-scss scss-mode-map)
-        (bind-key "C-c c" 'helm-css-scss-multi scss-mode-map)))))
 
 
 ;;;; helm-dash
@@ -5324,17 +5114,6 @@ if submodules exists, grep submodules too."
     ))
 
 
-;;;; helm-github-stars
-
-(use-package helm-github-stars
-  :ensure t
-  :commands helm-github-stars
-  :init
-  (progn
-    (setq helm-github-stars-cache-file
-          (expand-file-name "hgs-cache" user-cache-directory))))
-
-
 ;;;; helm-orgcard
 
 (use-package helm-orgcard
@@ -5348,13 +5127,6 @@ if submodules exists, grep submodules too."
       :ensure t
       :commands (helm-projectile)
       :bind ("C-x f p" . helm-projectile))
-
-
-;;;; helm-pydoc
-
-(use-package helm-pydoc
-  :ensure t
-  :commands helm-pydoc)
 
 
 ;;;; helm-recoll
@@ -5915,26 +5687,6 @@ if submodules exists, grep submodules too."
       (progn
         (flx-ido-mode 1)))
 
-
-    (use-package ido-hacks
-      :ensure t
-      :disabled t
-      :commands ido-hacks-mode
-      :if (not degrade-p-minimalism)
-      :init
-      (progn
-        (ido-hacks-mode 1)))
-
-
-    (use-package ido-ubiquitous
-      :ensure t
-      :disabled t
-      :if (and (not degrade-p-minimalism))
-      :commands ido-ubiquitous-mode
-      :init
-      (progn
-        (ido-ubiquitous-mode 1)))
-
     (defun my-ido-goto-home ()
       (interactive)
       (if (looking-back "/")
@@ -6098,21 +5850,6 @@ drag the viewpoint on the image buffer that the window displays."
               (add-to-list 'name-and-pos (cons name position))))))))))
 
 
-;;;; indent-guide
-
-(use-package indent-guide
-  :ensure t
-  :disabled t
-  :commands (indent-guide-mode indent-guide-global-mode)
-  :init
-  (progn
-    (setq indent-guide-char "▎"
-          indent-guide-delay 0.5)
-    (hook-into-modes #'indent-guide-mode
-                     my-significant-whitespace-mode-hooks)
-    (add-hook 'ruby-mode-hook 'indent-guide-mode)))
-
-
 ;;;; interaction-log
 
 (use-package interaction-log
@@ -6151,13 +5888,6 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (setq ivy-on-del-error-function #'ignore)))
-
-
-;;;; jade-mode
-
-(use-package jade-mode
-  :ensure t
-  :commands jade-mode)
 
 
 ;;;; js
@@ -6293,18 +6023,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands jss-connect)
 
 
-;;;; jump-char
-
-(use-package jump-char
-  :disabled t
-  :ensure t
-  ;; :bind (("M-m" . jump-char-forward)
-  ;;        ("M-M" . jump-char-backward))
-  :config
-  (progn
-    (setq jump-char-lazy-highlight-face nil)))
-
-
 ;;;; keep-buffers
 
 (use-package keep-buffers
@@ -6318,90 +6036,6 @@ drag the viewpoint on the image buffer that the window displays."
             ;; ("\\`\\*magit:.*\\*\\'" . nil)
             ))
     (keep-buffers-mode 1)))
-
-
-;;;; key-chord
-
-(use-package key-chord
-  :disabled t
-  :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :commands
-  (key-chord-mode
-   key-chord-define
-   key-chord-define-global)
-  :defer 0.2
-  :init
-  (progn
-    (setq
-     key-chord-two-keys-delay 0.05
-     key-chord-one-key-delay 0.15))
-  :config
-  (progn
-    (mapc
-     (lambda (keyscommand)
-       (key-chord-define-global
-        (car keyscommand) (cdr keyscommand)))
-     '(
-       ;; ;; SE top row shifted keys (kind of)
-       ;; ("1j" . "!")
-       ;; ("2j" . "'") ("2k" . "\"")  ("2l" .  "`")
-       ;; ("2w" . "@") ;; note exception
-       ;; ("3j" . "#")
-       ;; ("4j" . "$")
-       ;; ("5j" . "%")
-       ;; ("6a" . "&") ("6j" . "&")
-       ;; ("7a" . "\\") ("7s" . "|") ("7d" . "/") ;; standing slashes: \ | /
-       ;; ;; brackets: ( { [ <
-       ;; ("8a" . "(") ("9a" . ")")
-       ;; ("8s" . "{") ("9s" . "}")
-       ;; ("8d" . "[") ("9d" . "]")
-       ;; ("8f" . "<") ("9f" . ">")
-       ;; ("0a" . "=")
-       ;; ("+a" . "?")
-
-       ;; US (teck) top row shifted keys (kind of)
-
-       ("`j" . "~")
-       ("1j" . "!")
-       ("2j" . "@")
-       ("3j" . "#")
-       ("4j" . "$")
-       ("5j" . "%")
-       ("6f" . "^")
-       ("7f" . "&")
-       ("8f" . "*")
-       ("9f" . "(")
-       ("0f" . ")")
-       ("-f" . "_")
-       ("=f" . "+")
-       (";f" . ":")
-       ("[f" . "{")
-       ("]f" . "}")
-       ("/j" . "?")
-       ("\\j" . "|")
-
-       ;; functions
-       ;; ("jj" . ace-jump-word-mode)
-       ;; ("JJ" . projectile-find-file)
-       ;; ("dj" . other-window)
-       ;; ("dk" . other-frame)
-       ;; ("xk" . kill-this-buffer-if-not-modified)
-       ;; ("xk" . bury-buffer)
-       ;; ("xk" . previous-buffer)
-       ;; ("fj" . previous-buffer)
-       ;; ("fk" . next-buffer)
-       ;; ("fl" . ibuffer)
-       ;; ("bf" . ido-switch-buffer)
-       ;; ("FF" . jump-char-forward)
-       ;; ("BB" . jump-char-backward)
-       ;; ("og" . magit-status)
-       ))
-
-    (when (window-system)
-      (cl-letf (((symbol-function 'message)
-                 (lambda (fmt &rest _))))
-        (key-chord-mode 1)))))
 
 
 ;;;; keyfreq
@@ -6543,13 +6177,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)))
 
 
-;;;; litable
-
-(use-package litable
-  :ensure t
-  :commands (litable-mode))
-
-
 ;;;; loccur
 
 (use-package loccur
@@ -6560,11 +6187,6 @@ drag the viewpoint on the image buffer that the window displays."
          ("M-s l" . loccur))
   :init
   (progn
-    (defun loccur/list-Python-functions ()
-      (interactive)
-      "Displays only the lines corresponding to a function
-declaration in a Python file."
-      (loccur-no-highlight "^ *def "))
     (define-key region-bindings-mode-map "l" 'loccur-current)))
 
 
@@ -7084,13 +6706,6 @@ declaration in a Python file."
   :bind ("<down-mouse-3>" . mouse-drag-drag))
 
 
-;;;; mouse-slider-mode
-
-(use-package mouse-slider-mode
-  :ensure t
-  :commands mouse-slider-mode)
-
-
 ;;;; moz
 
 (use-package moz
@@ -7249,23 +6864,6 @@ Titus von der Malsburg."
     (bind-key "C-r" 'phi-search-backward mc/keymap)))
 
 
-;;;; mwe-log-commands
-
-(use-package mwe-log-commands
-  :ensure t
-  :disabled t
-  :commands (mwe:log-keyboard-commands
-             mwe:open-command-log-buffer))
-
-
-;;;; my-jumps
-
-(use-package my-jumps
-  :ensure jump
-
-  :commands (django-toggle-app))
-
-
 ;;;; nginx-mode
 
 (use-package nginx-mode
@@ -7310,21 +6908,6 @@ Titus von der Malsburg."
   :config
   (progn
     (unbind-key "M-h" nxml-mode-map)))
-
-
-;;;; nyan-mode
-
-(use-package nyan-mode
-  :ensure t
-  :if (and
-       (not (image-type-available-p 'xpm))
-       (not (not window-system))
-       (not noninteractive))
-  :commands nyan-mode
-  :init
-  (progn
-    ;;(nyan-mode 1)
-    ))
 
 
 ;;;; oauth2
@@ -7395,11 +6978,6 @@ Titus von der Malsburg."
                              "org-clock-save.el" user-data-directory)
      org-id-locations-file (expand-file-name
                             "org-id-locations" user-data-directory))
-
-    (use-package org-gcal
-      :ensure t
-      :commands (org-gcal-sync))
-
 
     (use-package org-annotate-file
       :bind ("C-c C-l" . org-annotate-file))
@@ -7805,14 +7383,6 @@ otherwise use the subtree title."
     ))
 
 
-;;;; org-ehtml
-
-(use-package org-ehtml
-  :disabled t
-  :ensure t
-  :defer)
-
-
 ;;;; org-import-icalendar
 
 (use-package org-import-icalendar
@@ -7855,23 +7425,6 @@ otherwise use the subtree title."
 (use-package outshine
   :ensure t
   :commands (outshine-mode))
-
-
-;;;; page-break-lines
-
-(use-package page-break-lines
-  :ensure t
-  :commands (turn-on-page-break-lines-mode
-             global-page-break-lines-mode
-             page-break-lines-mode)
-  :diminish ""
-  :init
-  (progn
-    (setq
-     page-break-lines-char ?╴)
-    (when window-system
-      (hook-into-modes 'page-break-lines-mode my-prog-mode-hooks)
-      )))
 
 
 ;;;; pandoc-mode
@@ -8101,100 +7654,6 @@ otherwise use the subtree title."
 (use-package prettier-js
   :ensure t
   :commands (prettier-js))
-
-
-;;;; prodigy
-
-(use-package prodigy
-  :disabled t
-  :ensure t
-  :commands (prodigy prodigy-define-service)
-  :bind ("C-h p" . prodigy)
-  :config
-  (progn
-    (defun prodigy-go-build (service)
-      (prodigy-insert-output
-       service
-       "- - - - - - - - - - - - - - - - - - - - - -\n")
-      (let ((cmd (plist-get service :command)))
-        (when (file-exists-p cmd)
-          (delete-file cmd))
-        (with-temp-buffer
-          (let ((success (eq 0 (call-process "go" nil t nil "build"
-                                             "-o"  cmd (plist-get service :go-main)))))
-            (prodigy-insert-output service (buffer-string))
-            (unless success
-              (error "prodigy-go-build-failed"))))))
-
-    (defun prodigy-docker-compose-up (service)
-      (prodigy-insert-output
-       service
-       "- - - - - - - - - - - - - - - - - - - - - -\n")
-      (with-temp-buffer
-        (let ((success (eq 0 (call-process "docker-compose" nil t nil "up" "-d"))))
-          (prodigy-insert-output service (buffer-string))
-          (unless success
-            (error "docker-compose up failed")))))
-
-    (prodigy-define-tag
-     :name 'bin
-     :hide t
-     :path (lambda ()
-             (file-truename default-directory)))
-
-    (prodigy-define-tag
-     :name 'go-build
-     :hide t
-     :init  (prodigy-callback (service) (prodigy-go-build service))
-     :tags '(bin))
-
-    (prodigy-define-tag
-     :name 'docker-compose-up
-     :command "docker-compose"
-     :args '("logs")
-     :hide t
-     :init (prodigy-callback (service) (prodigy-docker-compose-up service)))
-
-    (prodigy-define-tag
-     :name 'webpack
-     :hide t
-     :command "webpack"
-     :args (prodigy-callback
-            (service)
-            (let ((config (or(plist-get service :webpack-config ) "webpack.config.js")) )
-              (-concat (list "--config" config "--watch"  "--debug")
-                       (plist-get service :webpack-args)))))
-
-    (setq my-prodigy-truncate-amount 5000
-          my-prodigy-truncate-threshold 15000)
-    ;; NOTE overriden
-    (defun prodigy-truncate-buffer (service _)
-      "Truncate SERVICE process view buffer to its maximum size."
-      (prodigy-with-service-process-buffer
-       service
-       (when (>  (line-number-at-pos (point-max)) my-prodigy-truncate-threshold)
-         (save-excursion
-           (goto-char (point-min))
-           (forward-line my-prodigy-truncate-amount)
-           (delete-region (point-min) (point))))))
-
-    (defun my-prodigy-view-mode-hook ()
-      (compilation-minor-mode))
-    (add-hook 'prodigy-view-mode-hook 'my-prodigy-view-mode-hook)
-
-    ;; NOTE overriden
-    (defun my-prodigy-display-process ()
-      "Switch to process buffer for service at current line."
-      (interactive)
-      (-when-let (service (prodigy-service-at-pos))
-        (-if-let (buffer (get-buffer (prodigy-buffer-name service)))
-            (progn
-              (popwin:close-popup-window)
-              (display-buffer buffer)
-              (with-current-buffer buffer
-                (prodigy-view-mode)))
-          (message "Nothing to show for %s" (plist-get service :name)))))
-    (bind-key "RET" 'my-prodigy-display-process prodigy-mode-map)))
 
 
 ;;;; prog-mode
@@ -8560,37 +8019,6 @@ otherwise use the subtree title."
   :mode (("\\.proto\\'" . protobuf-mode)))
 
 
-;;;; pt
-
-(use-package pt
-  :ensure t
-  :commands (pt-regexp projectile-pt projectile-pt-file-pattern)
-  ;; :bind (("M-o a" . projectile-pt-file-pattern))
-  :init
-  (progn
-    (setq pt-arguments
-          (list "--smart-case")))
-  :config
-  (progn
-
-    (defvar projectile-pt-file-pattern-history '())
-    (defvar projectile-pt-file-pattern-search-history '())
-
-    (defun projectile-pt-file-pattern (regexp pattern)
-      "Run a pt search with REGEXP rooted at DIRECTORY with FILE-FILTER."
-      (interactive (list (read-from-minibuffer "Pt search for: " (thing-at-point 'symbol)
-                                               nil nil 'projectile-pt-file-pattern-history)
-                         (read-from-minibuffer "File pattern: " nil
-                                               nil nil 'projectile-pt-file-pattern-search-history)))
-      (pt-regexp regexp
-                 (projectile-project-root)
-                 (append
-                  (mapcar (lambda (val) (concat "--ignore=" val))
-                          (append projectile-globally-ignored-files
-                                  projectile-globally-ignored-directories))
-                  (list (concat "--file-search-regexp=" (shell-quote-argument pattern))))))))
-
-
 ;;;; python
 
 (use-package python
@@ -8688,100 +8116,6 @@ otherwise use the subtree title."
   :mode (("\\.qml\\'" . qml-mode)))
 
 
-;;;; quick-buffer-switch
-
-(use-package quick-buffer-switch
-  :ensure t
-  :commands (quick-buffer-switch)
-  :bind (("C-x b x" . qbs-current-major-mode)
-         ("C-x b <return>" . qbs-current-major-mode)
-         ("C-x b o" . qbs-org-mode)
-         ("C-x b d" . qbs-directory)
-         ("C-x b g" . qbs-git)
-         ("C-x b c" . qbs-coffee-buffer)
-         ("C-x b h" . qbs-html-buffer)
-         ("C-x b j" . qbs-js-mode)
-         ("C-x b s" . qbs-style)
-         ("C-x b e" . qbs-emacs-lisp-mode)
-         ("C-x b p" . qbs-python))
-  :init
-  (progn
-    (setq qbs-prefix-key "C-x b q"))
-  :config
-  (progn
-    (qbs-init)
-    (qbs-add-predicates
-     (make-qbs:predicate
-      :name 'current-major-mode
-      :shortcut "x"
-      :pre-search 'major-mode
-      :test '(when (eq major-mode qbs:pre-search) qbs:buffer-name))
-     (make-qbs:predicate
-      :name 'git
-      :shortcut "C-g"
-      :test '(when (eq major-mode 'magit-status-mode)
-               qbs:buffer-name
-               ))
-     (make-qbs:predicate
-      :name 'html-buffer
-      :shortcut "h"
-      :test '(when (--any?
-                    (eq major-mode it) my-html-like-modes)
-               qbs:buffer-file-name))
-     (make-qbs:predicate
-      :name 'style
-      :shortcut "s"
-      :test '(when (--any?
-                    (eq major-mode it) my-css-like-modes)
-               qbs:buffer-file-name))
-     (make-qbs:predicate
-      :name 'js-mode
-      :shortcut "j"
-      :test '(when (--any?
-                    (eq major-mode it)
-                    '(js2-mode js-mode))
-               qbs:buffer-file-name))
-     (make-qbs:predicate
-      :name 'python
-      :shortcut "p"
-      :test '(when (eq major-mode 'python-mode)
-               qbs:buffer-file-name))
-     )
-    (defun quick-buffer-switch (&optional type)
-      "Quick switch buffer switch according TYPE. Seed `qbs-predicates-plist'."
-      (interactive)
-      (let* ((type (or type
-                       (intern (ido-completing-read
-                                "Quick buffer switch predicate: "
-                                (loop for (k v) on qbs-predicates-plist by #'cddr
-                                      collect (symbol-name k))
-                                nil t nil nil nil t))))
-             (predicate (plist-get qbs-predicates-plist type))
-             (qbs:pre-search (eval (qbs:predicate-pre-search predicate)))
-             (blist (qbs-get-buffer-names predicate))
-             value)
-
-        (if (not blist)
-            (message (format "No buffer match '%s predicate"
-                             (qbs:predicate-name predicate)))
-          (setq value (ido-completing-read
-                       (format "Switch to %s: "
-                               (qbs:predicate-short-description predicate))
-                       blist
-                       nil t nil nil nil t))
-          (cond
-           ((file-directory-p value)
-            (let ((mark (qbs-find-buffer-visiting-dir value)))
-              (when mark
-                (switch-to-buffer (marker-buffer mark))
-                (goto-char (marker-position mark)))))
-           ((file-exists-p value)
-            (find-file value))
-           (t
-            (switch-to-buffer value)))
-          (eval (qbs:predicate-post-search predicate)))))))
-
-
 ;;;; quickrun
 
 (use-package quickrun
@@ -8847,21 +8181,6 @@ otherwise use the subtree title."
     (hook-into-modes #'rainbow-mode
                      '(css-mode-hook)))
   :diminish ((rainbow-mode . "rb")))
-
-
-;;;; real-auto-save
-
-(use-package real-auto-save
-  :ensure t
-  :disabled t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :commands
-  (real-auto-save
-   turn-on-real-auto-save
-   turn-off-real-auto-save)
-  :init
-  (progn
-    (add-hook 'org-mode-hook 'turn-on-real-auto-save)))
 
 
 ;;;; realgud
@@ -9056,14 +8375,6 @@ otherwise use the subtree title."
   :mode (("\\.rs\\'" . rust-mode)))
 
 
-;;;; rvm
-
-(use-package rvm
-  :ensure t
-  :commands (rvm-use
-             rvm-use-default))
-
-
 ;;;; savehist
 
 (use-package savehist
@@ -9155,31 +8466,6 @@ otherwise use the subtree title."
     (unbind-key "C-c C-c" scss-mode-map)))
 
 
-;;;; semantic
-
-(use-package semantic
-  :disabled t
-  :commands (my-semantic-setup)
-  :init
-  (progn
-    (setq
-     ;; semantic-idle-scheduler-no-working-message t ;; ignored by semantic
-     ;; semantic-idle-scheduler-working-in-modeline-flag t ;; ignored by semantic
-     semantic-minimum-working-buffer-size (* 1024 1024)
-     semantic-default-submodes nil
-     semanticdb-default-save-directory (expand-file-name
-                                        "semanticdb" user-data-directory))
-    (hook-into-modes 'my-semantic-setup '(python-mode-hook malabar-mode)))
-  :config
-  (progn
-    (defun my-semantic-setup ()
-      (semantic-mode)
-      (semantic-idle-scheduler-mode)
-      ;; (semantic-decoration-mode)
-      ;; (semantic-idle-breadcrumbs-mode) ;; using lsp-mode for this instead
-      )))
-
-
 ;;;; server
 
 (use-package server
@@ -9248,23 +8534,6 @@ otherwise use the subtree title."
                       scheme-mode))
               1)
              (t tab-width))))))
-
-
-;;;; show-css
-
-(use-package show-css
-  :ensure t
-  :disabled t
-  :commands (showcss-mode)
-  :init
-  (progn
-    (defun toggle-showcss()
-      "Toggle showcss-mode"
-      (interactive)
-      (if (derived-mode-p
-           'html-mode 'nxml-mode 'nxhtml-mode 'web-mode 'handlebars-mode)
-          (showcss-mode 'toggle)
-        (message "Not in an html mode")))))
 
 
 ;;;; shr
@@ -9380,17 +8649,6 @@ otherwise use the subtree title."
       (bind-key "C-<right>" 'skewer-scroll-right)
       ;; (bind-key "<f5>" 'skewer-reload-page)
       )))
-
-
-;;;; smart-forward
-
-(use-package smart-forward
-  :ensure t
-  :disabled t
-  :commands (smart-up
-             smart-down
-             smart-forward
-             smart-backward))
 
 
 ;;;; smart-shift
@@ -9851,29 +9109,6 @@ otherwise use the subtree title."
   :mode ("\\.ml[ip]?\\'" . tuareg-mode))
 
 
-;;;; type-break
-
-(use-package type-break
-  :defer
-  :disabled t
-  :if (and
-       (not noninteractive)
-       (not (not window-system)))
-  :init
-  (progn
-    (setq
-     type-break-demo-boring-stats t
-     type-break-terse-message t
-     type-break-demo-functions '(type-break-demo-boring)
-     ;; type-break-file-name
-     ;; (expand-file-name "type-break" user-data-directory)
-     type-break-file-name nil
-     type-break-mode-line-message-mode t
-     type-break-query-mode t)
-    ;; (type-break-mode)
-    ))
-
-
 ;;;; typescript-mode
 
 (use-package typescript-mode
@@ -9888,14 +9123,6 @@ otherwise use the subtree title."
       (silent-save-some-buffers)
       (prettier-js))
     (bind-key "C-c C-c" 'typescript-cccc typescript-mode-map)))
-
-
-;;;; unbound
-
-(use-package unbound
-  :ensure t
-  :disabled t
-  :commands describe-unbound-keys)
 
 
 ;;;; undo-tree
@@ -10179,36 +9406,6 @@ otherwise use the subtree title."
   :commands (wgrep-setup))
 
 
-;;;; which-func
-
-(use-package which-func
-  :disabled t ;; using lsp breadcrumbs mode instead
-  :commands (which-func-mode)
-  :if (and (not noninteractive) (not degrade-p-minimalism))
-  :init
-  (progn
-    (setq
-     which-func-modes '(emacs-lisp-mode))
-    (when (boundp 'mode-line-misc-info)
-      (which-function-mode 1)))
-  :config
-  (progn
-
-    ;; using lsp breadcrumbs mode instead
-    ;;
-    ;;
-    ;; (setq mode-line-misc-info (delete (assoc 'which-func-mode
-    ;;                                          mode-line-misc-info) mode-line-misc-info)
-    ;;       which-func-header-line-format '(which-func-mode ("" which-func-format)))
-    ;; (defadvice which-func-ff-hook (after header-line activate)
-    ;;   (when which-func-mode
-    ;;     (setq mode-line-misc-info (delete (assoc 'which-func-mode
-    ;;                                              mode-line-misc-info) mode-line-misc-info)
-    ;;           header-line-format which-func-header-line-format)))
-
-    ))
-
-
 ;;;; which-key
 
 (use-package which-key
@@ -10427,37 +9624,7 @@ otherwise use the subtree title."
     (add-hook 'git-commit-setup-hook #'my-ac-git-commit-setup-hook-fn )
     (hook-into-modes #'yas-minor-mode-on '(org-mode-hook))
     (hook-into-modes #'yas-minor-mode-on my-prog-mode-hooks)
-    (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks)
-
-
-;;;;; autoinsert
-
-    (use-package autoinsert
-      :disabled t
-      :if (not noninteractive)
-      :defer
-      :init
-      (progn
-        (defun autoinsert-yas-expand ()
-          "Replace text in yasnippet template."
-          (save-excursion
-            (goto-char (point-min))
-            (when (re-search-forward "^# --.*$" nil t 1)
-              (delete-region (point-min) (+ (point) 1))))
-          (yas-expand-snippet (buffer-string) (point-min) (point-max)))
-        (setq
-         auto-insert-directory my-yas-snippets-dir
-         auto-insert-alist
-         '((("\\.py\\'" . "Python script")
-            . ["python-mode/general/skeleton" autoinsert-yas-expand])
-           (snippet-mode . ["snippet-mode/skeleton" autoinsert-yas-expand])
-           (("\\.org\\'" . "Org mode")
-            . ["org-mode/skeleton" autoinsert-yas-expand])
-           (("\\.plu\\'" . "Plant UML mode")
-            . ["plantuml-mode/skeleton" autoinsert-yas-expand]))
-         auto-insert 'other
-         auto-insert-query nil)
-        (auto-insert-mode))))
+    (hook-into-modes #'yas-minor-mode-on my-css-like-mode-hooks))
   :config
   (progn
     (bind-key "C-x i" 'yas-insert-snippet yas-minor-mode-map)
