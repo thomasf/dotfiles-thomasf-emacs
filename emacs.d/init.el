@@ -2976,7 +2976,6 @@ for the current buffer's file name, and the line number at point."
 
 (use-package anzu
   :ensure t
-  :disabled t
   :defer 2
   :if (and
        (not noninteractive)
