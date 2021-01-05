@@ -8316,6 +8316,17 @@ otherwise use the subtree title."
   )
 
 
+;;;; rg
+
+(use-package rg
+  :ensure t
+  :commands (rg
+             rg-dwim
+             rg-project
+             rg-literal
+             rg-dwim-project-dir))
+
+
 ;;;; rings
 
 (use-package rings
