@@ -4385,7 +4385,11 @@ If FILE already exists, signal an error."
       (interactive "P")
       (my-flycheck-next-error (- (or n 1))))
 
-
+    (smartrep-define-key
+        flycheck-mode-map
+        "C-c"
+      '(("n" . my-flycheck-next-error)
+        ("p" . my-flycheck-previous-error)))
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
