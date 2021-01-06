@@ -581,7 +581,9 @@ re-downloaded in order to locate PACKAGE."
       shift-select-mode nil
       eval-expression-print-level nil
       idle-update-delay 0.5
-      next-error-recenter '(4))
+      next-error-recenter '(4)
+      next-error-verbose nil
+      )
 
 (and (fboundp 'x-cut-buffer-or-selection-value)
      (eq system-type 'gnu/linux)
@@ -843,8 +845,8 @@ re-downloaded in order to locate PACKAGE."
 (bind-key "<M-prior>" 'previous-error)
 (bind-key "<M-next>" 'next-error)
 
-(bind-key "<f9>" 'flycheck-next-error)
-(bind-key "<f10>" 'flycheck-previous-error)
+(bind-key "<f9>" 'my-flycheck-next-error)
+(bind-key "<f10>" 'my-flycheck-previous-error)
 
 (bind-key "<f11>" 'next-error)
 (bind-key "<f12>" 'previous-error)
@@ -2520,6 +2522,24 @@ sTo this: ")
 
 ;;;; MISC
 
+;;;;; next-error / previous-error
+
+(defun my-next-error (&optional arg reset)
+  ""
+  (interactive "P")
+  (let ((compilation-window-height 8))
+    (next-error arg reset)))
+
+(defun my-previous-error (&optional n)
+  ""
+  (interactive "P")
+  (my-next-error (- (or n 1))))
+
+
+(global-set-key [remap next-error] 'my-next-error)
+(global-set-key [remap previous-error] 'my-previous-error)
+
+
 ;;;;; cycle ispell languages
 
 ;; Languages for spellinc cycling
@@ -2765,7 +2785,8 @@ Otherwise, get the symbol at point, as a string."
           (symbol-name (symbol-at-point))))))
 
 
-;;;; ////uncategorized////
+;;;;; selective display menu
+
 
 (defun create-temp-selective-display-keymap ()
   (set-temporary-overlay-map
@@ -2799,6 +2820,9 @@ Otherwise, get the symbol at point, as a string."
     (set-selective-display nil)))
 
 (global-set-key (kbd "C-x $") 'inc-selective-display)
+
+
+;;;; ////uncategorized////
 
 (defun buffer-line-position ()
   "Current position formatted as file-name:line-number"
@@ -3541,7 +3565,6 @@ for the current buffer's file name, and the line number at point."
     )
   ;; :bind (("M-o a" . deadgrep))
   )
-
 
 
 ;;;; debbugs
@@ -4350,6 +4373,19 @@ If FILE already exists, signal an error."
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
   :config
   (progn
+
+    (defun my-flycheck-next-error (&optional n reset)
+      ""
+      (interactive "P")
+      (flycheck-next-error n reset)
+      (recenter))
+
+    (defun my-flycheck-previous-error (&optional n)
+      ""
+      (interactive "P")
+      (my-flycheck-next-error (- (or n 1))))
+
+
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
