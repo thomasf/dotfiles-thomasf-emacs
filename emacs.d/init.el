@@ -5670,7 +5670,7 @@ if submodules exists, grep submodules too."
 ;;;; ido-completing-read+
 
 (use-package ido-completing-read+
-  ;; :disabled t
+  :disabled t
   :ensure t
   :defer 0.7
   :commands ido-ubiquitous-mode
