@@ -820,7 +820,7 @@ re-downloaded in order to locate PACKAGE."
 ;; (bind-key "<f9>" 'previous-buffer)
 ;; (bind-key "<f10>" 'next-buffer)
 ;; (bind-key "<f11>" 'switch-to-buffer)
-(bind-key "<f12>" 'ibuffer)
+;; (bind-key "<f9>" 'ibuffer)
 ;; (bind-key "<f5>" 'ibuffer)
 
 (bind-key "C-H-n" 'forward-paragraph)
@@ -839,8 +839,17 @@ re-downloaded in order to locate PACKAGE."
 ;; (bind-key "S-C-<up>" 'enlarge-window)
 (unbind-key "C-<prior>")
 (unbind-key "C-<next>")
+
 (bind-key "<M-prior>" 'previous-error)
 (bind-key "<M-next>" 'next-error)
+
+(bind-key "<f9>" 'flycheck-next-error)
+(bind-key "<f10>" 'flycheck-previous-error)
+
+(bind-key "<f11>" 'next-error)
+(bind-key "<f12>" 'previous-error)
+
+
 ;; lisp-mode TODO: maybe move?
 ;;(define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
 (bind-key "M-o l"  'toggle-truncate-lines)
@@ -3528,8 +3537,11 @@ for the current buffer's file name, and the line number at point."
   :commands (deadgrep)
   :config
   (progn
-    (setq deadgrep-project-root-function 'project-root-function))
-  :bind (("M-o a" . deadgrep)))
+    (setq deadgrep-project-root-function 'project-root-function)
+    )
+  ;; :bind (("M-o a" . deadgrep))
+  )
+
 
 
 ;;;; debbugs
@@ -4288,7 +4300,9 @@ If FILE already exists, signal an error."
   :if (not noninteractive)
   :commands (flycheck-mode
              global-flycheck-mode
-             my-flycheck-list-errors)
+             my-flycheck-list-errors
+             flycheck-next-error
+             flycheck-previous-error)
   :bind (("M-o e" . my-flycheck-list-errors)
          ("C-h w" . my-flycheck-list-errors))
   :init
@@ -4299,7 +4313,12 @@ If FILE already exists, signal an error."
      flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint go-megacheck)
-     flycheck-completion-system 'ido)
+     flycheck-completion-system 'ido
+
+     flycheck-standard-error-navigation nil
+     flycheck-navigation-minimum-level 'warning
+     flycheck-error-list-minimum-level nil
+     )
 
     (defun my-node_modules-flycheck-hook ()
       (setq-local flycheck-executable-find #'flycheck-node_modules-executable-find))
@@ -6214,13 +6233,15 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (lsp lsp-mode)
   :init
   (progn
-    (setq lsp-gopls-codelens nil
-          lsp-idle-delay 0.2
-          lsp-file-watch-threshold 15000
-          ;; lsp-auto-configure nil
-          ;; lsp-diagnostics-provider :none
-          lsp-diagnostics-provider :flycheck
-          )
+	(setq lsp-gopls-codelens nil
+	      lsp-idle-delay 0.2
+	      lsp-file-watch-threshold 15000
+
+	      ;; lsp-diagnostics-provider :flycheck
+	      ;; lsp-diagnostics-provider :none
+
+	      lsp-diagnostics-disabled-modes '(go-mode)
+	      )
 
     (defun lsp-switch-flycheck-diagnostic ()
       (interactive)
@@ -6269,6 +6290,8 @@ drag the viewpoint on the image buffer that the window displays."
         (when (executable-find* "hie-wrapper"
                                 "install haskell-ide-engine https://github.com/haskell/haskell-ide-engine")
           (add-hook 'haskell-mode-hook #'lsp)))))
+
+
 
   :config
   (progn
@@ -6958,7 +6981,9 @@ Titus von der Malsburg."
          ("C-M-r" . org-capture)
          ("C-h t" . org-capture)
          ("C-c a" . org-agenda)
-         ("<f10>" . jump-to-org-agenda))
+
+         ;; ("<f10>" . jump-to-org-agenda)
+         )
   :init
   (progn
     (setq
@@ -8313,7 +8338,9 @@ otherwise use the subtree title."
              rg-dwim
              rg-project
              rg-literal
-             rg-dwim-project-dir))
+             rg-dwim-project-dir)
+  :bind (("M-o a" . rg-project))
+  )
 
 
 ;;;; rings
