@@ -4479,6 +4479,9 @@ If FILE already exists, signal an error."
         :fringe-face 'flycheck-fringe-info
         :error-list-face 'flycheck-error-list-info)
 
+
+      (advice-add 'flycheck-verify-setup :before 'package-initialize)
+
       (setq flycheck-flake8-error-level-alist
             '(
               ("^E303.*$" . info) ;; pep8: too many blank lines (3)
@@ -6277,11 +6280,29 @@ drag the viewpoint on the image buffer that the window displays."
 	      lsp-idle-delay 0.2
 	      lsp-file-watch-threshold 15000
 
-	      ;; lsp-diagnostics-provider :flycheck
+	      lsp-diagnostics-provider :flycheck
 	      ;; lsp-diagnostics-provider :none
-
-	      lsp-diagnostics-disabled-modes '(go-mode)
+	      ;; lsp-diagnostics-disabled-modes '(go-mode)
+          lsp-pyls-configuration-sources ["flake8"]
+          lsp-pyls-plugins-flake8-enabled t
 	      )
+
+
+    (defun lsp-diagnostics-toggle-major-mode ()
+      "Toggles the current major mode in the lsp-diagnostics-disabled-modes list and enables or disables lsp-diagnostics-mode in all matching open buffers."
+      (interactive)
+      (let ((disabled (member major-mode lsp-diagnostics-disabled-modes)))
+        (if disabled
+            (setq lsp-diagnostics-disabled-modes (remove major-mode lsp-diagnostics-disabled-modes))
+          (add-to-list 'lsp-diagnostics-disabled-modes major-mode))
+        (dolist (buf (buffer-list (current-buffer)))
+          (when (eq major-mode (buffer-local-value 'major-mode buf))
+            (with-current-buffer buf
+              (lsp-diagnostics-mode (if disabled 1 -1)))))))
+
+    (defun flycheck-checker-lsp-add-next-errcheck ()
+      (interactive)
+      (flycheck-add-next-checker 'lsp 'go-errcheck))
 
     (defun lsp-switch-flycheck-diagnostic ()
       (interactive)
