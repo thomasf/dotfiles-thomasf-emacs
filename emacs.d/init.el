@@ -1234,46 +1234,6 @@ re-downloaded in order to locate PACKAGE."
 
 ;;;; functions: buffers
 
-;;;;; bufferswitch
-
-(defvar my-bs-always-show-regexps
-  (list (regexp-opt (list "*scratch*" "*info*"))
-        "*magit:.+" "*Man" "*Org Agenda.+")
-  "*Buffer regexps to always show when buffer switching.")
-
-(defvar my-bs-never-show-regexps '("^\\s-" "^\\*" "TAGS$" "type-break")
-  "*Buffer regexps to never show when buffer switching.")
-
-(defvar my-ido-ignore-dired-buffers t
-  "*If non-nil, buffer switching should ignore dired buffers.")
-
-(defun my-bs-str-in-regexp-list (str regexp-list)
-  "Return non-nil if str matches anything in regexp-list."
-  (let ((case-fold-search nil))
-    (catch 'done
-      (dolist (regexp regexp-list)
-        (when (string-match regexp str)
-          (throw 'done t))))))
-
-(defun my-bs-ignore-buffer (name)
-  "Return non-nil if the named buffer should be ignored."
-  (or
-   (and (not (my-bs-str-in-regexp-list name my-bs-always-show-regexps))
-        (my-bs-str-in-regexp-list name my-bs-never-show-regexps))
-   (and my-ido-ignore-dired-buffers
-        (with-current-buffer name
-          (and (equal major-mode 'dired-mode)
-               (not (string= name "*Find*")))))
-   ;;Test to see if the window is visible on an existing visible frame.
-   (memq name
-         (mapcar
-          (lambda (x)
-            (buffer-name
-             (window-buffer
-              (frame-selected-window x))))
-          (visible-frame-list)))))
-
-
 ;;;;; get-buffers-matching-mode
 
 (defun get-buffers-matching-mode (mode)
@@ -3275,19 +3235,6 @@ for the current buffer's file name, and the line number at point."
           code-library-downcased-org-keywords t)))
 
 
-;;;; col-highlight
-
-(use-package col-highlight
-  :ensure t
-  :disabled t
-  :init
-  (progn
-    (toggle-highlight-column-when-idle 1))
-  :config
-  (progn
-    (col-highlight-set-interval 1)))
-
-
 ;;;; color-identifiers-mode
 
 (use-package color-identifiers-mode
@@ -3664,23 +3611,6 @@ for the current buffer's file name, and the line number at point."
                  dired-narrow-regexp
                  dired-narrow-fuzzy))
 
-
-    (use-package dired-subtree
-      :disabled t ;; dired-subtree is not compatible with dired-hide-details-mode
-      :ensure t
-      :commands (dired-subtree-insert
-                 dired-subreee-remove)
-      :init
-      (progn
-        (setq dired-subtree-use-backgrounds nil
-              dired-subtree-line-prefix "  │")
-        (defadvice dired-subtree-insert (before expand-view activate)
-          (when (bound-and-true-p dired-hide-details-mode)
-            (dired-hide-details-mode -1)))
-        (bind-key "i" 'dired-subtree-insert dired-mode-map)
-        (bind-key "I" 'dired-subtree-remove dired-mode-map)))
-
-
     (use-package dired-ranger
       :ensure t
       :commands (dired-ranger-copy dired-ranger-move dired-ranger-paste)
@@ -3726,14 +3656,6 @@ for the current buffer's file name, and the line number at point."
       :commands (dired-open-xdg
                  dired-open-guess-shell-alistv))
 
-
-    (use-package dired-efap
-      :ensure t
-      :disabled t
-      :commands dired-efap
-      :init
-      (progn
-        (bind-key "M-r" 'dired-efap dired-mode-map)))
 
     (when (boundp 'dired-hide-details-mode)
       (setq dired-hide-details-hide-symlink-targets nil
@@ -4305,15 +4227,6 @@ If FILE already exists, signal an error."
   :ensure t
   :commands (floobits-join-workspace floobits-share-dir-public
                                      floobits-share-dir-private))
-
-
-;;;; flx-isearch
-
-(use-package flx-isearch
-  :ensure t
-  :disabled t
-  :bind (( "C-s" . flx-isearch-forward)
-         ( "C-r" . flx-isearch-backward)))
 
 
 ;;;; flycheck
@@ -6165,23 +6078,6 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package less-css-mode
   :ensure t
   :mode "\\.less\\'")
-
-
-;;;; lexbind-mode
-
-(use-package lexbind-mode
-  :ensure t
-  :commands (lexbind-toggle-lexical-binding lexbind-lexscratch
-                                            lexbind-modeline-content lexbind-mode))
-
-
-;;;; lib-requires
-
-(use-package lib-requires
-  :ensure t
-  :disabled t
-  :commands (libreq-requires-tree libreq-requires-list
-                                  libreq-insert-lib-requires-as-comment))
 
 
 ;;;; libmpdee
