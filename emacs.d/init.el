@@ -1501,6 +1501,7 @@ re-downloaded in order to locate PACKAGE."
        (not (eq major-mode 'messages-buffer-mode))
        (not (buffer-base-buffer it))
        (buffer-file-name it)
+       (verify-visited-file-modtime it)
        (with-current-buffer it
          (save-buffer))))))
 
