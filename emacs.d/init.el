@@ -9534,6 +9534,30 @@ otherwise use the subtree title."
     (hook-into-modes #'ws-butler-mode my-html-like-mode-hooks)))
 
 
+;;;; xref
+
+(use-package xref
+  :defer t
+  :config
+  (progn
+    (defvar xref--current-item nil)
+    (defun my-pulse-xref ()
+      (pcase-let ((`(,beg . ,end)
+               (save-excursion
+                 (or
+                  (let ((length (xref-match-length xref--current-item)))
+                    (and length (cons (point) (+ (point) length))))
+                  (back-to-indentation)
+                  (if (eolp)
+                      (cons (line-beginning-position) (1+ (point)))
+                    (cons (point) (line-end-position)))))))
+        (my-pulse-region beg end)))
+    (remove-hook 'xref-after-jump-hook 'xref-pulse-momentarily)
+    (remove-hook 'xref-after-return-hook 'xref-pulse-momentarily)
+    (add-hook 'xref-after-jump-hook 'my-pulse-xref 99)
+    (add-hook 'xref-after-return-hook 'my-pulse-xref 99)))
+
+
 ;;;; xterm-color
 
 (use-package xterm-color
