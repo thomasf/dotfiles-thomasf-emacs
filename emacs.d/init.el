@@ -1154,78 +1154,88 @@ re-downloaded in order to locate PACKAGE."
     (add-hook 'after-init-hook 'my-set-fonts t)))
 
 
-;;;; nav-flash
+;;;; my-pulse
 
-(defvar nav-flash-enabled t)
-(use-package nav-flash
-  ;; :disabled t
-  :ensure t
-  :commands (nav-flash-show)
-  :init
-  (progn
-    (when nav-flash-enabled
-      (setq nav-flash-delay 0.6)
-      (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
-      (defun flash-defun()
-        "Flash current defun"
-        (interactive)
-        (save-restriction
-          (narrow-to-defun)
-          (nav-flash-show (point-min) (point-max))))
+(defvar my-pulse-enabled t)
 
-      (defvar nav-flash-show-soon-timer nil)
-      (defun nav-flash-show-soon-cancel-timer ()
-        (when nav-flash-show-soon-timer
-          (cancel-timer nav-flash-show-soon-timer)
-          (setq nav-flash-show-soon nil)))
+(setq pulse-iterations 20
+      pulse-delay .05
+      )
+(setq my-pulse-delay 0.6)
 
-      (defun nav-flash-show-soon (&optional later)
-        (nav-flash-show-soon-cancel-timer)
-        (setq nav-flash-show-soon-timer
-              (run-with-timer (if later 0.4 0.25) nil
-                              '(lambda ()
-                                 (nav-flash-show)))))
+(defun my-pulse-region (start end)
+  (require 'pulse)
+  (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+  (pulse-momentary-highlight-region start end 'my-pulse-face))
 
-      (defun nav-flash-show-later ()
-        (nav-flash-show-soon t))
+(defun my-pulse-line ()
+  (require 'pulse)
+  (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+  (set-face-attribute 'my-pulse-face nil :extend t)
+  (pulse-momentary-highlight-one-line (point) 'my-pulse-face))
 
-      (add-hook 'focus-in-hook 'nav-flash-show-later)
-      (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
+(defun my-pulse-defun()
+  "Flash current defun"
+  (interactive)
+  (save-restriction
+    (narrow-to-defun)
+    (my-pulse-region (point-min) (point-max))))
 
-      (defun recenter-top-bottom-flash ()
-        (interactive)
-        (call-interactively 'recenter-top-bottom)
-        (nav-flash-show))
+(defvar my-pulse-soon-timer nil)
+(defun my-pulse-soon-cancel-timer ()
+  (when my-pulse-soon-timer
+    (cancel-timer my-pulse-soon-timer)
+    (setq my-pulse-soon nil)))
 
-      (bind-key "C-l" 'recenter-top-bottom-flash)
+(defun my-pulse-soon (&optional later)
+  (my-pulse-soon-cancel-timer)
+  (setq my-pulse-soon-timer
+        (run-with-timer (if later 0.4 0.25) nil
+                        '(lambda ()
+                           (my-pulse-line)
+                           ))))
+(defun my-pulse-later ()
+  (my-pulse-soon t))
 
-      (defun move-to-window-line-top-bottom-flash ()
-        (interactive)
-        (call-interactively 'move-to-window-line-top-bottom)
-        (nav-flash-show))
+(defun my-pulse-show-maybe (&optional soon)
+  (and my-pulse-enabled
+     (if soon (my-pulse-soon)
+       (my-pulse-line))))
 
-      (bind-key "M-r" 'move-to-window-line-top-bottom-flash)
+(defun my-recenter-top-bottom (&optional arg)
+  (interactive "P")
+  (call-interactively #'recenter-top-bottom)
+  (my-pulse-line))
 
-      (defun scroll-up-command-flash ()
-        (interactive)
-        (call-interactively 'scroll-up-command)
-        (nav-flash-show-soon))
+(defun my-move-to-window-line-top-bottom (&optional arg)
+  (interactive "P")
+  (call-interactively #'move-to-window-line-top-bottom)
+  (my-pulse-line))
 
-      (bind-key "M-v" 'scroll-down-command-flash)
+(defun my-scroll-up-command (&optional arg)
+  (interactive "P")
+  (call-interactively #'scroll-up-command)
+  (my-pulse-soon))
 
-      (defun scroll-down-command-flash ()
-        (interactive)
-        (call-interactively 'scroll-down-command)
-        (nav-flash-show-soon))
-      (bind-key "C-v" 'scroll-up-command-flash))))
+(defun my-scroll-down-command (&optional arg)
+  (interactive "P")
+  (call-interactively #'scroll-down-command)
+  (my-pulse-soon))
 
 
-(defun nav-flash-show-maybe (&optional soon)
-  (and nav-flash-enabled
-       (fboundp 'nav-flash-show)
-       (fboundp 'nav-flash-show-soon)
-       (if soon (nav-flash-show-soon)
-         (nav-flash-show))))
+(when my-pulse-enabled
+  (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
+  (add-hook 'focus-in-hook 'my-pulse-later)
+  (add-hook 'focus-out-hook 'my-pulse-soon-cancel-timer)
+  (global-set-key [remap recenter-top-bottom] 'my-recenter-top-bottom)
+  (global-set-key [remap move-to-window-line-top-bottom] 'my-move-to-window-line-top-bottom)
+  (global-set-key [remap scroll-up-command] 'my-scroll-up-command)
+  (global-set-key [remap scroll-down-command] 'my-scroll-down-command)
+
+  (advice-add 'ibuffer-visit-buffer :after 'my-pulse-soon)
+  ;; (defadvice ibuffer-visit-buffer (after flash activate) (nav-flash-show))
+
+  )
 
 
 ;;; functions
@@ -1510,7 +1520,7 @@ re-downloaded in order to locate PACKAGE."
   (interactive)
   ;; (stop-using-minibuffer)
   (call-interactively 'other-frame)
-  (nav-flash-show-maybe)
+  (my-pulse-show-maybe)
   (silent-save-some-buffers))
 
 (defun save-some-buffers-other-window ()
@@ -1518,7 +1528,7 @@ re-downloaded in order to locate PACKAGE."
   (interactive)
   (call-interactively 'other-window-or-prompt)
   (unless (window-minibuffer-p)
-    (nav-flash-show-maybe)
+    (my-pulse-show-maybe)
     (silent-save-some-buffers)))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
@@ -4336,7 +4346,7 @@ If FILE already exists, signal an error."
       (interactive)
       (flycheck-error-list-goto-error pos)
       (recenter)
-      (nav-flash-show-maybe))
+      (my-pulse-show-maybe))
 
     (bind-key "RET" 'my-flycheck-error-list-goto-error flycheck-error-list-mode-map)
 
@@ -4688,7 +4698,7 @@ See URL `https://github.com/golang/lint'."
     (defun goto-last-change-flash ()
       (interactive)
       (call-interactively 'goto-last-change)
-      (nav-flash-show-maybe t))))
+      (my-pulse-show-maybe t))))
 
 
 ;;;; graphql-mode
@@ -8433,7 +8443,9 @@ otherwise use the subtree title."
                                scroll-other-window
                                scroll-other-window-down
                                scroll-up scroll-up-command
-                               scroll-up-command-flash))
+                               my-scroll-down-command
+                               my-scroll-up-command
+                               ))
     (scroll-restore-mode 1)))
 
 
