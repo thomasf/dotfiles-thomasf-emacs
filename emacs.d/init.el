@@ -4733,13 +4733,6 @@ See URL `https://github.com/golang/lint'."
          ("\\.gv\\'" . graphviz-dot-mode)))
 
 
-;;;; grizzl
-
-(use-package grizzl
-  :ensure t
-  :commands (grizzl-completing-read grizzl-make-index))
-
-
 ;;;; groovy-mode
 
 (use-package groovy-mode
@@ -5108,10 +5101,10 @@ if submodules exists, grep submodules too."
 
 ;;;; helm-projectile
 
-    (use-package helm-projectile
-      :ensure t
-      :commands (helm-projectile)
-      :bind ("C-x f p" . helm-projectile))
+(use-package helm-projectile
+  :ensure t
+  :commands (helm-projectile)
+  :bind ("C-x f p" . helm-projectile))
 
 
 ;;;; helm-recoll
@@ -5135,16 +5128,6 @@ if submodules exists, grep submodules too."
   (progn
     (define-key search-map "S" 'helm-multi-swoop-all)
     ))
-
-
-;;;; highlight
-
-(use-package highlight
-  :ensure t
-  :commands (hlt-choose-default-face hlt-highlighter
-                                     hlt-eraser hlt-highlight
-                                     hlt-highlight-region
-                                     hlt-highlight-regexp-region))
 
 
 ;;;; highlight-indentation
