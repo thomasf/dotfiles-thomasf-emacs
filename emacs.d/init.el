@@ -4026,17 +4026,6 @@ If FILE already exists, signal an error."
   :commands elfeed)
 
 
-;;;; elisp-slime-nav
-
-(use-package elisp-slime-nav
-  :ensure t
-  :commands (elisp-slime-nav-mode)
-  :diminish elisp-slime-nav-mode
-  :init
-  (progn
-    (add-hook 'emacs-lisp-mode-hook (lambda () (elisp-slime-nav-mode t)))))
-
-
 ;;;; erlang
 
 (use-package erlang
