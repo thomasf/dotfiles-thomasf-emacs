@@ -8,11 +8,17 @@
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
          ;; `(lsp-ui-sideline-global ((,class (:underline ,s-line :height 0.8))))
 
+         ;; `(pulse-highlight-start-face ((,light-class
+         ;;                                (:foreground ,(solarized-color-blend yellow base1 0.2)
+         ;;                                             :background ,(solarized-color-blend yellow base03 0.3)))
+         ;;                               (,dark-class (:foreground ,(solarized-color-blend cyan base1 0.1)
+         ;;                                                         :background ,(solarized-color-blend cyan base03 0.4)))))
+
          `(pulse-highlight-start-face ((,light-class
-                                        (:foreground ,(solarized-color-blend yellow base1 0.2)
-                                                     :background ,(solarized-color-blend yellow base03 0.3)))
-                                       (,dark-class (:foreground ,(solarized-color-blend cyan base1 0.1)
-                                                                 :background ,(solarized-color-blend cyan base03 0.4)))))
+                                        (:background ,(solarized-color-blend yellow base03 0.4)))
+                                       (,dark-class (:background ,(solarized-color-blend cyan base03 0.4)))))
+
+
          )
         (custom-theme-set-variables
          theme-name

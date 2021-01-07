@@ -1162,9 +1162,7 @@ re-downloaded in order to locate PACKAGE."
     my-pulse-enabled)
 
 (setq pulse-iterations 10
-      pulse-delay .05
-      )
-(setq my-pulse-delay 0.6)
+      pulse-delay .05)
 
 (defun my-pulse-region (start end)
   (when (my-pulse-p)
@@ -1191,22 +1189,22 @@ re-downloaded in order to locate PACKAGE."
   (when my-pulse-soon-timer
     (cancel-timer my-pulse-soon-timer)))
 
-(defun my-pulse-set-timer (&optional time)
+(defun my-pulse-set-timer (time)
   (when (my-pulse-p)
     (my-pulse-soon-cancel-timer)
     (setq my-pulse-soon-timer
           (run-with-timer
-           (or time 0.2) nil
+           time nil
            '(lambda () (my-pulse-line))))))
 
 (defun my-pulse-now (&rest r)
-  (my-pulse-set-timer 0.05))
+  (my-pulse-set-timer 0.02))
 
 (defun my-pulse-soon (&rest r)
-  (my-pulse-set-timer))
+  (my-pulse-set-timer 0.2))
 
 (defun my-pulse-later (&rest r)
-  (my-pulse-set-timer 0.4))
+  (my-pulse-set-timer 0.3))
 
 (defun my-recenter-top-bottom (&optional arg)
   (interactive "P")
@@ -1228,27 +1226,24 @@ re-downloaded in order to locate PACKAGE."
   (call-interactively #'scroll-down-command)
   (my-pulse-soon))
 
-;; (defun my-find-file (filename &optional wildcards)
-;;   (interactive "P")
-;;   (call-interactively #'find-file)
-;;   (my-pulse-now))
-
-
 (when my-pulse-enabled
+  ;; hooks
   (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
   (add-hook 'focus-in-hook 'my-pulse-later)
   (add-hook 'focus-out-hook 'my-pulse-soon-cancel-timer)
   (add-hook 'projectile-find-file-hook 'my-pulse-now)
-
+  ;; key remaps
   (global-set-key [remap recenter-top-bottom] 'my-recenter-top-bottom)
   (global-set-key [remap move-to-window-line-top-bottom] 'my-move-to-window-line-top-bottom)
   (global-set-key [remap scroll-up-command] 'my-scroll-up-command)
   (global-set-key [remap scroll-down-command] 'my-scroll-down-command)
-  ;; (global-set-key [remap find-file] 'my-find-file)
-
+  ;; advices
   (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)
-
-
+  (advice-add 'magit-diff-visit-file :after 'my-pulse-now)
+  (advice-add 'ido-find-file :after 'my-pulse-now)
+  (advice-add 'direx:generic-find-item :after 'my-pulse-now)
+  (advice-add 'direx:generic-view-item :after 'my-pulse-now)
+  ;; end
   )
 
 
