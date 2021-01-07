@@ -1159,7 +1159,11 @@ re-downloaded in order to locate PACKAGE."
 (defvar my-pulse-enabled t)
 
 (defun my-pulse-p ()
-    my-pulse-enabled)
+  (and my-pulse-enabled
+     (not (eq major-mode 'magit-status-mode))
+     (not (eq major-mode 'image-mode))
+     (not (and (boundp 'git-commit-mode) git-commit-mode)))
+  )
 
 (setq pulse-iterations 10
       pulse-delay .05)
