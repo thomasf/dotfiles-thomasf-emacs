@@ -1158,21 +1158,26 @@ re-downloaded in order to locate PACKAGE."
 
 (defvar my-pulse-enabled t)
 
-(setq pulse-iterations 20
+(defun my-pulse-p ()
+    my-pulse-enabled)
+
+(setq pulse-iterations 10
       pulse-delay .05
       )
 (setq my-pulse-delay 0.6)
 
 (defun my-pulse-region (start end)
-  (require 'pulse)
-  (copy-face 'pulse-highlight-start-face 'my-pulse-face)
-  (pulse-momentary-highlight-region start end 'my-pulse-face))
+  (when (my-pulse-p)
+    (require 'pulse)
+    (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+    (pulse-momentary-highlight-region start end 'my-pulse-face)))
 
-(defun my-pulse-line ()
-  (require 'pulse)
-  (copy-face 'pulse-highlight-start-face 'my-pulse-face)
-  (set-face-attribute 'my-pulse-face nil :extend t)
-  (pulse-momentary-highlight-one-line (point) 'my-pulse-face))
+(defun my-pulse-line (&rest r)
+  (when (my-pulse-p)
+    (require 'pulse)
+    (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+    (set-face-attribute 'my-pulse-face nil :extend t)
+    (pulse-momentary-highlight-one-line (point) 'my-pulse-face)))
 
 (defun my-pulse-defun()
   "Flash current defun"
@@ -1182,25 +1187,26 @@ re-downloaded in order to locate PACKAGE."
     (my-pulse-region (point-min) (point-max))))
 
 (defvar my-pulse-soon-timer nil)
-(defun my-pulse-soon-cancel-timer ()
+(defun my-pulse-soon-cancel-timer (&rest r)
   (when my-pulse-soon-timer
-    (cancel-timer my-pulse-soon-timer)
-    (setq my-pulse-soon nil)))
+    (cancel-timer my-pulse-soon-timer)))
 
-(defun my-pulse-soon (&optional later)
-  (my-pulse-soon-cancel-timer)
-  (setq my-pulse-soon-timer
-        (run-with-timer (if later 0.4 0.25) nil
-                        '(lambda ()
-                           (my-pulse-line)
-                           ))))
-(defun my-pulse-later ()
-  (my-pulse-soon t))
+(defun my-pulse-set-timer (&optional time)
+  (when (my-pulse-p)
+    (my-pulse-soon-cancel-timer)
+    (setq my-pulse-soon-timer
+          (run-with-timer
+           (or time 0.2) nil
+           '(lambda () (my-pulse-line))))))
 
-(defun my-pulse-show-maybe (&optional soon)
-  (and my-pulse-enabled
-     (if soon (my-pulse-soon)
-       (my-pulse-line))))
+(defun my-pulse-now (&rest r)
+  (my-pulse-set-timer 0.05))
+
+(defun my-pulse-soon (&rest r)
+  (my-pulse-set-timer))
+
+(defun my-pulse-later (&rest r)
+  (my-pulse-set-timer 0.4))
 
 (defun my-recenter-top-bottom (&optional arg)
   (interactive "P")
@@ -1222,18 +1228,26 @@ re-downloaded in order to locate PACKAGE."
   (call-interactively #'scroll-down-command)
   (my-pulse-soon))
 
+;; (defun my-find-file (filename &optional wildcards)
+;;   (interactive "P")
+;;   (call-interactively #'find-file)
+;;   (my-pulse-now))
+
 
 (when my-pulse-enabled
   (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
   (add-hook 'focus-in-hook 'my-pulse-later)
   (add-hook 'focus-out-hook 'my-pulse-soon-cancel-timer)
+  (add-hook 'projectile-find-file-hook 'my-pulse-now)
+
   (global-set-key [remap recenter-top-bottom] 'my-recenter-top-bottom)
   (global-set-key [remap move-to-window-line-top-bottom] 'my-move-to-window-line-top-bottom)
   (global-set-key [remap scroll-up-command] 'my-scroll-up-command)
   (global-set-key [remap scroll-down-command] 'my-scroll-down-command)
+  ;; (global-set-key [remap find-file] 'my-find-file)
 
-  (advice-add 'ibuffer-visit-buffer :after 'my-pulse-soon)
-  ;; (defadvice ibuffer-visit-buffer (after flash activate) (nav-flash-show))
+  (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)
+
 
   )
 
@@ -1520,7 +1534,7 @@ re-downloaded in order to locate PACKAGE."
   (interactive)
   ;; (stop-using-minibuffer)
   (call-interactively 'other-frame)
-  (my-pulse-show-maybe)
+  (my-pulse-soon)
   (silent-save-some-buffers))
 
 (defun save-some-buffers-other-window ()
@@ -1528,7 +1542,7 @@ re-downloaded in order to locate PACKAGE."
   (interactive)
   (call-interactively 'other-window-or-prompt)
   (unless (window-minibuffer-p)
-    (my-pulse-show-maybe)
+    (my-pulse-soon)
     (silent-save-some-buffers)))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
@@ -4346,7 +4360,7 @@ If FILE already exists, signal an error."
       (interactive)
       (flycheck-error-list-goto-error pos)
       (recenter)
-      (my-pulse-show-maybe))
+      (my-pulse-soon))
 
     (bind-key "RET" 'my-flycheck-error-list-goto-error flycheck-error-list-mode-map)
 
@@ -4698,7 +4712,7 @@ See URL `https://github.com/golang/lint'."
     (defun goto-last-change-flash ()
       (interactive)
       (call-interactively 'goto-last-change)
-      (my-pulse-show-maybe t))))
+      (my-pulse-later))))
 
 
 ;;;; graphql-mode

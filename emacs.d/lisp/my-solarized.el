@@ -10,9 +10,9 @@
 
          `(pulse-highlight-start-face ((,light-class
                                         (:foreground ,(solarized-color-blend yellow base1 0.2)
-                                                     :background ,(solarized-color-blend yellow base03 0.2)))
-                       (,dark-class (:foreground ,(solarized-color-blend cyan base1 0.1)
-                                                 :background ,(solarized-color-blend cyan base03 0.4)))))
+                                                     :background ,(solarized-color-blend yellow base03 0.3)))
+                                       (,dark-class (:foreground ,(solarized-color-blend cyan base1 0.1)
+                                                                 :background ,(solarized-color-blend cyan base03 0.4)))))
          )
         (custom-theme-set-variables
          theme-name
