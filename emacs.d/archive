@@ -1,0 +1,19 @@
+#!/bin/bash
+
+(
+  set -e
+  cd elpa-mirror
+  git init -q .
+  git add -A archive/
+  git commit -q -m"update packages"
+)
+
+emacs --no-site -batch -l archive.el
+
+(
+  set -e
+  cd elpa-mirror
+  git init -q .
+  git add -A archive/
+  git commit -q -m"update packages"
+)

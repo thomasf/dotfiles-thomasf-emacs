@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo ""
+echo "**** only in elpa"
+echo ""
+
+join -t, -v1 \
+     <( find elpa -maxdepth 1 -mindepth 1 -type d  -printf '%P\n' | sort  ) \
+     <( find ${1} -maxdepth 1 -mindepth 1 -type d  -printf '%P\n' | sort  )
+
+
+echo ""
+echo "*** only in ${1}"
+echo ""
+
+join -t, -v1 \
+     <( find ${1} -maxdepth 1 -mindepth 1 -type d  -printf '%P\n' | sort  ) \
+     <( find elpa -maxdepth 1 -mindepth 1 -type d  -printf '%P\n' | sort  )

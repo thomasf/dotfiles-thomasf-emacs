@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "reinstall elpa/ from local package mirror"
+
+if [ "$1" != "-f" ]; then
+  echo "-f required because desturctive command"
+  exit 1
+fi
+
+export ELPA_MIRROR=1
+
+./clean
+rm -rf elpa/*
+
+emacs --no-site -batch -l install.el
+emacs --no-site -batch -l makeup.el

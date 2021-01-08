@@ -104,7 +104,7 @@
   (or
    (and
     (not noninteractive)
-    (not degrade-p-minimalism)
+
     (workspace-prefix))))
 
 (defun workspace-prefix-file-name (name &optional ext)
@@ -149,6 +149,9 @@
      ("gnu"         . "https://elpa.gnu.org/packages/")
      ;; ("sc"   . "http://joseito.republika.pl/sunrise-commander/")
      ))
+  (when (getenv "ELPA_MIRROR")
+    (setq package-archives
+          '(("mirror" . "elpa-mirror/archive"))))
 
   (unless (boundp 'package-pinned-packages)
     (setq package-pinned-packages ()))
@@ -596,9 +599,11 @@ re-downloaded in order to locate PACKAGE."
 ;; misc Emacs settings not directly related to loading a package
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+
 ;;;;; timeclock
 
 (setq timeclock-use-display-time nil)
+
 
 ;;;;; tooltip
 
@@ -1028,7 +1033,7 @@ re-downloaded in order to locate PACKAGE."
 
 (and (not mf-current)
    (not noninteractive)
-   (not degrade-p-minimalism)
+
    (mf-mode-theme))
 
 (add-hook 'focus-in-hook
@@ -1072,7 +1077,7 @@ re-downloaded in order to locate PACKAGE."
   :if (and
        (not noninteractive)
        (not (not window-system))
-       (not degrade-p-minimalism))
+       )
   :commands (sml/setup)
   :preface
   (progn
@@ -1280,7 +1285,6 @@ re-downloaded in order to locate PACKAGE."
   ;; (my-pulse-later)
   (my-pulse-soon)
   (silent-save-some-buffers))
-
 
 
 ;;;;; next-error / previous-error
@@ -3042,7 +3046,7 @@ for the current buffer's file name, and the line number at point."
   :defer 2
   :if (and
        (not noninteractive)
-       (not degrade-p-minimalism))
+       )
   :commands (global-anzu-mode)
   :init (global-anzu-mode 1)
   :diminish "")
@@ -3127,7 +3131,7 @@ for the current buffer's file name, and the line number at point."
 ;;;; autorevert
 
 (use-package autorevert
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :defer
   :init
   (progn
@@ -3555,7 +3559,7 @@ for the current buffer's file name, and the line number at point."
 ;;;; cua-base
 
 (use-package cua-base
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :init
   (progn
     (setq
@@ -4085,6 +4089,16 @@ If FILE already exists, signal an error."
   :commands elfeed)
 
 
+;;;; elpa-mirror
+
+(use-package elpa-mirror
+  :commands elpamr-create-mirror-for-installed
+  :ensure t
+  :init
+  (progn
+    (setq elpamr-default-output-directory (expand-file-name "elpa-mirror/archive" user-emacs-directory))))
+
+
 ;;;; erlang
 
 (use-package erlang
@@ -4572,7 +4586,7 @@ See URL `https://github.com/golang/lint'."
 
 (use-package git-gutter
   :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :commands (git-gutter-mode
              global-git-gutter-mode)
   :bind (("M-o m g" . git-gutter-mode))
@@ -4974,7 +4988,6 @@ See URL `https://github.com/golang/lint'."
 (use-package helm
   :ensure t
   :defer 16
-  :if (and (not degrade-p-minimalism))
   :commands (helm-M-x helm-bookmarks helm-browse-code
                       helm-locate helm-mini helm-for-files helm-occur
                       helm-simple-call-tree helm-top helm-ucs helm-org-headlines
@@ -5705,7 +5718,7 @@ if submodules exists, grep submodules too."
 
     (use-package ido-vertical-mode
       :ensure t
-      :if (and (not degrade-p-minimalism))
+      :if (and )
       :commands (turn-on-ido-vertical
                  ido-vertical-mode)
       :init
@@ -5717,7 +5730,6 @@ if submodules exists, grep submodules too."
       :commands (flx-ido-mode)
       :if (not (or
                 noninteractive
-                degrade-p-minimalism
                 (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
       :init
       (progn
@@ -6066,7 +6078,7 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; keep-buffers
 
 (use-package keep-buffers
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive))
   :commands (keep-buffers-mode)
   :init
   (progn
@@ -6544,10 +6556,9 @@ drag the viewpoint on the image buffer that the window displays."
 
     (defun my-git-commit-hook-fn ()
       "My git commit mode hook."
-      (unless degrade-p-minimalism
-        (ispell-change-dictionary "english")
-        (turn-on-flyspell)
-        (toggle-save-place 0)))
+      (ispell-change-dictionary "english")
+      (turn-on-flyspell)
+      (toggle-save-place 0))
 
     (add-hook 'git-commit-setup-hook 'my-git-commit-hook-fn)
 
@@ -6987,7 +6998,7 @@ Titus von der Malsburg."
        ))
     (when (and
            (not noninteractive)
-           (not degrade-p-minimalism))
+           )
       (openwith-mode)))
   :config
   (progn
@@ -7485,7 +7496,7 @@ otherwise use the subtree title."
 (use-package parenface-plus
   :ensure t
   :disabled t
-  :if (and (not noninteractive) (not (not window-system)) (not degrade-p-minimalism))
+  :if (and (not noninteractive) (not (not window-system)) )
   :config
   (progn
     (defun paren-face-add-keyword-other ()
@@ -7602,7 +7613,7 @@ otherwise use the subtree title."
 ;;;; point-undo
 
 (use-package point-undo
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :commands (point-undo point-redo)
   :init
   (progn
@@ -8246,7 +8257,7 @@ otherwise use the subtree title."
 ;;;; recentf
 
 (use-package recentf
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :bind (("C-x f R" . find-recent-file))
   :defer 6
   :init
@@ -8286,7 +8297,7 @@ otherwise use the subtree title."
 (use-package region-bindings-mode
   :if (and
        (not noninteractive)
-       (not degrade-p-minimalism))
+       )
   :ensure t
   :commands (region-bindings-mode-enable)
   :diminish "▒▒"
@@ -8439,7 +8450,7 @@ otherwise use the subtree title."
 ;;;; savehist
 
 (use-package savehist
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :init
   (progn
     (setq
@@ -8458,7 +8469,7 @@ otherwise use the subtree title."
 ;;;; saveplace
 
 (use-package saveplace
-  :if (and (not noninteractive) (not degrade-p-minimalism))
+  :if (and (not noninteractive) )
   :init
   (progn
     (setq save-place-forget-unreadable-files nil))
@@ -8828,7 +8839,7 @@ otherwise use the subtree title."
 
 (use-package smex
   :ensure t
-  :if (and (not degrade-p-minimalism))
+  :if (and )
   :commands (smex smex-major-mode-commands smex-show-unbound-commands)
   :bind (("M-x" . smex)
          ("<menu>" . smex)
@@ -9232,7 +9243,7 @@ otherwise use the subtree title."
 ;;;; uniquify
 
 (use-package uniquify
-  :if (and (not degrade-p-minimalism) (not noninteractive))
+  :if (and  (not noninteractive))
   :init
   (progn
     (setq
@@ -9353,7 +9364,7 @@ otherwise use the subtree title."
 
 (use-package wakatime-mode
   :ensure t
-  :if (and (not noninteractive) (not degrade-p-minimalism) (executable-find* "wakatime"))
+  :if (and (not noninteractive)  (executable-find* "wakatime"))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
   :defer 4
@@ -9568,7 +9579,7 @@ otherwise use the subtree title."
 ;;;; winner
 
 (use-package winner
-  :if (and (not degrade-p-minimalism) (not noninteractive))
+  :if (and  (not noninteractive))
   :bind (("M-N" . winner-redo)
          ("M-P" . winner-undo))
   :init
@@ -9850,7 +9861,6 @@ otherwise use the subtree title."
 
 (use-package zencoding-mode
   :ensure t
-  :if (not degrade-p-minimalism)
   :commands zencoding-mode
   :diminish ((zencoding-mode . "zen"))
   :init
@@ -9880,7 +9890,7 @@ otherwise use the subtree title."
   (and
    (not noninteractive)
    window-system
-   (not degrade-p-minimalism)
+
    (cond
     ((equal workspace-prefix-startup "upgrade")
      (call-interactively 'list-packages)))))
