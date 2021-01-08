@@ -1170,27 +1170,31 @@ re-downloaded in order to locate PACKAGE."
 
 (defvar my-pulse-enabled t)
 
+(when my-pulse-enabled
+  (require 'pulse))
+
 (defun my-pulse-p ()
   (and my-pulse-enabled
      (pulse-available-p)
+     (not (window-minibuffer-p))
      (not (eq major-mode 'mu4e-headers-mode))
      (not (eq major-mode 'magit-status-mode))
      (not (eq major-mode 'image-mode))
      (not (and (boundp 'git-commit-mode) git-commit-mode))))
 
 (defun my-pulse--setup ()
-  (require 'pulse)
-  ;; flickers too much in terminal for me
-  (if (display-graphic-p)
+  (if (display-graphic-p) ;; flickers too much in terminals
       (setq pulse-iterations 10
             pulse-delay .04)
     (setq pulse-iterations 1
           pulse-delay .45))
     (copy-face 'pulse-highlight-start-face 'my-pulse-face))
 
-(defun my-pulse-region (start end)
+(defun my-pulse-region (start end &optional extend)
   (when (my-pulse-p)
     (my-pulse--setup)
+    (when extend
+      (set-face-attribute 'my-pulse-face nil :extend t))
     (pulse-momentary-highlight-region start end 'my-pulse-face)))
 
 (defun my-pulse-line (&rest r)
@@ -1198,6 +1202,16 @@ re-downloaded in order to locate PACKAGE."
     (my-pulse--setup)
     (set-face-attribute 'my-pulse-face nil :extend t)
     (pulse-momentary-highlight-one-line (point) 'my-pulse-face)))
+
+(defun my-pulse-rest-of-line (&rest r)
+  (when (my-pulse-p)
+    (save-excursion
+      (let ((beg (point)))
+        (end-of-line)
+        (when (not (eobp))
+          (forward-char 1))
+        (my-pulse-region beg (point) t)
+        nil))))
 
 (defun my-pulse-defun()
   "Flash current defun"
@@ -1208,7 +1222,9 @@ re-downloaded in order to locate PACKAGE."
 
 (defvar my-pulse-timer nil)
 (defun my-pulse-cancel-timer (&rest r)
-  (pulse-momentary-unhighlight)
+  (when
+      (fboundp 'pulse-momentary-unhighlight)
+    (pulse-momentary-unhighlight))
   (when my-pulse-timer
     (cancel-timer my-pulse-timer)))
 
@@ -1254,20 +1270,17 @@ re-downloaded in order to locate PACKAGE."
 (defun my-other-frame ()
   "Save-some-buffers, then other frame."
   (interactive)
-  (my-pulse-cancel-timer)
-  ;; (stop-using-minibuffer)
-  (call-interactively 'other-frame)
-  (my-pulse-soon)
-  (silent-save-some-buffers))
+  (call-interactively 'other-frame))
 
 (defun my-other-window ()
   "Save-some-buffers, then other window."
   (interactive)
   (my-pulse-cancel-timer)
-  (call-interactively 'other-window-or-prompt)
-  (unless (window-minibuffer-p)
-    (my-pulse-later)
-    (silent-save-some-buffers)))
+  (call-interactively 'other-window)
+  ;; (my-pulse-later)
+  (my-pulse-soon)
+  (silent-save-some-buffers))
+
 
 
 ;;;;; next-error / previous-error
@@ -4351,7 +4364,8 @@ If FILE already exists, signal an error."
       ""
       (interactive "P")
       (flycheck-next-error n reset)
-      (recenter))
+      (recenter)
+      (my-pulse-rest-of-line))
 
     (defun my-flycheck-previous-error (&optional n)
       ""
