@@ -7645,7 +7645,7 @@ otherwise use the subtree title."
           (help-mode :noselect t)
           ("*Ido Completions*" :noselect t :position bottom)
           (direx:direx-mode :position left :width .25 :dedicated t)
-          ("*Messages*" :height .40 :tail t)
+          ("*Messages*" :height .40 :tail t :stick t)
           (deadgrep-mode :height .40 :stick t)
           ("*pt-search*" :height .40 :stick t)
           ("*go-traceback*" :height .40 :stick t)
