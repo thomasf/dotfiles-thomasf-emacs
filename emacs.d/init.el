@@ -4393,9 +4393,9 @@ no errors as or more severe than `flycheck-navigation-minimum-level'."
         "C-c"
       '(("n" . my-flycheck-next-error)
         ("p" . my-flycheck-previous-error)
-        ("e" . #'(lambda () (setq flycheck-navigation-minimum-level 'error) (message "level: error")))
-        ("w" . #'(lambda () (setq flycheck-navigation-minimum-level 'warning) (message "level: warning")))
-        ("i" . #'(lambda () (setq flycheck-navigation-minimum-level 'info) (message "leve: info")))))
+        ("E" . #'(lambda () (setq flycheck-navigation-minimum-level 'error) (message "level: error")))
+        ("W" . #'(lambda () (setq flycheck-navigation-minimum-level 'warning) (message "level: warning")))
+        ("I" . #'(lambda () (setq flycheck-navigation-minimum-level 'info) (message "leve: info")))))
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
