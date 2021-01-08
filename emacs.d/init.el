@@ -7255,11 +7255,7 @@ Argument FILENAME File to insert."
       :config
       (progn
         (bind-key "h" 'ibuffer org-agenda-mode-map)
-        (org-clock-persistence-insinuate)
-        ;; (display-time-mode)
-        (if (fboundp 'timeclock-mode-line-display)
-            (timeclock-mode-line-display))
-        (timeclock-modeline-display)))
+        (org-clock-persistence-insinuate)))
 
     (defun my-term-agenda ()
       "Get a simple summary view "
