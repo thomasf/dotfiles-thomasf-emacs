@@ -8,15 +8,16 @@
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
          ;; `(lsp-ui-sideline-global ((,class (:underline ,s-line :height 0.8))))
 
-         ;; `(pulse-highlight-start-face ((,light-class
-         ;;                                (:foreground ,(solarized-color-blend yellow base1 0.2)
-         ;;                                             :background ,(solarized-color-blend yellow base03 0.3)))
-         ;;                               (,dark-class (:foreground ,(solarized-color-blend cyan base1 0.1)
-         ;;                                                         :background ,(solarized-color-blend cyan base03 0.4)))))
-
          `(pulse-highlight-start-face ((,light-class
                                         (:background ,(solarized-color-blend yellow base03 0.4)))
                                        (,dark-class (:background ,(solarized-color-blend cyan base03 0.4)))))
+
+         ;; easier to follow even when the cursor jumps all over the screen but maybe a little too much otherwise
+         `(next-error ((,class (:foreground ,magenta-2fg :background ,magenta-2bg :weight normal))))
+
+         ;; ;; same as moccur face
+         ;; ;; more adherent to solarized style but harder to se with next-error-recenter nil
+         ;; `(next-error ((,class (:background ,base02 :foreground ,base1 :weight bold))))
 
 
          )

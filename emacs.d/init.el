@@ -864,8 +864,8 @@ re-downloaded in order to locate PACKAGE."
 (bind-key "H-n" 'my-scroll-other-window-up)
 (bind-key "H-p" 'my-scroll-other-window-down)
 (bind-key "C-x 4 n" 'clone-buffer-and-narrow-to-function)
-(bind-key "C-x o" 'save-some-buffers-other-window)
-(bind-key "C-x C-o" 'save-some-buffers-other-frame)
+(bind-key "C-x o" 'my-other-window)
+(bind-key "C-x C-o" 'my-other-frame)
 
 ;; NOTE while being handy using smartrep with other-*
 ;;      functions is a bit slow for some reason.
@@ -873,11 +873,11 @@ re-downloaded in order to locate PACKAGE."
 ;; (smartrep-define-key
 ;;     global-map
 ;;     "C-x"
-;;   '(("o" . save-some-buffers-other-window)
-;;     ("C-o" . save-some-buffers-other-frame)))
+;;   '(("o" . my-other-window)
+;;     ("C-o" . my-other-frame)))
 
 
-(global-set-key [remap goto-line] 'goto-line-with-feedback)
+
 (bind-key "C-x f f" 'find-file)
 (bind-key "C-x b b" 'switch-to-buffer)
 (bind-key "C-x C-b" 'switch-to-buffer)
@@ -1160,24 +1160,30 @@ re-downloaded in order to locate PACKAGE."
 
 (defun my-pulse-p ()
   (and my-pulse-enabled
+     (pulse-available-p)
+     (not (eq major-mode 'mu4e-headers-mode))
      (not (eq major-mode 'magit-status-mode))
      (not (eq major-mode 'image-mode))
-     (not (and (boundp 'git-commit-mode) git-commit-mode)))
-  )
+     (not (and (boundp 'git-commit-mode) git-commit-mode))))
 
-(setq pulse-iterations 10
-      pulse-delay .05)
+(defun my-pulse--setup ()
+  (require 'pulse)
+  ;; flickers too much in terminal for me
+  (if (display-graphic-p)
+      (setq pulse-iterations 10
+            pulse-delay .04)
+    (setq pulse-iterations 1
+          pulse-delay .45))
+    (copy-face 'pulse-highlight-start-face 'my-pulse-face))
 
 (defun my-pulse-region (start end)
   (when (my-pulse-p)
-    (require 'pulse)
-    (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+    (my-pulse--setup)
     (pulse-momentary-highlight-region start end 'my-pulse-face)))
 
 (defun my-pulse-line (&rest r)
   (when (my-pulse-p)
-    (require 'pulse)
-    (copy-face 'pulse-highlight-start-face 'my-pulse-face)
+    (my-pulse--setup)
     (set-face-attribute 'my-pulse-face nil :extend t)
     (pulse-momentary-highlight-one-line (point) 'my-pulse-face)))
 
@@ -1188,15 +1194,16 @@ re-downloaded in order to locate PACKAGE."
     (narrow-to-defun)
     (my-pulse-region (point-min) (point-max))))
 
-(defvar my-pulse-soon-timer nil)
-(defun my-pulse-soon-cancel-timer (&rest r)
-  (when my-pulse-soon-timer
-    (cancel-timer my-pulse-soon-timer)))
+(defvar my-pulse-timer nil)
+(defun my-pulse-cancel-timer (&rest r)
+  (pulse-momentary-unhighlight)
+  (when my-pulse-timer
+    (cancel-timer my-pulse-timer)))
 
 (defun my-pulse-set-timer (time)
   (when (my-pulse-p)
-    (my-pulse-soon-cancel-timer)
-    (setq my-pulse-soon-timer
+    (my-pulse-cancel-timer)
+    (setq my-pulse-timer
           (run-with-timer
            time nil
            '(lambda () (my-pulse-line))))))
@@ -1208,7 +1215,66 @@ re-downloaded in order to locate PACKAGE."
   (my-pulse-set-timer 0.2))
 
 (defun my-pulse-later (&rest r)
-  (my-pulse-set-timer 0.3))
+  (my-pulse-set-timer 0.35))
+
+(when my-pulse-enabled
+  ;; hooks
+  (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
+  (add-hook 'focus-in-hook 'my-pulse-later)
+  (add-hook 'focus-out-hook 'my-pulse-cancel-timer)
+  (add-hook 'projectile-find-file-hook 'my-pulse-now)
+   ;; advices
+  (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)
+  (advice-add 'magit-diff-visit-file :after 'my-pulse-now)
+  (advice-add 'ido-find-file :after 'my-pulse-now)
+  (advice-add 'direx:generic-find-item :after 'my-pulse-now)
+  (advice-add 'direx:generic-view-item :after 'my-pulse-now)
+  ;; end
+  )
+
+
+;;; functions
+
+;;;; replacements for some standard emacs command
+
+;;;;; other-frame / other-window
+
+(defun my-other-frame ()
+  "Save-some-buffers, then other frame."
+  (interactive)
+  (my-pulse-cancel-timer)
+  ;; (stop-using-minibuffer)
+  (call-interactively 'other-frame)
+  (my-pulse-soon)
+  (silent-save-some-buffers))
+
+(defun my-other-window ()
+  "Save-some-buffers, then other window."
+  (interactive)
+  (my-pulse-cancel-timer)
+  (call-interactively 'other-window-or-prompt)
+  (unless (window-minibuffer-p)
+    (my-pulse-later)
+    (silent-save-some-buffers)))
+
+
+;;;;; next-error / previous-error
+
+(defun my-next-error (&optional arg reset)
+  (interactive "P")
+  (let ((compilation-window-height 8))
+    (next-error arg reset)))
+
+(defun my-previous-error (&optional n)
+  (interactive "P")
+  (my-next-error (- (or n 1))))
+
+(global-set-key [remap next-error] 'my-next-error)
+(global-set-key [remap previous-error] 'my-previous-error)
+
+
+;;;;; recenter-top-bottom / my-move-to-window-line-top-bottom
+
 
 (defun my-recenter-top-bottom (&optional arg)
   (interactive "P")
@@ -1220,38 +1286,41 @@ re-downloaded in order to locate PACKAGE."
   (call-interactively #'move-to-window-line-top-bottom)
   (my-pulse-line))
 
+
+(global-set-key [remap recenter-top-bottom] 'my-recenter-top-bottom)
+(global-set-key [remap move-to-window-line-top-bottom] 'my-move-to-window-line-top-bottom)
+
+
+;;;;; scroll-up-command / scroll-down-command
+
 (defun my-scroll-up-command (&optional arg)
   (interactive "P")
   (call-interactively #'scroll-up-command)
   (my-pulse-soon))
+
 
 (defun my-scroll-down-command (&optional arg)
   (interactive "P")
   (call-interactively #'scroll-down-command)
   (my-pulse-soon))
 
-(when my-pulse-enabled
-  ;; hooks
-  (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
-  (add-hook 'focus-in-hook 'my-pulse-later)
-  (add-hook 'focus-out-hook 'my-pulse-soon-cancel-timer)
-  (add-hook 'projectile-find-file-hook 'my-pulse-now)
-  ;; key remaps
-  (global-set-key [remap recenter-top-bottom] 'my-recenter-top-bottom)
-  (global-set-key [remap move-to-window-line-top-bottom] 'my-move-to-window-line-top-bottom)
-  (global-set-key [remap scroll-up-command] 'my-scroll-up-command)
-  (global-set-key [remap scroll-down-command] 'my-scroll-down-command)
-  ;; advices
-  (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)
-  (advice-add 'magit-diff-visit-file :after 'my-pulse-now)
-  (advice-add 'ido-find-file :after 'my-pulse-now)
-  (advice-add 'direx:generic-find-item :after 'my-pulse-now)
-  (advice-add 'direx:generic-view-item :after 'my-pulse-now)
-  ;; end
-  )
+
+(global-set-key [remap scroll-up-command] 'my-scroll-up-command)
+(global-set-key [remap scroll-down-command] 'my-scroll-down-command)
 
 
-;;; functions
+;;;;; scroll-other-window-up / scroll-other-window-down
+
+(defun my-scroll-other-window-down ()
+  "Scrolls other window down one line"
+  (interactive)
+  (scroll-other-window-down 1))
+
+(defun my-scroll-other-window-up ()
+  "Scrolls other window up one line"
+  (interactive)
+  (scroll-other-window-down -1))
+
 
 ;;;; misc...
 
@@ -1527,22 +1596,6 @@ re-downloaded in order to locate PACKAGE."
        (verify-visited-file-modtime it)
        (with-current-buffer it
          (save-buffer))))))
-
-(defun save-some-buffers-other-frame ()
-  "Save-some-buffers, then other frame."
-  (interactive)
-  ;; (stop-using-minibuffer)
-  (call-interactively 'other-frame)
-  (my-pulse-soon)
-  (silent-save-some-buffers))
-
-(defun save-some-buffers-other-window ()
-  "Save-some-buffers, then other window."
-  (interactive)
-  (call-interactively 'other-window-or-prompt)
-  (unless (window-minibuffer-p)
-    (my-pulse-soon)
-    (silent-save-some-buffers)))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
 
@@ -1918,16 +1971,16 @@ the current one that frame will be gain focus."
   (interactive "p")
   (if (minibuffer-prompt)
       (unwind-protect
-	      (let* ((minibuf (active-minibuffer-window))
-		         (minibuf-frame (window-frame minibuf)))
+          (let* ((minibuf (active-minibuffer-window))
+                 (minibuf-frame (window-frame minibuf)))
 
-	        (unless (equal minibuf-frame (selected-frame))
+            (unless (equal minibuf-frame (selected-frame))
               (select-frame-set-input-focus minibuf-frame))
-	        ;; (select-frame minibuf-frame)
-	        ;; (raise-frame minibuf-frame))
+            ;; (select-frame minibuf-frame)
+            ;; (raise-frame minibuf-frame))
 
-	        (when (window-live-p minibuf)
-	          (select-window minibuf))))
+            (when (window-live-p minibuf)
+              (select-window minibuf))))
     (other-window count all-frames)))
 
 
@@ -2506,24 +2559,6 @@ sTo this: ")
 
 ;;;; MISC
 
-;;;;; next-error / previous-error
-
-(defun my-next-error (&optional arg reset)
-  ""
-  (interactive "P")
-  (let ((compilation-window-height 8))
-    (next-error arg reset)))
-
-(defun my-previous-error (&optional n)
-  ""
-  (interactive "P")
-  (my-next-error (- (or n 1))))
-
-
-(global-set-key [remap next-error] 'my-next-error)
-(global-set-key [remap previous-error] 'my-previous-error)
-
-
 ;;;;; cycle ispell languages
 
 ;; Languages for spellinc cycling
@@ -2552,6 +2587,8 @@ sTo this: ")
         (linum-mode 1)
         (call-interactively 'goto-line))
     (linum-mode -1)))
+
+(global-set-key [remap goto-line] 'goto-line-with-feedback)
 
 
 ;;;;; menu-bar-go
@@ -2833,15 +2870,6 @@ for the current buffer's file name, and the line number at point."
   (interactive)
   (simpleclip-set-contents buffer-file-name))
 
-(defun my-scroll-other-window-down ()
-  "Scrolls other window down one line"
-  (interactive)
-  (scroll-other-window-down 1))
-
-(defun my-scroll-other-window-up ()
-  "Scrolls other window up one line"
-  (interactive)
-  (scroll-other-window-down -1))
 
 (defun clone-buffer-and-narrow-to-function ()
   (interactive)
@@ -2910,8 +2938,7 @@ for the current buffer's file name, and the line number at point."
   :ensure t
   :commands (ace-jump-word-mode
              ace-jump-mode)
-  :bind (("C-c SPC" . ace-jump-mode)
-         ("C-h j" . ace-jump-word-mode))
+  :bind (("C-c SPC" . ace-jump-mode))
   :init
   (progn
 
@@ -5178,8 +5205,7 @@ if submodules exists, grep submodules too."
 
 (use-package ibuffer
   :defer
-  :bind (("C-x b n" . ibuffer)
-         ("C-h h" . ibuffer)
+  :bind (("C-h h" . ibuffer)
          ("C-h C-h" . ibuffer)
          ("<XF86Search>" . ibuffer))
   :init
@@ -6168,16 +6194,16 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (lsp lsp-mode)
   :init
   (progn
-	(setq lsp-gopls-codelens nil
-	      lsp-idle-delay 0.2
-	      lsp-file-watch-threshold 15000
+    (setq lsp-gopls-codelens nil
+          lsp-idle-delay 0.2
+          lsp-file-watch-threshold 15000
 
-	      lsp-diagnostics-provider :flycheck
-	      ;; lsp-diagnostics-provider :none
-	      ;; lsp-diagnostics-disabled-modes '(go-mode)
+          lsp-diagnostics-provider :flycheck
+          ;; lsp-diagnostics-provider :none
+          ;; lsp-diagnostics-disabled-modes '(go-mode)
           lsp-pyls-configuration-sources ["flake8"]
           lsp-pyls-plugins-flake8-enabled t
-	      )
+          )
 
 
     (defun lsp-diagnostics-toggle-major-mode ()
@@ -7582,6 +7608,7 @@ otherwise use the subtree title."
          ("M-o p f" . popwin:find-file-tail))
   :config
   (progn
+    ;; (global-set-key (kbd "C-z") popwin:keymap)
     (--each
         '(("*identify*" :noselect t)
           ("*Help*" :stick t)
@@ -7592,6 +7619,8 @@ otherwise use the subtree title."
           (deadgrep-mode :height .40 :stick t)
           ("*pt-search*" :height .40 :stick t)
           ("*go-traceback*" :height .40 :stick t)
+          ("*rg*" :height .40 :stick t)
+          ("*xref*" :height .30)
           ("*prodigy*" :height .40)
           ("^\\*prodigy-.*\\*$" :regexp t :height .40 :stick t :tail t)
           ("*Keys*" :height .85)
@@ -7870,8 +7899,7 @@ otherwise use the subtree title."
          ("C-x f P" . projectile-find-file-ignored)
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
-         ("C-x b <SPC>" . projectile-switch-to-buffer)
-         ("M-o A" . projectile-ag))
+         ("C-x b <SPC>" . projectile-switch-to-buffer))
   :diminish ""
   :init
   (progn
@@ -8292,8 +8320,9 @@ otherwise use the subtree title."
              rg-project
              rg-literal
              rg-dwim-project-dir)
-  :bind (("M-o a" . rg-project))
-  )
+  :bind (
+         ("M-o a" . rg-project)
+         ("M-o A" . rg)))
 
 
 ;;;; rings
@@ -8751,7 +8780,6 @@ otherwise use the subtree title."
   :commands (smex smex-major-mode-commands smex-show-unbound-commands)
   :bind (("M-x" . smex)
          ("<menu>" . smex)
-         ("M-o o" . smex)
          ("<XF86Tools>" . smex)
          ;; ("<XF86Search>" . smex)
          ("M-X" . smex-major-mode-commands))
