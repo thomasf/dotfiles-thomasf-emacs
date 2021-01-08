@@ -4360,6 +4360,22 @@ If FILE already exists, signal an error."
   :config
   (progn
 
+    ;; patched because of https://github.com/flycheck/flycheck/issues/1856
+    (defun flycheck-error-level-interesting-p (err)
+      "Check if ERR severity is >= `flycheck-navigation-minimum-level'.
+
+ERR is also interesting (the function returns true) if there are
+no errors as or more severe than `flycheck-navigation-minimum-level'."
+      (when (flycheck-error-p err)
+        (message "flycheck-navigation-minimum-level %S" flycheck-navigation-minimum-level )
+        (message "(flycheck-error-level-severity min-level) %S" (flycheck-error-level-severity flycheck-navigation-minimum-level) )
+        (message "(flycheck-error-level-severity (flycheck-error-level err)) %S" (flycheck-error-level-severity (flycheck-error-level err)) )
+        ;; (message "%sh" (flycheck-error-level-severity min-level))
+        (-if-let (min-level flycheck-navigation-minimum-level)
+            (or (<= (flycheck-error-level-severity min-level)
+                  (flycheck-error-level-severity (flycheck-error-level err))))
+          t)))
+
     (defun my-flycheck-next-error (&optional n reset)
       ""
       (interactive "P")
@@ -4376,7 +4392,10 @@ If FILE already exists, signal an error."
         flycheck-mode-map
         "C-c"
       '(("n" . my-flycheck-next-error)
-        ("p" . my-flycheck-previous-error)))
+        ("p" . my-flycheck-previous-error)
+        ("e" . #'(lambda () (setq flycheck-navigation-minimum-level 'error) (message "level: error")))
+        ("w" . #'(lambda () (setq flycheck-navigation-minimum-level 'warning) (message "level: warning")))
+        ("i" . #'(lambda () (setq flycheck-navigation-minimum-level 'info) (message "leve: info")))))
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
@@ -4447,6 +4466,7 @@ If FILE already exists, signal an error."
 
       (flycheck-define-error-level 'error
         :severity 100
+        :compilation-level 2
         :overlay-category 'flycheck-error-overlay
         :fringe-bitmap 'vertical-wave-bitmap
         :fringe-face 'flycheck-fringe-error
@@ -4454,13 +4474,15 @@ If FILE already exists, signal an error."
 
       (flycheck-define-error-level 'warning
         :severity 10
+        :compilation-level 1
         :overlay-category 'flycheck-warning-overlay
         :fringe-bitmap 'vertical-wave-bitmap
         :fringe-face 'flycheck-fringe-warning
         :error-list-face 'flycheck-error-list-warning)
 
       (flycheck-define-error-level 'info
-        :severity -1
+        :severity -10
+        :compilation-level 0
         :overlay-category 'flycheck-info-overlay
         :fringe-bitmap 'vertical-wave-bitmap
         :fringe-face 'flycheck-fringe-info
