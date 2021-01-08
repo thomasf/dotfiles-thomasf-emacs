@@ -596,6 +596,9 @@ re-downloaded in order to locate PACKAGE."
 ;; misc Emacs settings not directly related to loading a package
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;;;;; timeclock
+
+(setq timeclock-use-display-time nil)
 
 ;;;;; tooltip
 
@@ -929,8 +932,8 @@ re-downloaded in order to locate PACKAGE."
 
 ;;;;; define theme-bright / theme-dark
 
-(defvar theme-bright nil "A light theme.")
-(defvar theme-dark nil "A dark theme.")
+(defvar mf-theme-light nil "A light theme.")
+(defvar mf-theme-dark nil "A dark theme.")
 
 
 ;;;;; install solarized-theme
@@ -952,8 +955,8 @@ re-downloaded in order to locate PACKAGE."
   :config
   (progn
     (load "solarized-theme-autoloads" nil t)
-    (setq theme-dark 'my-solarized-dark
-          theme-bright 'my-solarized-light)))
+    (setq mf-theme-dark 'my-solarized-dark
+          mf-theme-light 'my-solarized-light)))
 
 ;; (use-package zenburn-theme
 ;;   :ensure t
