@@ -978,53 +978,62 @@ re-downloaded in order to locate PACKAGE."
   (set-face-background 'vertical-border (face-background 'default)))
 
 
-;;;;; dark-theme
+;;;;; mf-dark-theme
 
-(defun dark-theme ()
+
+(defvar mf-current nil "last loaded theme")
+
+(defun mf-dark-theme ()
   "Switch to dark mode (dark color theme)."
   (interactive)
-  (when theme-dark
-    (load-theme theme-dark t)
-    (setq dark-theme-on t)
+  (when mf-theme-dark
+    (load-theme mf-theme-dark t)
+    (setq mf-current 'dark)
     (post-change-theme)))
 
 
-;;;;; bright-theme
+;;;;; mf-light-theme
 
-(defun bright-theme ()
+(defun mf-light-theme ()
   "Switch to light mode (light color theme)."
   (interactive)
-  (when theme-bright
-    (load-theme theme-bright t)
-    (setq dark-theme-on nil)
+  (when mf-theme-light
+    (load-theme mf-theme-light t)
+    (setq mf-current 'light)
     (post-change-theme)))
 
 
-;;;;; toggle-dark-theme
+;;;;; mf-toggle-theme
 
-(defun toggle-dark-theme ()
+(defun mf-toggle-theme ()
   "Toggle between light and dark modes."
   (interactive)
-  (if (bound-and-true-p dark-theme-on)
-      (bright-theme)
-    (dark-theme))
+  (if (eq mf-current 'light)
+      (mf-dark-theme)
+    (mf-light-theme))
   (post-change-theme))
 
 
 ;;;;; global darkmode
 
-(and (not (boundp 'dark-theme-on))
-     (not noninteractive)
-     (not degrade-p-minimalism)
-     (if (file-exists-p "~/.config/darkmode")
-         (dark-theme)
-       (bright-theme)))
+(defun mf-mode-theme (&optional force)
+  (let ((m (if (dark-mode-p) 'dark 'light)))
+    (if (or force (not (eq mf-current m)))
+        (if  (eq m 'dark)
+            (mf-dark-theme)
+          (mf-light-theme)))))
+
+(defun dark-mode-p ()
+  (file-exists-p "~/.config/darkmode"))
+
+(and (not mf-current)
+   (not noninteractive)
+   (not degrade-p-minimalism)
+   (mf-mode-theme))
 
 (add-hook 'focus-in-hook
           #'(lambda ()
-              (if (file-exists-p "~/.config/darkmode")
-                  (when (not dark-theme-on) (dark-theme))
-                (when dark-theme-on (bright-theme)))))
+              (mf-mode-theme)))
 
 
 ;;;; simple-modeline
@@ -1508,6 +1517,14 @@ re-downloaded in order to locate PACKAGE."
   (find-file
    (expand-file-name
     "init.el" user-emacs-directory)))
+
+(defun reload-init ()
+  "Opens emacs init"
+  (interactive)
+  (load (expand-file-name "init.el" user-emacs-directory) nil nil t)
+  (load (expand-file-name "lisp/my-solarized.el" user-emacs-directory) nil nil t)
+  (mf-mode-theme t))
+
 
 (defun find-bash-history ()
   "Open bash history file"
