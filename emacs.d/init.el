@@ -4656,6 +4656,20 @@ See URL `https://github.com/golang/lint'."
          ("/\\.git/info/exclude\\'" . gitignore-mode)))
 
 
+;;;; gitlab
+
+(use-package gitlab
+  :ensure t
+  :commands (gitlab-version)
+  :init
+  (progn
+
+    (use-package helm-gitlab
+      :ensure t
+      :commands (helm-gitlab-issues
+                 helm-gitlab-projects))))
+
+
 ;;;; glsl-mode
 
 (use-package glsl-mode
