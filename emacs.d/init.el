@@ -4589,7 +4589,14 @@ See URL `https://github.com/golang/lint'."
   :if (and (not noninteractive) )
   :commands (git-gutter-mode
              global-git-gutter-mode)
-  :bind (("M-o m g" . git-gutter-mode))
+  :bind (
+         ("M-o m g" . git-gutter-mode)
+         ;; ("C-<f10>" . git-gutter:next-hunk)
+         ;; ("C-<f9>" . git-gutter:previous-hunk)
+         ("C-<f10>" . my-git-gutter:next-hunk)
+         ("C-<f9>" . my-git-gutter:previous-hunk)
+         )
+
   :diminish (git-gutter-mode)
   :init
   (progn
@@ -4613,6 +4620,24 @@ See URL `https://github.com/golang/lint'."
 
   :config
   (progn
+    (defun my-git-gutter:next-hunk (&optional arg)
+      (interactive)
+      (let ((beg (point)))
+        (git-gutter:next-hunk (or arg 1))
+        (unless (eq beg (point))
+          (recenter))
+        (setq beg (point))
+        (save-excursion
+          (git-gutter:end-of-hunk)
+
+          (if (eq beg (point))
+              (my-pulse-line)
+            (end-of-visual-line)
+            (my-pulse-region beg (point))))))
+
+      (defun my-git-gutter:previous-hunk ()
+        (interactive)
+        (my-git-gutter:next-hunk -1))
 
     (use-package git-gutter-fringe
       :ensure t
