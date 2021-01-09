@@ -4374,7 +4374,7 @@ If FILE already exists, signal an error."
   :config
   (progn
 
-    ;; patched because of https://github.com/flycheck/flycheck/issues/1856
+    ;; TODO: patched because of https://github.com/flycheck/flycheck/issues/1856
     (defun flycheck-error-level-interesting-p (err)
       "Check if ERR severity is >= `flycheck-navigation-minimum-level'.
 
@@ -4853,8 +4853,6 @@ See URL `https://github.com/golang/lint'."
 (use-package graphql-mode
   :ensure t
   :mode (("\\.graphql\\'" . graphql-mode)))
-
-;; TODO: init
 
 
 ;;;; graphviz-dot-mode
