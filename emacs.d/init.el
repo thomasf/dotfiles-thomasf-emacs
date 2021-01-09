@@ -1624,14 +1624,14 @@ re-downloaded in order to locate PACKAGE."
   "Save buffers..."
   (save-window-excursion
     (--each (buffer-list)
-      (and
-       (buffer-live-p it)
-       (buffer-modified-p it)
-       (not (eq major-mode 'messages-buffer-mode))
-       (not (buffer-base-buffer it))
-       (buffer-file-name it)
-       (verify-visited-file-modtime it)
-       (with-current-buffer it
+      (with-current-buffer it
+        (and
+         (buffer-live-p it)
+         (buffer-modified-p it)
+         (not (eq major-mode 'messages-buffer-mode))
+         (not (buffer-base-buffer it))
+         (buffer-file-name it)
+         (verify-visited-file-modtime it)
          (save-buffer))))))
 
 (add-hook 'focus-out-hook 'silent-save-some-buffers)
