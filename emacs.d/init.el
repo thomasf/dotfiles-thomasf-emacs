@@ -2680,7 +2680,6 @@ sTo this: ")
         ((margin (max 0 (/ (- (window-body-width) fill-column) 2))))
       (set-window-margins nil margin margin))))
 
-(bind-key "M-o c" 'auto-window-margins)
 
 (define-minor-mode auto-window-margins-mode
   "..."
@@ -2711,6 +2710,7 @@ sTo this: ")
         (set-face-attribute 'default (selected-frame) :height 135)
         (set-face-attribute 'fringe (selected-frame)
                             :background (frame-parameter nil 'background-color))
+        (setq-default line-spacing 0.2)
         (and (boundp 'rainbow-delimiters-mode)
              rainbow-delimiters-mode
              (rainbow-delimiters-mode -1))
@@ -9216,11 +9216,7 @@ otherwise use the subtree title."
 (use-package transpose-frame
   :ensure t
   :commands (flip-frame flop-frame)
-  :bind (("M-o M-f" . flop-frame))
-  :init
-  (progn
-    (defalias 'w-flip-frame 'flip-frame)
-    (defalias 'w-flop-frame 'flop-frame)))
+  :bind (("M-o M-f" . flop-frame)))
 
 
 ;;;; truthy
@@ -9610,28 +9606,11 @@ otherwise use the subtree title."
 (bind-key "C-c ;" 'comment-or-uncomment-region-or-line)
 
 
-;;;; windmove
-
-(use-package windmove
-  :if (not noninteractive)
-  :commands windmove-find-other-window
-  :init
-  (progn
-    ;; (windmove-default-keybindings)
-    ;; Make windmove work in org-mode:
-    ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
-    ;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
-    ;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
-    ;; (add-hook 'org-shiftright-final-hook 'windmove-right)
-    ))
-
-
 ;;;; window-layout
 
 (use-package window-layout
   :ensure t
-  :commands (wlf:layout))
-
+  :defer t)
 
 ;;;; winner
 
