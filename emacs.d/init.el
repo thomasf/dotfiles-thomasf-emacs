@@ -4620,6 +4620,15 @@ See URL `https://github.com/golang/lint'."
 
   :config
   (progn
+    ;; TODO: patch to revert https://github.com/emacsorphanage/git-gutter/commit/34ae23dfed4f2afb06286c120cbc7793cf4c5bc1 which broke  git-gutter:diff-option
+    (defun git-gutter:start-git-diff-process (file proc-buf)
+      (let ((arg (git-gutter:git-diff-arguments file)))
+        (apply #'start-file-process "git-gutter" proc-buf
+               "git" "--no-pager" "-c" "diff.autorefreshindex=0"
+               "diff" "--no-color" "--no-ext-diff" "--relative" "-U0"
+               arg)))
+
+
     (defun my-git-gutter:next-hunk (&optional arg)
       (interactive)
       (let ((beg (point)))
