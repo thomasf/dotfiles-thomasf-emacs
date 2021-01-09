@@ -2053,25 +2053,36 @@ the current one that frame will be gain focus."
   (other-window -1))
 
 
-;;;;;; swap with master
+;;;;;; my-swap-window
 
-(defun win/master-window ()
-  "Get the master window, for now equal to the largest window."
-  (get-largest-window))
-
-;; ?? FIXME also copy point, buffer start pos, etc.
-(defun win/swap-with-master (&optional other-window)
+(defun my-swap-window (&optional other-window)
   "Swap buffers between other window."
   (interactive)
-  (if (> 1 (length (window-list)))
+  (if (<= (count-windows) 1)
       (message "Only one window, nothing to change.")
-    (let* ((master-win (win/master-window))
-           (selected-buffer (window-buffer (selected-window))))
-      (set-window-buffer (selected-window) (window-buffer master-win))
-      (set-window-buffer master-win selected-buffer)
-      (select-window master-win))))
+    (let* ((master (get-largest-window))
+           (current (selected-window))
+           (prev-master (frame-parameter nil 'win/master))
+           (prev-other (frame-parameter nil 'win/other))
+           (next-master master)
+           (next-other current))
+      (when (eq current master)
+        (cond
+         ((and (eq prev-master master) prev-other)
+          (setq next-master prev-other
+                new-other prev-master))
+         ((eq 2 (count-windows))
+          (setq next-master (next-window)
+                next-other current))
+         (t ;; maybe it would be best to always do this
+          (setq next-master (get-mru-window nil nil t)
+                next-other current))))
 
-(defalias 'w-swap-master 'win/swap-with-master)
+      (set-frame-parameter nil 'win/master next-master)
+      (set-frame-parameter nil 'win/other next-other)
+      (window-swap-states next-master current nil))))
+
+(bind-key "M-o M-<return>" 'my-swap-window)
 
 
 ;;;;; frames
