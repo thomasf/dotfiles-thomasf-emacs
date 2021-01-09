@@ -4601,8 +4601,8 @@ See URL `https://github.com/golang/lint'."
   :init
   (progn
     (setq git-gutter:verbosity 0
-          git-gutter:disabled-modes
-          '(org-mode dired-mode wdired-mode ielm-mode))
+          git-gutter:disabled-modes '(org-mode dired-mode wdired-mode ielm-mode)
+          git-gutter:diff-option "HEAD")
     (when window-system
       (let ((symbol (char-to-string
                      (if (char-displayable-p ?∎) ?∎ ?*))))
