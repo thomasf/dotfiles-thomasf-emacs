@@ -901,10 +901,14 @@ re-downloaded in order to locate PACKAGE."
 (bind-key "C-x b C-<SPC>" 'previous-buffer)
 (bind-key "C-x b C-n" 'next-buffer)
 
-(bind-key "C-s"  'isearch-forward-regexp)
-(bind-key "C-r"  'isearch-backward-regexp)
-(bind-key "C-M-s"  'isearch-forward)
-(bind-key "C-M-r"  'isearch-backward)
+;; (bind-key "C-s"  'isearch-forward-regexp)
+;; (bind-key "C-r"  'isearch-backward-regexp)
+(bind-key "C-s"  'isearch-forward)
+(bind-key "C-r"  'isearch-backward)
+(bind-key "C-S-s"  'isearch-forward-symbol-at-point)
+(bind-key "C-M-s"  'isearch-forward-regexp)
+(bind-key "C-M-r"  'isearch-backward-regexp)
+
 (global-set-key (kbd "C-x C-1") 'delete-other-windows)
 (global-set-key (kbd "C-x C-2") 'split-window-below)
 (global-set-key (kbd "C-x C-3") 'split-window-right)
