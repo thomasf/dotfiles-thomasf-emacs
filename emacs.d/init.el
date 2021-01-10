@@ -209,6 +209,7 @@ re-downloaded in order to locate PACKAGE."
 (use-package f :ensure t)
 (use-package bind-key :ensure t)
 (use-package smartrep :ensure t)
+(use-package hydra :ensure t)
 (use-package diminish :ensure t)
 (use-package deferred :ensure t :commands (deferred:$))
 (use-package let-alist :ensure t :commands (let-alist))
@@ -4432,14 +4433,31 @@ no errors as or more severe than `flycheck-navigation-minimum-level'."
       (interactive "P")
       (my-flycheck-next-error (- (or n 1))))
 
-    (smartrep-define-key
-        flycheck-mode-map
-        "C-c"
-      '(("n" . my-flycheck-next-error)
-        ("p" . my-flycheck-previous-error)
-        ("E" . #'(lambda () (setq flycheck-navigation-minimum-level 'error) (message "level: error")))
-        ("W" . #'(lambda () (setq flycheck-navigation-minimum-level 'warning) (message "level: warning")))
-        ("I" . #'(lambda () (setq flycheck-navigation-minimum-level 'info) (message "leve: info")))))
+    ;; (smartrep-define-key
+    ;;     flycheck-mode-map
+    ;;     "C-c"
+    ;;   '(("n" . my-flycheck-next-error)
+    ;;     ("p" . my-flycheck-previous-error)
+    ;;     ("E" . #'(lambda () (setq flycheck-navigation-minimum-level 'error) (message "level: error")))
+    ;;     ("W" . #'(lambda () (setq flycheck-navigation-minimum-level 'warning) (message "level: warning")))
+    ;;     ("I" . #'(lambda () (setq flycheck-navigation-minimum-level 'info) (message "leve: info")))
+    ;;     )
+    ;;   )
+
+    (defhydra hydra-next-flycheck-error (flycheck-mode-map "C-c")
+      "next-error"
+      ("n" my-flycheck-next-error "next")
+      ("p" my-flycheck-previous-error "prev" :bind nil)
+      ("j" my-flycheck-next-error "next" :bind nil)
+      ("k" my-flycheck-previous-error "prev" :bind nil)
+      ("e" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'error) (message "level: error"))
+       "l:error"  :bind nil)
+      ("w" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'warning) (message "level: warning"))
+       "l:warning" :bind nil)
+      ("i" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'info) (message "leve: info"))
+       "l:info" :bind nil)
+
+      )
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
