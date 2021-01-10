@@ -2607,6 +2607,20 @@ sTo this: ")
 
 ;;;; MISC
 
+;;;;; dring - cycle values from a list
+
+;; it's a dumb ring
+
+(defun dring-next-element (value lst)
+  "Returns the element next after value from or the first element if value isn't in the lst."
+  (nth (mod (+ 1 (or (cl-position value lst :test 'equal) -1))
+            (length lst))
+       lst))
+
+(defun dring-set-next-element (symbol lst)
+  (set symbol (dring-next-element (symbol-value symbol) lst)))
+
+
 ;;;;; cycle ispell languages
 
 ;; Languages for spellinc cycling
@@ -2895,7 +2909,7 @@ Otherwise, get the symbol at point, as a string."
 
 (defun buffer-line-position ()
   "Current position formatted as file-name:line-number"
-  (format "%s:%d" (buffer-file-name) (line-number-at-pos)))
+  (format "%s:%d" (buffer-fiale-name) (line-number-at-pos)))
 
 (defun position-to-kill-ring ()
   "Copy to the kill ring a string in the format \"file-name:line-number\"
@@ -4631,6 +4645,16 @@ See URL `https://github.com/golang/lint'."
 
   :config
   (progn
+    (defun my-git-gutter-cycle-diff-option ()
+      (interactive)
+      (message "git-gutter:diff-option: \"%s\""
+               (dring-set-next-element
+                'git-gutter:diff-option
+                '("HEAD" "" "--cached")))
+      (when git-gutter-mode
+        (git-gutter)))
+
+
     (defun my-git-gutter:next-hunk (&optional arg)
       (interactive)
       (let ((beg (point)))
