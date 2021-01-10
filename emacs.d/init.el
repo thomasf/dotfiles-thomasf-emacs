@@ -113,10 +113,20 @@
 
 ;;;; load-path
 
+
+(eval-and-compile
+  (defvar user-emacs-directory nil)
+  (defvar user-data-directory nil)
+  (defvar user-cache-directory nil)
+  (defvar user-lisp-directory nil)
+  (defvar user-site-lisp-directory nil)
+  (defvar user-themes-directory nil)
+  (defvar user-notes-directory nil))
+
+
 (when load-file-name
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
-
 
 ;;;; verbose start up/compile logging
 
@@ -215,12 +225,7 @@ re-downloaded in order to locate PACKAGE."
   :defer
   :init
   (progn
-    (setq
-     pcache-directory
-     (let ((dir (expand-file-name "pcache/" user-cache-directory)))
-       (make-directory dir t)
-       dir))
-    (eval-when-compile
+    (eval-and-compile
       (setq
        pcache-directory
        (let ((dir (expand-file-name "pcache/" user-cache-directory)))
