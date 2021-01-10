@@ -924,6 +924,27 @@ re-downloaded in order to locate PACKAGE."
  ("s" . transpose-sentences)
  ("p" . transpose-paragraphs))
 
+(defhydra hydra-goto (:hint nil)
+  ""
+  ;; ("h" first-error "first-error")
+  ("j" next-error "n-err")
+  ("k" previous-error "p-err")
+  ("n" next-error "n-err")
+  ("p" previous-error "p-err")
+
+  ("f" my-git-gutter:next-hunk "n-hunk")
+  ("d" my-git-gutter:previous-hunk "p-hunk")
+
+  ("u" my-flycheck-next-error "n-flyc")
+  ("i" my-flycheck-previous-error "p-flyc")
+
+  ("g" goto-line-with-feedback "line" :exit t)
+  ("c" goto-char "char" :exit t)
+  ("v" my-recenter-top-bottom "recenter")
+  ("q" nil nil))
+
+(bind-key  "M-g" 'hydra-goto/body global-map)
+
 
 ;;; gui packages
 
