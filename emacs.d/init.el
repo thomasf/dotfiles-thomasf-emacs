@@ -128,6 +128,7 @@
   (load (expand-file-name
          "load-path" (file-name-directory load-file-name)) nil t))
 
+
 ;;;; verbose start up/compile logging
 
 (eval-and-compile
@@ -2791,7 +2792,6 @@ Used to launch magit status from command line."
         (cond
          ((and
            window-system
-           ;; TODO maybe use dbus on osx later, i do not need it now.
            (not (eq system-type 'darwin))
            (require 'dbus nil t)
            (dbus-ping :session "org.freedesktop.Notifications" 250))
@@ -3025,23 +3025,6 @@ for the current buffer's file name, and the line number at point."
     (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)))
 
 
-;;;; ace-jump-mode
-
-(use-package ace-jump-mode
-  :ensure t
-  :commands (ace-jump-word-mode
-             ace-jump-mode)
-  :bind (("C-c SPC" . ace-jump-mode))
-  :init
-  (progn
-
-    (use-package conf-mode
-      :defer
-      :config
-      (progn
-        (unbind-key "C-c SPC" conf-mode-map)))))
-
-
 ;;;; adoc-mode
 
 (use-package adoc-mode
@@ -3163,6 +3146,7 @@ for the current buffer's file name, and the line number at point."
        font-lock-doc-string-face
        font-lock-string-face
        font-lock-keyword-face
+       avy-background-face
        region
        loccur-custom-buffer-grep
        isearch)
@@ -3202,6 +3186,94 @@ for the current buffer's file name, and the line number at point."
       (unless (current-buffer-remote-p)
         (auto-revert-mode)))
     (add-hook 'find-file-hook 'auto-revert-turn-on-maybe)))
+
+
+;;;; avy
+
+(use-package avy
+  :ensure t
+  :bind (
+         ;; ("C-c SPC" . avy-goto-char)
+         ;; ("C-c SPC" . avly-goto-word-1)
+         ("C-c SPC" . avy-goto-char-timer)
+         )
+  :init
+  (progn
+    (setq avy-background t
+          avy-keys '(?a ?s ?d ?f
+                        ;; ?g ?h
+                        ?j ?k ?l
+                        ;;?q
+                        ?w ?e ?r
+                        ;; ?t ?y
+                        ?u ?i ?o
+                        ;; p
+                        )
+          avy-highlight-first t
+          avy-style 'pre
+          avy-orders-alist '((avy-goto-char . avy-order-closest)
+                             (avy-goto-word-1 . avy-order-closest)
+                             (avy-goto-char-timer . avy-order-closest)
+                             )
+          )
+
+    (use-package conf-mode
+      :defer
+      :config
+      (progn
+        (unbind-key "C-c SPC" conf-mode-map))))
+  :config
+  (progn
+
+
+    ;;
+    ;; patch start
+    ;;
+    ;; TODO: maybe pull request if I take the time to understand the problem.
+    ;;
+    ;; This switches place of avy-lead-face and avy-lead-face-0. I think this
+    ;; is overall more consistent if used with (setq avy-highlight-first t). I
+    (defun avy--overlay-pre (path leaf)
+      "Create an overlay with PATH at LEAF.
+PATH is a list of keys from tree root to LEAF.
+LEAF is normally ((BEG . END) . WND)."
+      (if (with-selected-window (cdr leaf)
+            (bound-and-true-p visual-line-mode))
+          (avy--overlay-at-full path leaf)
+        (let* ((path (mapcar #'avy--key-to-char path))
+               (str (propertize (apply #'string (reverse path))
+                                'face 'avy-lead-face-0)))
+          (when (or avy-highlight-first (> (length str) 1))
+            (set-text-properties 0 1 '(face avy-lead-face) str))
+          (setq str (concat
+                     (propertize avy-current-path
+                                 'face 'avy-lead-face-1)
+                     str))
+          (avy--overlay
+           str
+           (avy-candidate-beg leaf) nil
+           (avy-candidate-wnd leaf)))))
+    (defun avy--overlay-post (path leaf)
+      "Create an overlay with PATH at LEAF.
+PATH is a list of keys from tree root to LEAF.
+LEAF is normally ((BEG . END) . WND)."
+      (let* ((path (mapcar #'avy--key-to-char path))
+             (str (propertize (apply #'string (reverse path))
+                              'face 'avy-lead-face-0)))
+        (when (or avy-highlight-first (> (length str) 1))
+          (set-text-properties 0 1 '(face avy-lead-face) str))
+        (setq str (concat
+                   (propertize avy-current-path
+                               'face 'avy-lead-face-1)
+                   str))
+        (avy--overlay
+         str
+         (avy-candidate-end leaf) nil
+         (avy-candidate-wnd leaf))))
+    ;;
+    ;; patch end
+    ;;
+    ))
 
 
 ;;;; backline
@@ -4430,7 +4502,10 @@ If FILE already exists, signal an error."
   :config
   (progn
 
+    ;; patch start
+    ;;
     ;; TODO: patched because of https://github.com/flycheck/flycheck/issues/1856
+    ;;
     (defun flycheck-error-level-interesting-p (err)
       "Check if ERR severity is >= `flycheck-navigation-minimum-level'.
 
@@ -4445,6 +4520,9 @@ no errors as or more severe than `flycheck-navigation-minimum-level'."
             (or (<= (flycheck-error-level-severity min-level)
                   (flycheck-error-level-severity (flycheck-error-level err))))
           t)))
+    ;;
+    ;; patch end
+    ;;
 
     (defun my-flycheck-next-error (&optional n reset)
       ""
@@ -4480,9 +4558,7 @@ no errors as or more severe than `flycheck-navigation-minimum-level'."
       ("w" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'warning) (message "level: warning"))
        "l:warning" :bind nil)
       ("i" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'info) (message "leve: info"))
-       "l:info" :bind nil)
-
-      )
+       "l:info" :bind nil))
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
@@ -9674,6 +9750,7 @@ otherwise use the subtree title."
 (use-package window-layout
   :ensure t
   :defer t)
+
 
 ;;;; winner
 

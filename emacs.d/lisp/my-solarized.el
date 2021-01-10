@@ -6,19 +6,18 @@
         (custom-theme-set-faces
          theme-name
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
-         ;; `(lsp-ui-sideline-global ((,class (:underline ,s-line :height 0.8))))
+         `(hydra-face-red ((,class (:foreground ,base1 :weight bold))))
 
-         `(pulse-highlight-start-face ((,light-class
-                                        (:background ,(solarized-color-blend yellow base03 0.4)))
-                                       (,dark-class (:background ,(solarized-color-blend cyan base03 0.4)))))
 
-         ;; easier to follow even when the cursor jumps all over the screen but maybe a little too much otherwise
-         `(next-error ((,class (:foreground ,magenta-2fg :background ,magenta-2bg :weight normal))))
+         ;; tese are probably a good candidates for upstream
+         `(avy-goto-char-timer-face ((,class (:inherit isearch))))
+         `(avy-background-face ((,class (:background ,base02 :foreground ,base0 :extend t))))
 
-         ;; ;; same as moccur face
-         ;; ;; more adherent to solarized style but harder to se with next-error-recenter nil
-         ;; `(next-error ((,class (:background ,base02 :foreground ,base1 :weight bold))))
-
+         ;; these are personal and maybe somewhat specific to the patched version of avy functions in init.el
+         `(avy-lead-face ((,class (:weight bold :foreground ,magenta))))
+         `(avy-lead-face-0 ((,class (:weight bold :foreground ,blue))))
+         `(avy-lead-face-1 ((,class (:weight bold :foreground ,base1))))
+         `(avy-lead-face-2 ((,class (:weight bold :foreground  ,cyan))))
 
          )
         (custom-theme-set-variables
