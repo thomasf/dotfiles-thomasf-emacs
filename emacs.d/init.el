@@ -210,7 +210,6 @@ re-downloaded in order to locate PACKAGE."
 (use-package f :ensure t)
 (use-package bind-key :ensure t)
 (use-package smartrep :ensure t)
-(use-package hydra :ensure t)
 (use-package diminish :ensure t)
 (use-package deferred :ensure t :commands (deferred:$))
 (use-package let-alist :ensure t :commands (let-alist))
@@ -234,6 +233,73 @@ re-downloaded in order to locate PACKAGE."
          (make-directory dir t)
          dir)))))
 
+(use-package hydra
+  :ensure t
+  :config
+  (progn
+
+    (setq hydra-amaranth-warn-message "not bound")
+
+    (defun hydra-compact-hint (hydra)
+      (let* ((basename (symbol-name hydra))
+             (hint (intern (concat basename "/hint")))
+             (params (intern (concat basename "/params")))
+             (heads (intern (concat basename "/heads")))
+             (hydra-head-format "%s "))
+        (set hint (eval (hydra--hint-heads-wocol-compact
+                         (symbol-value params) (symbol-value heads))))))
+
+    (defun hydra--hint-heads-wocol-compact (body heads)
+  "Generate a hint for the echo area.
+BODY, and HEADS are parameters to `defhydra'.
+Works for heads without a property :column."
+  (let (alist)
+    (dolist (h heads)
+      (let ((val (assoc (cadr h) alist))
+            (pstr (hydra-fontify-head h body)))
+        (if val
+            (setf (cadr val)
+                  (concat (cadr val) " " pstr))
+          (push
+           (cons (cadr h)
+                 (cons pstr (cl-caddr h)))
+           alist))))
+    (let ((keys (nreverse (mapcar #'cdr alist)))
+          (n-cols (plist-get (cddr body) :columns))
+          res)
+      (setq res
+            (if n-cols
+                (let ((n-rows (1+ (/ (length keys) n-cols)))
+                      (max-key-len (apply #'max (mapcar (lambda (x) (length (car x))) keys)))
+                      (max-doc-len (apply #'max (mapcar (lambda (x)
+                                                          (length (hydra--to-string (cdr x)))) keys))))
+                  `(concat
+                    "\n"
+                    (mapconcat #'identity
+                               (mapcar
+                                (lambda (x)
+                                  (mapconcat
+                                   (lambda (y)
+                                     (and y
+                                          (funcall hydra-key-doc-function
+                                                   (car y)
+                                                   ,max-key-len
+                                                   (hydra--to-string (cdr y))
+                                                   ,max-doc-len))) x ""))
+                                ',(hydra--matrix keys n-cols n-rows))
+                               "\n")))
+
+
+              `(concat
+                (mapconcat
+                 #'hydra--eval-and-format
+                 ',keys
+                 " ")
+                ,(if keys "." ""))))
+      (if (cl-every #'stringp
+                    (mapcar 'cddr alist))
+          (eval res)
+        res))))))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -368,7 +434,7 @@ re-downloaded in order to locate PACKAGE."
 (global-set-key (kbd "C-c o") my-other-map)
 (global-set-key (kbd "C-h o") my-other-map)
 (global-set-key (kbd "M-o") my-other-map)
-(define-key my-other-map (kbd "s") search-map)
+
 
 (defvar region-bindings-mode-map
   (let ((region-bindings-mode-map (make-sparse-keymap)))
@@ -877,8 +943,8 @@ re-downloaded in order to locate PACKAGE."
 
 (bind-key "M-H-n" 'next-error)
 (bind-key "M-H-p" 'previous-error)
-(bind-key "M-s-n" 'next-error)
-(bind-key "M-s-p" 'previous-error)
+;; (bind-key "M-s-n" 'next-error)
+;; (bind-key "M-s-p" 'previous-error)
 
 ;; (bind-key "S-C-<left>" 'shrink-window-horizontally)
 ;; (bind-key "S-C-<right>" 'enlarge-window-horizontally)
@@ -959,13 +1025,34 @@ re-downloaded in order to locate PACKAGE."
  ("s" . transpose-sentences)
  ("p" . transpose-paragraphs))
 
-(defhydra hydra-goto (:hint nil)
+(defun hydra-goto/pre ()
+
+    ;; (set-frame-parameter nil 'unsplittable t))
+)
+(defun hydra-goto/post ()
+  ;; (set-frame-parameter nil 'unsplittable nil)
+
+  )
+
+(defun toggle-next-error-last-buffer ()
+  (interactive)
+  (when next-error-last-buffer
+    (let ((win (get-buffer-window next-error-last-buffer)))
+    (if win
+        (delete-window win)
+      (display-buffer next-error-last-buffer 'display-buffer-at-bottom) t)
+    ;; (set-window-dedicated-p (display-buffer next-error-last-buffer 'display-buffer-at-bottom) t))
+    )))
+
+(defhydra hydra-goto (:hint nil :foreign-keys warn :pre hydra-goto/pre :post hydra-goto/post)
   ""
   ;; ("h" first-error "first-error")
-  ("j" next-error "n-err")
-  ("k" previous-error "p-err")
-  ("n" next-error "n-err")
-  ("p" previous-error "p-err")
+  ("h" next-error-select-buffer "n-err")
+  ("j" my-next-error "n-err")
+  ("k" my-previous-error "p-err")
+  ("y" toggle-next-error-last-buffer  "open-err" )
+  ;; ("n" next-error "n-err")
+  ;; ("p" previous-error "p-err")
 
   ("f" my-git-gutter:next-hunk "n-hunk")
   ("d" my-git-gutter:previous-hunk "p-hunk")
@@ -973,12 +1060,39 @@ re-downloaded in order to locate PACKAGE."
   ("u" my-flycheck-next-error "n-flyc")
   ("i" my-flycheck-previous-error "p-flyc")
 
-  ("g" goto-line-with-feedback "line" :exit t)
-  ("c" goto-char "char" :exit t)
-  ("v" my-recenter-top-bottom "recenter")
-  ("q" nil nil))
+  ("r" switch-to-next-buffer "n-buf")
+  ("e" switch-to-prev-buffer "p-buf")
 
+  ("g" goto-line-with-feedback "line" :exit t)
+  ("M-g" goto-line-with-feedback "line" :exit t)
+  ("c" goto-char "char" :exit t)
+
+  ("v" my-recenter-top-bottom "recenter")
+  ("q" nil nil :exit t))
+(hydra-compact-hint 'hydra-goto)
 (bind-key  "M-g" 'hydra-goto/body global-map)
+
+
+(defhydra hydra-search (:hint nil :foreign-keys warn :exit t)
+  ""
+  ;; ("" nil nil :column "rg")
+  ("r" rg "rg")
+  ("s" rg-project "rg-proj")
+  ("f" rg-dwim-current-file "rg-dwim-current-file")
+
+  ;; ("" nil nil :column "occur")
+  ("o" occur "occur")
+  ("l" loccur "loccur")
+  ("m" moccur "moccur")
+
+  ;; ("" nil nil :column "misc")
+  ("G" google-this "google-this")
+  ("." isearch-forward-symbol-at-point "isearch-symbol")
+  ;; ("q" nil nil :exit t)
+  )
+(hydra-compact-hint 'hydra-search)
+(bind-key "M-s" 'hydra-search/body global-map)
+(bind-key "s" 'hydra-search/body  my-other-map)
 
 
 ;;; gui packages
@@ -1353,8 +1467,10 @@ re-downloaded in order to locate PACKAGE."
 
 (defun my-next-error (&optional arg reset)
   (interactive "P")
-  (let ((compilation-window-height 8))
+  (let ((display-buffer-overriding-action
+         '((display-buffer-same-window))))
     (next-error arg reset)))
+
 
 (defun my-previous-error (&optional n)
   (interactive "P")
@@ -1823,7 +1939,6 @@ re-downloaded in order to locate PACKAGE."
                    grep-mode-hook
                    direx:direx-mode-hook
                    debugger-mode-hook
-                   prodigy-view-mode-hook
                    docker-images-mode-hook
                    compilation-mode-hook
                    docker-containers-mode-hook))
@@ -3502,7 +3617,7 @@ LEAF is normally ((BEG . END) . WND)."
                dired-do-moccur
                occur-by-moccur
                search-buffers)
-    :bind (("M-s m" . moccur))
+    ;; :bind (("M-s m" . moccur))
     :init
     (progn
       (bind-key "C-o" 'isearch-moccur isearch-mode-map)
@@ -5221,7 +5336,7 @@ See URL `https://github.com/golang/lint'."
                       helm-recentf helm-find)
   :bind (("M-o M-x" . helm-M-x)
          ("C-h a" . helm-apropos)
-         ("M-s b" . helm-occur)
+         ;; ("M-s b" . helm-occur)
          ;; ("C-x f h" . helm-for-files)
          ;; ("<f7>" . helm-for-files)
          ("C-x f r" . helm-recentf)
@@ -5525,7 +5640,6 @@ if submodules exists, grep submodules too."
     (bind-key "r" 'helm-recentf ibuffer-mode-map)
     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
-    (bind-key "j" 'helm-multi-swoop-all ibuffer-mode-map)
 
     (defun ibuffer-projectile-dired-known-projects-root (&optional arg)
       (interactive "P")
@@ -6433,7 +6547,8 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (loccur loccur-mode loccur-current loccur-no-highlight)
   :bind (("C-x l" . loccur-current)
          ("C-x L" . loccur-previous-match)
-         ("M-s l" . loccur))
+         ;; ("M-s l" . loccur)
+         )
   :init
   (progn
     (define-key region-bindings-mode-map "l" 'loccur-current)))
@@ -6777,7 +6892,7 @@ drag the viewpoint on the image buffer that the window displays."
     ;;   (when (get-register :magit-fullscreen)
     ;;     (jump-to-register :magit-fullscreen)
     ;;     (set-register :magit-fullscreen nil)))
-    (bind-key "q" 'previous-buffer magit-status-mode-map)
+    ;; (bind-key "q" 'previous-buffer magit-status-mode-map)
     (bind-key "h" 'ibuffer magit-status-mode-map)
     (defun magit-toggle-whitespace ()
       (interactive)
@@ -8575,9 +8690,11 @@ otherwise use the subtree title."
              rg-project
              rg-literal
              rg-dwim-project-dir)
-  :bind (
-         ("M-o a" . rg-project)
-         ("M-o A" . rg)))
+  :bind (("M-o a" . rg-project)
+         ("M-o A" . rg)
+         :map rg-mode-map
+         ("j" . next-error-no-select)
+         ("k" . previous-error-no-select)))
 
 
 ;;;; rings

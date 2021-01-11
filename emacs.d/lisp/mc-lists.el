@@ -237,6 +237,7 @@
         goto-line-with-feedback
         handle-switch-frame
         helm-descbinds
+        hydra-goto/body
         ibuffer
         ido-find-file
         ido-switch-buffer

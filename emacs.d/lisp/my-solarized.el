@@ -6,7 +6,12 @@
         (custom-theme-set-faces
          theme-name
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
-         `(hydra-face-red ((,class (:foreground ,base1 :weight bold))))
+         `(hydra-face-red ((,class (:foreground ,base1 :weight bold)))) ;; upstreamed
+
+         `(hydra-face-blue ((,class (:foreground ,blue :weight bold))))
+         `(hydra-face-amaranth ((,class (:foreground ,orange :weight bold))))
+         `(hydra-face-pink ((,class (:foreground ,magenta :weight bold))))
+         `(hydra-face-teal ((,class (:foreground ,cyan :weight bold))))
 
 
          ;; tese are probably a good candidates for upstream
