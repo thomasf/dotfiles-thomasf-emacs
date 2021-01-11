@@ -5428,18 +5428,6 @@ if submodules exists, grep submodules too."
     (helm-recoll-create-source "all" "~/.recoll/")))
 
 
-;;;; helm-swoop
-
-(use-package helm-swoop
-  :ensure t
-  :commands (helm-swoop
-             helm-multi-swoop-all)
-  :init
-  (progn
-    (define-key search-map "S" 'helm-multi-swoop-all)
-    ))
-
-
 ;;;; highlight-indentation
 
 (use-package highlight-indentation
