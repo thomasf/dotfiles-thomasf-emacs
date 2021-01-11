@@ -1044,8 +1044,9 @@ Works for heads without a property :column."
     ;; (set-window-dedicated-p (display-buffer next-error-last-buffer 'display-buffer-at-bottom) t))
     )))
 
-(defhydra hydra-goto (:hint nil :foreign-keys warn :pre hydra-goto/pre :post hydra-goto/post)
-  ""
+(defhydra hydra-goto (:hint none :pre hydra-goto/pre :post hydra-goto/post)
+  "
+(_j_/_k_ ERR _h_ src _y_ win) (_f_/_d_ HUNK) (_u_/_i_ FLYC _o_ lvl) (_r_/_e_ BUF) (GOTO line _g_ char _c_) . _v_ recenter"
   ;; ("h" first-error "first-error")
   ("h" next-error-select-buffer "n-err")
   ("j" my-next-error "n-err")
@@ -1059,6 +1060,7 @@ Works for heads without a property :column."
 
   ("u" my-flycheck-next-error "n-flyc")
   ("i" my-flycheck-previous-error "p-flyc")
+  ("o" my-flycheck-cycle-error-navigation-min-level "level")
 
   ("r" switch-to-next-buffer "n-buf")
   ("e" switch-to-prev-buffer "p-buf")
@@ -1069,7 +1071,7 @@ Works for heads without a property :column."
 
   ("v" my-recenter-top-bottom "recenter")
   ("q" nil nil :exit t))
-(hydra-compact-hint 'hydra-goto)
+;; (hydra-compact-hint 'hydra-goto)
 (bind-key  "M-g" 'hydra-goto/body global-map)
 
 
