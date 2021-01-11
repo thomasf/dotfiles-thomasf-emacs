@@ -641,6 +641,36 @@ re-downloaded in order to locate PACKAGE."
 
 (setq switch-to-buffer-preserve-window-point t)
 
+;; (info "(elisp) Displaying Buffers")
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Displaying-Buffers.html
+
+(setq display-buffer-alist nil)
+
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*rg*" eos)
+               (
+                display-buffer-no-window
+                display-buffer-reuse-window
+                display-buffer-in-side-window
+                )
+               (inhibit-same-window . t)
+               (window-height . 0.2)
+               (window-min-height 10)
+               (reusable-frames . visible)
+               ))
+
+(add-to-list 'display-buffer-alist
+             `(,(rx bos "*Flycheck errors*" eos)
+               (
+                display-buffer-reuse-window
+                display-buffer-in-side-window
+                )
+               (reusable-frames . visible)
+               (side . bottom)
+               (window-height . 0.15)
+               (window-min-height 10)
+               ))
+
 
 ;;;; defined in c source
 
@@ -6641,31 +6671,18 @@ drag the viewpoint on the image buffer that the window displays."
          )
   :init
   (progn
-    (defun my-magit-display-buffer (buffer)
-      "Display BUFFER..."
-      (display-buffer
-       buffer
-       (let ((new-maj (with-current-buffer buffer major-mode))
-             (cur-maj major-mode)
-             (cur-magit-p (derived-mode-p 'magit-mode)))
-         ;; (message "cur: %S new: %S " cur-maj new-maj)
-         (cond
-          ((and
-            (eq cur-maj 'magit-log-mode)
-            (eq new-maj 'magit-revision-mode))
-           nil)
-          (t '(display-buffer-same-window))))))
     (setq
      ;; magit-bury-buffer-function 'bury-buffer
      magit-bury-buffer-function 'magit-restore-window-configuration
      ;; magit-display-buffer-function 'magit-display-buffer-traditional
-     magit-display-buffer-function 'my-magit-display-buffer
+     magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1
      magit-pre-display-buffer-hook '(magit-save-window-configuration)
-     ;; magit-post-display-buffer-hook '(magit-maybe-set-dedicated)
-     magit-post-display-buffer-hook nil
+     magit-post-display-buffer-hook '(magit-maybe-set-dedicated)
+     ;; magit-post-display-buffer-hook nil
      magit-commit-show-diff nil
      magit-save-repository-buffers nil ;; manually saving all buffers instead (my-magit-status)
-     magit-completing-read-function 'magit-ido-completing-read
+     ;; magit-completing-read-function 'magit-ido-completing-read
+     magit-completing-read-function 'magit-builtin-completing-read
      magit-diff-refine-hunk 'all
      magit-log-author-date-max-length 25
      magit-log-auto-more t
@@ -7869,39 +7886,30 @@ otherwise use the subtree title."
   (progn
     ;; (global-set-key (kbd "C-z") popwin:keymap)
     (--each
-        '(("*identify*" :noselect t)
+        '(
+          ("*identify*" :noselect t)
           ("*Help*" :stick t)
           (help-mode :noselect t)
           ("*Ido Completions*" :noselect t :position bottom)
           (direx:direx-mode :position left :width .25 :dedicated t)
-          ("*Messages*" :height .40 :tail t :stick t)
+          ;; ("*Messages*" :height .40 :tail t :stick t)
           (deadgrep-mode :height .40 :stick t)
-          ("*pt-search*" :height .40 :stick t)
+          ;; ("*pt-search*" :height .40 :stick t)
           ("*go-traceback*" :height .40 :stick t)
-          ("*rg*" :height .40 :stick t)
           ("*xref*" :height .30)
-          ("*prodigy*" :height .40)
-          ("^\\*prodigy-.*\\*$" :regexp t :height .40 :stick t :tail t)
           ("*Keys*" :height .85)
           ("*Pp Macroexpand Output*" :noselect t)
           "*Personal Keybindings*"
-          (flycheck-error-list-mode :stick t)
+          ;; (flycheck-error-list-mode :stick t)
           ("*Org Select*" :position right :width 79 :noselect t)
           (" *Agenda Commands*" :position right :width 79)
           ("^\\*[Hh]elm.*\\*$" :regexp t :height 0.85)
-          ("*magit-commit*" :noselect t :height 0.40)
-          ("*magit-diff*" :noselect t :height 0.40)
-          ("*magit-edit-log*" :noselect t :height 0.25)
-          "*git-gutter:diff*")
+          ;; ("*magit-commit*" :noselect t :height 0.40)
+          ;; ("*magit-diff*" :noselect t :height 0.40)
+          ;; ("*magit-edit-log*" :noselect t :height 0.25)
+          )
       (push it popwin:special-display-config))
     (popwin-mode)))
-
-
-;;;;; import-popwin
-
-(use-package import-popwin
-  :ensure t
-  :commands (import-popwin))
 
 
 ;;;; prettier-js
