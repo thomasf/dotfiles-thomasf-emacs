@@ -6606,7 +6606,10 @@ drag the viewpoint on the image buffer that the window displays."
           ;; lsp-diagnostics-disabled-modes '(go-mode)
           lsp-pyls-configuration-sources ["flake8"]
           lsp-pyls-plugins-flake8-enabled t
-          )
+          lsp-pyls-plugins-autopep8-enabled nil
+          lsp-pyls-plugins-pycodestyle-enabled nil
+          lsp-pyls-plugins-yapf-enabled nil
+          lsp-pyls-plugins-pydocstyle-enabled nil)
 
 
     (defun lsp-diagnostics-toggle-major-mode ()
