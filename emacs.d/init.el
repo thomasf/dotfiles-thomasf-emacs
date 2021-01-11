@@ -715,8 +715,8 @@ Works for heads without a property :column."
 (add-to-list 'display-buffer-alist
              `(,(rx bos "*rg*" eos)
                (
-                display-buffer-no-window
                 display-buffer-reuse-window
+                display-buffer-no-window
                 display-buffer-in-side-window
                 )
                (inhibit-same-window . t)
