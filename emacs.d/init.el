@@ -4620,9 +4620,7 @@ If FILE already exists, signal an error."
       (message "flycheck-navigation-minimum-level: %s"
                (dring-set-next-element
                 'flycheck-navigation-minimum-level
-                '('info 'warning 'error)))
-      (when git-gutter-mode
-        (git-gutter)))
+                '('info 'warning 'error))))
 
     (defun my-node_modules-flycheck-hook ()
       (setq-local flycheck-executable-find #'flycheck-node_modules-executable-find))
