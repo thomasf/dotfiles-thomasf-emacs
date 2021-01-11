@@ -4610,11 +4610,17 @@ If FILE already exists, signal an error."
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint go-megacheck)
      flycheck-completion-system 'ido
-
      flycheck-standard-error-navigation nil
-     flycheck-navigation-minimum-level 'warning
-     flycheck-error-list-minimum-level nil
-     )
+     flycheck-navigation-minimum-level 'info
+     flycheck-error-list-minimum-level nil)
+    (defun my-flycheck-cycle-error-navigation-min-level ()
+      (interactive)
+      (message "flycheck-navigation-minimum-level: %s"
+               (dring-set-next-element
+                'flycheck-navigation-minimum-level
+                '('info 'warning 'error)))
+      (when git-gutter-mode
+        (git-gutter)))
 
     (defun my-node_modules-flycheck-hook ()
       (setq-local flycheck-executable-find #'flycheck-node_modules-executable-find))
