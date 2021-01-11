@@ -9,7 +9,7 @@
          `(hydra-face-red ((,class (:foreground ,base1 :weight bold)))) ;; upstreamed
 
          `(hydra-face-blue ((,class (:foreground ,blue :weight bold))))
-         `(hydra-face-amaranth ((,class (:foreground ,orange :weight bold))))
+         `(hydra-face-amaranth ((,class (:foreground ,base1 :weight bold))))
          `(hydra-face-pink ((,class (:foreground ,magenta :weight bold))))
          `(hydra-face-teal ((,class (:foreground ,cyan :weight bold))))
 
