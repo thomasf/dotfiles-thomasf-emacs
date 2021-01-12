@@ -7232,7 +7232,8 @@ Titus von der Malsburg."
   :bind (("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)
-         ("<mouse-2>" . mc/add-cursor-on-click))
+         ;; ("<mouse-2>" . mc/add-cursor-on-click)
+         )
   :init
   (progn
     (setq mc/list-file (expand-file-name
