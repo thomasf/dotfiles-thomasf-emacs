@@ -270,6 +270,7 @@
         point-undo
         projectile-ag
         projectile-find-file
+        push-button
         python-cccc
         recenter-top-bottom-flash
         shell
