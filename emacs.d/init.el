@@ -5643,6 +5643,7 @@ if submodules exists, grep submodules too."
   :config
   (progn
     (unbind-key "M-o" ibuffer-mode-map)
+    (unbind-key "M-g" ibuffer-mode-map)
     (bind-key "r" 'helm-recentf ibuffer-mode-map)
     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
