@@ -717,11 +717,11 @@ Works for heads without a property :column."
                (
                 display-buffer-reuse-window
                 display-buffer-no-window
-                display-buffer-in-side-window
+                display-buffer-at-bottom
                 )
                (inhibit-same-window . t)
-               (window-height . 0.2)
-               (window-min-height 10)
+               (window-height . 0.4)
+               (window-min-height . 30)
                (reusable-frames . visible)
                ))
 
@@ -734,7 +734,7 @@ Works for heads without a property :column."
                (reusable-frames . visible)
                (side . bottom)
                (window-height . 0.15)
-               (window-min-height 10)
+               (window-min-height . 10)
                ))
 
 
