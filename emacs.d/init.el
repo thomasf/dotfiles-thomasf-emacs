@@ -8701,6 +8701,9 @@ otherwise use the subtree title."
              rg-project
              rg-literal
              rg-dwim-project-dir)
+  :init
+  (progn
+    (setq rg-custom-type-aliases '(("." . "*"))))
   :bind (("M-o a" . rg-project)
          ("M-o A" . rg)
          :map rg-mode-map
