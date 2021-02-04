@@ -6053,12 +6053,11 @@ if submodules exists, grep submodules too."
 
     (use-package ido-vertical-mode
       :ensure t
-      :if (and )
-      :commands (turn-on-ido-vertical
+      :commands (ido-vertical-turn-on
                  ido-vertical-mode)
       :init
       (progn
-        (turn-on-ido-vertical)))
+        (ido-vertical-turn-on)))
 
     (use-package flx-ido
       :ensure  t
