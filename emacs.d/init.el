@@ -3505,6 +3505,13 @@ LEAF is normally ((BEG . END) . WND)."
   :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
 
 
+;;;; ca65-mode
+
+(use-package ca65-mode
+  :ensure t
+  :commands ca65-mode)
+
+
 ;;;; calendar
 
 (use-package calendar
