@@ -7816,6 +7816,13 @@ otherwise use the subtree title."
   :commands (outshine-mode))
 
 
+;;;; package-utils
+
+(use-package package-utils
+  :ensure t
+  :commands package-utils-upgrade-all-and-recompile)
+
+
 ;;;; pandoc-mode
 
 (use-package pandoc-mode
