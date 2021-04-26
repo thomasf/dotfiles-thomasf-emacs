@@ -262,6 +262,7 @@
         my-flycheck-list-errors
         my-go-go-command
         my-magit-status
+        my-recenter-top-bottom
         ns-prev-frame
         other-window
         persp-switch
