@@ -3968,6 +3968,16 @@ LEAF is normally ((BEG . END) . WND)."
   (progn
     (unbind-key "l" dired-mode-map)
 
+    (use-package dired-quick-sort
+      :config
+      (progn
+        ;; (dired-quick-sort-setup)
+        ;; Replace \"S\" with other keys to invoke the dired-quick-sort hydra.
+        (define-key dired-mode-map (kbd "s")'hydra-dired-quick-sort/body)
+        ;; Automatically use the sorting defined here to sort.
+        (add-hook 'dired-mode-hook 'dired-quick-sort)
+        ))
+
     (use-package wdired
       :defer
       :init
