@@ -3969,6 +3969,7 @@ LEAF is normally ((BEG . END) . WND)."
     (unbind-key "l" dired-mode-map)
 
     (use-package dired-quick-sort
+      :ensure t
       :config
       (progn
         ;; (dired-quick-sort-setup)
