@@ -9,4 +9,5 @@
   git commit -q -m"update packages"
 )
 
+./clean
 exec emacs --no-site -batch -l makeup.el
