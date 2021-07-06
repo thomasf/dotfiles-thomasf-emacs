@@ -160,9 +160,6 @@
      ("gnu"         . "https://elpa.gnu.org/packages/")
      ;; ("sc"   . "http://joseito.republika.pl/sunrise-commander/")
      ))
-  (when (getenv "ELPA_MIRROR")
-    (setq package-archives
-          '(("mirror" . "elpa-mirror/archive"))))
 
   (unless (boundp 'package-pinned-packages)
     (setq package-pinned-packages ()))
@@ -4368,16 +4365,6 @@ If FILE already exists, signal an error."
 (use-package elfeed
   :ensure t
   :commands elfeed)
-
-
-;;;; elpa-mirror
-
-(use-package elpa-mirror
-  :commands elpamr-create-mirror-for-installed
-  :ensure t
-  :init
-  (progn
-    (setq elpamr-default-output-directory (expand-file-name "elpa-mirror/archive" user-emacs-directory))))
 
 
 ;;;; erlang
