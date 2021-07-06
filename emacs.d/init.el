@@ -6476,6 +6476,13 @@ drag the viewpoint on the image buffer that the window displays."
              http-status-code))
 
 
+;;;; kotlin
+
+(use-package kotlin-mode
+  :ensure t
+  :mode (("\\.kt\\'" . kotlin-mode)))
+
+
 ;;;; langtool
 
 (use-package langtool
@@ -6667,9 +6674,18 @@ drag the viewpoint on the image buffer that the window displays."
                             "https://github.com/juliosueiras/terraform-lsp")
       (add-hook 'terraform-mode-hook #'lsp))
 
+    (when (file-exists-p*
+           "~/src/github.com/fwcd/kotlin-language-server/server/build/install/server/bin/kotlin-language-server")
+      (use-package lsp-kotlin
+        :after kotlin-mode
+        :init
+        (progn
+         (setq lsp-clients-kotlin-server-executable (expand-file-name "~/src/github.com/fwcd/kotlin-language-server/server/build/install/server/bin/kotlin-language-server"))
+          (add-hook 'kotlin-mode-hook #'lsp))))
+
     (use-package lsp-java
       :ensure t
-      :after haskell
+      :after cc-mode
       :init
       (progn
         (add-hook 'java-mode-hook #'lsp)))
