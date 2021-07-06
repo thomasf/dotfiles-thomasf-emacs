@@ -3955,7 +3955,7 @@ LEAF is normally ((BEG . END) . WND)."
 
     (use-package dired-quick-sort
       :ensure t
-      :if (and (eq system-type 'gnu/linux)
+      :if (and (eq system-type 'gnu/linux))
       :config
       (progn
         ;; (dired-quick-sort-setup)
