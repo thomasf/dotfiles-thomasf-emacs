@@ -3951,6 +3951,10 @@ LEAF is normally ((BEG . END) . WND)."
         )))
   :config
   (progn
+    (when (eq system-type 'darwin)
+      (setq ls-lisp-use-insert-directory-program nil)
+      (require 'ls-lisp))
+
     (unbind-key "l" dired-mode-map)
 
     (use-package dired-quick-sort
