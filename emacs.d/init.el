@@ -3441,9 +3441,9 @@ LEAF is normally ((BEG . END) . WND)."
   :commands (backup-walker-start))
 
 
-;;;; bazel-mode
+;;;; bazel
 
-(use-package bazel-mode
+(use-package bazel
   :ensure t
   :commands (bazel-mode)
   :mode "drone\\.star\\'")
