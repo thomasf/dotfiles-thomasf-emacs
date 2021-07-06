@@ -3663,6 +3663,9 @@ LEAF is normally ((BEG . END) . WND)."
     )
   :config
   (progn
+    (use-package company-yasnippet
+      :commands company-yasnippet)
+
     (bind-key "C-<tab>" 'company-complete-common-or-cycle company-mode-map)
 
     (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
