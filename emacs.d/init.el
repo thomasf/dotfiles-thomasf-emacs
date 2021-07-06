@@ -3700,18 +3700,6 @@ LEAF is normally ((BEG . END) . WND)."
     ))
 
 
-;;;;; company-lsp
-
-(use-package company-lsp
-  :ensure t
-  ;; :after company
-  :commands company-lsp
-  ;; :config
-  ;; (progn
-  ;; (push 'company-lsp company-backends))
-  )
-
-
 ;;;; compile
 
 (use-package compile
