@@ -3684,7 +3684,7 @@ LEAF is normally ((BEG . END) . WND)."
     (bind-key "C-v" 'company-next-page company-search-map)
     (bind-key "C-n" 'company-select-next company-search-map)
     (bind-key "C-p" 'company-select-previous company-search-map)
-
+    (bind-key "C-c y" 'company-yasnippet)
 
     ;; maybe these settings
     (setq company-require-match nil)
@@ -10034,7 +10034,6 @@ otherwise use the subtree title."
         ad-do-it))
 
     (bind-key "C-x i" 'yas-insert-snippet)
-    (bind-key "C-h TAB" 'yas-insert-snippet)
 
     (defun my-ac-git-commit-setup-hook-fn ()
       (yas-activate-extra-mode 'git-commit-mode)
