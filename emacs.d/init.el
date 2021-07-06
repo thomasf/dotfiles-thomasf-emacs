@@ -6683,6 +6683,8 @@ drag the viewpoint on the image buffer that the window displays."
                             "https://github.com/juliosueiras/terraform-lsp")
       (add-hook 'terraform-mode-hook #'lsp))
 
+    (add-hook 'java-mode-hook #'lsp)
+
 
     (use-package lsp-haskell
       :ensure t
