@@ -3,5 +3,7 @@
 # description: add a benchmark method
 # --
 func Benchmark${1:Feature}(b *testing.B) {
-	$0
+    for i := 0; i < b.N; i++ {
+    	$0
+    }
 }
