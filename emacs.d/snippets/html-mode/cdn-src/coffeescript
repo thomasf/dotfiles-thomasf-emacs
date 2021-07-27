@@ -1,3 +1,0 @@
-# name: coffeescript cdn cloudflare
-# --
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>

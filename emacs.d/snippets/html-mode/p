@@ -1,5 +1,5 @@
-# contributor: Jimmy Wu <frozenthrone88@gmail.com>
-# name: <p>...</p>
+# -*- mode: snippet -*-
+# name: p
 # key: p
 # --
-<p>$1</p>
+<p>$0</p>

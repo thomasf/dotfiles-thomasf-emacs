@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: base
+# key: base
+# --
+<base href="$1" />$0

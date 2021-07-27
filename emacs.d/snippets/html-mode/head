@@ -1,7 +1,8 @@
-# contributor: Jimmy Wu <frozenthrone88@gmail.com>
-# name: <head>...</head>
+# -*- mode: snippet -*-
+# name: head
 # key: head
 # --
 <head>
-  $0
+        <meta charset="utf-8" />
+        $0
 </head>

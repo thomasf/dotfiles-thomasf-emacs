@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: rp
+# key: rp
+# --
+<rp>$1</rp>

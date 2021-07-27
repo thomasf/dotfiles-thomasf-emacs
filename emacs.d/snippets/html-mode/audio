@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: audio
+# key: audio
+# --
+<audio${1: src="$2"}${3: controls} preload="${4:$$(yas/choose-value '("auto" "meta" "none"))}">
+  $0
+</audio>

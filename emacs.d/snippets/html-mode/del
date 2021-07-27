@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: del
+# key: del
+# --
+<del datetime="${2:`(insert (format-time-string "%Y-%m-%dT%TZ"))`}">$1</del>$0

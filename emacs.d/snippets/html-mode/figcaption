@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: figcaption
+# key: figcaption
+# --
+<figcaption>$1</figcaption>

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bdi
+# key: bdi
+# --
+<bdi>$1</bdi>

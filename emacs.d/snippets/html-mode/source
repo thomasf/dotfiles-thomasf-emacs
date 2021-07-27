@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: source
+# key: source
+# --
+<source type="$2" src="$1" />

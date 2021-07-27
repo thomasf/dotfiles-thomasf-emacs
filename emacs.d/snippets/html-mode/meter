@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: meter
+# key: meter
+# --
+<meter${1: ${2:min="$3" max="$4" }value="$5"${6: low="$7" high="$8" optimum="$9"}}>$10</meter>

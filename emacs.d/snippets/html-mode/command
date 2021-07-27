@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: command
+# key: command
+# --
+<command type="${1:$$(yas/choose-value '("command" "radio"))}"${2: radiogroup="$3"}${4: checked="checked"} />

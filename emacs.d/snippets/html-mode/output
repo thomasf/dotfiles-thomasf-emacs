@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: output
+# key: output
+# --
+<output name="$1">${2:0}</output>

@@ -1,7 +1,7 @@
-# contributor: Jimmy Wu <frozenthrone88@gmail.com>
-#name :<form method="..." id="..." action="..."></form>
+# -*- mode: snippet -*-
+# name: form
 # key: form
 # --
-<form method="$1" id="$2" action="$3">
-  $0
+<form action="$1" method="${2:post}">
+        $0
 </form>

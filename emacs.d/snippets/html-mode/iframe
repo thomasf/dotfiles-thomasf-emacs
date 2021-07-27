@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: iframe
+# key: iframe
+# --
+<iframe src="${1:http://example.com/}" height="$2" width="$3"></iframe>

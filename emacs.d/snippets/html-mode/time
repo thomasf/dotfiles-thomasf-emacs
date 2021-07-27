@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: time
+# key: time
+# --
+<time datetime="${2:`(insert (format-time-string "%Y-%m-%dT%TZ"))`}">$1</time>

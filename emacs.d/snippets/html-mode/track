@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: track
+# key: track
+# --
+<track kind="${1:$$(yas/choose-value '("subtitles" "captions" "descriptions" "chapters" "metadata"))}" src="$2" srclang="${3:en}" label="${4:English for the Hard of Hearing}" />

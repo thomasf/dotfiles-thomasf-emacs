@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: manifest
+# key: manifest
+# --
+manifest="${1:filename}.appcache"

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: tbody
+# key: tbody
+# --
+<tbody>
+        $0
+</tbody>

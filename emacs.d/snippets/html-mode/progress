@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: progress
+# key: progress
+# --
+<progress${1: max="$2"}>$0</progress>

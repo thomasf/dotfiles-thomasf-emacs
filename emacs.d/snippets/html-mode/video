@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: video
+# key: video
+# --
+<video${1: src="$2"}${3: poster="${4:poster.jpg}"}${5: controls="controls"}>
+  $0
+</video>

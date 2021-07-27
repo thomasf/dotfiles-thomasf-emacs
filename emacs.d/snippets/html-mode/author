@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: author
+# key: author
+# --
+<link rel="author" href="${1:humans.txt}" />

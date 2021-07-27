@@ -1,5 +1,5 @@
-# contributor: Jimmy Wu <frozenthrone88@gmail.com>
-# name: <input ... />
+# -*- mode: snippet -*-
+# name: input
 # key: input
 # --
-<input type="$1" name="$2" value="$3" />
+<input type="${1:$$(yas/choose-value '("hidden" "text" "search" "tel" "url" "email" "password" "datetime" "date" "month" "week" "time" "datetime-local" "number" "range" "color" "checkbox" "radio" "file" "submit" "image" "reset" "button"))}" name="$2" placeholder="$3" value="$4" />

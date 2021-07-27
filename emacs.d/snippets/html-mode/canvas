@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: canvas
+# key: canvas
+# --
+<canvas${1: id="$2"}${3: width="$4" height="$5"}>
+  ${6:<!-- Fallback content, in case the browser does not support Canvas. -->}
+</canvas>$0

@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: datalist
+# key: datalist
+# --
+<label>${1:label}
+        <input type="text" name="${2:name}" list="${3:names}" />
+        <datalist id="$3">
+                  $0
+        </datalist>
+</label>
