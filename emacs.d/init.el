@@ -3636,6 +3636,13 @@ LEAF is normally ((BEG . END) . WND)."
       (use-package moccur-edit))))
 
 
+;;;; comby
+
+(use-package comby
+  :ensure t
+  :commands (comby))
+
+
 ;;;; command-log-mode
 
 (use-package command-log-mode
