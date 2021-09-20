@@ -6702,8 +6702,8 @@ drag the viewpoint on the image buffer that the window displays."
       :after haskell
       :init
       (progn
-        (when (executable-find* "hie-wrapper"
-                                "install haskell-ide-engine https://github.com/haskell/haskell-ide-engine")
+        (when (executable-find* "haskell-language-server"
+                                "install haskell-language-server https://github.com/haskell/haskell-language-server")
           (add-hook 'haskell-mode-hook #'lsp)))))
 
 
