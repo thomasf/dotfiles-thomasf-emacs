@@ -8618,7 +8618,7 @@ otherwise use the subtree title."
   (progn
     (setq
      recentf-save-file (expand-file-name
-                        (workspace-prefix-file-name "recentf")
+                        (workspace-prefix-file-name "recentf" ".el")
                         user-data-directory)
      recentf-max-saved-items 5000
      recentf-auto-cleanup 300
@@ -8814,7 +8814,7 @@ otherwise use the subtree title."
   (progn
     (setq
      savehist-file (expand-file-name
-                    (workspace-prefix-file-name "savehist")
+                    (workspace-prefix-file-name "savehist" ".el")
                     user-data-directory)
      savehist-additional-variables '(search ring regexp-search-ring
                                             projectile-pt-file-pattern-history
@@ -8835,7 +8835,7 @@ otherwise use the subtree title."
   :config
   (progn
     (setq save-place-file (expand-file-name
-                           (workspace-prefix-file-name "saveplace")
+                           (workspace-prefix-file-name "saveplace" ".el")
                            user-data-directory))
     (save-place-mode 1)))
 
