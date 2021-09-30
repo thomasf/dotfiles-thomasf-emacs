@@ -147,6 +147,12 @@
 
 ;; set up package.el and make sure that some essential packages and features
 ;; are loaded early.
+
+(eval-and-compile
+  (when (and (equal emacs-version "27.2")
+           (eql system-type 'darwin))
+    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")))
+
 (eval-and-compile (push `("packages-start" ,(current-time)) init-times))
 
 (eval-and-compile
