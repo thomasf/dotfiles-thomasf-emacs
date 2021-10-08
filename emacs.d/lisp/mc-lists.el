@@ -219,6 +219,7 @@
         ac-complete
         adv-insert-new-number
         beginning-of-buffer
+        c-electric-lt-gt
         cleanup-buffer
         compile-goto-error
         deadgrep
