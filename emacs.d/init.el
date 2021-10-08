@@ -3449,7 +3449,7 @@ LEAF is normally ((BEG . END) . WND)."
 (use-package bazel
   :ensure t
   :commands (bazel-mode)
-  :mode "drone\\.star\\'")
+  :mode ("drone\\.star\\'" . bazel-starlark-mode))
 
 
 ;;;; bf-mode
