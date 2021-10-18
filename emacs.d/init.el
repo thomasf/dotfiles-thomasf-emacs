@@ -3359,6 +3359,7 @@ for the current buffer's file name, and the line number at point."
                         ?u ?i ?o
                         ;; p
                         )
+          avy-all-windows 'all-frames
           avy-highlight-first t
           avy-style 'pre
           avy-orders-alist '((avy-goto-char . avy-order-closest)
