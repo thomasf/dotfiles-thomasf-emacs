@@ -7136,6 +7136,7 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; moz
 
 (use-package moz
+  :disabled t
   :ensure t
   :commands moz-minor-mode)
 
