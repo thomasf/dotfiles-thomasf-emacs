@@ -4982,28 +4982,34 @@ See URL `https://github.com/golang/lint'."
             ".XX....."))))))
 
 
+;;;; git-modes
+
+(use-package git-modes
+  :ensure t
+  :mode (
+         ("/\\.gitignore_global\\'" . gitignore-mode)
+         ("/\\.gitignore\\'" . gitignore-mode)
+         ("/\\.git/info/exclude\\'" . gitignore-mode)
+
+         ("/\\.gitattributes\\'" . gitattributes-mode)
+         ("/info/attributes\\'" . gitattributes-mode)
+         ("/git/attributes\\'" . gitattributes-mode)
+
+         ("/\\.gitconfig\\'" . gitconfig-mode)
+         ("/\\.git/config\\'" . gitconfig-mode)
+         ("/modules/.*/config\\'" . gitconfig-mode)
+         ("/git/config\\'" . gitconfig-mode)
+         ("/\\.gitmodules\\'" . gitconfig-mode)
+         ("/etc/gitconfig\\'" . gitconfig-mode)
+
+         ))
+
+
 ;;;; git-timemachine
 
 (use-package git-timemachine
   :ensure t
   :commands git-timemachine)
-
-
-;;;; gitconfig-mode
-
-(use-package gitconfig-mode
-  :ensure t
-  :mode (("/\\.gitconfig\\'" . gitconfig-mode)
-         ("/\\.git/config\\'" . gitconfig-mode)))
-
-
-;;;; gitignore-mode
-
-(use-package gitignore-mode
-  :ensure t
-  :mode (("/\\.gitignore_global\\'" . gitignore-mode)
-         ("/\\.gitignore\\'" . gitignore-mode)
-         ("/\\.git/info/exclude\\'" . gitignore-mode)))
 
 
 ;;;; gitlab
