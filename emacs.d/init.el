@@ -1310,7 +1310,14 @@ Works for heads without a property :column."
   (setq my-monospaced-font "Pragmata Pro-17"
         my-variable-pitch-font "Go-17"
         dynamic-fonts-preferred-monospace-point-size 17
-        dynamic-fonts-preferred-proportional-point-size 17)))
+        dynamic-fonts-preferred-proportional-point-size 17))
+
+ ((string-prefix-p "dungen" system-name)
+  (setq my-monospaced-font "Pragmata Pro-16"
+        my-variable-pitch-font "Go-16"
+        dynamic-fonts-preferred-monospace-point-size 17
+        dynamic-fonts-preferred-proportional-point-size 17))
+ )
 
 (use-package dynamic-fonts
   :ensure t
