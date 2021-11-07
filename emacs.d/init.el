@@ -9726,7 +9726,7 @@ otherwise use the subtree title."
 
 (use-package wakatime-mode
   :ensure t
-  :if (and (not noninteractive)  (executable-find* "wakatime"))
+  :if (and (not noninteractive)  (executable-find* "wakatime-cli"))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
   :defer 4
