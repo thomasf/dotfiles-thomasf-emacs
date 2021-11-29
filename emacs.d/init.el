@@ -6746,7 +6746,7 @@ drag the viewpoint on the image buffer that the window displays."
     (setq
      lsp-auto-guess-root t
      lsp-prefer-flymake nil
-     lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1") user-data-directory)
+     lsp-session-file (expand-file-name (workspace-prefix-file-name "lsp-session-v1" ".el") user-data-directory)
      lsp-restart 'auto-restart
      lsp-clients-go-library-directories
      (list
