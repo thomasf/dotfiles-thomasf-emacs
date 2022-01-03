@@ -7385,8 +7385,9 @@ Titus von der Malsburg."
 
 ;;;; org
 (eval-and-compile
-  (assq-delete-all 'org package--builtins)
-  (assq-delete-all 'org package--builtin-versions))
+  (with-eval-after-load "package"
+    (assq-delete-all 'org package--builtins)
+    (assq-delete-all 'org package--builtin-versions)))
 
 (use-package org
   :ensure org
