@@ -161,10 +161,8 @@
    package-archives
    '(("melpa-stable" . "https://stable.melpa.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
-     ;; ("marmalade"   . "https://marmalade-repo.org/packages/")
-     ("org"         . "http://orgmode.org/elpa/")
-     ("gnu"         . "https://elpa.gnu.org/packages/")
-     ;; ("sc"   . "http://joseito.republika.pl/sunrise-commander/")
+     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+     ("gnu" . "https://elpa.gnu.org/packages/")
      ))
 
   (unless (boundp 'package-pinned-packages)
@@ -7386,9 +7384,12 @@ Titus von der Malsburg."
 
 
 ;;;; org
+(eval-and-compile
+  (assq-delete-all 'org package--builtins)
+  (assq-delete-all 'org package--builtin-versions))
 
 (use-package org
-  :ensure org-plus-contrib
+  :ensure org
   :defer 28
   :commands (org
              org-capture
@@ -7431,6 +7432,10 @@ Titus von der Malsburg."
          org-journal-file-pattern "[0-9]\\{8\\}$"))))
   :config
   (progn
+    (use-package org-contrib
+      :ensure t
+
+     )
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
     (setq org-modules '(org-bbdb org-bibtex org-docview org-habit

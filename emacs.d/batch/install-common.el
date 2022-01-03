@@ -6,9 +6,10 @@
  package-archives
  '(("melpa-stable" . "https://stable.melpa.org/packages/")
    ("melpa" . "https://melpa.org/packages/")
-   ("marmalade"   . "https://marmalade-repo.org/packages/")
-   ("org"         . "http://orgmode.org/elpa/")
-   ("gnu"         . "https://elpa.gnu.org/packages/")))
+   ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+   ("gnu" . "https://elpa.gnu.org/packages/")
+   )
+ )
 
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
