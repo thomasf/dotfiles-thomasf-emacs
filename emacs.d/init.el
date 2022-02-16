@@ -5054,7 +5054,9 @@ See URL `https://github.com/golang/lint'."
 
 (use-package go-mode
   :ensure t
-  :mode "\\.go\\'"
+  :mode (("\\.go\\'" . go-mode)
+         ("go\\.mod\\'" . go-dot-mod-mode))
+
   :config
   (progn
 
@@ -6673,6 +6675,7 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
+    (add-hook 'go-dot-mod-mode-hook #'lsp)
 
     (when (executable-find* "html-languageserver"
                             "yarn global add vscode-html-languageserver-bin")
