@@ -1753,6 +1753,7 @@ Works for heads without a property :column."
   (let* ((default-directory user-notes-directory)
          (files (->> (-concat (f-entries "agenda/" nil t)
                               (f-entries "org/" nil t)
+                              (f-entries "md/" nil t)
                               (f-entries "library/" nil t)
                               (f-entries "elisp/" nil t))
                      (--map (s-chop-prefix (s-concat default-directory "/") it))
