@@ -10253,18 +10253,18 @@ otherwise use the subtree title."
 
 ;;; workspace-hook
 
-(defun  my-workspace-hook()
-  "workspace specific hook function."
-  t
-  (and
-   (not noninteractive)
-   window-system
+;; (defun  my-workspace-hook()
+;;   "workspace specific hook function."
+;;   t
+;;   (and
+;;    (not noninteractive)
+;;    window-system
 
-   (cond
-    ((equal workspace-prefix-startup "upgrade")
-     (call-interactively 'list-packages)))))
+;;    (cond
+;;     ((equal workspace-prefix-startup "upgrade")
+;;      (call-interactively 'list-packages)))))
 
-(add-hook 'after-init-hook 'my-workspace-hook t)
+;; (add-hook 'after-init-hook 'my-workspace-hook t)
 
 ;; this thing just nuges emacs to adjust it's window size, some times it starts
 ;; in 80x35. compat
