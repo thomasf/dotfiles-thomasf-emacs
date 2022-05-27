@@ -48,10 +48,8 @@
   "TODO"
   (interactive)
   (end-of-line)
-
   (unless (re-search-forward "^[^ \n]+" nil t)
-    (goto-char (point-max))
-    )
+    (goto-char (point-max)))
   (beginning-of-line))
 
 (defun magit-multi-status-previous-section ()
