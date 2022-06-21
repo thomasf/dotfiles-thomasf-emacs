@@ -9761,7 +9761,7 @@ otherwise use the subtree title."
     )
   :config
   (progn
-    (when (executable-find "wakatime")
+    (when (executable-find "wakatime-cli")
       (global-wakatime-mode 1))))
 
 
