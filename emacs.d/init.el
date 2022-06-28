@@ -6623,7 +6623,12 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :commands (lorem-ipsum-insert-paragraphs
              lorem-ipsum-insert-sentences
-             lorem-ipsum-insert-list))
+             lorem-ipsum-insert-list)
+  :config
+  (progn
+    (fmakunbound 'Lorem-ipsum-insert-list)
+    (fmakunbound 'Lorem-ipsum-insert-paragraphs)
+    (fmakunbound 'Lorem-ipsum-insert-sentences)))
 
 
 ;;;; lsp-mode
