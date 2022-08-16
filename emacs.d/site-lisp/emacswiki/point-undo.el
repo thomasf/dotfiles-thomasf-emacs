@@ -104,7 +104,7 @@
 
 (defun point-undo-doit (list1 list2)
   ;; list1, list2 = {point-undo-list, point-redo-list}
-  (destructuring-bind (pt . wst)
+  (cl-destructuring-bind (pt . wst)
       (or (car (symbol-value list1)) '(nil)) ;nil-safe
     (when pt
       (set list1 (cdr (symbol-value list1)))
