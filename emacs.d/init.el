@@ -209,7 +209,7 @@ re-downloaded in order to locate PACKAGE."
 (use-package memoize :ensure t :defer)
 (use-package s :ensure t)
 (use-package f :ensure t)
-(use-package bind-key :ensure t)
+(use-package bind-key :ensure t :config (override-global-mode 1))
 (use-package smartrep :ensure t)
 (use-package diminish :ensure t)
 (use-package deferred :ensure t :commands (deferred:$))
