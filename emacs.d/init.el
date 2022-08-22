@@ -6682,6 +6682,7 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
     (add-hook 'go-dot-mod-mode-hook #'lsp)
+    (add-hook 'terraform-mode-hook #'lsp)
 
     (when (executable-find* "html-languageserver"
                             "yarn global add vscode-html-languageserver-bin")
