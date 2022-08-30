@@ -863,15 +863,11 @@ Works for heads without a property :column."
               scroll-conservatively 10000
               scroll-up-aggressively 0.01
               scroll-down-aggressively 0.01
-              auto-window-vscroll nil)
+              auto-window-vscroll nil
+              truncate-partial-width-windows 50)
 (setq-default
  ;; scroll-preserve-screen-position t
  scroll-preserve-screen-position 1)
-
-
-;;;;; xdisp.c
-
-(setq-default truncate-partial-width-windows 50)
 
 
 ;;;;; xfns.c
