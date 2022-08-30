@@ -6064,7 +6064,7 @@ if submodules exists, grep submodules too."
      ido-auto-merge-work-directories-length -1
      ido-file-extensions-order
      '( ;; languages
-       ".py" ".go"  ".js" ".jsx"  ".coffee" ".rb" ".java" ".c"  ".cc" ".cpp" ".el"
+       ".py" ".go"  ".js" ".jsx"  ".coffee" ".rb" ".java" ".c"  ".cc" ".cpp" ".el" ".ts" ".tsx"
        ;; markup
        ".html" ".htm" ".xhtml"
        ;; styles
