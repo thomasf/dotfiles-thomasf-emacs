@@ -2604,6 +2604,18 @@ Then move to that line and indent accordning to mode"
   (align-regexp begin end "\\(\\s-*\\)[=|:]" 1 1))
 
 
+;;;;; insert random number
+
+(defun insert-random-number (NUM)
+  "Insert NUM random digits.
+NUM default to 8."
+  (interactive "P")
+  (let ((charset "1234567890" )
+        (base-count 10))
+    (dotimes (_ (if (numberp NUM) (abs NUM) 8))
+      (insert (elt charset (random base-count))))))
+
+
 ;;;;; insert date/time formatted strings
 
 (defvar current-date-time-format "%Y-%m-%d %H:%M"
