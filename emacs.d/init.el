@@ -9436,6 +9436,13 @@ otherwise use the subtree title."
   :defer)
 
 
+;;;; text-mode
+
+(use-package text-mode
+  :defer t
+  :mode (("LICENSE\\'" . text-mode)))
+
+
 ;;;; textile-mode
 
 (use-package textile-mode
