@@ -222,6 +222,7 @@ re-downloaded in order to locate PACKAGE."
 (use-package ctable :ensure t :defer)
 (use-package fringe-helper :ensure t :defer)
 (use-package fuzzy :ensure t :defer :disabled t)
+(use-package flx : ensure t :defer :disabled t)
 (use-package pcache
   :ensure t
   :defer
@@ -6304,10 +6305,15 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package ivy
   :ensure t
+  :if (and (not noninteractive))
   :defer t
+  :commands ivy-mode
   :init
   (progn
-    (setq ivy-on-del-error-function #'ignore)))
+    (setq ivy-on-del-error-function #'ignore
+          ivy-height 50
+          ivy-use-virtual-buffers t))
+  (ivy-mode))
 
 
 ;;;; js
@@ -8388,7 +8394,8 @@ otherwise use the subtree title."
 
     (setq
      projectile-sort-order 'recently-active
-     projectile-completion-system 'ido
+     ;; projectile-completion-system 'ido
+     projectile-completion-system 'ivy
      projectile-require-project-root t
      projectile-switch-project-action 'projectile-dired
      projectile-enable-caching nil
