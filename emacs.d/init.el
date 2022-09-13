@@ -3824,6 +3824,11 @@ LEAF is normally ((BEG . END) . WND)."
 
 (use-package counsel
   :ensure t
+  :bind (
+         ("C-x C-f" . counsel-find-file)
+         ("M-x" . counsel-M-x)
+         )
+  :config (setq ivy-initial-inputs-alist nil)
   :commands (counsel-mode
              counsel-outline
              counsel-rg
@@ -6086,13 +6091,13 @@ if submodules exists, grep submodules too."
   :config
   (progn
 
-    (use-package ido-vertical-mode
-      :ensure t
-      :commands (ido-vertical-turn-on
-                 ido-vertical-mode)
-      :init
-      (progn
-        (ido-vertical-turn-on)))
+    ;; (use-package ido-vertical-mode
+    ;;   :ensure t
+    ;;   :commands (ido-vertical-turn-on
+    ;;              ido-vertical-mode)
+    ;;   :init
+    ;;   (progn
+    ;;     (ido-vertical-turn-on)))
 
     (use-package flx-ido
       :ensure  t
@@ -6311,7 +6316,7 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (setq ivy-on-del-error-function #'ignore
-          ivy-height 50
+          ivy-height 30
           ivy-use-virtual-buffers t))
   (ivy-mode))
 
