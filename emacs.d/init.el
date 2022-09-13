@@ -9255,7 +9255,8 @@ otherwise use the subtree title."
   :ensure t
   :if (and )
   :commands (smex smex-major-mode-commands smex-show-unbound-commands)
-  :bind (("M-x" . smex)
+  :bind (
+         ;; ("M-x" . smex)
          ("<menu>" . smex)
          ("<XF86Tools>" . smex)
          ;; ("<XF86Search>" . smex)
