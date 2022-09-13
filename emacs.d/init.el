@@ -6317,7 +6317,9 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq ivy-on-del-error-function #'ignore
           ivy-height 30
-          ivy-use-virtual-buffers t))
+          ivy-use-virtual-buffers t
+           ivy-re-builders-alist
+           '((t . ivy--regex-ignore-order))))
   (ivy-mode))
 
 
