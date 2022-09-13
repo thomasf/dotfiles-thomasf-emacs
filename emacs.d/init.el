@@ -3887,7 +3887,7 @@ LEAF is normally ((BEG . END) . WND)."
 ;;;; dart-mode
 
 (use-package dart-mode
-  :disabled t
+  ;; :disabled t
   :ensure t
   :commands (dart-mode)
   :mode ("\\.dart\\'" . dart-mode))
