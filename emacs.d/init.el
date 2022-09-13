@@ -1769,7 +1769,7 @@ Works for heads without a property :column."
                      (projectile-sort-by-recently-active-first)
                      )))
     (if files
-        (find-file (ido-completing-read "" files))
+        (find-file (completing-read "" files))
       (message "Err0#wr"))))
 (bind-key "C-x f n" 'find-notes)
 (bind-key "C-h n" 'find-notes)
