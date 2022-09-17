@@ -6220,14 +6220,14 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; imenu
 
 (use-package imenu
-  :bind (("M-o i" . ido-goto-symbol))
+  :bind (("M-o i" . goto-symbol))
   :init
   (progn
     (setq
      imenu-auto-rescan t))
   :config
   (progn
-    (defun ido-goto-symbol (&optional symbol-list)
+    (defun goto-symbol (&optional symbol-list)
       "Refresh imenu and jump to a place in the buffer using Ido."
       (interactive)
       (unless (featurep 'imenu)
@@ -6247,7 +6247,7 @@ drag the viewpoint on the image buffer that the window displays."
                    (setq imenu--index-alist nil)
                    (ido-goto-symbol (imenu--make-index-alist))
                    (setq selected-symbol
-                         (ido-completing-read "Symbol?" symbol-names))
+                         (completing-read "Symbol?" symbol-names))
                    (string= (car imenu--rescan-item) selected-symbol)))
           (unless (and (boundp 'mark-active) mark-active)
             (push-mark nil t nil))
@@ -8691,7 +8691,7 @@ otherwise use the subtree title."
       "Use `ido-completing-read' to \\[find-file] a recent file"
       (interactive)
       (recentf-mode 1)
-      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (if (find-file (completing-read "Find recent file: " recentf-list))
           (message "Opening file...")
         (message "Aborting")))))
 
