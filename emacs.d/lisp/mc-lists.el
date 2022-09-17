@@ -183,6 +183,7 @@
         sp-kill-region
         sp-remove-active-pair-overlay
         sp-self-insert-command
+        string-inflection-cycle
         subtract-number-at-point
         tagedit-forward-slurp-tag
         tagedit-insert-dot
@@ -268,6 +269,7 @@
         my-go-go-command
         my-magit-status
         my-recenter-top-bottom
+        my-scroll-down-command
         ns-prev-frame
         other-window
         persp-switch
