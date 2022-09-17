@@ -597,6 +597,11 @@ Works for heads without a property :column."
   )
 
 
+;;;;; isearch
+
+(setq search-default-mode #'char-fold-to-regexp)
+
+
 ;;;;; jit-lock
 
 (setq jit-lock-stealth-time nil
