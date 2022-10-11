@@ -2882,8 +2882,7 @@ sTo this: ")
 (defun auto-window-margins ()
   "Set window margins according to fill column."
   (when (not (or
-              (windmove-find-other-window 'left)
-              (windmove-find-other-window 'right)
+
               (window-minibuffer-p)))
     (and (boundp 'org-indent-mode)
          org-indent-mode
@@ -2923,6 +2922,7 @@ sTo this: ")
       (progn
         (delete-other-windows)
         (defvar font-normal-height (face-attribute 'default :height))
+        (defvar normal-line-spacing line-spacing)
         (set-face-attribute 'default (selected-frame) :height 135)
         (set-face-attribute 'fringe (selected-frame)
                             :background (frame-parameter nil 'background-color))
@@ -2933,13 +2933,36 @@ sTo this: ")
         (and (boundp 'yascroll-bar-mode)
              yascroll-bar-mode
              (yascroll-bar-mode -1))
-        (auto-window-margins-mode 1)
-        ;; (wash-out-fontlock-faces 0.4)
-        )
+        (auto-window-margins-mode 1))
 
-    (auto-window-margins-mode -1)
-    (set-face-attribute 'default (selected-frame)  :height font-normal-height)))
+    (auto-window-margins-mode -1) (set-face-attribute 'default (selected-frame)  :height font-normal-height)
+    (setq-default line-spacing normal-line-spacing)))
 
+
+
+(define-minor-mode present-read-mode
+  "..."
+  nil nil nil
+  :group 'present-read
+  :global t
+  (if present-read-mode
+      (progn
+        (delete-other-windows)
+        (defvar font-normal-height (face-attribute 'default :height))
+        (defvar normal-line-spacing line-spacing)
+        (set-face-attribute 'default (selected-frame) :height 170)
+        (set-face-attribute 'fringe (selected-frame)
+                            :background (frame-parameter nil 'background-color))
+        (setq-default line-spacing 0.25)
+        (and (boundp 'rainbow-delimiters-mode)
+             rainbow-delimiters-mode
+             (rainbow-delimiters-mode -1))
+        (and (boundp 'yascroll-bar-mode)
+             yascroll-bar-mode
+             (yascroll-bar-mode -1)))
+
+    (set-face-attribute 'default (selected-frame)  :height font-normal-height)
+    (setq-default line-spacing normal-line-spacing)))
 
 ;;;;; init magit status
 
