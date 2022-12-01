@@ -3867,7 +3867,7 @@ LEAF is normally ((BEG . END) . WND)."
 ;;;; csharp-mode
 
 (use-package csharp-mode
-  :ensure t
+  ;; :ensure t
   :mode "\\.cs\\'")
 
 
