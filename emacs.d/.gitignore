@@ -1,11 +1,12 @@
-url/
+/url/
 .yas-compiled-snippets.el
 *.elc
-tags
+/tags
 **/qt_color_picker/qt_color_picker
 .python-environments/
-elpa/
-packages/
+/elpa/
+/elpa.*/
+/packages/
 org-gcal/
 /.lsp-session-v1
 /.extension/
