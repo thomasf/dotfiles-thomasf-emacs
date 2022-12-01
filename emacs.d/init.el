@@ -4177,6 +4177,7 @@ If FILE already exists, signal an error."
 ;;;; direx
 
 (use-package direx
+  :disabled t  ;; direx is not compatible with emacs-29 (probably)
   :ensure t
   :commands (direx:jump-to-directory direx:jump-to-directory-noselect
                                      direx:jump-to-directory-other-window)
