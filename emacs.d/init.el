@@ -2964,6 +2964,7 @@ sTo this: ")
     (set-face-attribute 'default (selected-frame)  :height font-normal-height)
     (setq-default line-spacing normal-line-spacing)))
 
+
 ;;;;; init magit status
 
 (defun init-magit-status (path)
