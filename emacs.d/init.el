@@ -1073,6 +1073,11 @@ Works for heads without a property :column."
   ("c" goto-char "char" :exit t)
 
   ("v" my-recenter-top-bottom "recenter")
+
+  ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
+  ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
+  ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
+
   ("q" nil nil :exit t))
 ;; (hydra-compact-hint 'hydra-goto)
 (bind-key  "M-g" 'hydra-goto/body global-map)
@@ -1084,7 +1089,7 @@ Works for heads without a property :column."
   ("r" rg "rg")
   ("s" rg-project "rg-proj")
   ("f" rg-dwim-current-file "rg-dwim-current-file")
-
+  ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
   ;; ("" nil nil :column "occur")
   ("o" occur "occur")
   ("l" loccur "loccur")
