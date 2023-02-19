@@ -459,6 +459,7 @@ Works for heads without a property :column."
     clojure-mode-hook
     emacs-lisp-mode-hook
     go-mode-hook
+    go-ts-mode
     groovy-mode-hook
     haskell-mode-hook
     js-mode-hook
@@ -494,7 +495,8 @@ Works for heads without a property :column."
 (defvar my-significant-whitespace-mode-hooks
   '(haskell-mode-hook
     kivy-mode-hook
-    python-mode-hook))
+    python-mode-hook
+    python-ts-mode-hook))
 
 
 ;;;; markup modes
@@ -3362,7 +3364,9 @@ for the current buffer's file name, and the line number at point."
                (eq major-mode 'typescript-mode)
                (eq major-mode 'rust-mode)
                (eq major-mode 'go-mode)
+               (eq major-mode 'go-ts-mode)
                (eq major-mode 'python-mode)
+               (eq major-mode 'python-ts-mode)
                )
         (auto-highlight-symbol-mode))
       )
@@ -3649,6 +3653,7 @@ LEAF is normally ((BEG . END) . WND)."
     (setq code-library-mode-file-alist '((c++-mode . "cpp.org")
                                          (emacs-lisp-mode . "elisp.org")
                                          (python-mode . "python.org")
+                                         (python-ts-mode . "python.org")
                                          (perl-mode . "perl.org")
                                          (js2-mode . "javascript.org")
                                          (js-mode . "javascript.org")
@@ -4710,7 +4715,7 @@ If FILE already exists, signal an error."
            (hardhat-buffer-included-p (current-buffer))
            (current-buffer-remote-p))
         (flycheck-mode)))
-    (add-hook 'python-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'python-base-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-jsx-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'web-mode-hook 'flycheck-turn-on-maybe)
@@ -4720,6 +4725,7 @@ If FILE already exists, signal an error."
     (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
+    (add-hook 'go-ts-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'arduino-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'sh-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
@@ -4903,7 +4909,7 @@ See URL `https://github.com/golang/lint'."
         :command ("golint" source)
         :error-patterns
         ((info line-start (file-name) ":" line ":" column ": " (message) line-end))
-        :modes go-mode
+        :modes (go-mode go-ts-mode)
         :next-checkers (go-vet
                         ;; Fall back, if go-vet doesn't exist
                         go-build go-test go-errcheck go-unconvert go-megacheck)))))
@@ -5112,16 +5118,13 @@ See URL `https://github.com/golang/lint'."
 
   :config
   (progn
-
     (use-package go-impl
       :ensure t
       :commands go-impl)
-
     (setq gofmt-command (cond
                          ;; ((executable-find* "gofumports") "gofumports")
                          ((executable-find* "goimports") "goimports")
                          (t "gofmt")))
-
     (defun my-go-go-command ()
       "Save all buffers, run go fmt and then flycheck, bound to C-c C-C in my go-mode."
       (interactive)
@@ -5144,12 +5147,18 @@ See URL `https://github.com/golang/lint'."
 
     (bind-key "C-c C-c" 'my-go-go-command go-mode-map)
 
-
     (use-package go-stacktracer
       :ensure t
       :commands (go-stacktracer-region))
 
     (require 'go-expanderr nil t)))
+
+(use-package go-ts-mode
+  :defer t
+  :config
+  (progn
+    (use-package go-mode :ensure t)
+    (bind-key "C-c C-c" 'my-go-go-command go-ts-mode-map)))
 
 
 ;;;;; go-traceback
@@ -5981,6 +5990,7 @@ if submodules exists, grep submodules too."
                         ))
               ("code" (or
                        (mode . python-mode)
+                       (mode . python-ts-mode)
                        (mode . ruby-mode)
                        (mode . js-mode)
                        (mode . js2-mode)
@@ -5990,6 +6000,7 @@ if submodules exists, grep submodules too."
                        (mode . haskell-mode)
                        (mode . kivy-mode)
                        (mode . go-mode)
+                       (mode . go-ts-mode)
                        (mode . rust-mode)
                        ))
               ;; -------------------------------------------------
@@ -6732,7 +6743,7 @@ drag the viewpoint on the image buffer that the window displays."
         (setq lsp-diagnostics-provider :none))
       (message "%s" lsp-diagnostics-provider))
 
-    (add-hook 'python-mode-hook #'lsp)
+    (add-hook 'python-base-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
@@ -6747,6 +6758,9 @@ drag the viewpoint on the image buffer that the window displays."
 
     (when (executable-find* "gopls")
       (add-hook 'go-mode-hook #'lsp))
+
+    (when (executable-find* "gopls")
+      (add-hook 'go-ts-mode-hook #'lsp))
 
     (when (executable-find* "rls"
                             "rustup component add rls --toolchain stable-x86_64-unknown-linux-gnu")
@@ -7963,8 +7977,10 @@ otherwise use the subtree title."
     (add-hook 'lisp-mode-hook 'paren-face-add-keyword)
     (add-hook 'go-mode-hook 'paren-face-add-keyword)
     (add-hook 'go-mode-hook 'paren-face-add-keyword-other)
-    (add-hook 'python-mode-hook 'paren-face-add-keyword)
-    (add-hook 'python-mode-hook 'paren-face-add-keyword-other)
+    (add-hook 'go-ts-mode-hook 'paren-face-add-keyword)
+    (add-hook 'go-ts-mode-hook 'paren-face-add-keyword-other)
+    (add-hook 'python-base-mode-hook 'paren-face-add-keyword)
+    (add-hook 'python-base-mode-hook 'paren-face-add-keyword-other)
     ))
 
 
@@ -8576,6 +8592,7 @@ otherwise use the subtree title."
       (py-isort-buffer))
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
+    (bind-key "C-c C-c" 'python-cccc python-base-mode-map)
 
     (smartrep-define-key
         python-mode-map
@@ -10277,6 +10294,7 @@ otherwise use the subtree title."
             (erlang-mode . "erlang")
             (gfm-mode . "md")
             (go-mode . "go")
+            (go-ts-mode . "go")
             (groovy-mode . "groovy")
             (haskell-mode . "haskell")
             (html-mode . "html")
