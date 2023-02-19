@@ -41,6 +41,7 @@
         cua-scroll-down
         cua-scroll-up
         cua-set-mark
+        cycle-spacing
         delete-blank-lines
         delete-indentation
         dired-back-to-start-of-files
