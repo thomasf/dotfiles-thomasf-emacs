@@ -1074,6 +1074,9 @@ Works for heads without a property :column."
 
   ("v" my-recenter-top-bottom "recenter")
 
+  ;; goto various windows
+  ("U" browse-url "browse-url" :exit t)
+  ("S" scratch-buffer "scratch" :exit t)
   ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
   ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
