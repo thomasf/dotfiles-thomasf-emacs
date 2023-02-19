@@ -8570,7 +8570,9 @@ otherwise use the subtree title."
         (setq importmagic-be-quiet t))
       :config
       (progn
-        (add-hook 'python-mode-hook 'importmagic-mode)))
+        (add-hook 'python-mode-hook 'importmagic-mode)
+        (add-hook 'python-ts-mode-hook 'importmagic-mode)
+        ))
 
     (use-package py-autopep8
       :ensure t
@@ -8592,7 +8594,7 @@ otherwise use the subtree title."
       (py-isort-buffer))
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
-    (bind-key "C-c C-c" 'python-cccc python-base-mode-map)
+    (bind-key "C-c C-c" 'python-cccc python-ts-mode-map)
 
     (smartrep-define-key
         python-mode-map
@@ -8601,7 +8603,9 @@ otherwise use the subtree title."
         ("<"   . python-indent-shift-left)))
 
     (unbind-key "C-c C-p" python-mode-map)
-    (unbind-key "C-c C-j" python-mode-map)))
+    (unbind-key "C-c C-j" python-mode-map)
+    (unbind-key "C-c C-p" python-ts-mode-map)
+    (unbind-key "C-c C-j" python-ts-mode-map)))
 
 
 ;;;; python-django
