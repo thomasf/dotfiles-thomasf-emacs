@@ -2,4 +2,4 @@
 # key: reterr
 # description: return err
 # --
-return err
+return $0fmt.Errorf("$1: %w",err)
