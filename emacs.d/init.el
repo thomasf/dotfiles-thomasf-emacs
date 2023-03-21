@@ -1083,6 +1083,9 @@ Works for heads without a property :column."
   ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
 
+  ("B" bm-show-all "*bookmarks*" :exit t)
+  ("b" bm-toggle "*bm-toggle*")
+
   ("q" nil nil :exit t))
 ;; (hydra-compact-hint 'hydra-goto)
 (bind-key  "M-g" 'hydra-goto/body global-map)
