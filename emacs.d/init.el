@@ -1082,6 +1082,7 @@ Works for heads without a property :column."
   ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
   ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
+  ("s" helm-imenu "imenu" :exit t)
 
   ("B" bm-show-all "*bookmarks*" :exit t)
   ("b" bm-toggle "*bm-toggle*")
