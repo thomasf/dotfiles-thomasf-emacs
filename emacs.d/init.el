@@ -8859,6 +8859,10 @@ otherwise use the subtree title."
   :init
   (progn
     (setq rg-custom-type-aliases '(("gyp" .    "*.gyp *.gypi"))))
+  :config
+  (progn
+    (rg-define-toggle "-g !tests/ -g !tests.py -g !test_*.py -g !testdata/ -g !*_test.go" "T"))
+
   :bind (("M-o a" . rg-project)
          ("M-o A" . rg)
          :map rg-mode-map
