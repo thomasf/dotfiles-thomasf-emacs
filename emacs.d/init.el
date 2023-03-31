@@ -8862,7 +8862,9 @@ otherwise use the subtree title."
     (setq rg-custom-type-aliases '(("gyp" .    "*.gyp *.gypi"))))
   :config
   (progn
-    (rg-define-toggle "-g !tests/ -g !tests.py -g !test_*.py -g !testdata/ -g !*_test.go" "T"))
+    (rg-define-toggle "-g !tests/ -g !tests.py -g !test_*.py -g !testdata/ -g !*_test.go" "T")
+    (rg-define-toggle "--sort-files" "S" t)
+    )
 
   :bind (("M-o a" . rg-project)
          ("M-o A" . rg)
