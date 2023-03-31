@@ -1084,8 +1084,8 @@ Works for heads without a property :column."
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
   ("s" helm-imenu "imenu" :exit t)
 
-  ("B" bm-show-all "*bookmarks*" :exit t)
-  ("b" bm-toggle "*bm-toggle*")
+  ("b" list-bookmarks "*bookmarks*" :exit t)
+  ("B" bookmark-set "*bm-toggle*" :exit t)
 
   ("q" nil nil :exit t))
 ;; (hydra-compact-hint 'hydra-goto)
@@ -3522,37 +3522,37 @@ LEAF is normally ((BEG . END) . WND)."
 
 ;;;; bm
 
-(use-package bm
-  :ensure t
-  :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
-                     bm-buffer-save-all bm-repository-load bm-repository-save
-                     bm-buffer-restore bm-buffer-restore-all bm-buffer-save
-                     bm-repository-clear bm-remove-all-all-buffers)
-  :bind (("C-c b n" . bm-next)
-         ("C-c b p" . bm-previous)
-         ("C-c b s" . bm-show-all))
-  :init
-  (progn
+;; (use-package bm
+;;   :ensure t
+;;   :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
+;;                      bm-buffer-save-all bm-repository-load bm-repository-save
+;;                      bm-buffer-restore bm-buffer-restore-all bm-buffer-save
+;;                      bm-repository-clear bm-remove-all-all-buffers)
+;;   :bind (("C-c b n" . bm-next)
+;;          ("C-c b p" . bm-previous)
+;;          ("C-c b s" . bm-show-all))
+;;   :init
+;;   (progn
 
 
-;;;;; helm-bm
+;; ;;;;; helm-bm
 
-    (use-package helm-bm
-      :ensure t
-      :commands helm-bm
-      :bind (
-             ("C-c b b" . helm-bm)
-             ("C-h u" . helm-bm))
-      :config
-      (progn
-        (use-package bm)))
-    (setq
-     bm-repository-file (expand-file-name
-                         "bm-repository" user-data-directory)
-     bm-annotate-on-create t
-     bm-cycle-all-buffers t
-     bm-buffer-persistence t
-     bm-repository-size 500)))
+;;     (use-package helm-bm
+;;       :ensure t
+;;       :commands helm-bm
+;;       :bind (
+;;              ("C-c b b" . helm-bm)
+;;              ("C-h u" . helm-bm))
+;;       :config
+;;       (progn
+;;         (use-package bm)))
+;;     (setq
+;;      bm-repository-file (expand-file-name
+;;                          "bm-repository" user-data-directory)
+;;      bm-annotate-on-create t
+;;      bm-cycle-all-buffers t
+;;      bm-buffer-persistence t
+;;      bm-repository-size 500)))
 
 
 ;;;; browse-kill-ring
