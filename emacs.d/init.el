@@ -560,12 +560,6 @@ Works for heads without a property :column."
 (setq apropos-do-all t)
 
 
-;;;;; bookmark
-
-(setq bookmark-default-file (expand-file-name
-                             "bookmarks" user-data-directory))
-
-
 ;;;;; browse-url
 
 (when (eq 'gnu/linux system-type)
@@ -1084,8 +1078,8 @@ Works for heads without a property :column."
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
   ("s" helm-imenu "imenu" :exit t)
 
-  ("b" list-bookmarks "*bookmarks*" :exit t)
-  ("B" bookmark-set "*bm-toggle*" :exit t)
+  ("b" bookmark-jump "*bookmarks*" :exit t)
+  ("B" helm-bookmarks "*bm-set*" :exit t)
 
   ("q" nil nil :exit t))
 ;; (hydra-compact-hint 'hydra-goto)
@@ -3522,37 +3516,53 @@ LEAF is normally ((BEG . END) . WND)."
 
 ;;;; bm
 
-;; (use-package bm
-;;   :ensure t
-;;   :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
-;;                      bm-buffer-save-all bm-repository-load bm-repository-save
-;;                      bm-buffer-restore bm-buffer-restore-all bm-buffer-save
-;;                      bm-repository-clear bm-remove-all-all-buffers)
-;;   :bind (("C-c b n" . bm-next)
-;;          ("C-c b p" . bm-previous)
-;;          ("C-c b s" . bm-show-all))
-;;   :init
-;;   (progn
+(use-package bm
+  :ensure t
+  :disabled t
+
+  :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
+                     bm-buffer-save-all bm-repository-load bm-repository-save
+                     bm-buffer-restore bm-buffer-restore-all bm-buffer-save
+                     bm-repository-clear bm-remove-all-all-buffers)
+  :bind (("C-c b n" . bm-next)
+         ("C-c b p" . bm-previous)
+         ("C-c b s" . bm-show-all))
+  :init
+  (progn
 
 
-;; ;;;;; helm-bm
+;;;;; helm-bm
 
-;;     (use-package helm-bm
-;;       :ensure t
-;;       :commands helm-bm
-;;       :bind (
-;;              ("C-c b b" . helm-bm)
-;;              ("C-h u" . helm-bm))
-;;       :config
-;;       (progn
-;;         (use-package bm)))
-;;     (setq
-;;      bm-repository-file (expand-file-name
-;;                          "bm-repository" user-data-directory)
-;;      bm-annotate-on-create t
-;;      bm-cycle-all-buffers t
-;;      bm-buffer-persistence t
-;;      bm-repository-size 500)))
+    (use-package helm-bm
+      :ensure t
+      :disabled t
+      :commands helm-bm
+      :bind (
+             ("C-c b b" . helm-bm)
+             ("C-h u" . helm-bm))
+      :config
+      (progn
+        (use-package bm)))
+    (setq
+     bm-repository-file (expand-file-name
+                         "bm-repository" user-data-directory)
+     bm-annotate-on-create t
+     bm-cycle-all-buffers t
+     bm-buffer-persistence t
+     bm-repository-size 500)))
+
+
+;;;; bookmark
+
+(use-package bookmark
+  :defer t
+  :init
+  (progn
+    (setq
+     bookmark-default-file (expand-file-name (workspace-prefix-file-name "bookmark" ".emacs.bmk") user-data-directory)
+     bookmark-watch-bookmark-file 'silent
+     bookmark-save-flag 1
+     bookmark-fringe-mark nil)))
 
 
 ;;;; browse-kill-ring
