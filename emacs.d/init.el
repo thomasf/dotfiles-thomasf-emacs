@@ -9558,7 +9558,7 @@ otherwise use the subtree title."
   :init
   (progn
     (setq
-     todotxt-file (expand-file-name "~/Dropbox/todo/todo.txt"))))
+     todotxt-file (expand-file-name "~/notes/txt/todo.txt"))))
 
 
 ;;;; toggle-quotes
