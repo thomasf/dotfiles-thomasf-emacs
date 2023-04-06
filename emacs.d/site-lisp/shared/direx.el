@@ -1,4 +1,4 @@
-;;; direx.el --- Simple Directory Explorer
+;;; direx.el --- Simple Directory Explorer  -*- lexical-binding:t -*-
 
 ;; Copyright (C) 2011-2015  Tomohiro Matsuyama
 
@@ -26,7 +26,6 @@
 ;;; Code:
 
 (require 'cl-lib)
-(eval-when-compile (require 'cl))
 (require 'eieio)
 (require 'dired)
 (require 'regexp-opt)
@@ -70,14 +69,6 @@
 (defmacro direx:awhen (test &rest body)
   (declare (indent 1))
   `(let ((it ,test)) (when it ,@body)))
-
-(defun direx:apply-partially (fun &rest args)
-  (if (fboundp 'apply-partially)
-      (apply 'apply-partially fun args)
-    (require 'cl)
-    (lexical-let ((fun fun) (args args))
-      (lambda (&rest restargs)
-	(apply fun (append args restargs))))))
 
 (defun direx:starts-with (x y)
   (and (<= (length y) (length x))
@@ -374,7 +365,7 @@ mouse-2: find this node in other window"))
     (cl-loop with point = (overlay-end (direx:item-overlay item))
              with old-children = (direx:item-children item)
              for new-child in (direx:make-item-children item)
-             for old-child = (cl-find-if (direx:apply-partially
+             for old-child = (cl-find-if (apply-partially
                                           'direx:item-equals new-child)
                                          old-children)
              if old-child
@@ -690,7 +681,7 @@ mouse-2: find this node in other window"))
 
 (defun direx:find-root-item-if (predicate)
   (cl-find-if predicate
-              (mapcar (direx:apply-partially 'buffer-local-value 'direx:root-item)
+              (mapcar (apply-partially 'buffer-local-value 'direx:root-item)
                       (direx:buffer-list))))
 
 (defun direx:find-root-item-for-root (root)
