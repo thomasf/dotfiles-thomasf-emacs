@@ -9455,6 +9455,7 @@ otherwise use the subtree title."
 
 (use-package string-edit
   :ensure t
+  :disabled t
   :commands (string-edit-at-point))
 
 
