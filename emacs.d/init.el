@@ -4244,9 +4244,14 @@ If FILE already exists, signal an error."
   :config
   (progn
     (let ((map direx:direx-mode-map))
+      (define-key map (kbd "s") 'isearch-forward-regexp)
       (define-key map (kbd ".") 'direx:up-item)
       (define-key map (kbd "N") 'direx:next-sibling-item)
-      (define-key map (kbd "P") 'direx:previous-sibling-item))))
+      (define-key map (kbd "P") 'direx:previous-sibling-item)
+      (define-key map (kbd "j") 'direx:next-item)
+      (define-key map (kbd "k") 'direx:previous-item)
+      (define-key map (kbd "J") 'direx:next-sibling-item)
+      (define-key map (kbd "K") 'direx:previous-sibling-item))))
 
 
 ;;;; docker
