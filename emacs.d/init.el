@@ -3680,6 +3680,21 @@ LEAF is normally ((BEG . END) . WND)."
           code-library-downcased-org-keywords t)))
 
 
+;;;; coffee-mode
+
+(use-package coffee-mode
+  :ensure t
+  :commands coffee-mode
+  :mode (("\\.coffee\\'" . coffee-mode)
+         ("Cakefile\\'" . coffee-mode))
+  :init
+  (progn
+    (setq
+     coffee-cleanup-whitespace nil
+     coffee-tab-width 2
+     coffe-js-mode 'js2-mode)))
+
+
 ;;;; color-identifiers-mode
 
 (use-package color-identifiers-mode
