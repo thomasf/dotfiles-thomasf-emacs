@@ -234,7 +234,7 @@ re-downloaded in order to locate PACKAGE."
        (let ((dir (expand-file-name "pcache/" user-cache-directory)))
          (make-directory dir t)
          dir)))))
-
+(use-package posframe :ensure t :defer :disabled t)
 (use-package hydra
   :ensure t
   :config
