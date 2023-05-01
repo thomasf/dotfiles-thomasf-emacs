@@ -9668,10 +9668,12 @@ _p_rev       h_i_de complete      toggle _c_omplete      _s_ave
 ^^           ^^                   _N_uke
 "
       ;; nav
-      ("n" next-line )
-      ("j" next-line )
-      ("p" previous-line )
-      ("k" previous-line )
+      ("<down>" next-line)
+      ("n" next-line)
+      ("j" next-line)
+      ("<up>" previous-line)
+      ("p" previous-line)
+      ("k" previous-line)
 
       ;; list
       ("l" todotxt-unhide-all)
