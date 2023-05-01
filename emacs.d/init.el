@@ -9650,7 +9650,57 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :init
   (progn
     (setq
-     todotxt-file (expand-file-name "~/notes/txt/todo.txt"))))
+     todotxt-file (expand-file-name "~/notes/txt/todo.txt")))
+  :config
+  (progn
+    (defhydra todotxt-hydra
+      ;; (:hint nil :foreign-keys warn :pre (todotxt) )
+      (:color pink :hint nil :foreign-keys warn )
+      "
+^Move^       ^List^               ^Item^                 ^Other^
+^^-----------^^-------------------^^---------------------^^------------------
+_n_ext       _l_ist all           _a_dd                  (_g_) revert
+_p_rev       h_i_de complete      toggle _c_omplete      _s_ave
+^^           _/_ filter           _e_dit                 _q_uit
+^^           _\\_ remove filter    _t_ag
+^^           _A_rchive complete   _d_ue date
+^^           ^^                   p_r_iority
+^^           ^^                   _N_uke
+"
+      ;; nav
+      ("n" next-line )
+      ("j" next-line )
+      ("p" previous-line )
+      ("k" previous-line )
+
+      ;; list
+      ("l" todotxt-unhide-all)
+      ("i" todotxt-show-incomplete)
+      ("/" todotxt-filter-for)
+      ("\\"  todotxt-filter-out)
+      ("A" todotxt-archive)
+
+      ;; item
+      ("a" todotxt-add-item)
+      ("c" todotxt-complete-toggle)
+      ("e" todotxt-edit-item)
+      ("t" todotxt-tag-item)
+      ("d" todotxt-add-due-date)
+      ("r" todotxt-add-priority)
+      ("N" todotxt-nuke-item)
+
+
+      ;; other
+      ("g" todotxt-revert)
+      ("s" save-buffer)
+      ;; ("u" todotxt-undo)
+      ("q" todotxt-bury  :exit t))
+
+    (defun my-todotxt-mode-hook ()
+      "my todotxt mode hook"
+      (todotxt-hydra/body))
+
+    (add-hook 'todotxt-mode-hook  'my-todotxt-mode-hook)))
 
 
 ;;;; toggle-quotes
