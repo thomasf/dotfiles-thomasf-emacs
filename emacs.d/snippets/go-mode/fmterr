@@ -1,0 +1,5 @@
+# name: fmt.Errorf
+# key: fmterr
+# description: fmterr
+# --
+$0fmt.Errorf("$1: %w",err)
