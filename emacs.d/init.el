@@ -7004,6 +7004,10 @@ drag the viewpoint on the image buffer that the window displays."
     ;;     (setq magit-circleci-n-builds 15)
     ;;     (magit-circleci-mode)))
 
+    (use-package orgit
+      :ensure t
+      :commands (orgit-store-link))
+
     (use-package magit-svn
       :ensure t
       :commands (magit-svn-mode
@@ -7578,9 +7582,9 @@ Titus von der Malsburg."
   :config
   (progn
     (use-package org-contrib
-      :ensure t
-
-     )
+      :ensure t)
+    (use-package orgit
+      :ensure t)
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
     (setq org-modules '(org-bbdb org-bibtex org-docview org-habit
