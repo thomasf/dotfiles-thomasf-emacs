@@ -8928,9 +8928,14 @@ otherwise use the subtree title."
   (progn
     (rg-define-toggle "-g !tests/ -g !tests.py -g !test_*.py -g !testdata/ -g !*_test.go" "T")
     (rg-define-toggle "--sort-files" "S" t)
-    )
 
-  :bind (("M-o a" . rg-project)
+    (defun my-rg-project ()
+      "rg-project and then open goto hydra directly"
+      (interactive)
+      (call-interactively #'rg-project)
+      (call-interactively #'hydra-goto/body)))
+
+  :bind (("M-o a" . my-rg-project)
          ("M-o A" . rg)
          :map rg-mode-map
          ("j" . next-error-no-select)
