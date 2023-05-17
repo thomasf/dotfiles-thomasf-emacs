@@ -1963,7 +1963,8 @@ Works for heads without a property :column."
                    debugger-mode-hook
                    docker-images-mode-hook
                    compilation-mode-hook
-                   docker-containers-mode-hook))
+                   docker-containers-mode-hook
+                   treemacs-mode-hook))
 
 
 (use-package helm
