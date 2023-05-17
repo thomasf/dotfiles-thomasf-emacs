@@ -8654,7 +8654,8 @@ otherwise use the subtree title."
       (interactive)
       (silent-save-some-buffers)
       (py-black-buffer)
-      (py-isort-buffer))
+      ;; (py-isort-buffer)
+      )
 
     (bind-key "C-c C-c" 'python-cccc python-mode-map)
     (bind-key "C-c C-c" 'python-cccc python-ts-mode-map)
