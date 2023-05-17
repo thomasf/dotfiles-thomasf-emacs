@@ -7009,11 +7009,6 @@ drag the viewpoint on the image buffer that the window displays."
       :ensure t
       :commands (orgit-store-link))
 
-    (use-package magit-svn
-      :ensure t
-      :commands (magit-svn-mode
-                 turn-on-magit-svn))
-
     (use-package magit-blame
       :commands magit-blame-mode)
 
