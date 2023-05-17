@@ -8001,7 +8001,7 @@ otherwise use the subtree title."
   :config
   (progn
     (add-hook 'outline-minor-mode-hook
-              'outline-minor-faces-add-font-lock-keywords)))
+              #'outline-minor-faces-mode)))
 
 
 ;;;; outshine
