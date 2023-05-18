@@ -5069,14 +5069,14 @@ See URL `https://github.com/golang/lint'."
                             :hint nil)
   "
 Git gutter:
-  _j_: next hunk        _s_tage hunk     _q_uit
-  _k_: previous hunk    _r_evert hunk    _Q_uit and deactivate git-gutter
-  ^ ^                   _p_opup hunk
+  _j_: next hunk        _s_tage hunk         (_1_) diff option HEAD         _q_uit
+  _k_: previous hunk    _r_evert hunk        (_2_) diff option --cached     _Q_uit and deactivate
+  ^ ^                   _p_opup hunk         (_3_) clear option
   _h_: first hunk
-  _l_: last hunk        set start _R_evision
+  _l_: last hunk        ^ ^                  set start _R_evision
 "
-  ("j" git-gutter:next-hunk)
-  ("k" git-gutter:previous-hunk)
+  ("j" my-git-gutter:next-hunk)
+  ("k" my-git-gutter:previous-hunk)
   ("h" (progn (goto-char (point-min))
               (git-gutter:next-hunk 1)))
   ("l" (progn (goto-char (point-min))
@@ -5085,6 +5085,11 @@ Git gutter:
   ("r" git-gutter:revert-hunk)
   ("p" git-gutter:popup-hunk)
   ("R" git-gutter:set-start-revision)
+
+  ("1" (progn (setq git-gutter:diff-option "HEAD") (git-gutter)))
+  ("2" (progn (setq git-gutter:diff-option "--cached") (git-gutter)))
+  ("3" (progn (setq git-gutter:diff-option "")  (git-gutter)))
+
   ("q" nil :color blue)
   ("Q" (progn (git-gutter-mode -1)
               ;; git-gutter-fringe doesn't seem to
