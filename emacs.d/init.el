@@ -7064,6 +7064,7 @@ drag the viewpoint on the image buffer that the window displays."
               '(("github.com" "api.github.com" "github.com" forge-github-repository)
                 ("gitlab.com" "gitlab.com/api/v4" "gitlab.com" forge-gitlab-repository)
                 ("gitlab.23c.se" "gitlab.23c.se/api/v4" "gitlab.23c.se" forge-gitlab-repository)
+                ("gitlab.tracklib.com" "gitlab.tracklib.com/api/v4" "gitlab.tracklib.com" forge-gitlab-repository)
                 ("salsa.debian.org" "salsa.debian.org/api/v4" "salsa.debian.org" forge-gitlab-repository)
                 ("framagit.org" "framagit.org/api/v4" "framagit.org" forge-gitlab-repository)
                 ("codeberg.org" "codeberg.org/api/v1" "codeberg.org" forge-gitea-repository)
