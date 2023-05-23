@@ -7230,7 +7230,7 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
     (dolist
-        (m (list mingus-playlist-map mingus-browse-map mingus-help-map))
+        (m (list mingus-playlist-mode-map mingus-browse-mode-map mingus-help-mode-map))
       (define-key m "s" 'isearch-forward-regexp)
       (define-key m "t" 'mingus-toggle)
       (define-key m "n" 'next-line)
