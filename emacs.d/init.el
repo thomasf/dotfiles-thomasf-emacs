@@ -9675,13 +9675,13 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
       "
 ^Move^       ^List^               ^Item^                 ^Other^
 ^^-----------^^-------------------^^---------------------^^------------------
-_n_ext       _l_ist all           _a_dd                  (_g_) revert
-_p_rev       h_i_de complete      toggle _c_omplete      _s_ave
-^^           _/_ filter           _e_dit                 _q_uit
+_n_ext       ^_l_ist all           _a_dd                  (_g_) revert
+_p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
+^^           ^_/_ filter           _e_dit                 _q_uit
 ^^           _\\_ remove filter    _t_ag
-^^           _A_rchive complete   _d_ue date
-^^           ^^                   p_r_iority
-^^           ^^                   _N_uke
+^^           ^_A_rchive complete   _d_ue date
+^^           ^^ ^                  p_r_iority
+^^           ^^ ^                  _N_uke
 "
       ;; nav
       ("<down>" next-line)
