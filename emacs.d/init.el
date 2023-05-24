@@ -5072,8 +5072,8 @@ Git gutter:
   _j_: next hunk        _s_tage hunk         (_1_) diff option HEAD         _q_uit
   _k_: previous hunk    _r_evert hunk        (_2_) diff option --cached     _Q_uit and deactivate
   ^ ^                   _p_opup hunk         (_3_) clear option
-  _h_: first hunk
-  _l_: last hunk        ^ ^                  set start _R_evision
+  _h_: first hunk       ^ ^                  set start _R_evision
+  _l_: last hunk        ^ ^                  set start _D_efault revision
 "
   ("j" my-git-gutter:next-hunk)
   ("k" my-git-gutter:previous-hunk)
@@ -5084,8 +5084,11 @@ Git gutter:
   ("s" git-gutter:stage-hunk)
   ("r" git-gutter:revert-hunk)
   ("p" git-gutter:popup-hunk)
-  ("R" git-gutter:set-start-revision)
 
+  ("R" git-gutter:set-start-revision)
+  ("D" (progn (let ((rev (nth 1 (magit--get-default-branch))))
+                (git-gutter:set-start-revision rev)
+                (message "set start revision to: %s " rev))))
   ("1" (progn (setq git-gutter:diff-option "HEAD") (git-gutter)))
   ("2" (progn (setq git-gutter:diff-option "--cached") (git-gutter)))
   ("3" (progn (setq git-gutter:diff-option "")  (git-gutter)))
