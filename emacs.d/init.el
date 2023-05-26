@@ -1046,7 +1046,7 @@ Works for heads without a property :column."
 (defhydra hydra-goto (:hint none :pre hydra-goto/pre :post hydra-goto/post)
   "
 (_j_/_k_ ERR _h_ src _y_ win) (_f_/_d_ HUNK) (_u_/_i_ FLYC _o_ lvl) (_r_/_e_ BUF) (GOTO line _g_ char _c_) . _v_ recenter
-(_b_/_B_ bookmark) _U_ URL . _s_ imenu . _S_ scratch . _I_ ibuffer . _R_ rg-buf . _D_ dired"
+(_b_/_B_ bookmark) _U_ URL . _s_ imenu . _S_ scratch . _I_ ibuffer . _R_ rg-buf . _D_ dired . _G_ git-gutter"
   ;; ("h" first-error "first-error")
   ("h" next-error-select-buffer "n-err")
   ("j" my-next-error "n-err")
@@ -1068,6 +1068,8 @@ Works for heads without a property :column."
   ("g" goto-line-with-feedback "line" :exit t)
   ("M-g" goto-line-with-feedback "line" :exit t)
   ("c" goto-char "char" :exit t)
+
+  ("G" hydra-git-gutter/body :exit t)
 
   ("v" my-recenter-top-bottom "recenter")
 
@@ -5003,7 +5005,8 @@ See URL `https://github.com/golang/lint'."
   :ensure t
   :if (and (not noninteractive) )
   :commands (git-gutter-mode
-             global-git-gutter-mode)
+             global-git-gutter-mode
+             hydra-git-gutter/body)
   :bind (
          ("M-o m g" . git-gutter-mode)
          ;; ("C-<f10>" . git-gutter:next-hunk)
@@ -5017,7 +5020,8 @@ See URL `https://github.com/golang/lint'."
   (progn
     (setq git-gutter:verbosity 0
           git-gutter:disabled-modes '(org-mode dired-mode wdired-mode ielm-mode)
-          git-gutter:diff-option "HEAD")
+          git-gutter:diff-option ""
+          git-gutter:update-interval 1.6)
     (when window-system
       (let ((symbol (char-to-string
                      (if (char-displayable-p ?∎) ?∎ ?*))))
@@ -5064,9 +5068,10 @@ See URL `https://github.com/golang/lint'."
         (interactive)
         (my-git-gutter:next-hunk -1))
 
+      (defhydra hydra-git-gutter (:body-pre
+                                  '(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
 
-      (defhydra hydra-git-gutter (:body-pre (git-gutter-mode 1)
-                            :hint nil)
+                                  :hint nil)
   "
 Git gutter:
   _j_: next hunk        _s_tage hunk         (_1_) diff option HEAD         _q_uit
@@ -5085,13 +5090,17 @@ Git gutter:
   ("r" git-gutter:revert-hunk)
   ("p" git-gutter:popup-hunk)
 
-  ("R" git-gutter:set-start-revision)
+  ("R" (progn (call-interactively 'git-gutter:set-start-revision)
+              (git-gutter:update-all-windows)))
   ("D" (progn (let ((rev (nth 1 (magit--get-default-branch))))
                 (git-gutter:set-start-revision rev)
                 (message "set start revision to: %s " rev))))
-  ("1" (progn (setq git-gutter:diff-option "HEAD") (git-gutter)))
-  ("2" (progn (setq git-gutter:diff-option "--cached") (git-gutter)))
-  ("3" (progn (setq git-gutter:diff-option "")  (git-gutter)))
+  ("1" (progn (setq git-gutter:diff-option "HEAD")
+              (git-gutter:update-all-windows)))
+  ("2" (progn (setq git-gutter:diff-option "--cached")
+              (git-gutter:update-all-windows)))
+  ("3" (progn (setq git-gutter:diff-option "")
+              (git-gutter:update-all-windows)))
 
   ("q" nil :color blue)
   ("Q" (progn (git-gutter-mode -1)
