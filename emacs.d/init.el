@@ -5021,7 +5021,8 @@ See URL `https://github.com/golang/lint'."
     (setq git-gutter:verbosity 0
           git-gutter:disabled-modes '(org-mode dired-mode wdired-mode ielm-mode)
           git-gutter:diff-option ""
-          git-gutter:update-interval 1.6)
+          ;; git-gutter:update-interval 1.6 ;; seems to be something wrong with this
+          )
     (when window-system
       (let ((symbol (char-to-string
                      (if (char-displayable-p ?∎) ?∎ ?*))))
