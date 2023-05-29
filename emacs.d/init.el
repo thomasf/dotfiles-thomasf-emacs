@@ -4730,7 +4730,137 @@ If FILE already exists, signal an error."
      flycheck-completion-system 'ido
      flycheck-standard-error-navigation nil
      flycheck-navigation-minimum-level 'info
-     flycheck-error-list-minimum-level nil)
+     flycheck-error-list-minimum-level nil
+     flycheck-checkers '(ada-gnat
+                         asciidoctor
+                         asciidoc
+                         awk-gawk
+                         bazel-build-buildifier
+                         bazel-module-buildifier
+                         bazel-starlark-buildifier
+                         bazel-workspace-buildifier
+                         c/c++-clang
+                         c/c++-gcc
+                         c/c++-cppcheck
+                         cfengine
+                         chef-foodcritic
+                         coffee
+                         coffee-coffeelint
+                         coq
+                         css-csslint
+                         css-stylelint
+                         cuda-nvcc
+                         cwl
+                         d-dmd
+                         dockerfile-hadolint
+                         elixir-credo
+                         emacs-lisp
+                         emacs-lisp-checkdoc
+                         ember-template
+                         erlang-rebar3
+                         erlang
+                         eruby-erubis
+                         eruby-ruumba
+                         fortran-gfortran
+                         go-gofmt
+                         go-golint
+                         go-vet
+                         go-build
+                         go-test
+                         go-errcheck
+                         go-unconvert
+                         go-staticcheck
+                         groovy
+                         haml
+                         handlebars
+                         haskell-stack-ghc
+                         haskell-ghc
+                         haskell-hlint
+                         html-tidy
+                         javascript-eslint
+                         javascript-jshint
+                         javascript-standard
+                         json-jsonlint
+                         json-python-json
+                         json-jq
+                         jsonnet
+                         less
+                         less-stylelint
+                         llvm-llc
+                         lua-luacheck
+                         lua
+                         markdown-markdownlint-cli
+                         markdown-mdl
+                         nix
+                         nix-linter
+                         opam
+                         perl
+                         perl-perlcritic
+                         php
+                         php-phpmd
+                         php-phpcs
+                         processing
+                         proselint
+                         protobuf-protoc
+                         protobuf-prototool
+                         pug
+                         puppet-parser
+                         puppet-lint
+                         python-flake8
+                         python-pylint
+                         python-pycompile
+                         python-pyright
+                         python-mypy
+                         r-lintr
+                         racket
+                         rpm-rpmlint
+                         rst-sphinx
+                         rst
+                         ruby-rubocop
+                         ruby-standard
+                         ruby-reek
+                         ruby-rubylint
+                         ruby
+                         ruby-jruby
+                         rust-cargo
+                         rust
+                         rust-clippy
+                         scala
+                         scala-scalastyle
+                         scheme-chicken
+                         scss-lint
+                         scss-stylelint
+                         sass/scss-sass-lint
+                         sass
+                         scss
+                         sh-bash
+                         sh-posix-dash
+                         sh-posix-bash
+                         sh-zsh
+                         sh-shellcheck
+                         slim
+                         slim-lint
+                         sql-sqlint
+                         systemd-analyze
+                         tcl-nagelfar
+                         terraform
+                         terraform-tflint
+                         tex-chktex
+                         tex-lacheck
+                         texinfo
+                         textlint
+                         typescript-tslint
+                         verilog-verilator
+                         vhdl-ghdl
+                         xml-xmlstarlet
+                         xml-xmllint
+                         yaml-jsyaml
+                         yaml-ruby
+                         yaml-yamllint
+                         python-ruff))
+
+    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile))
+
     (defun my-flycheck-cycle-error-navigation-min-level ()
       (interactive)
       (message "flycheck-navigation-minimum-level: %s"
@@ -4753,6 +4883,7 @@ If FILE already exists, signal an error."
            (hardhat-buffer-included-p (current-buffer))
            (current-buffer-remote-p))
         (flycheck-mode)))
+
     (add-hook 'python-base-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'js2-jsx-mode-hook 'flycheck-turn-on-maybe)
@@ -4766,7 +4897,9 @@ If FILE already exists, signal an error."
     (add-hook 'go-ts-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'arduino-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'sh-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe))
+    (add-hook 'haskell-mode-hook 'flycheck-turn-on-maybe)
+    )
+
   :config
   (progn
 
@@ -4938,6 +5071,28 @@ no errors as or more severe than `flycheck-navigation-minimum-level'."
               ("^D.*$" . info)
               ("^N.*$" . info))
             )
+
+      (flycheck-define-checker python-ruff
+        "A Python syntax and style checker using the ruff utility.
+To override the path to the ruff executable, set
+`flycheck-python-ruff-executable'.
+See URL `http://pypi.python.org/pypi/ruff'."
+        :command ("ruff"
+                  "--format=text"
+                  (eval (when buffer-file-name
+                          (concat "--stdin-filename=" buffer-file-name)))
+                  "-")
+        :standard-input t
+        :error-filter (lambda (errors)
+                        (let ((errors (flycheck-sanitize-errors errors)))
+                          (seq-map #'flycheck-flake8-fix-error-level errors)))
+        :error-patterns
+        ((warning line-start
+                  (file-name) ":" line ":" (optional column ":") " "
+                  (id (one-or-more (any alpha)) (one-or-more digit)) " "
+                  (message (one-or-more not-newline))
+                  line-end))
+        :modes (python-mode python-ts-mode))
 
       ;; this demotes go-golint from warning to info
       (flycheck-define-checker go-golint
@@ -6791,16 +6946,21 @@ drag the viewpoint on the image buffer that the window displays."
     (setq lsp-gopls-codelens nil
           lsp-idle-delay 0.2
           lsp-file-watch-threshold 15000
-
           lsp-diagnostics-provider :flycheck
           ;; lsp-diagnostics-provider :none
-          ;; lsp-diagnostics-disabled-modes '(go-mode)
-          lsp-pyls-configuration-sources ["flake8"]
-          lsp-pyls-plugins-flake8-enabled t
-          lsp-pyls-plugins-autopep8-enabled nil
-          lsp-pyls-plugins-pycodestyle-enabled nil
-          lsp-pyls-plugins-yapf-enabled nil
-          lsp-pyls-plugins-pydocstyle-enabled nil)
+          lsp-diagnostics-disabled-modes '(go-mode python-mode python-ts-mode go-ts-mode)
+          lsp-pylsp-configuration-sources ["flake8"]
+          ;; lsp-pylsp-configuration-sources ["ruff"]
+          lsp-pylsp-configuration-sources nil
+          lsp-pylsp-plugins-flake8-enabled t
+          lsp-pylsp-plugins-autopep8-enabled nil
+          lsp-pylsp-plugins-pycodestyle-enabled nil
+          lsp-pylsp-plugins-pyflakes-enabled nil
+          lsp-pylsp-plugins-autopep8-enabled nil
+          lsp-pylsp-plugins-pylint-enabled nil
+          lsp-pylsp-plugins-yapf-enabled nil
+          lsp-pylsp-plugins-pydocstyle-enabled nil
+          )
 
 
     (defun lsp-diagnostics-toggle-major-mode ()
@@ -6878,14 +7038,16 @@ drag the viewpoint on the image buffer that the window displays."
       (progn
         (add-hook 'java-mode-hook #'lsp)))
 
-    (use-package lsp-haskell
-      :ensure t
-      :after haskell
-      :init
-      (progn
-        (when (executable-find* "haskell-language-server"
-                                "install haskell-language-server https://github.com/haskell/haskell-language-server")
-          (add-hook 'haskell-mode-hook #'lsp)))))
+    ;; (use-package lsp-haskell
+    ;;   :ensure t
+    ;;   :after haskell
+    ;;   :init
+    ;;   (progn
+    ;;     (when (executable-find* "haskell-language-server"
+    ;;                             "install haskell-language-server https://github.com/haskell/haskell-language-server")
+    ;;       (add-hook 'haskell-mode-hook #'lsp))))
+
+    )
 
 
 
