@@ -4859,7 +4859,7 @@ If FILE already exists, signal an error."
                          yaml-yamllint
                          python-ruff))
 
-    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile))
+    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile python-pyright))
 
     (defun my-flycheck-cycle-error-navigation-min-level ()
       (interactive)
