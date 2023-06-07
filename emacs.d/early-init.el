@@ -4,9 +4,8 @@
         ))
 (setq tool-bar-mode nil
       menu-bar-mode nil
-      scroll-bar-mode nil)
-
-(setq frame-inhibit-implied-resize t
+      scroll-bar-mode nil
+      frame-inhibit-implied-resize t
       default-frame-alist '((vertical-scroll-bars . nil)
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
