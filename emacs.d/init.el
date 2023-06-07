@@ -4726,7 +4726,7 @@ If FILE already exists, signal an error."
      flycheck-highlighting-mode 'lines
      flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
-     flycheck-disabled-checkers '(javascript-jshint go-megacheck)
+     flycheck-disabled-checkers '(javascript-jshint go-megacheck go-staticcheck go-errcheck)
      flycheck-completion-system 'ido
      flycheck-standard-error-navigation nil
      flycheck-navigation-minimum-level 'info
