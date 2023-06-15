@@ -2862,7 +2862,9 @@ sTo this: ")
       (progn
         (display-line-numbers-mode 1)
         (call-interactively 'goto-line))
-    (display-line-numbers-mode -1)))
+    (display-line-numbers-mode -1))
+  (my-pulse-line))
+
 
 (global-set-key [remap goto-line] 'goto-line-with-feedback)
 
