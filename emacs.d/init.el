@@ -4769,9 +4769,9 @@ If FILE already exists, signal an error."
                          go-vet
                          go-build
                          go-test
-                         go-errcheck
+                         ;; go-errcheck
                          go-unconvert
-                         go-staticcheck
+                         ;; go-staticcheck
                          groovy
                          haml
                          handlebars
