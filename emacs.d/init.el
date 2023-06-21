@@ -8964,13 +8964,10 @@ otherwise use the subtree title."
 
 (use-package realgud
   :ensure realgud
-  :commands (realgud-pdb realgud-gdb pdb)
+  :commands (realgud:pdb realgud:gdb)
   :init
   (progn
-    (setq pdb-command-name "python -m pdb"))
-  :config
-  (progn
-    (defalias 'pdb 'realgud-pdb)))
+    (setq pdb-command-name "python -m pdb")))
 
 
 ;;;; recentf
