@@ -6969,7 +6969,7 @@ drag the viewpoint on the image buffer that the window displays."
           lsp-pylsp-plugins-pylint-enabled nil
           lsp-pylsp-plugins-yapf-enabled nil
           lsp-pylsp-plugins-pydocstyle-enabled nil
-          )
+          lsp-response-timeout 25)
 
 
     (defun lsp-diagnostics-toggle-major-mode ()
