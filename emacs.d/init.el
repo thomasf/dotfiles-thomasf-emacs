@@ -7117,7 +7117,7 @@ drag the viewpoint on the image buffer that the window displays."
      lsp-ui-doc-show-with-cursor nil
 
      lsp-ui-sideline-enable t
-     lsp-ui-sideline-show-code-actions t
+     lsp-ui-sideline-show-code-actions nil
      lsp-ui-sideline-show-hover nil
      lsp-ui-sideline-show-diagnostics nil
      lsp-ui-sideline-show-symbol t
