@@ -6949,6 +6949,8 @@ drag the viewpoint on the image buffer that the window displays."
     (setq lsp-gopls-codelens nil
           lsp-idle-delay 0.2
           lsp-file-watch-threshold 15000
+          lsp-response-timeout 25
+          lsp-auto-execute-action nil
           lsp-diagnostics-provider :flycheck
           ;; lsp-diagnostics-provider :none
           lsp-diagnostics-disabled-modes '(go-mode python-mode python-ts-mode go-ts-mode)
@@ -6963,8 +6965,7 @@ drag the viewpoint on the image buffer that the window displays."
           lsp-pylsp-plugins-autopep8-enabled nil
           lsp-pylsp-plugins-pylint-enabled nil
           lsp-pylsp-plugins-yapf-enabled nil
-          lsp-pylsp-plugins-pydocstyle-enabled nil
-          lsp-response-timeout 25)
+          lsp-pylsp-plugins-pydocstyle-enabled nil)
 
 
     (defun lsp-diagnostics-toggle-major-mode ()
