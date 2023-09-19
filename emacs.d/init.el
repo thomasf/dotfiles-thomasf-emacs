@@ -456,6 +456,8 @@ Works for heads without a property :column."
 
 (defvar my-prog-mode-hooks
   '(prog-mode-hook
+    csharp-mode
+    csharp-ts-mode
     clojure-mode-hook
     emacs-lisp-mode-hook
     go-mode-hook
@@ -3919,13 +3921,6 @@ LEAF is normally ((BEG . END) . WND)."
              counsel-fzf))
 
 
-;;;; csharp-mode
-
-(use-package csharp-mode
-  ;; :ensure t
-  :mode "\\.cs\\'")
-
-
 ;;;; css-mode
 
 (use-package css-mode
@@ -7002,6 +6997,8 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'js-mode-hook #'lsp)
     (add-hook 'go-dot-mod-mode-hook #'lsp)
     (add-hook 'terraform-mode-hook #'lsp)
+    (add-hook 'csharp-mode-hook #'lsp)
+    (add-hook 'csharp-ts-mode-hook #'lsp)
 
     (when (executable-find* "html-languageserver"
                             "yarn global add vscode-html-languageserver-bin")
