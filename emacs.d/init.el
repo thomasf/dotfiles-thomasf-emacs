@@ -1154,8 +1154,11 @@ Works for heads without a property :column."
   :config
   (progn
     (load "solarized-theme-autoloads" nil t)
-    (setq mf-theme-dark 'my-solarized-dark
-          mf-theme-light 'my-solarized-light)))
+    ;; (setq mf-theme-dark 'my-solarized-dark
+    ;;       mf-theme-light 'my-solarized-light)))
+
+    (setq mf-theme-dark 'my-solarized-selenized-dark
+          mf-theme-light 'my-solarized-selenized-light)))
 
 ;; (use-package zenburn-theme
 ;;   :ensure t
