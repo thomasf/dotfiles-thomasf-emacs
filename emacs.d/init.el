@@ -1298,44 +1298,44 @@ Works for heads without a property :column."
 
 ;;;; dynamic-fonts
 
-(defvar my-monospaced-font "Pragmata Pro-12")
+(defvar my-monospaced-font "PragmataPro-12")
 (defvar my-variable-pitch-font "Go-12.5")
 ;; (defvar my-variable-pitch-font "Input Sans Compressed-11.8")
 ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
 (cond
  ((string-prefix-p "transwhale" system-name)
-  (setq my-monospaced-font "Pragmata Pro-12"
+  (setq my-monospaced-font "PragmataPro-12"
         my-variable-pitch-font "Go-12.5"
         dynamic-fonts-preferred-monospace-point-size 12
         dynamic-fonts-preferred-proportional-point-size 12.5))
 
  ((string-prefix-p "prizza" system-name)
-  (setq my-monospaced-font "Pragmata Pro-15"
+  (setq my-monospaced-font "PragmataPro-15"
         my-variable-pitch-font "Go-15.5"
         dynamic-fonts-preferred-monospace-point-size 15
         dynamic-fonts-preferred-proportional-point-size 15.5))
 
  ((string-prefix-p "fogskum" system-name)
-  (setq my-monospaced-font "Pragmata Pro-15"
+  (setq my-monospaced-font "PragmataPro-15"
         my-variable-pitch-font "Go-15.5"
         dynamic-fonts-preferred-monospace-point-size 15
         dynamic-fonts-preferred-proportional-point-size 15.5))
 
  ((string-prefix-p "crangy" system-name)
-  (setq my-monospaced-font "Pragmata Pro-17"
+  (setq my-monospaced-font "PragmataPro-17"
         my-variable-pitch-font "Go-17"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
 
  ((string-prefix-p "dungen" system-name)
-  (setq my-monospaced-font "Pragmata Pro-16"
+  (setq my-monospaced-font "PragmataPro-16"
         my-variable-pitch-font "Go-16"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
 
  ((string-prefix-p "tfr-tracklib" system-name)
-  (setq my-monospaced-font "Pragmata Pro-16"
+  (setq my-monospaced-font "PragmataPro-16"
         my-variable-pitch-font "Go-16"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
