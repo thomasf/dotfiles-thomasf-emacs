@@ -185,8 +185,14 @@ re-downloaded in order to locate PACKAGE."
 (eval-when-compile
   (require 'package)
   (package-initialize t)
-  (require-package 'use-package)
-  (require 'use-package))
+  (require-package 'use-package))
+
+(require 'use-package)
+;; (use-package quelpa
+;;   :ensure t
+;;   :init (progn
+;;           (use-package quelpa-use-package
+;;             :ensure t)))
 
 (require 'cl)
 (require 'subr-x)
@@ -9777,6 +9783,21 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :commands (swiper-isearch
              swiper-isearch-backward))
 
+;;;; copilot
+
+;; (use-package copilot
+;;   :commands (copilot-login
+;;              copilot-mode
+;;              copilot-complete
+;;              copilot-accept-completion
+;;              copilot-panel-complete)
+
+;;   :bind ("s-<tab>" . copilot-accept-completion)
+;;   :quelpa (copilot
+;;            :fetcher github
+;;            :repo "zerolfx/copilot.el"
+;;            :branch "main"
+;;            :files ("dist" "*.el")))
 
 ;;;; sws-mode
 
