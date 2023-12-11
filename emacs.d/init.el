@@ -4290,7 +4290,7 @@ If FILE already exists, signal an error."
 
 (use-package dockerfile-mode
   :ensure t
-  :mode (("Dockerfile\\'" . dockerfile-mode))
+  :mode (("Dockerfile" . dockerfile-mode))
   :init
   (progn
     (setq-default docker-use-sudo nil)))
