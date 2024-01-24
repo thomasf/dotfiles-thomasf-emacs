@@ -1,6 +1,5 @@
 # name: if error
 # key: iferr
-# description: iferr snippet
 # --
 if err != nil {
 	$0

@@ -1,6 +1,5 @@
 # name: ifelse
 # key: ifelse
-# description: if else snippet
 # --
 if ${1:condition} {
 	$0

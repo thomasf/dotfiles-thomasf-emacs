@@ -1,6 +1,5 @@
 # name: interface
 # key: interface
-# description: add an interface
 # --
 type ${1:InterfaceName} interface {
 	${2:MethodName}()	${3:ReturnType}

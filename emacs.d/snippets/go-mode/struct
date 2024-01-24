@@ -1,6 +1,5 @@
 # name: struct
 # key: struct
-# description: add a struct
 # --
 // $1 .
 type $1 struct {

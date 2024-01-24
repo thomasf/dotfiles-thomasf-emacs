@@ -1,6 +1,5 @@
 # name: bench
 # key: bench
-# description: add a benchmark method
 # --
 func Benchmark${1:Feature}(b *testing.B) {
     for i := 0; i < b.N; i++ {

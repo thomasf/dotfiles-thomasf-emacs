@@ -1,6 +1,5 @@
 # name: for
 # key: for
-# description: for
 # --
 for ${1:elements} {
 	$0

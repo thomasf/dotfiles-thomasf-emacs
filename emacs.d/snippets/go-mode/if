@@ -1,6 +1,5 @@
 # name: if
 # key: if
-# description: if snippet
 # --
 if ${1:condition} {
 	$0

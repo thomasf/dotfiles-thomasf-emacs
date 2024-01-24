@@ -1,6 +1,5 @@
 # name: func
 # key: func
-# description: func
 # --
 func $1($0) {
 

@@ -1,4 +1,3 @@
-# Author: Jonas Bonèr <jonas@jonasboner.com>
 # name: for (x <- xs) { ... }
 # key: for
 # --

@@ -1,6 +1,5 @@
 # name: make
 # key: make
-# description: snippet for make builtin
 # --
 make(${1:Type}, ${2:startingSize}, ${3:memorySize})
 $0
