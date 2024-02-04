@@ -10,3 +10,4 @@
                             (tool-bar-lines . 0)
                             (menu-bar-lines . 0)
                             (fullscreen . nil)))
+(setenv "LSP_USE_PLISTS" "true")
