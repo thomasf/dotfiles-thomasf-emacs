@@ -3920,6 +3920,23 @@ LEAF is normally ((BEG . END) . WND)."
   :commands (constants-get constants-insert constants-replace))
 
 
+;;;; copilot
+
+;; (use-package copilot
+;;   :commands (copilot-login
+;;              copilot-mode
+;;              copilot-complete
+;;              copilot-accept-completion
+;;              copilot-panel-complete)
+
+;;   :bind ("s-<tab>" . copilot-accept-completion)
+;;   :quelpa (copilot
+;;            :fetcher github
+;;            :repo "zerolfx/copilot.el"
+;;            :branch "main"
+;;            :files ("dist" "*.el")))
+
+
 ;;;; counsel
 
 (use-package counsel
@@ -9796,21 +9813,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :commands (swiper-isearch
              swiper-isearch-backward))
 
-;;;; copilot
-
-;; (use-package copilot
-;;   :commands (copilot-login
-;;              copilot-mode
-;;              copilot-complete
-;;              copilot-accept-completion
-;;              copilot-panel-complete)
-
-;;   :bind ("s-<tab>" . copilot-accept-completion)
-;;   :quelpa (copilot
-;;            :fetcher github
-;;            :repo "zerolfx/copilot.el"
-;;            :branch "main"
-;;            :files ("dist" "*.el")))
 
 ;;;; sws-mode
 
