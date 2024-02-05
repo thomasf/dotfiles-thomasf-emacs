@@ -5519,6 +5519,13 @@ Git gutter:
          ("\\.gradle\\'" . groovy-mode)))
 
 
+;;;; gtpel
+
+(use-package gptel
+  :ensure t
+  :commands (gptel gptel-send))
+
+
 ;;;; handlebars-mode
 
 (use-package handlebars-mode
