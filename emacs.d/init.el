@@ -5540,6 +5540,8 @@ Git gutter:
 
 (use-package gptel
   :ensure t
+  :config (progn
+            (load "gptel-autoloads" nil t))
   :commands (gptel gptel-send))
 
 
