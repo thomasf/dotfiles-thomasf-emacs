@@ -5542,7 +5542,10 @@ Git gutter:
   :ensure t
   :config (progn
             (load "gptel-autoloads" nil t))
-  :commands (gptel gptel-send))
+  :commands (gptel gptel-send)
+  :init
+  (progn
+    (setq gptel-model "gpt-4")))
 
 
 ;;;; handlebars-mode
