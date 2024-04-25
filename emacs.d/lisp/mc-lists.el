@@ -93,6 +93,7 @@
         kill-sexp
         live-cycle-clj-coll
         magit-stage-item
+        markdown-end-of-line
         markdown-enter-key
         markdown-exdent-or-delete
         markdown-outdent-or-delete
