@@ -4465,6 +4465,7 @@ If FILE already exists, signal an error."
     (hook-into-modes #'editorconfig-mode my-html-like-mode-hooks))
   :config
   (progn
+    (load "editorconfig-autoloads" nil t)
     (require 'editorconfig-core)
     (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash)
     (and (not noninteractive)
@@ -7242,7 +7243,7 @@ drag the viewpoint on the image buffer that the window displays."
       :commands (orgit-store-link))
 
     (use-package magit-blame
-      :commands magit-blame-mode)
+      :commands (magit-blame-mode magit-blame))
 
     (use-package magit-wip
       :commands (magit-wip-save-mode
@@ -7264,6 +7265,7 @@ drag the viewpoint on the image buffer that the window displays."
         (call-interactively 'my-magit-status))))
   :config
   (progn
+    (load "magit-autoloads" nil t)
     (use-package magit-section
       :ensure t)
     (use-package forge
