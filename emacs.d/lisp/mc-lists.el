@@ -210,6 +210,7 @@
         wdired--self-insert
         wdired-next-line
         whole-line-or-region-comment-dwim
+        whole-line-or-region-copy-region-as-kill
         whole-line-or-region-kill-region
         whole-line-or-region-kill-ring-save
         whole-line-or-region-yank
