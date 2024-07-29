@@ -5546,7 +5546,7 @@ Git gutter:
   :commands (gptel gptel-send)
   :init
   (progn
-    (setq gptel-model "gpt-4")))
+    (setq gptel-model "gpt-4o")))
 
 
 ;;;; handlebars-mode
