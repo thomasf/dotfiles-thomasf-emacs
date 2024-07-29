@@ -250,6 +250,7 @@
         ibuffer
         ido-find-file
         ido-switch-buffer
+        ignore-preserving-kill-region
         image-mouse-scroll-position
         intelligent-close
         js2r-extract-var
