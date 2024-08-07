@@ -5651,7 +5651,7 @@ Git gutter:
        )
      hardhat-fullpath-editable-regexps
      '("~/\\.cpan/CPAN/MyConfig\\.pm\\'"
-       "/\\.git/.*\\(?:[A-Z_]*_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\)\\'"
+       "/\\.git/.*\\(?:[A-Z_]*_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\|notes\.txt\\)\\'"
        ;; "~/\\.cabal/"
        ;; "~/perl5/perlbrew/"
        ;; "~/\\.npm/"
