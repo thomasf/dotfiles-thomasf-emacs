@@ -7201,7 +7201,7 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :defer 19
   :commands (magit-log magit-run-gitk magit-run-git-gui
-                       magit-status magit-git-repo-p magit-list-repos magit-find-git-config-file)
+                       magit-status magit-git-repo-p magit-list-repos find-git-notes-txt)
   :bind (("M-o G" . my-magit-status-with-prefix)
          ("M-o g" . my-magit-status)
          ("C-h g" . my-magit-status)
@@ -7249,11 +7249,6 @@ drag the viewpoint on the image buffer that the window displays."
       :commands (magit-wip-save-mode
                  global-magit-wip-save-mode))
 
-    (defun find-git-notes-txt ()
-      "Open notes.txt in current .git repo"
-      (interactive)
-      (magit-find-git-config-file "notes.txt"))
-
     (defun git-wip ()
       "run git wip"
       (interactive)
@@ -7271,6 +7266,12 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
     (load "magit-autoloads" nil t)
+
+    (defun find-git-notes-txt ()
+      "Open notes.txt in current .git repo"
+      (interactive)
+      (find-file (file-name-concat (magit-gitdir) "notes.txt")))
+
     (use-package magit-section
       :ensure t)
     (use-package forge
