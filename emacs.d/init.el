@@ -2455,6 +2455,25 @@ display, depending on the window manager)."
 (bind-key "C-s-v" 'yank-selection)
 
 
+;;;;; yank-all-visible-text
+
+(defun yank-all-visible-text ()
+  "Yank all visible text from all frames and windows into the kill ring."
+  (interactive)
+  (let ((text ""))
+    (dolist (frame (visible-frame-list))
+      (dolist (window (window-list frame 'no-minibuffer))
+        (with-current-buffer (window-buffer window)
+          (setq text (concat text
+                             (format "\n--- Buffer: %s ---\n" (buffer-name))
+                             (buffer-substring-no-properties
+                              (window-start window)
+                              (window-end window)))))))
+    (when (string< "" text)
+      (kill-new text)
+      (message "Yanked %d characters from all visible windows." (length text)))))
+
+
 ;;;;; enable "regular" backspace behaviour in isearch
 
 (defun isearch-delete-something ()
