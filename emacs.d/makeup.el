@@ -18,6 +18,7 @@
 
 (makeup-log "Delete ELPA leftovers and setup package.el.")
 (require 'package)
+(setq package-user-dir (locate-user-emacs-file (format "elpa.%d" emacs-major-version)))
 (mkdir package-user-dir t)
 (let ((default-directory package-user-dir))
   (mapc (lambda (dir)

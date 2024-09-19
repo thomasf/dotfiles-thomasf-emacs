@@ -23,6 +23,8 @@ See also `locate-user-emacs-file'.")
 (defconst user-notes-directory
   (file-truename "~/notes"))
 
+(setq package-user-dir (locate-user-emacs-file (format "elpa.%d" emacs-major-version)))
+
 ;; These should always exist
 (make-directory user-data-directory t)
 (make-directory user-cache-directory t)
