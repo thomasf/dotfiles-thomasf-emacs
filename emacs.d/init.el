@@ -7246,8 +7246,8 @@ drag the viewpoint on the image buffer that the window displays."
      magit-auto-revert-mode-lighter ""
      magit-revert-buffers 'silent)
 
-    (defadvice magit-version (around skipit activate)
-      "900000000")
+    ;; (defadvice magit-version (around skipit activate)
+    ;;   "900000000")
 
     ;; (use-package magit-circleci
     ;;   :ensure t
