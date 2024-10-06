@@ -7257,9 +7257,10 @@ drag the viewpoint on the image buffer that the window displays."
     ;;     (setq magit-circleci-n-builds 15)
     ;;     (magit-circleci-mode)))
 
-    (use-package orgit
-      :ensure t
-      :commands (orgit-store-link))
+    ;; stopped working in recent magit update as of 2024-10-06
+    ;; (use-package orgit
+    ;;   :ensure t
+    ;;   :commands (orgit-store-link))
 
     (use-package magit-blame
       :commands (magit-blame-mode magit-blame))
@@ -7839,8 +7840,11 @@ Titus von der Malsburg."
   (progn
     (use-package org-contrib
       :ensure t)
-    (use-package orgit
-      :ensure t)
+
+    ;; stopped working in recent magit update as of 2024-10-06
+    ;; (use-package orgit
+    ;;   :ensure t)
+
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
     (setq org-modules '(org-bbdb org-bibtex org-docview org-habit
