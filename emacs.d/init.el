@@ -7018,7 +7018,7 @@ drag the viewpoint on the image buffer that the window displays."
           lsp-diagnostics-provider :flycheck
           ;; lsp-diagnostics-provider :none
           lsp-diagnostics-disabled-modes '(go-mode python-mode python-ts-mode go-ts-mode)
-          lsp-disabled-clients '(semgrep-ls)
+          lsp-disabled-clients '(semgrep-ls ruff)
           lsp-pylsp-configuration-sources ["flake8"]
           ;; lsp-pylsp-configuration-sources ["ruff"]
           lsp-pylsp-configuration-sources nil
