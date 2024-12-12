@@ -475,7 +475,9 @@ Works for heads without a property :column."
     kivy-mode-hook
     pyhon-mode-hook
     qml-mode-hook
-    ruby-mode-hook))
+    ruby-mode-hook
+    typescript-mode-hook
+    typescript-ts-mode-hook))
 
 
 ;;;; lisp modes
@@ -3408,6 +3410,7 @@ for the current buffer's file name, and the line number at point."
                (eq major-mode 'js2-mode)
                (eq major-mode 'js2-jsx-mode)
                (eq major-mode 'typescript-mode)
+               (eq major-mode 'typescript-ts-mode)
                (eq major-mode 'rust-mode)
                (eq major-mode 'go-mode)
                (eq major-mode 'go-ts-mode)
@@ -4930,6 +4933,7 @@ If FILE already exists, signal an error."
     (add-hook 'js-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'web-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'typescript-mode 'my-node_modules-flycheck-hook)
+    (add-hook 'typescript-ts-mode 'my-node_modules-flycheck-hook)
 
     (defun flycheck-turn-on-maybe ()
       (unless
@@ -7055,10 +7059,11 @@ drag the viewpoint on the image buffer that the window displays."
         (setq lsp-diagnostics-provider :none))
       (message "%s" lsp-diagnostics-provider))
 
-    (add-hook 'python-base-mode-hook #'lsp)
+    ;; (add-hook 'python-base-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
+    (add-hook 'typescript-ts-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
     (add-hook 'go-dot-mod-mode-hook #'lsp)
     (add-hook 'terraform-mode-hook #'lsp)
@@ -7101,6 +7106,18 @@ drag the viewpoint on the image buffer that the window displays."
         (progn
          (setq lsp-clients-kotlin-server-executable (expand-file-name "~/src/github.com/fwcd/kotlin-language-server/server/build/install/server/bin/kotlin-language-server"))
           (add-hook 'kotlin-mode-hook #'lsp))))
+
+
+    (use-package lsp-pyright
+      :ensure t
+      :init
+      (progn
+        (setq lsp-pyright-langserver-command "basedpyright")
+        (defun my-lsp-pyright-hook ()
+          (require 'lsp-pyright)
+          (lsp))
+        (add-hook 'python-base-mode-hook #'my-lsp-pyright-hook)))
+
 
     (use-package lsp-java
       :ensure t
