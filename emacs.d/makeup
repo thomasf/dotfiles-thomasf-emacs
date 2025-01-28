@@ -3,17 +3,44 @@
 set -e
 # set -x
 
-elpadir="elpa.$(emacs  -batch --eval '(princ emacs-major-version)')"
-# echo $elpadir
-export elpadir
+usage() {
+  echo "Usage: $0 [options]"
+  echo "Options:"
+  echo "  --emacs        Path to the Emacs binary (default: emacs)"
+  echo "  -h, --help     Display this help message and exit"
+}
+
+emacs="emacs"
+
+while [[ "$#" -gt 0 ]]; do
+  case $1 in
+    --emacs)
+      emacs="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown option: $1"
+      usage
+      exit 1
+      ;;
+  esac
+done
+
+suffix="$($emacs -batch --eval '(princ emacs-major-version)')"
+export elpadir="elpa.$suffix"
+
 (
   set -e
-  cd $elpadir
+  cd "$elpadir"
   git init -q .
   echo '!*.elc' > .gitignore
   git add -A .
-  git commit -q -m"update packages"
+  git commit -q -m "update packages"
 ) || true
 
 ./clean
-exec emacs --no-site -batch -l makeup.el
+exec "$emacs" --no-site -batch -l makeup.el
