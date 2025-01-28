@@ -4281,7 +4281,7 @@ If FILE already exists, signal an error."
 ;;;; direx
 
 (use-package direx
-  ;; :disabled t  ;; direx is not compatible with emacs-29 (probably)
+  :disabled t  ;; direx is not compatible with emacs-30 (probably)
   :ensure t
   :commands (direx:jump-to-directory direx:jump-to-directory-noselect
                                      direx:jump-to-directory-other-window)
@@ -10092,6 +10092,25 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
   :commands (flip-frame flop-frame)
   :bind (("M-o M-f" . flop-frame)))
 
+
+;;;; treemacs
+
+(use-package treemacs
+  :ensure t
+  :defer t
+  :commands (treemacs)
+  :bind (("C-x C-d" . treemacs-select-window))
+  :config
+  (progn
+    (load "treemacs-autoloads" nil t)
+    (setq
+     treemacs-select-when-already-in-treemacs 'close
+     treemacs-display-in-side-window t
+     treemacs-no-png-images t
+     treemacs-recenter-after-file-follow t)
+    (treemacs-follow-mode 1)
+    (treemacs-project-follow-mode 1))
+  )
 
 ;;;; truthy
 
