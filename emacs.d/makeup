@@ -1,13 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
+set -e
+# set -x
+
+elpadir="elpa.$(emacs  -batch --eval '(princ emacs-major-version)')"
+# echo $elpadir
+export elpadir
 (
   set -e
-  cd elpa
+  cd $elpadir
   git init -q .
   echo '!*.elc' > .gitignore
   git add -A .
   git commit -q -m"update packages"
-)
+) || true
 
 ./clean
 exec emacs --no-site -batch -l makeup.el
