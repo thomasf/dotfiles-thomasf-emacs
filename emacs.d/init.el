@@ -4476,9 +4476,12 @@ If FILE already exists, signal an error."
 
 ;;;; editorconfig
 
+(eval-when-compile ;; editorconfig is included in emacs 30
+  (when (<= emacs-major-version 30)
+    (require-package 'editorconfig)))
+
 (use-package editorconfig
   :commands (editorconfig-mode editorconfig-apply)
-  :ensure t
   :diminish editorconfig-mode
   :init
   (progn
@@ -4487,12 +4490,12 @@ If FILE already exists, signal an error."
     (hook-into-modes #'editorconfig-mode my-html-like-mode-hooks))
   :config
   (progn
-    (load "editorconfig-autoloads" nil t)
-    (require 'editorconfig-core)
-    (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash)
+    (when (<= emacs-major-version 30)
+      (load "editorconfig-autoloads" nil t)
+      (require 'editorconfig-core)
+      (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash))
     (and (not noninteractive)
-       (buffer-file-name)
-       (editorconfig-apply))))
+       (editorconfig-mode 1))))
 
 
 ;;;; eimp
