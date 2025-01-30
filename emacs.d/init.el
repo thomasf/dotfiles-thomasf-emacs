@@ -7312,6 +7312,7 @@ drag the viewpoint on the image buffer that the window displays."
     (use-package magit-section
       :ensure t)
     (use-package forge
+      :disabled t
       :ensure t
 
       :init
