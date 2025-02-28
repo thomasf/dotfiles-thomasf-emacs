@@ -7025,7 +7025,7 @@ drag the viewpoint on the image buffer that the window displays."
           lsp-diagnostics-provider :flycheck
           ;; lsp-diagnostics-provider :none
           lsp-diagnostics-disabled-modes '(go-mode python-mode python-ts-mode go-ts-mode)
-          lsp-disabled-clients '(semgrep-ls ruff)
+          lsp-disabled-clients '(semgrep-ls ruff pyright)
           lsp-pylsp-configuration-sources ["flake8"]
           ;; lsp-pylsp-configuration-sources ["ruff"]
           lsp-pylsp-configuration-sources nil
@@ -7062,7 +7062,7 @@ drag the viewpoint on the image buffer that the window displays."
         (setq lsp-diagnostics-provider :none))
       (message "%s" lsp-diagnostics-provider))
 
-    ;; (add-hook 'python-base-mode-hook #'lsp)
+    (add-hook 'python-base-mode-hook #'lsp)
     (add-hook 'js2-mode-hook #'lsp)
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
@@ -7112,6 +7112,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
     (use-package lsp-pyright
+      :disabled t
       :ensure t
       :init
       (progn
