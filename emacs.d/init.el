@@ -1312,6 +1312,12 @@ Works for heads without a property :column."
 ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
 (cond
+ ((string-prefix-p "flam" system-name)
+  (setq my-monospaced-font "PragmataPro-12"
+        my-variable-pitch-font "Go-12.5"
+        dynamic-fonts-preferred-monospace-point-size 12
+        dynamic-fonts-preferred-proportional-point-size 12.5))
+
  ((string-prefix-p "transwhale" system-name)
   (setq my-monospaced-font "PragmataPro-12"
         my-variable-pitch-font "Go-12.5"
@@ -4393,7 +4399,7 @@ If FILE already exists, signal an error."
      ediff-before-flag-mol "»»»"
      ediff-after-flag-mol "«««"
      ediff-window-setup-function 'ediff-setup-windows-plain
-     ediff-split-window-function (if (string= system-name "transwhale") 'split-window-vertically
+     ediff-split-window-function (if (or (string= system-name "transwhale") (string= system-name "flam")) 'split-window-vertically
                                    'split-window-horizontally)
      ediff-merge-split-window-function ediff-split-window-function )
 
