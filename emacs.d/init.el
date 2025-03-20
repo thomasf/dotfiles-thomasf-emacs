@@ -4490,7 +4490,7 @@ If FILE already exists, signal an error."
     (hook-into-modes #'editorconfig-mode my-html-like-mode-hooks))
   :config
   (progn
-    (when (<= emacs-major-version 30)
+    (when (< emacs-major-version 30)
       (load "editorconfig-autoloads" nil t)
       (require 'editorconfig-core)
       (setq editorconfig-get-properties-function 'editorconfig-core-get-properties-hash))
