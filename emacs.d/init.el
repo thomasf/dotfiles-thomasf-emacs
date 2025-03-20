@@ -10806,6 +10806,14 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
     (unbind-key "C-j" zencoding-mode-keymap)))
 
 
+;;;; zig-ts-mode
+
+(use-package zig-ts-mode
+  :defer t
+  :commands (zig-ts-mode)
+  :mode ("\\.zig\\'" . zig-ts-mode))
+
+
 ;;; settings that might have been set by loading libraries
 
 ;;;; set cursor options
