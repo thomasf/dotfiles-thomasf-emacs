@@ -5910,22 +5910,22 @@ Git gutter:
 
 ;;;; helm-git-grep
 
-(use-package helm-git-grep
-  :ensure t
-  :commands (helm-git-grep
-             helm-git-grep-1
-             helm-git-grep-at-point)
-  :init
-  (progn
-    (defun helm-git-grep-region ()
-      "Helm git grep with region
-if submodules exists, grep submodules too."
-      (interactive)
-      (let* ((symbol (buffer-substring (mark) (point)))
-             (input (if symbol (concat symbol " ") nil)))
-        (helm-git-grep-1 input)))
-    (define-key search-map "g" 'helm-git-grep-region)
-    ))
+;; (use-package helm-git-grep
+;;   :ensure t
+;;   :commands (helm-git-grep
+;;              helm-git-grep-1
+;;              helm-git-grep-at-point)
+;;   :init
+;;   (progn
+;;     (defun helm-git-grep-region ()
+;;       "Helm git grep with region
+;; if submodules exists, grep submodules too."
+;;       (interactive)
+;;       (let* ((symbol (buffer-substring (mark) (point)))
+;;              (input (if symbol (concat symbol " ") nil)))
+;;         (helm-git-grep-1 input)))
+;;     (define-key search-map "g" 'helm-git-grep-region)
+;;     ))
 
 
 ;;;; helm-orgcard
