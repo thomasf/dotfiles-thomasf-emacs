@@ -8944,10 +8944,18 @@ otherwise use the subtree title."
 
     (use-package py-ruff-fmt-buffer
       :commands (py-ruff-fmt-buffer))
+
+    (defun my-python-format-buffer ()
+        "format buffer with black or ruff depending on whats installed"
+        (interactive)
+        (cond
+         ((executable-find "black" ) (py-black-buffer))
+         ((executable-find "ruff" ) (py-ruff-fmt-buffer))))
+
     (defun python-cccc ()
       (interactive)
       (silent-save-some-buffers)
-      (py-black-buffer)
+      (my-python-format-buffer)
       ;; (py-isort-buffer)
       )
 
