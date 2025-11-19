@@ -8942,6 +8942,8 @@ otherwise use the subtree title."
     (use-package py-black
       :commands (py-black-buffer))
 
+    (use-package py-ruff-fmt-buffer
+      :commands (py-ruff-fmt-buffer))
     (defun python-cccc ()
       (interactive)
       (silent-save-some-buffers)
