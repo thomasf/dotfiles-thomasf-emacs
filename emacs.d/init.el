@@ -8942,7 +8942,7 @@ otherwise use the subtree title."
     (use-package py-black
       :commands (py-black-buffer))
 
-    (use-package py-ruff-fmt-buffer
+    (use-package py-ruff-fmt
       :commands (py-ruff-fmt-buffer))
 
     (defun my-python-format-buffer ()
