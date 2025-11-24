@@ -4926,7 +4926,8 @@ If FILE already exists, signal an error."
                          yaml-yamllint
                          python-ruff))
 
-    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile python-pyright))
+    ;; (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile python-pyright))
+    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile pylsp))
 
     (defun my-flycheck-cycle-error-navigation-min-level ()
       (interactive)
@@ -7031,7 +7032,8 @@ drag the viewpoint on the image buffer that the window displays."
           lsp-diagnostics-provider :flycheck
           ;; lsp-diagnostics-provider :none
           lsp-diagnostics-disabled-modes '(go-mode python-mode python-ts-mode go-ts-mode)
-          lsp-disabled-clients '(semgrep-ls ruff pyright)
+          ;; lsp-disabled-clients '(semgrep-ls ruff pyright)
+          lsp-disabled-clients '(semgrep-ls ruff)
           lsp-pylsp-configuration-sources ["flake8"]
           ;; lsp-pylsp-configuration-sources ["ruff"]
           lsp-pylsp-configuration-sources nil
@@ -7118,7 +7120,7 @@ drag the viewpoint on the image buffer that the window displays."
 
 
     (use-package lsp-pyright
-      :disabled t
+      ;; :disabled t
       :ensure t
       :init
       (progn
