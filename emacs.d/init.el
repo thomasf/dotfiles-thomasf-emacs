@@ -10533,7 +10533,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 
 (use-package winner
   :if (and  (not noninteractive))
-  :bind (("M-N" . winner-redo)
+  :bind* (("M-N" . winner-redo)
          ("M-P" . winner-undo))
   :init
   (progn
