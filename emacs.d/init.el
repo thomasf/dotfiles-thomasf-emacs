@@ -10177,6 +10177,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
   :init
   (progn
     (setq
+     undo-tree-auto-save-history nil
      undo-tree-visualizer-timestamps t
      undo-tree-history-directory-alist
      (list (cons "." (expand-file-name
