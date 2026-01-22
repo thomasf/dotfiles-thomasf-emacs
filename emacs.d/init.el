@@ -7273,7 +7273,9 @@ drag the viewpoint on the image buffer that the window displays."
      magit-log-auto-more t
      magit-auto-revert-mode t
      magit-auto-revert-mode-lighter ""
-     magit-revert-buffers 'silent)
+     magit-revert-buffers 'silent
+     magit-revision-insert-related-refs t
+     magit-revision-insert-related-refs-display-alist '((contained . nil)))
 
     ;; (defadvice magit-version (around skipit activate)
     ;;   "900000000")
