@@ -209,6 +209,7 @@
         upcase-region
         wdired--self-insert
         wdired-next-line
+        wdired-upcase-word
         whole-line-or-region-comment-dwim
         whole-line-or-region-copy-region-as-kill
         whole-line-or-region-kill-region
