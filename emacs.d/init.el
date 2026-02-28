@@ -4971,25 +4971,6 @@ If FILE already exists, signal an error."
 
   :config
   (progn
-
-    ;; patch start
-    ;;
-    ;; TODO: patched because of https://github.com/flycheck/flycheck/issues/1856
-    ;;
-    (defun flycheck-error-level-interesting-p (err)
-      "Check if ERR severity is >= `flycheck-navigation-minimum-level'.
-
-ERR is also interesting (the function returns true) if there are
-no errors as or more severe than `flycheck-navigation-minimum-level'."
-      (when (flycheck-error-p err)
-        (message "flycheck-navigation-minimum-level %S" flycheck-navigation-minimum-level )
-        (message "(flycheck-error-level-severity min-level) %S" (flycheck-error-level-severity flycheck-navigation-minimum-level) )
-        (message "(flycheck-error-level-severity (flycheck-error-level err)) %S" (flycheck-error-level-severity (flycheck-error-level err)) )
-        ;; (message "%sh" (flycheck-error-level-severity min-level))
-        (-if-let (min-level flycheck-navigation-minimum-level)
-            (or (<= (flycheck-error-level-severity min-level)
-                  (flycheck-error-level-severity (flycheck-error-level err))))
-          t)))
     ;;
     ;; patch end
     ;;
