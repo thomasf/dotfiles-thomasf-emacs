@@ -7808,7 +7808,7 @@ Titus von der Malsburg."
     (assq-delete-all 'org package--builtin-versions)))
 
 (use-package org
-  :ensure org
+  ;; :ensure org
   :defer 28
   :commands (org
              org-capture
