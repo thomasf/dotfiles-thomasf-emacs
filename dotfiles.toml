@@ -1,5 +1,5 @@
 [[ignore]]
-match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled"]
+match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled", '.log']
 
 [[script]]
 src = '''

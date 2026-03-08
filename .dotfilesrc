@@ -1,3 +1,0 @@
-[dotfiles]
-ignore = [ '.DS_Store', '.git', '.gitignore', 'README.md', 'INSTALLER', '.compiled', '.dotfilesrc', '.#.*', 'Dockerfile', '.dockerignore', ]
-
