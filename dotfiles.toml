@@ -1,6 +1,8 @@
-ignore = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled"]
+[[ignore]]
+match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled"]
 
-script = '''
+[[script]]
+src = '''
 rev=$(git rev-parse HEAD)
 compiled="$(cat .compiled 2>/dev/null || true)"
 if ! [[ $rev == $compiled ]]; then
