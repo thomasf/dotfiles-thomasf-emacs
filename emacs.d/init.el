@@ -7994,6 +7994,7 @@ Argument FILENAME File to insert."
      org-icalendar-store-UID t
      org-icalendar-use-deadline '(todo-due event-if-todo event-if-not-todo)
      org-icalendar-use-scheduled '(todo-start)
+     org-image-max-width 0.95
      org-log-done 'time
      org-log-reschedule 'time
      org-log-into-drawer t
