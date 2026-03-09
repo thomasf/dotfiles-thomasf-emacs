@@ -7851,6 +7851,18 @@ Titus von der Malsburg."
          org-journal-file-pattern "[0-9]\\{8\\}$"))))
   :config
   (progn
+
+    (defun my/update-org-yank-image-dir ()
+      "Set the image save directory relative to the current org file."
+      (when (derived-mode-p 'org-mode)
+        (let* ((filename (buffer-file-name))
+               (dir-name (when filename
+                           (concat (file-name-sans-extension (file-name-nondirectory filename))
+                                   "-images/"))))
+          (setq-local org-yank-image-save-method dir-name))))
+
+    (add-hook 'org-mode-hook #'my/update-org-yank-image-dir)
+
     (use-package org-contrib
       :ensure t)
 
