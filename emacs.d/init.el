@@ -4408,8 +4408,7 @@ If FILE already exists, signal an error."
       (let ((file1 (pop command-line-args-left))
             (file2 (pop command-line-args-left)))
         (ediff file1 file2)))
-    (add-to-list 'command-switch-alist '("diff" . command-line-diff))
-    )
+    (add-to-list 'command-switch-alist '("diff" . command-line-diff)))
 
   :config
   (progn
@@ -4421,7 +4420,36 @@ If FILE already exists, signal an error."
                         (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
     (defun add-d-to-ediff-mode-map ()
       (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
-    (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)))
+    (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map))
+
+  (defun my/ediff-adjust-font-size (inc)
+  "Adjust the font size in all active Ediff buffers by INC."
+  (interactive "P")
+  (let ((buffers (list ediff-buffer-A ediff-buffer-B ediff-buffer-C)))
+    (dolist (buf buffers)
+      (when (buffer-live-p buf)
+        (with-current-buffer buf
+          (text-scale-increase inc))))))
+
+  (defun my/ediff-font-size-increase ()
+    (interactive)
+    (my/ediff-adjust-font-size 1))
+
+  (defun my/ediff-font-size-decrease ()
+    (interactive)
+    (my/ediff-adjust-font-size -1))
+
+  (defun my/ediff-font-size-reset ()
+    (interactive)
+    (my/ediff-adjust-font-size 0))
+
+
+  (with-eval-after-load 'ediff-util
+    (add-hook 'ediff-keymap-setup-hook
+              (lambda ()
+                (define-key ediff-mode-map (kbd "=") 'my/ediff-font-size-increase)
+                (define-key ediff-mode-map (kbd "-") 'my/ediff-font-size-decrease)
+                (define-key ediff-mode-map (kbd "0") 'my/ediff-font-size-reset)))))
 
 
 ;;;; edit-color-stamp
