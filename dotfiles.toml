@@ -1,3 +1,5 @@
+public = true
+
 [[ignore]]
 match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled", '.log']
 
