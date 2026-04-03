@@ -1055,7 +1055,7 @@ Works for heads without a property :column."
 
 (defhydra hydra-goto (:hint none :pre hydra-goto/pre :post hydra-goto/post)
   "
-(_j_/_k_ ERR _h_ src _y_ win) (_f_/_d_ HUNK) (_u_/_i_ FLYC _o_ lvl) (_r_/_e_ BUF) (GOTO line _g_ char _c_) . _v_ recenter
+(_j_/_k_ ERR _h_ src _y_ win) (_f_/_d_ HUNK) (_u_/_i_ FLYC _o_ lvl) (_r_/_e_ BUF) (GOTO line _g_ char _c_) . _l_ recenter
 (_b_/_B_ bookmark) _U_ URL . _s_ imenu . _S_ scratch . _I_ ibuffer . _R_ rg-buf . _D_ dired . _G_ git-gutter"
   ;; ("h" first-error "first-error")
   ("h" next-error-select-buffer "n-err")
@@ -1081,7 +1081,7 @@ Works for heads without a property :column."
 
   ("G" hydra-git-gutter/body :exit t)
 
-  ("v" my-recenter-top-bottom "recenter")
+  ("l" my-recenter-top-bottom "recenter")
 
   ;; goto various windows
   ("U" browse-url "browse-url" :exit t)
