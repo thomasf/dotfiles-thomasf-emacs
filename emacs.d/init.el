@@ -7162,6 +7162,9 @@ drag the viewpoint on the image buffer that the window displays."
 
   :config
   (progn
+    (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more any))
+                 )
+
     (use-package lsp-headerline
       :defer
       :config
