@@ -3157,6 +3157,72 @@ Otherwise, get the symbol at point, as a string."
           (symbol-name (symbol-at-point))))))
 
 
+;;;;; go-build-tags
+
+(defgroup go-build-tags nil
+  "Manage Go build tags for Flycheck, lsp-mode and possibly other tools."
+  :group 'languages)
+
+(defcustom go-build-tags-list '()
+  "List of currently active Go build tags."
+  :type '(repeat string)
+  :group 'go-build-tags)
+
+(defun go-build-tags-sync ()
+  "Sync `go-build-tags-list` to Flycheck and LSP variables."
+  (let* ((tags go-build-tags-list)
+         (comma-tags (mapconcat 'identity tags ",")))
+
+    ;; Update Flycheck
+    (setq flycheck-go-build-tags tags)
+
+    ;; Update LSP (gopls) as a single comma-separated flag in a vector
+    (setq lsp-gopls-build-flags
+          (if (string-empty-p comma-tags)
+              []
+            (vector (concat "-tags=" comma-tags))))
+
+    ;; Refresh LSP workspace
+    (when (fboundp 'lsp-workspace-restart)
+      (condition-case nil
+          (lsp-workspace-restart (lsp-find-workspace 'gopls (buffer-file-name)))
+        (error (message "Gopls not active; tags updated."))))
+
+    (go-build-tags-show-active)))
+
+(defun go-build-tags-show-active ()
+  "Display the currently active Go build tags in the minibuffer."
+  (interactive)
+  (if go-build-tags-list
+      (message "Active Go build tags: [%s]"
+               (mapconcat 'identity go-build-tags-list ", "))
+    (message "No Go build tags currently active.")))
+
+(defun go-build-tags-add (tag)
+  "Add a Go build TAG and sync."
+  (interactive "sTag to add: ")
+  (unless (member tag go-build-tags-list)
+    (push tag go-build-tags-list)
+    (go-build-tags-sync)))
+
+(defun go-build-tags-remove (tag)
+  "Remove a Go build TAG and sync."
+  (interactive
+   (list (completing-read "Tag to remove: " go-build-tags-list)))
+  (setq go-build-tags-list (delete tag go-build-tags-list))
+  (go-build-tags-sync))
+
+(defun go-build-tags-toggle-at-point ()
+  "Add or remove the Go build tag at point."
+  (interactive)
+  (let ((tag (thing-at-point 'word t)))
+    (if (not tag)
+        (message "No word found at point.")
+      (if (member tag go-build-tags-list)
+          (go-build-tags-remove tag)
+        (go-build-tags-add tag)))))
+
+
 ;;;;; selective display menu
 
 
@@ -10161,6 +10227,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
     (treemacs-follow-mode 1)
     (treemacs-project-follow-mode 1))
   )
+
 
 ;;;; truthy
 
