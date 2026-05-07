@@ -1799,6 +1799,7 @@ Works for heads without a property :column."
                               (f-entries "org/" nil t)
                               (f-entries "md/" nil t)
                               (f-entries "library/" nil t)
+                              (f-entries "txt/" nil t)
                               (f-entries "elisp/" nil t))
                      (--map (s-chop-prefix (s-concat default-directory "/") it))
                      (mapcar #'(lambda (x)
@@ -1807,7 +1808,8 @@ Works for heads without a property :column."
                                        (or (and "."
                                                 (or "md" "markdown" "org" "txt" "plu" "org.gpg")
                                                 eol)
-                                           (and bol "elisp/" (* any) (group "el" eol))))
+                                          (and bol "elisp/" (* any) (group "el" eol))
+                                          (and bol "txt/" (* any) (group "txt" eol))))
                                       x)
                                      x)))
                      (-flatten)
