@@ -10430,6 +10430,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 
 (use-package wakatime-mode
   :ensure t
+  :disabled t
   :if (and (not noninteractive)  (executable-find* "wakatime-cli"))
   :commands (wakatime-mode global-wakatime-mode)
   :diminish (wakatime-mode . "")
