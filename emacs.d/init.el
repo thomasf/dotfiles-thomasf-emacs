@@ -10123,13 +10123,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
          ("Gopkg\\.lock\\'" . toml-mode)))
 
 
-;;;; tox
-
-(use-package tox
-  :ensure t
-  :commands (tox-current-test tox-current-cast))
-
-
 ;;;; traad
 
 (use-package traad
