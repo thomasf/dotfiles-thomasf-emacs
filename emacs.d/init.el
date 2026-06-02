@@ -4646,13 +4646,6 @@ If FILE already exists, signal an error."
     ))
 
 
-;;;; elfeed
-
-(use-package elfeed
-  :ensure t
-  :commands elfeed)
-
-
 ;;;; erlang
 
 (use-package erlang
