@@ -1151,7 +1151,9 @@ Works for heads without a property :column."
   :ensure t
   :if (or
        window-system
-       (equal "xterm-24bit" (getenv-internal "TERM" initial-environment)))
+       (or
+        (equal "xterm-24bit" (getenv-internal "TERM" initial-environment))
+        (equal "truecolor" (getenv-internal "COLORTERM" initial-environment))))
   :init
   (progn
     (setq solarized-use-less-bold t
