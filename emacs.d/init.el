@@ -1153,6 +1153,7 @@ Works for heads without a property :column."
        window-system
        (or
         (equal "xterm-24bit" (getenv-internal "TERM" initial-environment))
+        (equal "alacritty" (getenv-internal "TERM" initial-environment))
         (equal "truecolor" (getenv-internal "COLORTERM" initial-environment))))
   :init
   (progn
