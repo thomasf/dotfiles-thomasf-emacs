@@ -165,8 +165,7 @@
      ("gnu" . "https://elpa.gnu.org/packages/")
      ))
 
-  (unless (boundp 'package-pinned-packages)
-    (setq package-pinned-packages ()))
+  (setq package-pinned-packages '((org . "built-in")))
 
   (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
