@@ -7956,8 +7956,8 @@ Titus von der Malsburg."
 
     (add-hook 'org-mode-hook #'my/update-org-yank-image-dir)
 
-    (use-package org-contrib
-      :ensure t)
+    ;; (use-package org-contrib
+    ;;   :ensure t)
 
     ;; stopped working in recent magit update as of 2024-10-06
     ;; (use-package orgit
