@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (require 'solarized)
 (require 'my-solarized)
 (eval-when-compile

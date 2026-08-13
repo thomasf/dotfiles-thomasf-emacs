@@ -1,5 +1,4 @@
-;;; point-undo.el --- undo/redo position
-
+;;; point-undo.el --- undo/redo position  -*- lexical-binding: t -*-
 ;;  Copyright (C) 2006,2008 rubikitch <rubikitch atmark ruby-lang.org>
 ;;  Version: $Id: point-undo.el,v 1.6 2009/10/16 20:37:37 rubikitch Exp rubikitch $
 ;; Package-Version: 20100504.129

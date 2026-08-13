@@ -1,5 +1,5 @@
+;;; -*- lexical-binding: t -*-
 (require 'solarized)
-
 
 (setq my-solarized-faces
       '("Personal solarized theme customization"
