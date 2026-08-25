@@ -15,12 +15,12 @@ import (
 )
 
 func TestWalk(t *testing.T) {
-	root := &Node{Heading: String("root"), Body: []string{"root body"}}
-	n10 := &Node{Heading: String("1.0")}
-	n11 := &Node{Heading: String("1.1")}
-	n12 := &Node{Heading: String("1.2"), Body: []string{"one", "two"}}
-	n122 := &Node{Heading: String("1.2.2")}
-	n20 := &Node{Heading: String("2.0"), Body: []string{"end"}}
+	root := &Node{Heading: new("root"), Body: []string{"root body"}}
+	n10 := &Node{Heading: new("1.0")}
+	n11 := &Node{Heading: new("1.1")}
+	n12 := &Node{Heading: new("1.2"), Body: []string{"one", "two"}}
+	n122 := &Node{Heading: new("1.2.2")}
+	n20 := &Node{Heading: new("2.0"), Body: []string{"end"}}
 	root.AddChildren(n10)
 	root.AddChildren(n20)
 	n10.AddChildren(n11)
@@ -53,19 +53,19 @@ func TestWalk(t *testing.T) {
 }
 
 func TestParent(t *testing.T) {
-	root := &Node{Heading: String("root"), Body: []string{"root body"}}
-	n10 := &Node{Heading: String("1.0")}
-	n11 := &Node{Heading: String("1.1")}
-	n12 := &Node{Heading: String("1.2"), Body: []string{"one", "two"}}
-	n122 := &Node{Heading: String("1.2.2")}
-	n20 := &Node{Heading: String("2.0"), Body: []string{"end"}}
+	root := &Node{Heading: new("root"), Body: []string{"root body"}}
+	n10 := &Node{Heading: new("1.0")}
+	n11 := &Node{Heading: new("1.1")}
+	n12 := &Node{Heading: new("1.2"), Body: []string{"one", "two"}}
+	n122 := &Node{Heading: new("1.2.2")}
+	n20 := &Node{Heading: new("2.0"), Body: []string{"end"}}
 	root.AddChildren(n10)
 	root.AddChildren(n20)
 	n10.AddChildren(n11)
 	n10.AddChildren(n12)
 	n12.AddChildren(n122)
 
-	nc := &Node{Heading: String("not connected")}
+	nc := &Node{Heading: new("not connected")}
 
 	// direct parents
 	for n, v := range []struct {
@@ -95,11 +95,11 @@ func TestParent(t *testing.T) {
 
 func TestWriteTree(t *testing.T) {
 	root := &Node{Body: []string{"root body"}}
-	n10 := &Node{Heading: String("1.0")}
-	n11 := &Node{Heading: String("1.1")}
-	n12 := &Node{Heading: String("1.2"), Body: []string{"one", "two"}}
-	n122 := &Node{Heading: String("1.2.2")}
-	n20 := &Node{Heading: String("2.0"), Body: []string{"end"}}
+	n10 := &Node{Heading: new("1.0")}
+	n11 := &Node{Heading: new("1.1")}
+	n12 := &Node{Heading: new("1.2"), Body: []string{"one", "two"}}
+	n122 := &Node{Heading: new("1.2.2")}
+	n20 := &Node{Heading: new("2.0"), Body: []string{"end"}}
 	root.AddChildren(n10)
 	root.AddChildren(n20)
 	n10.AddChildren(n11)
@@ -129,11 +129,11 @@ end
 
 func TestDistance(t *testing.T) {
 	root := &Node{}
-	n10 := &Node{Heading: String("1.0")}
-	n11 := &Node{Heading: String("1.1")}
-	n12 := &Node{Heading: String("1.2")}
-	n122 := &Node{Heading: String("1.2.2")}
-	n20 := &Node{Heading: String("2.4")}
+	n10 := &Node{Heading: new("1.0")}
+	n11 := &Node{Heading: new("1.1")}
+	n12 := &Node{Heading: new("1.2")}
+	n122 := &Node{Heading: new("1.2.2")}
+	n20 := &Node{Heading: new("2.4")}
 	root.AddChildren(n10)
 	root.AddChildren(n20)
 	n10.AddChildren(n11)
@@ -141,7 +141,7 @@ func TestDistance(t *testing.T) {
 	n12.AddChildren(n122)
 	// log.Println("ch", len(root.Children), root, root.Children[0].Parent, root.Children[1].Parent)
 
-	nc := &Node{Heading: String("not connected")}
+	nc := &Node{Heading: new("not connected")}
 	root.Distance(n12)
 
 	for n, v := range []struct {
@@ -184,7 +184,7 @@ one
 		}
 
 		n1 := &Node{
-			Heading: String("1"),
+			Heading: new("1"),
 			Body:    []string{"one"},
 			Parent:  root,
 		}
@@ -203,15 +203,15 @@ one
 	{
 		root := &Node{}
 		n1 := &Node{
-			Heading: String("1"),
+			Heading: new("1"),
 			Parent:  root,
 		}
 		n2 := &Node{
-			Heading: String("2"),
+			Heading: new("2"),
 			Parent:  root,
 		}
 		n3 := &Node{
-			Heading: String("3"),
+			Heading: new("3"),
 			Parent:  root,
 		}
 		root.Children = []*Node{n1, n2, n3}
@@ -257,7 +257,7 @@ func TestDistanceSkip(t *testing.T) {
 	var want *Node
 	{
 		root := &Node{}
-		skip := &Node{Heading: String("skip")}
+		skip := &Node{Heading: new("skip")}
 		s1 := &Node{Children: []*Node{skip}}
 		skip.Parent = s1
 		s1.Parent = root
@@ -296,9 +296,9 @@ ccC
 	var want *Node
 	{
 		root := &Node{Body: []string{"000"}}
-		a := &Node{Heading: String("a"), Body: []string{"aaa"}}
-		b := &Node{Heading: String("b"), Body: []string{"bb"}}
-		c := &Node{Heading: String("c"), Body: []string{"ccC", ";;"}}
+		a := &Node{Heading: new("a"), Body: []string{"aaa"}}
+		b := &Node{Heading: new("b"), Body: []string{"bb"}}
+		c := &Node{Heading: new("c"), Body: []string{"ccC", ";;"}}
 		ab1 := &Node{}
 		ab2 := &Node{}
 		root.AddChildren(a)

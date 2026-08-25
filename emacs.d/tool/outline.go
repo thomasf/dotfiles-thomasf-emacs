@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"slices"
 	"strings"
 	"unicode/utf8"
 )
@@ -51,8 +52,9 @@ func (n *Node) AppendBody(lines ...string) {
 	n.Body = append(n.Body, lines...)
 }
 
+//go:fix inline
 func String(s string) *string {
-	return &s
+	return new(s)
 }
 
 func NewNode() *Node {
@@ -117,8 +119,8 @@ func (n *Node) Walk(callback func(node, parent *Node) bool) {
 		if !callback(node, node.Parent) {
 			continue
 		}
-		for index := len(node.Children) - 1; index >= 0; index-- {
-			nodes = append(nodes, node.Children[index])
+		for _, v := range slices.Backward(node.Children) {
+			nodes = append(nodes, v)
 		}
 	}
 }

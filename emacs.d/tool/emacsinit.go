@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"slices"
 	"sort"
 	"strings"
 )
@@ -86,8 +87,8 @@ func (e *EmacsInit) FixLineSpacing() error {
 			}
 			{
 				var trailingEmpty int
-				for i := len(node.Body) - 1; i >= 0; i-- {
-					if strings.TrimSpace(node.Body[i]) != "" {
+				for _, v := range slices.Backward(node.Body) {
+					if strings.TrimSpace(v) != "" {
 						break
 					}
 					trailingEmpty++
