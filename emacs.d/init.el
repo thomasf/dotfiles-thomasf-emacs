@@ -8864,7 +8864,6 @@ otherwise use the subtree title."
   :ensure t
   :defer 1.4
   :commands (projectile-mode
-             projectile-global-mode
              projectile-project-p
              projectile-sort-by-recentf-first
              projectile-sort-by-recently-active-first)
@@ -8901,8 +8900,6 @@ otherwise use the subtree title."
 
     (setq
      projectile-sort-order 'recently-active
-     ;; projectile-completion-system 'ido
-     projectile-completion-system 'ivy
      projectile-require-project-root t
      projectile-switch-project-action 'projectile-dired
      projectile-enable-caching nil
@@ -8914,7 +8911,7 @@ otherwise use the subtree title."
                             "projectile.cache" user-cache-directory)
      projectile-file-exists-local-cache-expire nil
      projectile-file-exists-remote-cache-expire (* 15 60)
-     projectile-project-root-files-functions
+     projectile-project-root-functions
      '(projectile-root-bottom-up
        projectile-root-top-down
        projectile-root-top-down-recurring
@@ -8976,7 +8973,7 @@ otherwise use the subtree title."
   :config
   (progn
     (add-to-list 'projectile-globally-ignored-directories "vendor")
-    (projectile-global-mode)))
+    (projectile-mode)))
 
 (defalias 'project-root-function 'projectile-project-root)
 
