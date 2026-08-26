@@ -1,4 +1,4 @@
-;;; moccur-edit.el --- apply replaces to multiple files
+;;; moccur-edit.el --- apply replaces to multiple files -*- lexical-binding: t -*-
 ;; -*- Mode: Emacs-Lisp -*-
 
 ;;  $Id: moccur-edit.el,v 2.16 2008/08/01 09:32:18 akihisa Exp $

@@ -1,4 +1,4 @@
-;;; edit-env.el --- display and edit environment variables
+;;; edit-env.el --- display and edit environment variables -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2001 Benjamin Rutt
 ;;

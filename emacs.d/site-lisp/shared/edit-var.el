@@ -1,4 +1,4 @@
-;;; edit-var.el --- display and edit Lisp variables
+;;; edit-var.el --- display and edit Lisp variables -*- lexical-binding: t -*-
 
 (defvar edit-variable-buffer)
 (defvar edit-variable-symbol)

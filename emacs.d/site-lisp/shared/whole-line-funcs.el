@@ -1,4 +1,4 @@
-;;; whole-line-funcs.el --- triple-click like line marking functions
+;;; whole-line-funcs.el --- triple-click like line marking functions -*- lexical-binding: t -*-
 ;;
 ;; Filename: whole-line-funcs.el (previously known as mark-lines.el)
 ;; Description:

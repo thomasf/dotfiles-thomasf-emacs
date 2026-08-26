@@ -1,4 +1,4 @@
-;;; revbufs.el -- reverts all out-of-date buffers safely
+;;; revbufs.el -- reverts all out-of-date buffers safely -*- lexical-binding: t -*-
 
 ;; Author:   Neil Van Dyke <neil@neilvandyke.org>
 ;; Version:  1.2

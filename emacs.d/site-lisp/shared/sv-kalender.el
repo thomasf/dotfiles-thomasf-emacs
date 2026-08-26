@@ -1,4 +1,4 @@
-;;; sv-kalender.el --- Swedish calendar for Emacs
+;;; sv-kalender.el --- Swedish calendar for Emacs -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2002-2021 Daniel Jensen
 

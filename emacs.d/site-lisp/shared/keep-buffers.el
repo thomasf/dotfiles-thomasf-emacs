@@ -1,4 +1,4 @@
-;;; keep-buffers.el -- Attempt to prevent named buffers from deletion.
+;;; keep-buffers.el -- Attempt to prevent named buffers from deletion. -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2000 Steve Kemp
 ;; Copyright (C) 2011 Le Wang

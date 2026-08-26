@@ -1,4 +1,4 @@
-;;; profile-dotemacs.el --- Profile your Emacs init file
+;;; profile-dotemacs.el --- Profile your Emacs init file -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2010, 2012  David Engster
 
