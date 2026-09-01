@@ -1,4 +1,4 @@
-;;; init.el --- Thomas Frössman emacs init
+;;; init.el --- Thomas Frössman emacs init -*- byte-compile-warnings: (not docstrings-wide); -*-
 
 ;;; Commentary:
 
