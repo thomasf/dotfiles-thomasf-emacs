@@ -210,7 +210,6 @@ re-downloaded in order to locate PACKAGE."
   (progn
     (add-hook 'emacs-lisp-mode-hook 'dash-enable-font-lock)))
 
-(use-package dash-functional :ensure t :defer)
 (use-package memoize :ensure t :defer)
 (use-package s :ensure t)
 (use-package f :ensure t)
@@ -668,7 +667,7 @@ Works for heads without a property :column."
       kill-whole-line nil
       shift-select-mode nil
       eval-expression-print-level nil
-      idle-update-delay 0.5
+      which-func-update-delay 0.5
       next-error-recenter '(4)
       next-error-verbose nil
       )
@@ -1185,7 +1184,7 @@ Works for heads without a property :column."
 
 (defun post-change-theme ()
   "Set some stuff that"
-  (set-face-inverse-video-p 'vertical-border nil)
+  (set-face-inverse-video 'vertical-border nil)
   (set-face-background 'vertical-border (face-background 'default)))
 
 
@@ -1313,49 +1312,49 @@ Works for heads without a property :column."
 ;; (defvar my-monospaced-font "Input Mono Compressed-11.8")
 
 (cond
- ((string-prefix-p "flam" system-name)
+ ((string-prefix-p "flam" (system-name))
   (setq my-monospaced-font "PragmataPro-12"
         my-variable-pitch-font "Go-12.5"
         dynamic-fonts-preferred-monospace-point-size 12
         dynamic-fonts-preferred-proportional-point-size 12.5))
 
- ((string-prefix-p "transwhale" system-name)
+ ((string-prefix-p "transwhale" (system-name))
   (setq my-monospaced-font "PragmataPro-12"
         my-variable-pitch-font "Go-12.5"
         dynamic-fonts-preferred-monospace-point-size 12
         dynamic-fonts-preferred-proportional-point-size 12.5))
 
- ((string-prefix-p "prizza" system-name)
+ ((string-prefix-p "prizza" (system-name))
   (setq my-monospaced-font "PragmataPro-15"
         my-variable-pitch-font "Go-15.5"
         dynamic-fonts-preferred-monospace-point-size 15
         dynamic-fonts-preferred-proportional-point-size 15.5))
 
- ((string-prefix-p "fogskum" system-name)
+ ((string-prefix-p "fogskum" (system-name))
   (setq my-monospaced-font "PragmataPro-15"
         my-variable-pitch-font "Go-15.5"
         dynamic-fonts-preferred-monospace-point-size 15
         dynamic-fonts-preferred-proportional-point-size 15.5))
 
- ((string-prefix-p "crangy" system-name)
+ ((string-prefix-p "crangy" (system-name))
   (setq my-monospaced-font "PragmataPro-17"
         my-variable-pitch-font "Go-17"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
 
- ((string-prefix-p "dungen" system-name)
+ ((string-prefix-p "dungen" (system-name))
   (setq my-monospaced-font "PragmataPro-16"
         my-variable-pitch-font "Go-16"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
 
- ((string-prefix-p "tfr-tracklib" system-name)
+ ((string-prefix-p "tfr-tracklib" (system-name))
   (setq my-monospaced-font "PragmataPro-16"
         my-variable-pitch-font "Go-16"
         dynamic-fonts-preferred-monospace-point-size 17
         dynamic-fonts-preferred-proportional-point-size 17))
 
- ((string-prefix-p "dangus" system-name)
+ ((string-prefix-p "dangus" (system-name))
   (setq my-monospaced-font "PragmataPro-16"
         my-variable-pitch-font "Go-16"
         dynamic-fonts-preferred-monospace-point-size 17
@@ -1809,8 +1808,8 @@ Works for heads without a property :column."
                                        (or (and "."
                                                 (or "md" "markdown" "org" "txt" "plu" "org.gpg")
                                                 eol)
-                                          (and bol "elisp/" (* any) (group "el" eol))
-                                          (and bol "txt/" (* any) (group "txt" eol))))
+                                          (and bol "elisp/" (* not-newline) (group "el" eol))
+                                          (and bol "txt/" (* not-newline) (group "txt" eol))))
                                       x)
                                      x)))
                      (-flatten)
@@ -2540,7 +2539,7 @@ there's a region, all lines that region covers will be duplicated."
 (bind-key "C-x C-y" 'duplicate-line-or-region-comment-original)
 
 (defun one-shot-keybinding (key command)
-  (set-temporary-overlay-map
+  (set-transient-map
    (let ((map (make-sparse-keymap)))
      (define-key map (kbd key) command)
      map) t))
@@ -2965,7 +2964,6 @@ sTo this: ")
 
 (define-minor-mode auto-window-margins-mode
   "..."
-  nil nil nil
   :group 'easy-read
   :global t
   (if auto-window-margins-mode
@@ -2982,7 +2980,6 @@ sTo this: ")
 
 (define-minor-mode easy-read-mode
   "..."
-  nil nil nil
   :group 'easy-read
   :global t
   (if easy-read-mode
@@ -3009,7 +3006,6 @@ sTo this: ")
 
 (define-minor-mode present-read-mode
   "..."
-  nil nil nil
   :group 'present-read
   :global t
   (if present-read-mode
@@ -3085,12 +3081,6 @@ Used to launch magit status from command line."
 
 (define-minor-mode invert-shift-number-keys-mode
   "..."
-  ;; The initial value.
-  nil
-  ;; The indicator for the mode line.
-  nil
-  ;; The minor mode bindings.
-  nil
   :group 'my
   :global t
   (if (not invert-shift-number-keys-mode)
@@ -3230,7 +3220,7 @@ Otherwise, get the symbol at point, as a string."
 
 
 (defun create-temp-selective-display-keymap ()
-  (set-temporary-overlay-map
+  (set-transient-map
    (let ((map (make-sparse-keymap)))
      (define-key map (kbd "=") 'inc-selective-display)
      (define-key map (kbd "+") 'inc-selective-display)
@@ -3918,7 +3908,7 @@ LEAF is normally ((BEG . END) . WND)."
       (and (company-tooltip-visible-p)
            (company-explicit-action-p)))
 
-    (setq company-auto-complete #'my-company-visible-and-explicit-action-p)
+    (setq company-insertion-on-trigger #'my-company-visible-and-explicit-action-p)
     (setq company-frontends '(company-echo-metadata-frontend
                               company-pseudo-tooltip-unless-just-one-frontend-with-delay
                               company-preview-frontend))
@@ -4164,7 +4154,7 @@ LEAF is normally ((BEG . END) . WND)."
                                "image-dired" user-cache-directory)
               image-dired-thumb-margin 12
               image-dired-thumb-relief 0
-              image-dired-thumb-width 200))
+              image-dired-thumb-size 200))
       :config
       (progn
         (bind-keys
@@ -4468,7 +4458,7 @@ If FILE already exists, signal an error."
      ediff-before-flag-mol "»»»"
      ediff-after-flag-mol "«««"
      ediff-window-setup-function 'ediff-setup-windows-plain
-     ediff-split-window-function (if (or (string= system-name "transwhale") (string= system-name "flam")) 'split-window-vertically
+     ediff-split-window-function (if (or (string= (system-name) "transwhale") (string= (system-name) "flam")) 'split-window-vertically
                                    'split-window-horizontally)
      ediff-merge-split-window-function ediff-split-window-function )
 
@@ -4584,7 +4574,7 @@ If FILE already exists, signal an error."
     (require-package 'editorconfig)))
 
 (use-package editorconfig
-  :commands (editorconfig-mode editorconfig-apply)
+  :commands (editorconfig-mode)
   :diminish editorconfig-mode
   :init
   (progn
@@ -4824,7 +4814,7 @@ If FILE already exists, signal an error."
         (dolist (e other-extens)
           (if (let ((f (concat name e)))
                 (and (file-exists-p f) (find-file f)))
-              (return)))))
+              (cl-return)))))
 
     (setq
      cc-other-file-alist
@@ -6273,9 +6263,9 @@ Git gutter:
       (:description "filename2"
                     :reader (read-from-minibuffer "Filter by filename (regexp): "))
       ;; (ibuffer-awhen (buffer-local-value 'buffer-file-name buf)
-      (ibuffer-awhen (with-current-buffer buf
-                       (or buffer-file-name
-                           default-directory))
+      (when-let* ((it (with-current-buffer buf
+                        (or buffer-file-name
+                            default-directory))))
         (string-match qualifier it)))
 
     (defun ibuffer-set-filter-groups-by-root  ()
@@ -7224,7 +7214,7 @@ drag the viewpoint on the image buffer that the window displays."
 
   :config
   (progn
-    (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more any))
+    (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more not-newline))
                  )
 
     (use-package lsp-headerline
@@ -7440,8 +7430,8 @@ drag the viewpoint on the image buffer that the window displays."
     (defun my-git-commit-hook-fn ()
       "My git commit mode hook."
       (ispell-change-dictionary "english")
-      (turn-on-flyspell)
-      (toggle-save-place 0))
+      (flyspell-mode 1)
+      (save-place-local-mode -1))
 
     (add-hook 'git-commit-setup-hook 'my-git-commit-hook-fn)
 
@@ -7617,8 +7607,8 @@ drag the viewpoint on the image buffer that the window displays."
   :defer
   :init
   (progn
-    (setq mml2015-encrypt-to-self t
-          mml2015-sign-with-sender t
+    (setq mml-secure-openpgp-encrypt-to-self t
+          mml-secure-openpgp-sign-with-sender t
           mml2015-use 'epg)))
 
 
@@ -8002,7 +7992,7 @@ Titus von der Malsburg."
                 (when (outline-invisible-p)
                   (save-excursion
                     (outline-previous-visible-heading 1)
-                    (org-show-subtree)))))
+                    (org-fold-show-subtree)))))
 
     (defun update-org-hours (n)
       "Change all org-mode timestamps in the current buffer by N hours."
@@ -8115,7 +8105,7 @@ Argument FILENAME File to insert."
      org-clock-report-include-clocking-task t
      org-clock-sound t
      org-confirm-babel-evaluate nil
-     org-export-babel-evaluate nil
+     org-export-use-babel nil
      org-tags-exclude-from-inheritance '("crypt" "flagged"))
 
     (setq
@@ -8633,9 +8623,9 @@ otherwise use the subtree title."
   (progn
     (defun my-prettify-symbols-compile-patterns (patterns)
       (let ((pretty-patterns))
-        (loop for (glyph . pairs) in patterns do
-              (loop for (regexp . major-modes) in pairs do
-                    (loop for mode in major-modes do
+        (cl-loop for (glyph . pairs) in patterns do
+              (cl-loop for (regexp . major-modes) in pairs do
+                    (cl-loop for mode in major-modes do
                           (let* ((mode (intern (concat (symbol-name mode)
                                                        "-mode")))
                                  (assoc-pair (assoc mode pretty-patterns))
@@ -9516,8 +9506,7 @@ otherwise use the subtree title."
   :init
   (progn
     (setq ;; sh-mode.el
-     sh-basic-offset 2
-     sh-indentation 2)))
+     sh-basic-offset 2)))
 
 
 ;;;; shift-text
@@ -10286,8 +10275,8 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 
 (use-package unfill
   :ensure t
-  :commands (unfill-region unfill-paragraph toggle-fill-unfill)
-  :bind ("M-q" . toggle-fill-unfill))
+  :commands (unfill-region unfill-paragraph unfill-toggle)
+  :bind ("M-q" . unfill-toggle))
 
 
 ;;;; uniquify
@@ -10300,7 +10289,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
      uniquify-buffer-name-style 'post-forward
      uniquify-separator " • "
      uniquify-min-dir-content 3
-     uniquify-after-kill-buffer-p t
+     uniquify-after-kill-buffer-flag t
      uniquify-ignore-buffers-re "^\\*")))
 
 
@@ -10331,7 +10320,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
           (let ((bol (point))
                 (date (vc-call-backend vc-annotate-backend 'annotate-time))
                 (inhibit-read-only t))
-            (assert (>= (point) bol))
+            (cl-assert (>= (point) bol))
             (put-text-property bol (point) 'invisible 'vc-annotate-annotation)
             (when (string-equal "Git" vc-annotate-backend)
               (save-excursion
@@ -10665,12 +10654,12 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
   :defer t
   :config
   (progn
-    (defvar xref--current-item nil)
+    (defvar xref-current-item nil)
     (defun my-pulse-xref ()
       (pcase-let ((`(,beg . ,end)
                (save-excursion
                  (or
-                  (let ((length (xref-match-length xref--current-item)))
+                  (let ((length (xref-match-length xref-current-item)))
                     (and length (cons (point) (+ (point) length))))
                   (back-to-indentation)
                   (if (eolp)
