@@ -200,7 +200,7 @@ re-downloaded in order to locate PACKAGE."
   :defer t
   :init
   (progn
-    (add-hook 'sql-mode-hook '(lambda () (define-key sql-mode-map (kbd "TAB") 'self-insert-command)))))
+    (add-hook 'sql-mode-hook #'(lambda () (define-key sql-mode-map (kbd "TAB") 'self-insert-command)))))
 
 (use-package dash
   :ensure t
@@ -1469,7 +1469,7 @@ Works for heads without a property :column."
     (setq my-pulse-timer
           (run-with-timer
            time nil
-           '(lambda () (my-pulse-line))))))
+           #'(lambda () (my-pulse-line))))))
 
 (defun my-pulse-now (&rest r)
   (my-pulse-set-timer 0.02))
@@ -2119,7 +2119,7 @@ Works for heads without a property :column."
 (defun color-blend-name (color1 color2 alpha)
   "Blends COLOR1 onto COLOR2 using alpha "
   (apply 'color-rgb-to-hex
-         (-zip-with '(lambda (it other)
+         (-zip-with #'(lambda (it other)
                        (+ (* alpha it) (* other  (- 1 alpha))))
                     (color-name-to-rgb color1)
                     (color-name-to-rgb color2))))
@@ -2732,7 +2732,7 @@ Uses `current-date-time-format' for the formatting the date/time."
 (defun backward-hyphenated-or-underscore-word ()
   (interactive)
   (backward-word)
-  (while (looking-back "[-_]") (backward-word)))
+  (while (looking-back "[-_]" 1) (backward-word)))
 
 (defun camelCase-previous-word ()
   "Convert the previous word (including hyphens and underscores) to camelCase."
@@ -2968,15 +2968,13 @@ sTo this: ")
   :global t
   (if auto-window-margins-mode
       (progn
-        (--map
-         (with-selected-window it
-           (auto-window-margins))
-         (window-list))
+        (dolist (win (window-list))
+          (with-selected-window win
+            (auto-window-margins)))
         (add-hook 'window-configuration-change-hook 'auto-window-margins))
-    (remove-hook  'window-configuration-change-hook 'auto-window-margins)
-    (--map
-     (set-window-margins it 0)
-     (window-list))))
+    (remove-hook 'window-configuration-change-hook 'auto-window-margins)
+    (dolist (win (window-list))
+      (set-window-margins win 0))))
 
 (define-minor-mode easy-read-mode
   "..."
@@ -3257,11 +3255,11 @@ Otherwise, get the symbol at point, as a string."
 
 (defun buffer-line-position ()
   "Current position formatted as file-name:line-number"
-  (format "%s:%d" (buffer-fiale-name) (line-number-at-pos)))
+  (format "%s:%d" (buffer-file-name) (line-number-at-pos)))
 
 (defun position-to-kill-ring ()
   "Copy to the kill ring a string in the format \"file-name:line-number\"
-for the current buffer's file name, and the line number at point."
+for the current buffer\\='s file name, and the line number at point."
   (interactive)
   (kill-new (buffer-line-position)))
 
@@ -5288,7 +5286,8 @@ See URL `https://github.com/golang/lint'."
 
 (use-package git-gutter
   :ensure t
-  :if (and (not noninteractive) )
+  :defer t
+  :if (not noninteractive)
   :commands (git-gutter-mode
              global-git-gutter-mode
              hydra-git-gutter/body)
@@ -5355,7 +5354,7 @@ See URL `https://github.com/golang/lint'."
         (my-git-gutter:next-hunk -1))
 
       (defhydra hydra-git-gutter (:body-pre
-                                  '(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
+                                  #'(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
 
                                   :hint nil)
   "
@@ -6540,9 +6539,9 @@ Git gutter:
 
     (defun my-ido-goto-home ()
       (interactive)
-      (if (looking-back "/")
+      (if (looking-back "/" 1)
           (insert
-           (if (looking-back "~/")
+           (if (looking-back "~/" 2)
                "//" "~/"))
         (call-interactively 'self-insert-command)))
 
@@ -7887,8 +7886,8 @@ Titus von der Malsburg."
 
 (eval-and-compile
   (with-eval-after-load "package"
-    (assq-delete-all 'org package--builtins)
-    (assq-delete-all 'org package--builtin-versions)))
+    (setq package--builtins (assq-delete-all 'org package--builtins))
+    (setq package--builtin-versions (assq-delete-all 'org package--builtin-versions))))
 
 (use-package org
   ;; :ensure org
@@ -9159,6 +9158,7 @@ otherwise use the subtree title."
 
 (use-package realgud
   :ensure realgud
+  :defer t
   :commands (realgud:pdb realgud:gdb)
   :init
   (progn
@@ -10766,13 +10766,12 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
                 (fmt "")
                 (popup-items))
 
-            (mapcar #'(lambda (choice)
-                        (when (yas--template-p choice)
-                          (setq group-max-len (max group-max-len
-                                                   (+ (length (yas--template-group choice) )
-                                                      (apply '+ (mapcar 'length (yas--template-group choice))))))
-                          (setq key-max-len (max key-max-len (length (yas--template-key choice))))))
-                    choices)
+            (dolist (choice choices)
+              (when (yas--template-p choice)
+                (setq group-max-len (max group-max-len
+                                         (+ (length (yas--template-group choice))
+                                            (apply #'+ (mapcar #'length (yas--template-group choice))))))
+                (setq key-max-len (max key-max-len (length (yas--template-key choice))))))
 
             (setq fmt (format "%s%%%d.%ds%s%%-%d.%ds│ %%s"
                               (if (> group-max-len 0 ) "" " ")
@@ -10941,7 +10940,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
      (add-hook 'after-init-hook
                #'(lambda ()
                    (run-with-idle-timer
-                    0 nil '(lambda ()
+                    0 nil #'(lambda ()
                              (tool-bar-mode -1))) nil)))
 
 
@@ -10950,7 +10949,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 (when (and load-file-name
            (not noninteractive))
   (add-hook 'after-init-hook
-            `(lambda ()
+            #'(lambda ()
                (eval-and-compile (push `("after-init" ,after-init-time) init-times))
                (with-current-buffer (get-buffer-create " *emacslog*")
                  (let ((end-time (current-time)))
