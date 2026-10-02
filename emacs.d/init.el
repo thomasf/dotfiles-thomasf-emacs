@@ -1054,7 +1054,7 @@ Works for heads without a property :column."
 (defhydra hydra-goto (:hint none :pre hydra-goto/pre :post hydra-goto/post)
   "
 (_j_/_k_ ERR _h_ src _y_ win) (_f_/_d_ HUNK) (_u_/_i_ FLYC _o_ lvl) (_r_/_e_ BUF) (GOTO line _g_ char _c_) . _l_ recenter
-(_b_/_B_ bookmark) _U_ URL . _s_ imenu . _S_ scratch . _I_ ibuffer . _R_ rg-buf . _D_ dired . _G_ git-gutter"
+(_b_/_B_ bookmark) _U_ URL . _v_ visit-file . _s_ imenu . _S_ scratch . _I_ ibuffer . _R_ rg-buf . _D_ dired . _G_ git-gutter"
   ;; ("h" first-error "first-error")
   ("h" next-error-select-buffer "n-err")
   ("j" my-next-error "n-err")
@@ -1083,6 +1083,7 @@ Works for heads without a property :column."
 
   ;; goto various windows
   ("U" browse-url "browse-url" :exit t)
+  ("v" visit-file "visit-file" :exit t)
   ("S" scratch-buffer "scratch" :exit t)
   ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
   ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
@@ -1822,6 +1823,44 @@ Works for heads without a property :column."
       (message "Err0#wr"))))
 (bind-key "C-x f n" 'find-notes)
 (bind-key "C-h n" 'find-notes)
+
+(defun my/find-file-at-point ()
+  "Like `find-file-at-point' but understands line number suffixes.
+Handles FILE:LINE, FILE:LINE:COL and FILE:START-END.  For a range the
+lines are marked as the active region.  Without a line suffix, or if
+the file does not exist, falls back to `find-file-at-point'."
+  (interactive)
+  (let ((thing (thing-at-point 'filename t)))
+    (if (and thing
+             (string-match
+              (rx bos (group (+? anychar))
+                  ":" (group (+ digit))
+                  (? (or (seq "-" (group (+ digit)))
+                         (seq ":" (group (+ digit)))))
+                  (* (any ".,;:"))
+                  eos)
+              thing)
+             (file-exists-p (expand-file-name (match-string 1 thing))))
+        (let ((file (expand-file-name (match-string 1 thing)))
+              (line (string-to-number (match-string 2 thing)))
+              (end (and (match-string 3 thing)
+                        (string-to-number (match-string 3 thing))))
+              (col (and (match-string 4 thing)
+                        (string-to-number (match-string 4 thing)))))
+          (find-file file)
+          (widen)
+          (goto-char (point-min))
+          (forward-line (1- line))
+          (when col
+            (move-to-column (1- col)))
+          (when (and end (> end line))
+            (push-mark (save-excursion
+                         (forward-line (- end line))
+                         (line-end-position))
+                       t t)))
+      (call-interactively #'find-file-at-point))))
+(defalias 'my/ffap #'my/find-file-at-point)
+(defalias 'visit-file #'my/find-file-at-point)
 
 
 ;;;;; sudo-edit
