@@ -7984,6 +7984,17 @@ Titus von der Malsburg."
 
     (add-hook 'org-mode-hook #'my/update-org-yank-image-dir)
 
+    (defun my/org-timestamp-us-weekday (orig format-string &rest args)
+      "Format Org timestamps with English weekday names, keeping the locale elsewhere."
+      (let ((system-time-locale
+             (if (and (stringp format-string)
+                      (string-search (car org-timestamp-formats) format-string))
+                 "C"
+               system-time-locale)))
+        (apply orig format-string args)))
+
+    (advice-add 'format-time-string :around #'my/org-timestamp-us-weekday)
+
     ;; (use-package org-contrib
     ;;   :ensure t)
 
