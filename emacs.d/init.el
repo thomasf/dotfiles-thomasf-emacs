@@ -467,9 +467,7 @@ Works for heads without a property :column."
     haskell-mode-hook
     js-mode-hook
     js2-mode-hook
-    kivy-mode-hook
     pyhon-mode-hook
-    qml-mode-hook
     ruby-mode-hook
     typescript-mode-hook
     typescript-ts-mode-hook))
@@ -499,7 +497,6 @@ Works for heads without a property :column."
 
 (defvar my-significant-whitespace-mode-hooks
   '(haskell-mode-hook
-    kivy-mode-hook
     python-mode-hook
     python-ts-mode-hook))
 
@@ -2037,10 +2034,6 @@ the file does not exist, falls back to `find-file-at-point'."
                    treemacs-mode-hook))
 
 
-(defadvice android-logcat (after smaller-font activate)
-  (with-current-buffer (get-buffer "*android-logcat*")
-    (my-set-text-scale-smaller)))
-
 (defun my-set-text-scale-smaller-maybe ()
   (let ((bn (buffer-name)))
     (when
@@ -3368,19 +3361,6 @@ for the current buffer\\='s file name, and the line number at point."
   :commands anchored-transpose)
 
 
-;;;; android-mode
-
-(use-package android-mode
-  :ensure t
-  :commands (android-mode android-logcat android-start-emulator
-                          android-start-ddms)
-  :init
-  (progn
-    (setq
-     android-mode-sdk-dir "~/.opt/android-sdks"
-     android-mode-avd "d")))
-
-
 ;;;; ansi
 
 (use-package ansi
@@ -4628,20 +4608,6 @@ If FILE already exists, signal an error."
     (define-key region-bindings-mode-map "j" 'er/contract-region)))
 
 
-;;;; extempore
-
-(use-package extempore-mode
-  :ensure t
-  :mode ("\\.xtm\\'" . extempore-mode)
-  :config
-  (progn
-    (setq user-extempore-directory
-          (-first 'file-directory-p
-                  (list
-                   (expand-file-name "~/.opt/extempore/")
-                   "/usr/local/opt/extempore/")))))
-
-
 ;;;; face-remap
 
 (use-package face-remap
@@ -4778,19 +4744,8 @@ If FILE already exists, signal an error."
        ("\\.cxx\\'" (".hxx" ".hh" ".h"))
        ("\\.hxx\\'" (".cxx"))
 
-       ("\\.py\\'" (".kv"))
-       ("\\.kv\\'" (".py"))
-
 
        ))))
-
-
-;;;; floobits
-
-(use-package floobits
-  :ensure t
-  :commands (floobits-join-workspace floobits-share-dir-public
-                                     floobits-share-dir-private))
 
 
 ;;;; flx
@@ -5740,13 +5695,6 @@ Git gutter:
              htmlize-many-files-dired))
 
 
-;;;; hy-mode
-
-(use-package hy-mode
-  :ensure t
-  :mode "\\.hy\\'")
-
-
 ;;;; ibuffer
 
 (use-package ibuffer
@@ -6051,7 +5999,6 @@ Git gutter:
                        (mode . java-mode)
                        (mode . sh-mode)
                        (mode . haskell-mode)
-                       (mode . kivy-mode)
                        (mode . go-mode)
                        (mode . go-ts-mode)
                        (mode . rust-mode)
@@ -6408,13 +6355,6 @@ drag the viewpoint on the image buffer that the window displays."
          ("\\Pipfile.lock\\'" . json-mode)))
 
 
-;;;; jss
-
-(use-package jss
-  :ensure t
-  :commands jss-connect)
-
-
 ;;;; keep-buffers
 
 (use-package keep-buffers
@@ -6428,34 +6368,6 @@ drag the viewpoint on the image buffer that the window displays."
             ;; ("\\`\\*magit:.*\\*\\'" . nil)
             ))
     (keep-buffers-mode 1)))
-
-
-;;;; keyfreq
-
-(use-package keyfreq
-  :ensure t
-  :if (not noninteractive)
-  :commands (keyfreq-mode
-             keyfreq-autosave-mode)
-  :init
-  (progn
-    (setq keyfreq-file (expand-file-name "keyfreq" user-data-directory)
-          keyfreq-file-lock (expand-file-name
-                             "keyfreq.lock" user-data-directory))
-    ;; (keyfreq-mode)
-    ;; (keyfreq-autosave-mode)
-    ))
-
-
-;;;; kivy-mode
-
-(use-package kivy-mode
-  :ensure t
-  :mode (("\\.kv\\'" . kivy-mode))
-  :config
-  (progn
-    (bind-key "C-c <" 'python-indent-shift-left kivy-mode-map)
-    (bind-key "C-c >" 'python-indent-shift-right kivy-mode-map)))
 
 
 ;;;; know-your-http-well
@@ -8509,13 +8421,6 @@ otherwise use the subtree title."
           python-environment-default-root-name "emacs-default")))
 
 
-;;;; qml-mode
-
-(use-package qml-mode
-  :ensure t
-  :mode (("\\.qml\\'" . qml-mode)))
-
-
 ;;;; quickrun
 
 (use-package quickrun
@@ -9361,14 +9266,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :mode (("LICENSE\\'" . text-mode)))
 
 
-;;;; textile-mode
-
-(use-package textile-mode
-  :ensure t
-  :commands textile-mode
-  :mode ("\\.textile\\'" . textile-mode))
-
-
 ;;;; thingopt
 
 (use-package thingopt :ensure t :defer)
@@ -9788,13 +9685,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
     ;; (bind-key "C-<tab>" 'js2-jsx-mode web-mode-map)
     (unbind-key "C-c C-p" web-mode-map)
     (unbind-key "C-c C-n" web-mode-map)))
-
-
-;;;; websocket
-
-(use-package websocket
-  :ensure t
-  :commands websocket-open)
 
 
 ;;;; wgrep
