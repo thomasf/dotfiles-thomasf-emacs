@@ -7273,18 +7273,7 @@ Titus von der Malsburg."
                             "org-id-locations" user-data-directory))
 
     (use-package org-annotate-file
-      :bind ("C-c C-l" . org-annotate-file))
-
-
-    (use-package org-journal
-      :ensure t
-      :commands (org-journal-new-entry)
-      :init
-      (progn
-        (setq
-         org-journal-dir
-         (expand-file-name "org/journal/" user-notes-directory)
-         org-journal-file-pattern "[0-9]\\{8\\}$"))))
+      :bind ("C-c C-l" . org-annotate-file)))
   :config
   (progn
 
