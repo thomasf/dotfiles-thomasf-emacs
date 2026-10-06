@@ -7324,9 +7324,6 @@ Titus von der Malsburg."
     ;; org-git-link
     ;; (require 'ox-reveal)
 
-    (use-package orgbox
-      :ensure t)
-
     (and window-system
          (require 'org-bullets nil t)
          (fboundp 'org-bullets-mode)
