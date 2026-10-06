@@ -6400,8 +6400,12 @@ drag the viewpoint on the image buffer that the window displays."
     (setq ivy-on-del-error-function #'ignore
           ivy-height 30
           ivy-use-virtual-buffers t
-           ivy-re-builders-alist
-           '((t . ivy--regex-ignore-order))))
+          ivy-re-builders-alist
+          '((swiper . ivy--regex-ignore-order)
+            (swiper-isearch . ivy--regex-ignore-order)
+            (counsel-rg . ivy--regex-ignore-order)
+            (counsel-git-grep . ivy--regex-ignore-order)
+            (t . ivy--regex-fuzzy))))
   (ivy-mode))
 
 
