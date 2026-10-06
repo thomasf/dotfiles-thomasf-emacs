@@ -225,8 +225,6 @@ re-downloaded in order to locate PACKAGE."
 (use-package epc :ensure t :defer)
 (use-package ctable :ensure t :defer)
 (use-package fringe-helper :ensure t :defer)
-(use-package fuzzy :ensure t :defer :disabled t)
-(use-package flx : ensure t :defer :disabled t)
 (use-package pcache
   :ensure t
   :defer
@@ -238,7 +236,6 @@ re-downloaded in order to locate PACKAGE."
        (let ((dir (expand-file-name "pcache/" user-cache-directory)))
          (make-directory dir t)
          dir)))))
-(use-package posframe :ensure t :defer :disabled t)
 (use-package hydra
   :ensure t
   :config
@@ -1088,10 +1085,10 @@ Works for heads without a property :column."
   ("R" (lambda () (interactive) (switch-to-buffer "*rg*")) "*rg*" :exit t)
   ("I" (lambda () (interactive) (ibuffer)) "*ibuf*" :exit t)
   ("D" (lambda () (interactive) (dired ".")) "*dired*" :exit t)
-  ("s" helm-imenu "imenu" :exit t)
+  ("s" counsel-imenu "imenu" :exit t)
 
   ("b" bookmark-jump "*bookmarks*" :exit t)
-  ("B" helm-bookmarks "*bm-set*" :exit t)
+  ("B" counsel-bookmark "*bm-set*" :exit t)
 
   ("q" nil nil :exit t))
 ;; (hydra-compact-hint 'hydra-goto)
@@ -2040,15 +2037,6 @@ the file does not exist, falls back to `find-file-at-point'."
                    docker-containers-mode-hook
                    treemacs-mode-hook))
 
-
-(use-package helm
-  :defer t
-  :disabled t
-  :commands (with-helm-buffer)
-  :config
-  (progn
-    (add-hook 'helm-after-initialize-hook
-              #'(lambda () (with-helm-buffer (my-set-text-scale-smaller))))))
 
 (defadvice android-logcat (after smaller-font activate)
   (with-current-buffer (get-buffer "*android-logcat*")
@@ -3147,34 +3135,6 @@ Used to launch magit status from command line."
     ("0" . ")")))
 
 
-;;;;; helm popup frame
-
-(defvar popup-frame--frame  nil)
-
-(defun popup-frame--minibuffer-exit  ()
-  (when (and
-         popup-frame--frame
-         (frame-live-p popup-frame--frame))
-    (delete-frame popup-frame--frame t)
-    (setq popup-frame--frame nil)))
-
-(add-hook 'minibuffer-exit-hook
-          'popup-frame--minibuffer-exit )
-
-(defun popup-frame (f)
-  (interactive)
-  (setq popup-frame--frame (make-frame
-                            '((name . "floating-center-large")
-                              (title . "emacs popup minibuffer"))))
-  (with-selected-frame popup-frame--frame
-    (call-interactively f)))
-
-(defun popup-frame-helm-for-files  ()
-  (interactive)
-  (popup-frame 'helm-for-files))
-;; (bind-key "<menu>" 'popup-frame-helm-for-files)
-
-
 ;;;;; get-dwim-at-point
 
 (defun get-dwim-at-point ()
@@ -3667,44 +3627,6 @@ LEAF is normally ((BEG . END) . WND)."
   :commands bf-mode)
 
 
-;;;; bm
-
-(use-package bm
-  :ensure t
-  :disabled t
-
-  :commands (bm-next bm-previous bm-show-all bm-toggle bm-buffer-save
-                     bm-buffer-save-all bm-repository-load bm-repository-save
-                     bm-buffer-restore bm-buffer-restore-all bm-buffer-save
-                     bm-repository-clear bm-remove-all-all-buffers)
-  :bind (("C-c b n" . bm-next)
-         ("C-c b p" . bm-previous)
-         ("C-c b s" . bm-show-all))
-  :init
-  (progn
-
-
-;;;;; helm-bm
-
-    (use-package helm-bm
-      :ensure t
-      :disabled t
-      :commands helm-bm
-      :bind (
-             ("C-c b b" . helm-bm)
-             ("C-h u" . helm-bm))
-      :config
-      (progn
-        (use-package bm)))
-    (setq
-     bm-repository-file (expand-file-name
-                         "bm-repository" user-data-directory)
-     bm-annotate-on-create t
-     bm-cycle-all-buffers t
-     bm-buffer-persistence t
-     bm-repository-size 500)))
-
-
 ;;;; bookmark
 
 (use-package bookmark
@@ -4068,6 +3990,15 @@ LEAF is normally ((BEG . END) . WND)."
   :bind (
          ("C-x C-f" . counsel-find-file)
          ("M-x" . counsel-M-x)
+         ("M-o M-x" . counsel-M-x)
+         ("C-h a" . counsel-apropos)
+         ("C-h b" . counsel-descbinds)
+         ("C-h i" . counsel-imenu)
+         ("M-o M-i" . counsel-imenu)
+         ("C-h r" . counsel-recentf)
+         ("C-x f r" . counsel-recentf)
+         ("C-x f L" . counsel-locate)
+         ("C-x f p" . projectile-find-file)
          )
   :config (setq ivy-initial-inputs-alist nil)
   :commands (counsel-mode
@@ -4473,14 +4404,6 @@ If FILE already exists, signal an error."
     (global-set-key [remap kill-ring-save] 'easy-kill)))
 
 
-;;;; edbi
-
-(use-package edbi
-  :disabled t
-  :ensure t
-  :commands edbi:open-db-viewer)
-
-
 ;;;; ediff
 
 (use-package ediff
@@ -4546,14 +4469,6 @@ If FILE already exists, signal an error."
                 (define-key ediff-mode-map (kbd "=") 'my/ediff-font-size-increase)
                 (define-key ediff-mode-map (kbd "-") 'my/ediff-font-size-decrease)
                 (define-key ediff-mode-map (kbd "0") 'my/ediff-font-size-reset)))))
-
-
-;;;; edit-color-stamp
-
-(use-package edit-color-stamp
-  :disabled t ;; color chooser widget does not compile atm
-  :ensure t
-  :commands edit-color-stamp)
 
 
 ;;;; edit-env
@@ -4686,20 +4601,6 @@ If FILE already exists, signal an error."
 (use-package eval-sexp-fu
   :ensure t
   :commands (eval-sexp-fu-flash-mode))
-
-
-;;;; evil
-
-(use-package evil
-  :disabled t
-  :ensure t
-  :commands evil-mode
-  :init
-  (progn
-
-    (use-package evil-matchit
-      :ensure t
-      :commands global-evil-machit-mode)))
 
 
 ;;;; eww
@@ -5180,13 +5081,6 @@ If FILE already exists, signal an error."
     ;;        ((executable-find* "jsxhint" "yarn global add jsxhint") "jsxhint")
     ;;        (t "jshint")))
 
-    (use-package helm-flycheck
-      :ensure t
-      :commands (helm-flycheck)
-      :init
-      (progn
-        (bind-key "C-c ! h" 'helm-flycheck flycheck-mode-map)))
-
     (when (fboundp 'define-fringe-bitmap)
       (require 'fringe-helper)
       (fringe-helper-define 'vertical-wave-bitmap '(center repeat)
@@ -5432,24 +5326,7 @@ Git gutter:
               ;; clear the markup right away
               (sit-for 0.1)
               (git-gutter:clear))
-       :color blue))
-
-    (use-package git-gutter-fringe
-      :ensure t
-      :disabled t
-      :if window-system
-      :init
-      (progn
-        (setq git-gutter-fr:side 'right-fringe))
-      :config
-      (progn
-        (when (fboundp 'define-fringe-bitmap)
-          (fringe-helper-define 'git-gutter-fr:added '(top repeat)
-            ".XX.....")
-          (fringe-helper-define 'git-gutter-fr:deleted '(top repeat)
-            ".XX.....")
-          (fringe-helper-define 'git-gutter-fr:modified '(top repeat)
-            ".XX....."))))))
+       :color blue))))
 
 
 ;;;; git-modes
@@ -5486,14 +5363,7 @@ Git gutter:
 
 (use-package gitlab
   :ensure t
-  :commands (gitlab-version)
-  :init
-  (progn
-
-    (use-package helm-gitlab
-      :ensure t
-      :commands (helm-gitlab-issues
-                 helm-gitlab-projects))))
+  :commands (gitlab-version))
 
 
 ;;;; glsl-mode
@@ -5579,30 +5449,6 @@ Git gutter:
 (use-package go-scratch
   :ensure t
   :commands go-scratch)
-
-
-;;;; god-mode
-
-(use-package god-mode
-  :disabled t
-  :ensure t
-  :commands (god-mode god-mode-all god-local-mode
-                      god-local-mode-resume god-local-mode-pause)
-  :init
-  (progn
-    (global-set-key (kbd "<escape>") 'god-mode-all))
-  :config
-  (progn
-    (defun god-toggle-on-region-bindings-mode ()
-      "Toggle god-mode on region-bindings-mode."
-      (if (bound-and-true-p region-bindings-mode)
-          (god-local-mode-pause)
-        (god-local-mode-resume)))
-    (add-hook 'region-bindings-mode-hook 'god-toggle-on-region-bindings-mode)
-    (define-key god-local-mode-map (kbd "z") 'repeat)
-    ;; (define-key god-local-mode-map (kbd "i") 'god-local-mode)
-    (define-key god-local-mode-map (kbd "i") 'god-mode-all)
-    ))
 
 
 ;;;; google-c-style
@@ -5837,223 +5683,6 @@ Git gutter:
     (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)))
 
 
-;;;; helm
-
-(use-package helm
-  :ensure t
-  :defer 16
-  :commands (helm-M-x helm-bookmarks helm-browse-code
-                      helm-locate helm-mini helm-for-files helm-occur
-                      helm-simple-call-tree helm-top helm-ucs helm-org-headlines
-                      helm-org-keywords helm-mode helm-dired-mode
-                      helm-recentf helm-find)
-  :bind (("M-o M-x" . helm-M-x)
-         ("C-h a" . helm-apropos)
-         ;; ("M-s b" . helm-occur)
-         ;; ("C-x f h" . helm-for-files)
-         ;; ("<f7>" . helm-for-files)
-         ("C-x f r" . helm-recentf)
-         ("C-h r" . helm-recentf)
-         ;; ("<f6>" . helm-recentf)
-         ("C-x f L" . helm-locate))
-  :preface
-  (progn
-    (load "helm-autoloads" t t))
-  :config
-  (progn
-    (require 'helm-utils))
-  :init
-  (progn
-    (setq
-     helm-for-files-preferred-list
-     '(
-       helm-source-files-in-current-dir
-       helm-source-buffers-list
-       ;; helm-source-recentf
-       helm-source-projectile-files-list
-       ;; helm-source-projectile-buffers-list
-       helm-source-projectile-recentf-list
-       helm-source-file-cache
-       )
-     helm-prevent-escaping-from-minibuffer nil
-     helm-buffer-max-length 50
-     helm-full-frame t
-     helm-ff-transformer-show-only-basename nil
-     helm-adaptive-history-file (expand-file-name
-                                 "helm-adaptive-history"
-                                 user-data-directory)
-     helm-adaptive-history-length 100
-     helm-candidate-number-limit 100)
-
-
-    (use-package helm-imenu
-      :bind (("M-o M-i" . helm-imenu)
-             ;; ("<f8>" . helm-imenu)
-             ("C-h i" . helm-imenu))
-      :config
-      (progn
-        (defadvice helm-imenu (before ensure-semantic-context activate)
-          ;; quickly just try to to sematntic analyse before each imenu call
-          (condition-case nil
-              (semantic-analyze-current-context)
-            (error t)))))
-
-
-    (use-package helm-descbinds
-      :ensure t
-      :commands helm-descbinds
-      :bind ("C-h b" . helm-descbinds))))
-
-
-;;;; helm-chrome
-
-(use-package helm-chrome
-  :ensure t
-  :commands helm-chrome-bookmarks)
-
-
-;;;; helm-dash
-
-(use-package helm-dash
-  :ensure t
-  :commands (helm-dash helm-dash-at-point)
-  :bind (("C-h SPC" . helm-dash-at-point))
-  :config
-  (progn
-    (setq helm-dash-browser-func
-          (cond ((fboundp 'xwidget-webkit-browse-url) 'xwidget-webkit-browse-url)
-                ((fboundp 'eww) 'eww)
-                (t 'browse-url)))
-    (when (eq system-type 'gnu/linux)
-      (setq helm-dash-docsets-path (format "%s/.local/share/zeal"
-                                           (getenv "HOME"))))
-    (setq helm-dash-many-docsets
-          '(
-            "Android"
-            "Appcelerator Titanium"
-            "BackboneJS"
-            "Bash"
-            "Bootstrap_2"
-            "Bootstrap_3"
-            "C++"
-            "CSS"
-            "Clojure"
-            "NET_Framework"
-            "Redis"
-            "Swift"
-            "OS_X"
-            "D3JS"
-            "Django"
-            "Go"
-            "Glib"
-            "Flask"
-            "OCaml"
-            "Foundation"
-            "Go"
-            "HTML"
-            "JavaScript"
-            "Lo-Dash"
-            "Markdown"
-            "MySQL"
-            "Nginx"
-            "PHP"
-            "NodeJS"
-            "PostgreSQL"
-            "Processing"
-            "Python 2"
-            "Python 3"
-            "SQLite"
-            "SVG"
-            "Sass"
-            "Twisted"
-            "UnderscoreJS"
-            "Vagrant"
-            "XSLT"
-            "ZeptoJS"
-            "iOS"
-            "jQuery"
-            "jQuery_Mobile"
-            "jQuery_UI"
-            ))
-    (setq helm-dash-common-docsets
-          '(
-            ;; "Bootstrap_3"
-            "CSS"
-            ;; "Clojure"
-            ;; "D3JS"
-            "Django"
-            ;; "Flask"
-            ;; "Foundation"
-            "Go"
-            "HTML"
-            "JavaScript"
-            "Lo-Dash"
-            "Markdown"
-            "MomentJS"
-            "Nginx"
-            "NodeJS"
-            "PostgreSQL"
-            ;; "Processing"
-            "Python 2"
-            "Python 3"
-            "SQLite"
-            "SVG"
-            "Sass"
-            ;; "Twisted"
-            ;; "Vagrant"
-            ;; "ZeptoJS"
-            "jQuery"
-            "BackboneJS"
-            ))
-    ))
-
-
-;;;; helm-git-grep
-
-;; (use-package helm-git-grep
-;;   :ensure t
-;;   :commands (helm-git-grep
-;;              helm-git-grep-1
-;;              helm-git-grep-at-point)
-;;   :init
-;;   (progn
-;;     (defun helm-git-grep-region ()
-;;       "Helm git grep with region
-;; if submodules exists, grep submodules too."
-;;       (interactive)
-;;       (let* ((symbol (buffer-substring (mark) (point)))
-;;              (input (if symbol (concat symbol " ") nil)))
-;;         (helm-git-grep-1 input)))
-;;     (define-key search-map "g" 'helm-git-grep-region)
-;;     ))
-
-
-;;;; helm-orgcard
-
-(use-package helm-orgcard
-  :ensure t
-  :commands helm-orgcard)
-
-
-;;;; helm-projectile
-
-(use-package helm-projectile
-  :ensure t
-  :commands (helm-projectile)
-  :bind ("C-x f p" . helm-projectile))
-
-
-;;;; helm-recoll
-
-(use-package helm-recoll
-  :ensure t
-  :commands (helm-recoll helm-recoll-all)
-  :bind (("M-o r" . helm-recoll-all))
-  :config
-  (progn
-    (helm-recoll-create-source "all" "~/.recoll/")))
-
-
 ;;;; highlight-indentation
 
 (use-package highlight-indentation
@@ -6149,7 +5778,7 @@ Git gutter:
   (progn
     (unbind-key "M-o" ibuffer-mode-map)
     (unbind-key "M-g" ibuffer-mode-map)
-    (bind-key "r" 'helm-recentf ibuffer-mode-map)
+    (bind-key "r" 'counsel-recentf ibuffer-mode-map)
     (bind-key "s" 'isearch-forward-regexp ibuffer-mode-map)
     (bind-key "." 'ibuffer-invert-sorting ibuffer-mode-map)
 
@@ -6314,7 +5943,6 @@ Git gutter:
                 (or (mode . magit-log-edit-mode)
                     (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
                     (name . "^\\*Pymacs\\*$")
-                    (name . "^\\*helm.*\\*")
                     (name . "^\\*Compile-log\\*$")
                     (name . "^\\*Ido Completions\\*$")
                     (name . "^\\*magit-\\(process\\)\\*$")
@@ -6490,7 +6118,6 @@ Git gutter:
                        (mode . magit-log-edit-mode)
                        (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
                        (name . "^\\*Pymacs\\*$")
-                       (name . "^\\*helm.*\\*")
                        (name . "^\\*Compile-log\\*$")
                        (name . "^\\*Ido Completions\\*$")
                        (name . "^\\*magit-\\(process\\|commit\\)\\*$")
@@ -6544,7 +6171,7 @@ Git gutter:
        ;; xml and conf
        ".yml" ".yaml" ".xml" ".ini" ".cfg" ".cnf")
      ;; ido-use-virtual-buffers t
-     ido-ignore-buffers '("\\` " "*Ido Completions*" "*Completions*" "*helm*"
+     ido-ignore-buffers '("\\` " "*Ido Completions*" "*Completions*"
                           "type-break")
      ido-ignore-files '("\\`CVS/" "\\`#" "\\`.#" "\\`\\.\\./" "\\`\\./")
      ido-ignore-extensions t
@@ -6596,18 +6223,6 @@ Git gutter:
 
       )
     (add-hook 'ido-setup-hook 'my-ido-setup-bindings-hook)))
-
-
-;;;; ido-completing-read+
-
-(use-package ido-completing-read+
-  :disabled t
-  :ensure t
-  :defer 0.7
-  :commands ido-ubiquitous-mode
-  :config
-  (progn
-    (ido-ubiquitous-mode)))
 
 
 ;;;; ielm
@@ -6955,19 +6570,6 @@ drag the viewpoint on the image buffer that the window displays."
     ))
 
 
-;;;; kite-mini
-
-(use-package kite-mini
-  :disabled t
-  :ensure t
-  :commands (kite-mini-mode)
-  :init
-  (progn
-
-    (use-package kite-mini-console
-      :commands kite-mini-console)))
-
-
 ;;;; kivy-mode
 
 (use-package kivy-mode
@@ -7079,13 +6681,6 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (define-key region-bindings-mode-map "l" 'loccur-current)))
-
-
-;;;; log4j-mode
-
-(use-package log4j-mode
-  :disabled t
-  :mode ("\\.log\\'" . log4j-mode))
 
 
 ;;;; logito
@@ -7427,43 +7022,6 @@ drag the viewpoint on the image buffer that the window displays."
 
     (use-package magit-section
       :ensure t)
-    (use-package forge
-      :disabled t
-      :ensure t
-
-      :init
-      (progn
-        (setq forge-database-file  (expand-file-name "forge/database.sqlite" user-data-directory)
-              forge-post-directory (expand-file-name "forge/posts/" user-data-directory)))
-      :config
-      (progn
-
-        (use-package forge-topic
-          :config
-          (progn
-            (defun my-forge-bug-reference-setup-condition (orig-fun &rest args)
-              (when (or (eq major-mode 'forge-topic-mode)
-                        (eq major-mode 'magit-staus-mode)
-                        (eq major-mode 'forge-issue-list-mode)
-                        (eq major-mode 'magit-log-mode))
-                (apply orig-fun args)))
-            (advice-add 'forge-bug-reference-setup :around #'my-forge-bug-reference-setup-condition)))
-        (setq forge-alist
-              '(("github.com" "api.github.com" "github.com" forge-github-repository)
-                ("gitlab.com" "gitlab.com/api/v4" "gitlab.com" forge-gitlab-repository)
-                ("gitlab.23c.se" "gitlab.23c.se/api/v4" "gitlab.23c.se" forge-gitlab-repository)
-                ("gitlab.tracklib.com" "gitlab.tracklib.com/api/v4" "gitlab.tracklib.com" forge-gitlab-repository)
-                ("salsa.debian.org" "salsa.debian.org/api/v4" "salsa.debian.org" forge-gitlab-repository)
-                ("framagit.org" "framagit.org/api/v4" "framagit.org" forge-gitlab-repository)
-                ("codeberg.org" "codeberg.org/api/v1" "codeberg.org" forge-gitea-repository)
-                ("code.orgmode.org" "code.orgmode.org/api/v1" "code.orgmode.org" forge-gogs-repository)
-                ("bitbucket.org" "api.bitbucket.org/2.0" "bitbucket.org" forge-bitbucket-repository)
-                ("git.savannah.gnu.org" nil "git.savannah.gnu.org" forge-cgit*-repository)
-                ("git.kernel.org" nil "git.kernel.org" forge-cgit-repository)
-                ("repo.or.cz" nil "repo.or.cz" forge-repoorcz-repository)
-                ("git.suckless.org" nil "git.suckless.org" forge-stagit-repository)
-                ("git.sr.ht" nil "git.sr.ht" forge-srht-repository))
-              forge-database-file (expand-file-name "forge-database.sqlite" user-data-directory))))
 
     (defun my-git-commit-hook-fn ()
       "My git commit mode hook."
@@ -7585,18 +7143,6 @@ drag the viewpoint on the image buffer that the window displays."
   )
 
 
-;;;; melpa-upstream-visit
-
-(use-package melpa-upstream-visit
-  :disabled t
-  :ensure t
-  :commands muv
-  :init
-  (progn
-    (defadvice list-packages (before load-muv activate)
-      (use-package melpa-upstream-visit))))
-
-
 ;;;; memory-usage
 
 (use-package memory-usage
@@ -7673,14 +7219,6 @@ drag the viewpoint on the image buffer that the window displays."
 
 (use-package mouse-drag
   :bind ("<down-mouse-3>" . mouse-drag-drag))
-
-
-;;;; moz
-
-(use-package moz
-  :disabled t
-  :ensure t
-  :commands moz-minor-mode)
 
 
 ;;;; mu4e
@@ -7849,17 +7387,6 @@ Titus von der Malsburg."
 
 (use-package notifications
   :commands notifications-notify)
-
-
-;;;; nrepl-eval-sexp-fu
-
-(use-package nrepl-eval-sexp-fu
-  :ensure t
-  :disabled t
-  :commands (nrepl-eval-sexp-fu-flash-mode
-             turn-on-nrepl-eval-sexp-fu-flash-mode
-             nrepl-eval-sexp-fu-eval-sexp-inner-list
-             nrepl-eval-sexp-fu-eval-sexp-inner-sexp))
 
 
 ;;;; nsm
@@ -8445,28 +7972,6 @@ otherwise use the subtree title."
   :ensure t
   :commands (turn-on-pandoc
              pandoc-load-default-settings))
-
-
-;;;; parenface-plus
-
-(use-package parenface-plus
-  :ensure t
-  :disabled t
-  :if (and (not noninteractive) (not (not window-system)) )
-  :config
-  (progn
-    (defun paren-face-add-keyword-other ()
-      "Adds paren-face support to the mode."
-      (font-lock-add-keywords nil '(("\\[\\|\\]" . paren-face)))
-      (font-lock-add-keywords nil '(("{\\|}" . paren-face))))
-    (add-hook 'lisp-mode-hook 'paren-face-add-keyword)
-    (add-hook 'go-mode-hook 'paren-face-add-keyword)
-    (add-hook 'go-mode-hook 'paren-face-add-keyword-other)
-    (add-hook 'go-ts-mode-hook 'paren-face-add-keyword)
-    (add-hook 'go-ts-mode-hook 'paren-face-add-keyword-other)
-    (add-hook 'python-base-mode-hook 'paren-face-add-keyword)
-    (add-hook 'python-base-mode-hook 'paren-face-add-keyword-other)
-    ))
 
 
 ;;;; peep-dired
@@ -9458,16 +8963,6 @@ otherwise use the subtree title."
     (save-place-mode 1)))
 
 
-;;;; sclang
-
-(use-package sclang
-  :disabled t
-  :commands (sclang-start
-             sclang-server-boot)
-  :mode ("\\.\\(sc\\|scd\\)\\'" . sclang-mode)
-  :interpreter ("sclang" . sclang-mode))
-
-
 ;;;; scratch
 
 (use-package scratch
@@ -9903,60 +9398,7 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
        (unsplittable . t)
        (left-fringe . 0)
        (name . "speedbar")
-       (title . "Speedbar")))
-
-    (use-package sr-speedbar
-      :ensure t
-      :disabled t
-      :commands (sr-speedbar-toggle
-                 sr-speedbar-refresh-toggle
-                 sr-speedbar-select-window)
-      :init
-      (progn
-        (setq
-         sr-speedbar-width 40
-         sr-speedbar-width-x 40
-         sr-speedbar-max-width 60
-         sr-speedbar-auto-refresh t
-         sr-speedbar-skip-other-window-p t
-         sr-speedbar-right-side nil)
-
-        (defvar last-selected-window (selected-window))
-        (defadvice select-window (after remember-selected-window activate)
-          "Remember the last selected window."
-          (unless (or
-                   (not (boundp 'sr-speedbar-window))
-                   (eq (selected-window) sr-speedbar-window))
-            (setq last-selected-window (selected-window)))))
-      :config
-      (progn
-        (defun sr-speedbar-maybe-close ()
-          (when (sr-speedbar-exist-p)
-            (sr-speedbar-close)))
-
-        (defadvice tiling-cycle (before sr-speedbar-close)
-          "Close speedbar if it's open."
-          (sr-speedbar-maybe-close))
-
-        (defadvice mu4e (before sr-speedbar-close)
-          "Close speedbar if it's open."
-          (sr-speedbar-maybe-close))
-
-        (defun sr-speedbar-before-visiting-file-hook ()
-          "Function that hooks `speedbar-before-visiting-file-hook'."
-          (select-window last-selected-window))
-
-        (defun sr-speedbar-before-visiting-tag-hook ()
-          "Function that hooks `speedbar-before-visiting-tag-hook'."
-          (select-window last-selected-window))
-
-        (defun sr-speedbar-visiting-file-hook ()
-          "Function that hooks `speedbar-visiting-file-hook'."
-          (select-window last-selected-window))
-
-        (defun sr-speedbar-visiting-tag-hook ()
-          "Function that hooks `speedbar-visiting-tag-hook'."
-          (select-window last-selected-window)))))
+       (title . "Speedbar"))))
   :config
   (progn
     (bind-key "S-<up>" 'speedbar-up-directory speedbar-mode-map)
@@ -9972,14 +9414,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 (use-package sqlite
   :ensure t
   :defer)
-
-
-;;;; string-edit
-
-(use-package string-edit
-  :ensure t
-  :disabled t
-  :commands (string-edit-at-point))
 
 
 ;;;; string-inflection
@@ -10422,15 +9856,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 (use-package vkill
   :commands vkill
   :if (not noninteractive)
-  :init
-  (progn
-    (defun vkill-and-helm-occur ()
-      (interactive)
-      (vkill)
-      (call-interactively #'helm-occur))
-    ;; (bind-key "C-x L" 'vkill-and-helm-occur)
-    )
-
   :config
   (setq vkill-show-all-processes t))
 
@@ -10447,26 +9872,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
       (volatile-highlights-mode 1))
     (hook-into-modes #'turn-on-volatile-highlights-mode
                      my-prog-mode-hooks)))
-
-
-;;;; wakatime-mode
-
-(use-package wakatime-mode
-  :ensure t
-  :disabled t
-  :if (and (not noninteractive)  (executable-find* "wakatime-cli"))
-  :commands (wakatime-mode global-wakatime-mode)
-  :diminish (wakatime-mode . "")
-  :defer 4
-  :init
-  (progn
-    (setq wakatime-disable-on-error t)
-    ;; (setq wakatime-cli-path "~/.opt/wakatime/wakatime-cli.py")
-    )
-  :config
-  (progn
-    (when (executable-find "wakatime-cli")
-      (global-wakatime-mode 1))))
 
 
 ;;;; web-mode
@@ -10526,63 +9931,11 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
   :commands websocket-open)
 
 
-;;;; weechat
-
-(use-package weechat
-  :ensure t
-  :disabled t
-  :commands (weechat-connect)
-  :bind  (("C-x b i" . weechat-switch-buffer)
-          ("C-x b I" . weechat-monitor-buffer))
-  :init
-  (progn
-    (setq weechat-buffer-kill-buffers-on-disconnect t
-          weechat-auto-monitor-new-buffers 'silent
-          weechat-initial-lines 200
-          weechat-auto-close-buffers t
-          weechat-modules '(weechat-button weechat-complete)
-          weechat-time-format "%a %H:%M"
-          weechat-strip-formatting t ;; FIXME remove when weechat colors is using its color settings properly
-          weechat-tracking-faces-priorities '(weechat-highlight-face))
-
-    (defun my-weechat-mode-hook ()
-      (visual-line-mode 1))
-    (add-hook 'weechat-mode-hook 'my-weechat-mode-hook)
-
-    (defun weechat-monitor-all-buffers ()
-      "Monitor all weechat buffers"
-      (interactive)
-      (let ((weechat-auto-monitor-buffers t))
-        (weechat-auto-monitor)))
-
-    (defun weechat ()
-      "Load private-weechat which is supposed to connect to weechat."
-      (interactive)
-      (require 'private-weechat nil t)
-      (my-weechat-connect))))
-
-
 ;;;; wgrep
 
 (use-package wgrep
   :ensure t
   :commands (wgrep-setup))
-
-
-;;;; which-key
-
-(use-package which-key
-  :ensure t
-  :disabled t
-  :commands (which-key-mode)
-  :defer 0.9
-  :diminish ""
-  :init
-  (progn
-    (setq which-key-idle-delay 1.0
-          which-key--secondary-timer-active nil
-          which-key-popup-type 'minibuffer)
-    (which-key-mode)))
 
 
 ;;;; whitespace
@@ -10661,10 +10014,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
     (setq winner-dont-bind-my-keys t
           winner-boring-buffers
           '("*Completions*"
-            "*SPEEDBAR*"
-            "*helm for files*"
-            "*helm imenu*"
-            "*helm*"))
+            "*SPEEDBAR*"))
     (condition-case nil
         (winner-mode 1)
       (error (warn "winner mode startup failed!")))))
@@ -10720,19 +10070,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
     (remove-hook 'xref-after-return-hook 'xref-pulse-momentarily)
     (add-hook 'xref-after-jump-hook 'my-pulse-xref 99)
     (add-hook 'xref-after-return-hook 'my-pulse-xref 99)))
-
-
-;;;; xterm-color
-
-(use-package xterm-color
-  :ensure t
-  :disabled t
-  :commands (xterm-color-filter xterm-color-unfontify-region)
-  :init
-  (progn
-    (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-    (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
-    (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region)))
 
 
 ;;;; yaml-mode
@@ -10947,6 +10284,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 ;;;; zig-ts-mode
 
 (use-package zig-ts-mode
+  :ensure t
   :defer t
   :commands (zig-ts-mode)
   :mode ("\\.zig\\'" . zig-ts-mode))
