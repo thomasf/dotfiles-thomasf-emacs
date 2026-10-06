@@ -1487,7 +1487,6 @@ Works for heads without a property :column."
    ;; advices
   (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)
   (advice-add 'magit-diff-visit-file :after 'my-pulse-now)
-  (advice-add 'ido-find-file :after 'my-pulse-now)
   (advice-add 'direx:generic-find-item :after 'my-pulse-now)
   (advice-add 'direx:generic-view-item :after 'my-pulse-now)
   ;; end
@@ -3991,6 +3990,8 @@ LEAF is normally ((BEG . END) . WND)."
          ("C-x C-f" . counsel-find-file)
          ("M-x" . counsel-M-x)
          ("M-o M-x" . counsel-M-x)
+         ("<menu>" . counsel-M-x)
+         ("<XF86Tools>" . counsel-M-x)
          ("C-h a" . counsel-apropos)
          ("C-h b" . counsel-descbinds)
          ("C-h i" . counsel-imenu)
@@ -4106,7 +4107,7 @@ LEAF is normally ((BEG . END) . WND)."
 
 (use-package dired
   :commands (dired)
-  :bind (("C-x d d" . ido-dired))
+  :bind (("C-x d d" . dired))
   :if (not noninteractive)
   :init
   (progn
@@ -4792,6 +4793,14 @@ If FILE already exists, signal an error."
                                      floobits-share-dir-private))
 
 
+;;;; flx
+
+;; ivy sorts ivy--regex-fuzzy matches by flx score when flx is available.
+(use-package flx
+  :ensure t
+  :defer t)
+
+
 ;;;; flycheck
 
 (use-package flycheck
@@ -4812,7 +4821,6 @@ If FILE already exists, signal an error."
      flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
      flycheck-disabled-checkers '(javascript-jshint go-megacheck go-staticcheck go-errcheck)
-     flycheck-completion-system 'ido
      flycheck-standard-error-navigation nil
      flycheck-navigation-minimum-level 'info
      flycheck-error-list-minimum-level nil
@@ -5944,7 +5952,6 @@ Git gutter:
                     (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
                     (name . "^\\*Pymacs\\*$")
                     (name . "^\\*Compile-log\\*$")
-                    (name . "^\\*Ido Completions\\*$")
                     (name . "^\\*magit-\\(process\\)\\*$")
                     (name . "^ "))))
              '(("EMACS"
@@ -6119,7 +6126,6 @@ Git gutter:
                        (name . "^\\*\\(traad-server\\|httpd\\|epc con.*\\|tramp/.*\\|Completions\\)\\*$")
                        (name . "^\\*Pymacs\\*$")
                        (name . "^\\*Compile-log\\*$")
-                       (name . "^\\*Ido Completions\\*$")
                        (name . "^\\*magit-\\(process\\|commit\\)\\*$")
                        (name . "^ ")
                        ))
@@ -6131,98 +6137,14 @@ Git gutter:
                   (setq ibuffer-hidden-filter-groups '("MORE"))
                   (ibuffer-update nil t)
                   (hl-line-mode 1)))
-    (defun ibuffer-ido-find-file ()
-      "Like `ido-find-file', but default to the directory of the buffer at point."
-      (interactive
-       (let ((default-directory (let ((buf (ibuffer-current-buffer)))
-                                  (if (buffer-live-p buf)
-                                      (with-current-buffer buf
-                                        default-directory)
-                                    default-directory))))
-         (ido-find-file-in-dir default-directory))))
-    (bind-key "C-x C-f" 'ibuffer-ido-find-file ibuffer-mode-map)))
-
-
-;;;; ido
-
-(use-package ido
-  :commands ido-mode
-  :if (and
-       (not noninteractive))
-  :init
-  (progn
-    (setq
-     ido-enable-tramp-completion t
-     ido-enable-flex-matching t
-     ido-create-new-buffer 'always
-     ido-use-filename-at-point nil
-     ido-enable-dot-prefix t
-     ido-max-prospects 50
-     ido-auto-merge-work-directories-length -1
-     ido-file-extensions-order
-     '( ;; languages
-       ".py" ".go"  ".js" ".jsx" ".rb" ".java" ".c"  ".cc" ".cpp" ".el" ".ts" ".tsx"
-       ;; markup
-       ".html" ".htm" ".xhtml"
-       ;; styles
-       ".styl" ".scss" ".sass" ".css"
-       ;; documents
-       ".org" ".md" ".markdowm" ".doc" ".txt" ".rst"
-       ;; xml and conf
-       ".yml" ".yaml" ".xml" ".ini" ".cfg" ".cnf")
-     ;; ido-use-virtual-buffers t
-     ido-ignore-buffers '("\\` " "*Ido Completions*" "*Completions*"
-                          "type-break")
-     ido-ignore-files '("\\`CVS/" "\\`#" "\\`.#" "\\`\\.\\./" "\\`\\./")
-     ido-ignore-extensions t
-     ido-default-buffer-method 'selected-window
-     ido-default-file-method 'selected-window
-     ido-save-directory-list-file (expand-file-name
-                                   "ido.last" user-data-directory))
-    (ido-mode 'both)
-    (ido-everywhere 1)
-    )
-  :config
-  (progn
-
-    ;; (use-package ido-vertical-mode
-    ;;   :ensure t
-    ;;   :commands (ido-vertical-turn-on
-    ;;              ido-vertical-mode)
-    ;;   :init
-    ;;   (progn
-    ;;     (ido-vertical-turn-on)))
-
-    (use-package flx-ido
-      :ensure  t
-      :commands (flx-ido-mode)
-      :if (not (or
-                noninteractive
-                (or (not (boundp 'emacs-version)) (string< emacs-version "24.3"))))
-      :init
-      (progn
-        (flx-ido-mode 1)))
-
-    (defun my-ido-goto-home ()
+    (defun ibuffer-counsel-find-file ()
+      "Like `counsel-find-file', but start in the directory of the buffer at point."
       (interactive)
-      (if (looking-back "/" 1)
-          (insert
-           (if (looking-back "~/" 2)
-               "//" "~/"))
-        (call-interactively 'self-insert-command)))
-
-    (defun my-ido-setup-bindings-hook ()
-      ;; (unbind-key "C-a" ido-common-completion-map)
-      (bind-key "~" 'my-ido-goto-home ido-completion-map)
-      (bind-key "C-a" 'beginning-of-line ido-completion-map)
-      (bind-key "C-i" 'ido-toggle-ignore ido-completion-map)
-      (bind-key "C-n" 'ido-next-match ido-completion-map)
-      (bind-key "C-p" 'ido-prev-match ido-completion-map)
-      (bind-key "<down>" 'ido-next-match ido-completion-map)
-      (bind-key "<up>" 'ido-prev-match ido-completion-map)
-
-      )
-    (add-hook 'ido-setup-hook 'my-ido-setup-bindings-hook)))
+      (let ((buf (ibuffer-current-buffer)))
+        (counsel-find-file nil (if (buffer-live-p buf)
+                                   (buffer-local-value 'default-directory buf)
+                                 default-directory))))
+    (bind-key "C-x C-f" 'ibuffer-counsel-find-file ibuffer-mode-map)))
 
 
 ;;;; ielm
@@ -6302,60 +6224,11 @@ drag the viewpoint on the image buffer that the window displays."
 ;;;; imenu
 
 (use-package imenu
-  :bind (("M-o i" . goto-symbol))
+  :bind (("M-o i" . counsel-imenu))
   :init
   (progn
     (setq
-     imenu-auto-rescan t))
-  :config
-  (progn
-    (defun goto-symbol (&optional symbol-list)
-      "Refresh imenu and jump to a place in the buffer using Ido."
-      (interactive)
-      (unless (featurep 'imenu)
-        (require 'imenu nil t))
-      (cond
-       ((not symbol-list)
-        (let ((ido-mode ido-mode)
-              (ido-enable-flex-matching
-               (if (boundp 'ido-enable-flex-matching)
-                   ido-enable-flex-matching t))
-              name-and-pos symbol-names position)
-          (unless ido-mode
-            (ido-mode 1)
-            (setq ido-enable-flex-matching t))
-          (while (progn
-                   (imenu--cleanup)
-                   (setq imenu--index-alist nil)
-                   (ido-goto-symbol (imenu--make-index-alist))
-                   (setq selected-symbol
-                         (completing-read "Symbol?" symbol-names))
-                   (string= (car imenu--rescan-item) selected-symbol)))
-          (unless (and (boundp 'mark-active) mark-active)
-            (push-mark nil t nil))
-          (setq position (cdr (assoc selected-symbol name-and-pos)))
-          (cond
-           ((overlayp position)
-            (goto-char (overlay-start position)))
-           (t
-            (goto-char position)))))
-       ((listp symbol-list)
-        (dolist (symbol symbol-list)
-          (let (name position)
-            (cond
-             ((and (listp symbol) (imenu--subalist-p symbol))
-              (ido-goto-symbol symbol))
-             ((listp symbol)
-              (setq name (car symbol))
-              (setq position (cdr symbol)))
-             ((stringp symbol)
-              (setq name symbol)
-              (setq position
-                    (get-text-property 1 'org-imenu-marker symbol))))
-            (unless (or (null position) (null name)
-                        (string= (car imenu--rescan-item) name))
-              (add-to-list 'symbol-names name)
-              (add-to-list 'name-and-pos (cons name position))))))))))
+     imenu-auto-rescan t)))
 
 
 ;;;; interaction-log
@@ -7163,8 +7036,7 @@ drag the viewpoint on the image buffer that the window displays."
   :init
   (progn
     (setq
-     mingus-use-mouse-p nil
-     mingus-use-ido-mode-p t))
+     mingus-use-mouse-p nil))
   :config
   (progn
     (dolist
@@ -7586,7 +7458,7 @@ Titus von der Malsburg."
     (defun insert-file-as-org-table (filename)
       "Insert a file at point and convert it to an org table.
 Argument FILENAME File to insert."
-      (interactive (list (ido-read-file-name "csv file: ")))
+      (interactive (list (read-file-name "csv file: ")))
       (let* ((start (point))
              (end (+ start (nth 1 (insert-file-contents filename)))))
         (org-table-convert-region start end)))
@@ -7645,7 +7517,6 @@ Argument FILENAME File to insert."
      org-agenda-show-inherited-tags t
      org-agenda-window-setup 'current-window
      org-columns-ellipses "…"
-     org-completion-use-ido t
      org-cycle-separator-lines 1
      org-datetree-add-timestamp t
      org-default-notes-file (expand-file-name "agenda/refile.org" user-notes-directory)
@@ -8144,7 +8015,6 @@ otherwise use the subtree title."
           ("*identify*" :noselect t)
           ("*Help*" :stick t)
           (help-mode :noselect t)
-          ("*Ido Completions*" :noselect t :position bottom)
           (direx:direx-mode :position left :width .35 :dedicated t)
           ;; ("*Messages*" :height .40 :tail t :stick t)
           (deadgrep-mode :height .40 :stick t)
@@ -8747,7 +8617,7 @@ otherwise use the subtree title."
                        "[/\\]\\.git/"))
 
     (defun find-recent-file ()
-      "Use `ido-completing-read' to \\[find-file] a recent file"
+      "Use `completing-read' to \\[find-file] a recent file"
       (interactive)
       (recentf-mode 1)
       (if (find-file (completing-read "Find recent file: " recentf-list))
@@ -9354,24 +9224,16 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
 ;;;; smex
 
+;; counsel-M-x uses smex to sort commands by recent use.
 (use-package smex
   :ensure t
-  :if (and )
-  :commands (smex smex-major-mode-commands smex-show-unbound-commands)
-  :bind (
-         ;; ("M-x" . smex)
-         ("<menu>" . smex)
-         ("<XF86Tools>" . smex)
-         ;; ("<XF86Search>" . smex)
-         ("M-X" . smex-major-mode-commands))
+  :defer t
   :init
   (progn
     (setq
      smex-save-file (expand-file-name
                      "smex-items" user-data-directory)
-     smex-flex-matching t
-     smex-history-length 15
-     smex-prompt-string "")))
+     smex-history-length 15)))
 
 
 ;;;; solarized-theme-utils
