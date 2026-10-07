@@ -8209,6 +8209,9 @@ otherwise use the subtree title."
      projectile-known-projects-file (expand-file-name
                                      "projectile-bookmarks.eld"
                                      user-data-directory)
+     projectile-frecency-file (expand-file-name
+                                     "projectile-frecency.eld"
+                                     user-data-directory)
      projectile-cache-file (expand-file-name
                             "projectile.cache" user-cache-directory)
      projectile-file-exists-local-cache-expire nil
