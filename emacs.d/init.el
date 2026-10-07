@@ -6226,7 +6226,24 @@ drag the viewpoint on the image buffer that the window displays."
             (counsel-rg . ivy--regex-ignore-order)
             (counsel-git-grep . ivy--regex-ignore-order)
             (t . ivy--regex-fuzzy))))
-  (ivy-mode))
+  (ivy-mode)
+  :config
+  (progn
+    ;; Ignore spaces in fuzzy input so "find init" matches "find-init". Ivy
+    ;; special-cases `ivy--regex-fuzzy' by identity for flx sorting and
+    ;; highlighting, so advise it instead of using a wrapper re-builder.
+    (defun my-ivy-fuzzy-strip-spaces (str)
+      (replace-regexp-in-string " +" "" str))
+    (advice-add 'ivy--regex-fuzzy :filter-args
+                (lambda (args)
+                  (cons (my-ivy-fuzzy-strip-spaces (car args)) (cdr args))))
+    (advice-add 'ivy--flx-sort :filter-args
+                (lambda (args)
+                  (cons (my-ivy-fuzzy-strip-spaces (car args)) (cdr args))))
+    (advice-add 'ivy--highlight-fuzzy :around
+                (lambda (fn str)
+                  (let ((ivy-text (my-ivy-fuzzy-strip-spaces ivy-text)))
+                    (funcall fn str))))))
 
 
 ;;;; js
