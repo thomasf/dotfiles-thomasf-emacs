@@ -8164,7 +8164,7 @@ otherwise use the subtree title."
 
 (use-package projectile
   :ensure t
-  :defer 1.4
+  :defer 0.2
   :commands (projectile-mode
              projectile-project-p
              projectile-sort-by-recentf-first
