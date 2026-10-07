@@ -1268,37 +1268,6 @@ Works for heads without a property :column."
                 simple-modeline-segment-major-mode)))))))
 
 
-;;;; smart-mode-line
-
-;; (setq sml/theme nil)
-;; (use-package smart-mode-line
-;;   :disabled t
-;;   :ensure t
-;;   :if (and
-;;        (not noninteractive)
-;;        (not (not window-system))
-;;        )
-;;   :commands (sml/setup)
-;;   :preface
-;;   (progn
-;;     (load "smart-mode-line-autoloads" t t))
-;;   :init
-;;   (progn
-;;     (customize-set-variable 'sml/projectile-replacement-format ":p/%s:")
-;;     (setq
-;;      sml/modified-char "m"
-;;      sml/read-only-char "r"
-;;      sml/outside-modified-char "M"
-;;      sml/mule-info ""
-;;      sml/shorten-modes nil
-;;      sml/replacer-regexp-list
-;;      '(("^~/\.virtualenvs/\\([^/]+\\)" ":e/\\1:")
-;;        ("^~/\.local/share/virtualenvs/\\([^/]+\\)" ":e/\\1:")
-;;        ("^/sudo:.*:" ":su:")
-;;        ("^~/dropbox/" ":db:")))
-;;     (sml/setup)))
-
-
 ;;;; dynamic-fonts
 
 (defvar my-monospaced-font "PragmataPro-12")
