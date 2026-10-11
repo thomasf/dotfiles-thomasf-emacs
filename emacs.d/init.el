@@ -4704,147 +4704,21 @@ If FILE already exists, signal an error."
      flycheck-highlighting-mode 'lines
      flycheck-idle-change-delay 0.6
      ;; flycheck-highlighting-mode 'symbols
-     flycheck-disabled-checkers '(javascript-jshint go-megacheck go-staticcheck go-errcheck)
      flycheck-standard-error-navigation nil
      flycheck-navigation-minimum-level 'info
-     flycheck-error-list-minimum-level nil
-     flycheck-checkers '(ada-gnat
-                         asciidoctor
-                         asciidoc
-                         awk-gawk
-                         bazel-build-buildifier
-                         bazel-module-buildifier
-                         bazel-starlark-buildifier
-                         bazel-workspace-buildifier
-                         c/c++-clang
-                         c/c++-gcc
-                         c/c++-cppcheck
-                         cfengine
-                         chef-foodcritic
-                         coffee
-                         coffee-coffeelint
-                         coq
-                         css-csslint
-                         css-stylelint
-                         cuda-nvcc
-                         cwl
-                         d-dmd
-                         dockerfile-hadolint
-                         elixir-credo
-                         emacs-lisp
-                         emacs-lisp-checkdoc
-                         ember-template
-                         erlang-rebar3
-                         erlang
-                         eruby-erubis
-                         eruby-ruumba
-                         fortran-gfortran
-                         go-gofmt
-                         go-golint
-                         go-vet
-                         go-build
-                         go-test
-                         ;; go-errcheck
-                         go-unconvert
-                         ;; go-staticcheck
-                         groovy
-                         haml
-                         handlebars
-                         haskell-stack-ghc
-                         haskell-ghc
-                         haskell-hlint
-                         html-tidy
-                         javascript-eslint
-                         javascript-jshint
-                         javascript-standard
-                         json-jsonlint
-                         json-python-json
-                         json-jq
-                         jsonnet
-                         less
-                         less-stylelint
-                         llvm-llc
-                         lua-luacheck
-                         lua
-                         markdown-markdownlint-cli
-                         markdown-mdl
-                         nix
-                         nix-linter
-                         opam
-                         perl
-                         perl-perlcritic
-                         php
-                         php-phpmd
-                         php-phpcs
-                         processing
-                         proselint
-                         protobuf-protoc
-                         protobuf-prototool
-                         pug
-                         puppet-parser
-                         puppet-lint
-                         python-flake8
-                         python-pylint
-                         python-pycompile
-                         python-pyright
-                         python-mypy
-                         r-lintr
-                         racket
-                         rpm-rpmlint
-                         rst-sphinx
-                         rst
-                         ruby-rubocop
-                         ruby-standard
-                         ruby-reek
-                         ruby-rubylint
-                         ruby
-                         ruby-jruby
-                         rust-cargo
-                         rust
-                         rust-clippy
-                         scala
-                         scala-scalastyle
-                         scheme-chicken
-                         scss-lint
-                         scss-stylelint
-                         sass/scss-sass-lint
-                         sass
-                         scss
-                         sh-bash
-                         sh-posix-dash
-                         sh-posix-bash
-                         sh-zsh
-                         sh-shellcheck
-                         slim
-                         slim-lint
-                         sql-sqlint
-                         systemd-analyze
-                         tcl-nagelfar
-                         terraform
-                         terraform-tflint
-                         tex-chktex
-                         tex-lacheck
-                         texinfo
-                         textlint
-                         typescript-tslint
-                         verilog-verilator
-                         vhdl-ghdl
-                         xml-xmlstarlet
-                         xml-xmllint
-                         yaml-jsyaml
-                         yaml-ruby
-                         yaml-yamllint
-                         python-ruff))
+     flycheck-error-list-minimum-level nil)
 
     ;; (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile python-pyright))
-    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile pylsp))
+    (setq-default flycheck-disabled-checkers '(python-flake8 python-mypy python-pycompile pylsp
+                                               go-gofmt go-errcheck go-staticcheck go-unconvert
+                                               javascript-jshint))
 
     (defun my-flycheck-cycle-error-navigation-min-level ()
       (interactive)
       (message "flycheck-navigation-minimum-level: %s"
                (dring-set-next-element
                 'flycheck-navigation-minimum-level
-                '('info 'warning 'error))))
+                '(info warning error))))
 
     (defun my-node_modules-flycheck-hook ()
       (setq-local flycheck-executable-find #'flycheck-node_modules-executable-find))
@@ -4852,8 +4726,6 @@ If FILE already exists, signal an error."
     (add-hook 'js2-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'js-mode-hook 'my-node_modules-flycheck-hook)
     (add-hook 'web-mode-hook 'my-node_modules-flycheck-hook)
-    (add-hook 'typescript-mode 'my-node_modules-flycheck-hook)
-    (add-hook 'typescript-ts-mode 'my-node_modules-flycheck-hook)
 
     (defun flycheck-turn-on-maybe ()
       (unless
@@ -4881,10 +4753,6 @@ If FILE already exists, signal an error."
 
   :config
   (progn
-    ;;
-    ;; patch end
-    ;;
-
     (defun my-flycheck-next-error (&optional n reset)
       ""
       (interactive "P")
@@ -4967,6 +4835,21 @@ If FILE already exists, signal an error."
         (flycheck-list-errors)
         (select-window (get-buffer-window "*Flycheck errors*"))))
 
+    (defun my-flycheck-drop-duplicate-errors (args)
+      "Drop errors in ARGS that an earlier checker in the chain already reported.
+An error is a duplicate if its file, line, column and message match."
+      (let* ((key (lambda (err)
+                    (list (flycheck-error-filename err)
+                          (flycheck-error-line err)
+                          (flycheck-error-column err)
+                          (flycheck-error-message err))))
+             (seen (mapcar key flycheck-current-errors)))
+        (list (seq-remove (lambda (err) (member (funcall key err) seen))
+                          (car args)))))
+
+    (advice-add 'flycheck-report-current-errors
+                :filter-args 'my-flycheck-drop-duplicate-errors)
+
     (flycheck-add-mode 'javascript-eslint 'web-mode)
     ;; (setq flycheck-javascript-jshint-executable
     ;;       (cond
@@ -5010,7 +4893,6 @@ If FILE already exists, signal an error."
 
       (setq flycheck-flake8-error-level-alist
             '(
-              ("^E303.*$" . info) ;; pep8: too many blank lines (3)
               ("^E501.*$" . info) ;; pep8: line too long (82 > 79 characters)
               ("^E128.*$" . info) ;; pep8:       continuation line under-indented for visual indent.
               ("^E2.*$" . info)   ;; pep8: Whitespace
@@ -5023,42 +4905,7 @@ If FILE already exists, signal an error."
               ("^F83.*$" . error)
               ("^D.*$" . info)
               ("^N.*$" . info))
-            )
-
-      (flycheck-define-checker python-ruff
-        "A Python syntax and style checker using the ruff utility.
-To override the path to the ruff executable, set
-`flycheck-python-ruff-executable'.
-See URL `http://pypi.python.org/pypi/ruff'."
-        :command ("ruff" "check"
-                  "--output-format=concise"
-                  (eval (when buffer-file-name
-                          (concat "--stdin-filename=" buffer-file-name)))
-                  "-")
-        :standard-input t
-        :error-filter (lambda (errors)
-                        (let ((errors (flycheck-sanitize-errors errors)))
-                          (seq-map #'flycheck-flake8-fix-error-level errors)))
-        :error-patterns
-        ((warning line-start
-                  (file-name) ":" line ":" (optional column ":") " "
-                  (id (one-or-more (any alpha)) (one-or-more digit)) " "
-                  (message (one-or-more not-newline))
-                  line-end))
-        :modes (python-mode python-ts-mode))
-
-      ;; this demotes go-golint from warning to info
-      (flycheck-define-checker go-golint
-        "A Go style checker using Golint.
-
-See URL `https://github.com/golang/lint'."
-        :command ("golint" source)
-        :error-patterns
-        ((info line-start (file-name) ":" line ":" column ": " (message) line-end))
-        :modes (go-mode go-ts-mode)
-        :next-checkers (go-vet
-                        ;; Fall back, if go-vet doesn't exist
-                        go-build go-test go-errcheck go-unconvert go-megacheck)))))
+            ))))
 
 
 ;;;; flyspell
