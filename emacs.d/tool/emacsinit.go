@@ -12,14 +12,37 @@ import (
 	"strings"
 )
 
+// initFile is one of the emacs init files the tool keeps tidy.
+type initFile struct {
+	path string
+	// sorted lists the heading paths whose child sections are kept in
+	// alphabetical order.
+	sorted [][]string
+}
+
+var initFiles = []initFile{
+	{path: "../init.el"},
+	{path: "../lisp/init/init-lib.el"},
+	{path: "../lisp/init/init-core.el", sorted: [][]string{
+		{"core", "defined in elisp source"},
+		{"core", "defined in c source"},
+	}},
+	{path: "../lisp/init/init-ui.el"},
+	{path: "../lisp/init/init-commands.el"},
+	{path: "../lisp/init/init-security.el", sorted: [][]string{{"use-package"}}},
+	{path: "../lisp/init/init-packages.el", sorted: [][]string{{"use-package"}}},
+	{path: "../lisp/init/init-org.el", sorted: [][]string{{"use-package"}}},
+}
+
 // EmacsInit .
 type EmacsInit struct {
+	file initFile
 	root *Node
 	data []byte
 }
 
-func loadEmacsInit() (*EmacsInit, error) {
-	data, err := ioutil.ReadFile("../init.el")
+func loadEmacsInit(file initFile) (*EmacsInit, error) {
+	data, err := ioutil.ReadFile(file.path)
 	if err != nil {
 		return nil, err
 	}
@@ -29,6 +52,7 @@ func loadEmacsInit() (*EmacsInit, error) {
 		return nil, err
 	}
 	return &EmacsInit{
+		file: file,
 		root: root,
 		data: data,
 	}, nil
@@ -36,7 +60,7 @@ func loadEmacsInit() (*EmacsInit, error) {
 
 func (e *EmacsInit) Save() error {
 	out := e.Render()
-	if err := ioutil.WriteFile("../init.el", []byte(out), 0775); err != nil {
+	if err := ioutil.WriteFile(e.file.path, []byte(out), 0775); err != nil {
 		return err
 	}
 	return nil
@@ -113,14 +137,10 @@ func (e *EmacsInit) FixLineSpacing() error {
 }
 
 func (e *EmacsInit) Sort() error {
-	for _, headingpath := range [][]string{
-		{"use-package"},
-		{"core", "defined in elisp source"},
-		{"core", "defined in c source"},
-	} {
+	for _, headingpath := range e.file.sorted {
 		node := e.root.FindNodePath(headingpath...)
 		if node == nil {
-			return fmt.Errorf("could not find: %v", strings.Join(headingpath, " / "))
+			return fmt.Errorf("%s: could not find: %v", e.file.path, strings.Join(headingpath, " / "))
 		}
 		log.Println("sorting", *node.Heading)
 		sort.SliceStable(node.Children, func(i, j int) bool {
