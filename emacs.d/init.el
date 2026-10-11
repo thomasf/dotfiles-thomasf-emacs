@@ -1804,31 +1804,7 @@ the file does not exist, falls back to `find-file-at-point'."
 
 ;;;;; sudo-edit
 
-(defun sudo-edit-current-file ()
-  (interactive)
-  (let ((my-file-name) ; fill this with the file to open
-        (position))    ; if the file is already open save position
-    (if (equal major-mode 'dired-mode) ; test if we are in dired-mode
-        (progn
-          (setq my-file-name (dired-get-file-for-visit))
-          (find-alternate-file (prepare-tramp-sudo-string my-file-name)))
-      (setq my-file-name (buffer-file-name); hopefully anything else is an already opened file
-            position (point))
-      (find-alternate-file (prepare-tramp-sudo-string my-file-name))
-      (goto-char position))))
-
-(defun prepare-tramp-sudo-string (tempfile)
-  (if (file-remote-p tempfile)
-      (let ((vec (tramp-dissect-file-name tempfile)))
-        (tramp-make-tramp-file-name
-         "sudo"
-         (tramp-file-name-user nil)
-         (tramp-file-name-host vec)
-         (tramp-file-name-localname vec)
-         (format "ssh:%s@%s|"
-                 (tramp-file-name-user vec)
-                 (tramp-file-name-host vec))))
-    (concat "/sudo:root@localhost:" tempfile)))
+(defalias 'sudo-edit-current-file #'tramp-revert-buffer-with-sudo)
 
 
 ;;;;; buffer saving
@@ -1881,20 +1857,8 @@ the file does not exist, falls back to `find-file-at-point'."
 
 ;;;;; make-script-executable
 
-(defun my-make-script-executable ()
-  "If file starts with a shebang, make `buffer-file-name' executable"
-  (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-min))
-      (when (and (looking-at "^#!")
-                 (not (file-executable-p buffer-file-name)))
-        (set-file-modes buffer-file-name
-                        (logior (file-modes buffer-file-name) #o100))
-        (message (concat "Made " buffer-file-name " executable"))))))
-
 (when (not noninteractive)
-  (add-hook 'after-save-hook 'my-make-script-executable))
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p))
 
 
 ;;;; calling external commands
@@ -3813,12 +3777,7 @@ LEAF is normally ((BEG . END) . WND)."
       (setq-local truncate-partial-width-windows nil))
     (add-hook 'compilation-mode-hook 'my-compilation-mode-hook)
     (add-hook 'compilation-minor-mode-hook 'my-compilation-mode-hook)
-    (defun my-colorize-compilation-buffer ()
-      (when (eq major-mode 'compilation-mode)
-
-        (use-package ansi-color)
-        (ansi-color-apply-on-region compilation-filter-start (point-max))))
-    (add-hook 'compilation-filter-hook 'my-colorize-compilation-buffer)))
+    (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)))
 
 
 ;;;; conf-mode
