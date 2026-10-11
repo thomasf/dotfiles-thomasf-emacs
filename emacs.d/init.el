@@ -1669,6 +1669,16 @@ Works for heads without a property :column."
   (dired "~/notes/"))
 (bind-key "C-x d n" 'dired-notes)
 
+(defun dired-present ()
+  "dired-present"
+  (interactive)
+  (dired "~/notes/present/"))
+
+(defun dired-scratch ()
+  "dired-scratch"
+  (interactive)
+  (dired "~/scratch/"))
+
 (defun dired-sitepackages ()
   "Jump to sitepackages directory."
   (interactive)
