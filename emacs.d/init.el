@@ -4512,64 +4512,6 @@ If FILE already exists, signal an error."
              figlet-figletify-region-comment))
 
 
-;;;; fill-column-indicator
-
-(use-package fill-column-indicator
-  :ensure t
-  :commands (fci-mode
-             turn-on-fci-mode)
-  :init
-  (progn
-    (setq fci-rule-width 2)
-    ;; TODO fci-mode disables visual-line-move and that causes next/prev-line to
-    ;; skip multiple lines some times.. bugs
-    ;; https://github.com/alpaker/Fill-Column-Indicator/issues/28
-    ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=13108
-
-    ;; (when window-system (hook-into-modes #'turn-on-fci-mode
-    ;; my-prog-mode-hooks))
-    )
-  :config
-  (progn
-    (defun fci-enabled-p ()
-      (and (boundp 'fci-mode) fci-mode))
-    (defvar fci-mode-suppressed nil)
-
-    (defadvice popup-create (before suppress-fci-mode activate)
-      "Suspend fci-mode while popups are visible"
-      (let ((fci-enabled (fci-enabled-p)))
-        (when fci-enabled
-          (setq-local fci-mode-suppressed fci-enabled)
-          (turn-off-fci-mode))))
-
-    (defadvice popup-delete (after restore-fci-mode activate)
-      "Restore fci-mode when all popups have closed"
-      (when (and fci-mode-suppressed
-                 (null popup-instances))
-        (setq fci-mode-suppressed nil)
-        (turn-on-fci-mode)))
-
-    (defadvice browse-kill-ring (before suppress-fci-mode activate)
-      "Suspend fci-mode while browse kill ring is active"
-      (let ((fci-enabled (fci-enabled-p)))
-        (when fci-enabled
-          (setq-local fci-mode-suppressed fci-enabled)
-          (turn-off-fci-mode))))
-
-    (defadvice browse-kill-ring-quit (after restore-fci-mode activate)
-      "Restore fci-mode when all popups have closed"
-      (when fci-mode-suppressed)
-      (setq fci-mode-suppressed nil)
-      (turn-on-fci-mode))
-
-    ;; Regenerate fci-mode line images after switching themes
-    (defadvice enable-theme (after recompute-fci-face activate)
-      (dolist (buffer (buffer-list))
-        (with-current-buffer buffer
-          (when (fci-enabled-p)
-            (turn-on-fci-mode)))))))
-
-
 ;;;; find-file
 
 (use-package find-file
