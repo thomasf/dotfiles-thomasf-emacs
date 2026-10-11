@@ -886,18 +886,6 @@ Works for heads without a property :column."
 
 ;;; key-bindings
 
-;; (and (eq system-type 'darwin)
-;;      window-system
-;;      (setq
-;;       mac-command-modifier 'meta
-;;       mac-right-command-modifier 'super
-;;       ;; mac-control-modifier
-;;       ;; mac-right-control-modifier
-;;       ;; mac-function-modifier
-;;       mac-option-modifier 'super
-;;       mac-right-option-modifier nil
-;;       ))
-
 ;; This is very special because what I have done to my caps lock key.
 (define-key special-event-map (kbd "<key-17>") 'ignore)
 (define-key special-event-map (kbd "<M-key-17>") 'ignore)
@@ -1162,17 +1150,6 @@ Works for heads without a property :column."
 
     (setq mf-theme-dark 'my-solarized-selenized-dark
           mf-theme-light 'my-solarized-selenized-light)))
-
-;; (use-package zenburn-theme
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (load "zenburn-theme-autoloads" nil t)))
-
-;; (use-package anti-zenburn-theme
-;;       :ensure t
-;;       :config
-;;       (load "anti-zenburn-theme-autoloads" nil t))
 
 
 ;;;;; post-change-theme
@@ -3914,23 +3891,6 @@ LEAF is normally ((BEG . END) . WND)."
   :commands (constants-get constants-insert constants-replace))
 
 
-;;;; copilot
-
-;; (use-package copilot
-;;   :commands (copilot-login
-;;              copilot-mode
-;;              copilot-complete
-;;              copilot-accept-completion
-;;              copilot-panel-complete)
-
-;;   :bind ("s-<tab>" . copilot-accept-completion)
-;;   :quelpa (copilot
-;;            :fetcher github
-;;            :repo "zerolfx/copilot.el"
-;;            :branch "main"
-;;            :files ("dist" "*.el")))
-
-
 ;;;; counsel
 
 (use-package counsel
@@ -5542,15 +5502,6 @@ Git gutter:
        "~/\\.emacs\\.d/override/"
        "~/\\.emacs\\.d/site-lisp/"
        "~/\\.npm/"
-       ;; "~/\\.opt/XMonadContrib/"
-       ;; "~/\\.opt/android-sdks/"
-       ;; "~/\\.opt/emacs-24/"
-       ;; "~/\\.opt/emacs-override/"
-       ;; "~/\\.opt/emacs-site-lisp/"
-       ;; "~/\\.opt/emacs/"
-       ;; "~/\\.opt/go/"
-       ;; "~/\\.opt/go-master/"
-       ;; "~/\\.opt/xmonad/"
        "~/\\.opt/"
        "~/\\.rvm/"
        "~/\\.virthualenv/"
@@ -5562,14 +5513,6 @@ Git gutter:
      hardhat-fullpath-editable-regexps
      '("~/\\.cpan/CPAN/MyConfig\\.pm\\'"
        "/\\.git/.*\\(?:[A-Z_]*_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\|notes\.txt\\)\\'"
-       ;; "~/\\.cabal/"
-       ;; "~/perl5/perlbrew/"
-       ;; "~/\\.npm/"
-       ;; "~/\\.virtualenv/"
-       ;; "~/\\.virthualenv/"
-       ;; "~/\\.rvm/"
-       ;; "/\\.hg/"
-       ;; "/\\.svn/"
        )
      hardhat-bof-content-protected-regexps:
      '((emacs-lisp-mode . "\\`;;;;[^\n]*--- automatically extracted\\>")
@@ -6607,15 +6550,6 @@ drag the viewpoint on the image buffer that the window displays."
       (progn
         (add-hook 'java-mode-hook #'lsp)))
 
-    ;; (use-package lsp-haskell
-    ;;   :ensure t
-    ;;   :after haskell
-    ;;   :init
-    ;;   (progn
-    ;;     (when (executable-find* "haskell-language-server"
-    ;;                             "install haskell-language-server https://github.com/haskell/haskell-language-server")
-    ;;       (add-hook 'haskell-mode-hook #'lsp))))
-
     )
 
 
@@ -6752,19 +6686,6 @@ drag the viewpoint on the image buffer that the window displays."
     ;; (defadvice magit-version (around skipit activate)
     ;;   "900000000")
 
-    ;; (use-package magit-circleci
-    ;;   :ensure t
-    ;;   :commands magit-circleci-mode
-    ;;   :init
-    ;;   (progn
-    ;;     (setq magit-circleci-n-builds 15)
-    ;;     (magit-circleci-mode)))
-
-    ;; stopped working in recent magit update as of 2024-10-06
-    ;; (use-package orgit
-    ;;   :ensure t
-    ;;   :commands (orgit-store-link))
-
     (use-package magit-blame
       :commands (magit-blame-mode magit-blame))
 
@@ -6807,20 +6728,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'git-commit-setup-hook 'my-git-commit-hook-fn)
 
     (require 'json)
-    ;; (defadvice magit-status (around magit-fullscreen activate)
-    ;;   (window-configuration-to-register :magit-fullscreen)
-    ;;   ad-do-it
-    ;;   (delete-other-windows))
-    ;; (defun magit-quit-session ()
-    ;;   "Restores the previous window configuration and kills the magit buffer"
-    ;;   (interactive)
-    ;;   ;; TODO maybe in some cases
-    ;;   ;; (kill-buffer)
-    ;;   (bury-buffer)
-    ;;   (when (get-register :magit-fullscreen)
-    ;;     (jump-to-register :magit-fullscreen)
-    ;;     (set-register :magit-fullscreen nil)))
-    ;; (bind-key "q" 'previous-buffer magit-status-mode-map)
     (bind-key "h" 'ibuffer magit-status-mode-map)
     (defun magit-toggle-whitespace ()
       (interactive)
@@ -6851,13 +6758,7 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
-  :mode (("\\.slide\\'" . gfm-mode)
-         ;; ("\\.md\\'" . gfm-mode)
-         ;; ("\\.mdwn\\'" . gfm-mode)
-         ;; ("\\.mkd\\'" . gfm-mode)
-         ;; ("\\.mkdown\\'" . gfm-mode)
-         ;; ("\\.mdtext\\'" . gfm-mode)
-         )
+  :mode (("\\.slide\\'" . gfm-mode))
   :init
   (progn
     (setq markdown-command "pandoc -f markdown -t html"
@@ -7283,13 +7184,6 @@ Titus von der Malsburg."
         (apply orig format-string args)))
 
     (advice-add 'format-time-string :around #'my/org-timestamp-us-weekday)
-
-    ;; (use-package org-contrib
-    ;;   :ensure t)
-
-    ;; stopped working in recent magit update as of 2024-10-06
-    ;; (use-package orgit
-    ;;   :ensure t)
 
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
@@ -9560,20 +9454,7 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
 (use-package virtualenvwrapper
   :ensure t
   :commands (venv-workon
-             venv-is-valid)
-  :init
-  (progn
-    ;; (when
-    ;;     (and
-    ;;      (not (getenv "VIRTUAL_ENV"))
-    ;;      (eq window-system 'x))
-    ;;   (let ((workspace-prefix (workspace-prefix)))
-    ;;     (if (and workspace-prefix
-    ;;              (venv-is-valid workspace-prefix))
-    ;;         (venv-workon workspace-prefix))))
-    ;; (if (getenv "VIRTUAL_ENV")
-    ;;     (my-notify "emacs" (format "venv: %s" (f-base (getenv "VIRTUAL_ENV")))))
-    ))
+             venv-is-valid))
 
 
 ;;;; visual-regexp
@@ -10029,21 +9910,6 @@ _p_rev       ^h_i_de complete      toggle _c_omplete      _s_ave
               cursor-type '(bar . 3))
 (blink-cursor-mode)
 
-
-;;; workspace-hook
-
-;; (defun  my-workspace-hook()
-;;   "workspace specific hook function."
-;;   t
-;;   (and
-;;    (not noninteractive)
-;;    window-system
-
-;;    (cond
-;;     ((equal workspace-prefix-startup "upgrade")
-;;      (call-interactively 'list-packages)))))
-
-;; (add-hook 'after-init-hook 'my-workspace-hook t)
 
 ;; this thing just nuges emacs to adjust it's window size, some times it starts
 ;; in 80x35. compat
