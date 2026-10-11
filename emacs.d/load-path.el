@@ -1,4 +1,4 @@
-;;; load-path.el
+;;; load-path.el -*- lexical-binding: nil; -*-
 
 (defconst user-emacs-directory
   (if (eq system-type 'ms-dos)

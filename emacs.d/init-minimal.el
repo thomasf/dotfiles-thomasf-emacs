@@ -1,3 +1,4 @@
+;;; init-minimal.el -*- lexical-binding: nil; -*-
 
 (and (fboundp 'menu-bar-mode)
      (not (eq system-type 'darwin))

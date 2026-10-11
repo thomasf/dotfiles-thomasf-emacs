@@ -1,3 +1,4 @@
+;;; init-home.el -*- lexical-binding: nil; -*-
 ;; (make-frame)
 (load (expand-file-name "init" (file-name-directory load-file-name)) nil t)
 ;; ;; (org-agenda nil "n")

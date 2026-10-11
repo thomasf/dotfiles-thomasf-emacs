@@ -1,3 +1,4 @@
+;;; init-batch.el -*- lexical-binding: nil; -*-
 (setq force-load-messages nil
       use-package-verbose nil
       use-package-debug nil)

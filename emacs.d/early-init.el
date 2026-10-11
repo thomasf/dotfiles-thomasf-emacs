@@ -1,3 +1,4 @@
+;;; early-init.el -*- lexical-binding: nil; -*-
 (eval-and-compile
   (setq package-enable-at-startup nil
         ;; package-install-upgrade-built-in t

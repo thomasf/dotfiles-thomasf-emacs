@@ -1,4 +1,4 @@
-;;; makeup.el --- Tries to ensure an correct environment
+;;; makeup.el --- Tries to ensure an correct environment -*- lexical-binding: nil; -*-
 
 ;;; Commentary:
 ;;

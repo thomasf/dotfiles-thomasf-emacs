@@ -1,4 +1,4 @@
-;;; archive.el --- Tries to ensure an correct environment
+;;; archive.el --- Tries to ensure an correct environment -*- lexical-binding: nil; -*-
 
 ;;; Commentary:
 ;;
