@@ -2378,8 +2378,7 @@ With a prefix argument which does not equal a boolean value of
 nil, remove the urgency flag (which might or might not change
 display, depending on the window manager)."
   (interactive "P")
-  (let (frame (car (car (cdr (current-frame-configuration)))))
-    (x-urgency-hint frame (not arg))))
+  (x-urgency-hint (selected-frame) (not arg)))
 
 (when window-system
   (unbind-key "C-x C-c")
