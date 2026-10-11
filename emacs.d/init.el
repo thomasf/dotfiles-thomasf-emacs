@@ -6851,12 +6851,13 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
-  ;; :mode (("\\.markdown\\'" . gfm-mode)
-  ;;        ("\\.md\\'" . gfm-mode)
-  ;;        ("\\.mdwn\\'" . gfm-mode)
-  ;;        ("\\.mkd\\'" . gfm-mode)
-  ;;        ("\\.mkdown\\'" . gfm-mode)
-  ;;        ("\\.mdtext\\'" . gfm-mode))
+  :mode (("\\.slide\\'" . gfm-mode)
+         ;; ("\\.md\\'" . gfm-mode)
+         ;; ("\\.mdwn\\'" . gfm-mode)
+         ;; ("\\.mkd\\'" . gfm-mode)
+         ;; ("\\.mkdown\\'" . gfm-mode)
+         ;; ("\\.mdtext\\'" . gfm-mode)
+         )
   :init
   (progn
     (setq markdown-command "pandoc -f markdown -t html"
@@ -6913,9 +6914,7 @@ drag the viewpoint on the image buffer that the window displays."
                         'markdown-imenu-create-index))))
   :config
   (progn
-    (unbind-key "`" gfm-mode-map)
-    )
-  )
+    (unbind-key "`" gfm-mode-map)))
 
 
 ;;;; memory-usage
