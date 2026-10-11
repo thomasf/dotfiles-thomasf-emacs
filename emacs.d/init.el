@@ -3806,65 +3806,7 @@ LEAF is normally ((BEG . END) . WND)."
   :defer
   :config
   (progn
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 '(my-go . ("^\t+\\([^()\t\n]+\\):\\([0-9]+\\):? .*$" 1 2)) t)
-    (setq compilation-ask-about-save nil
-          compilation-error-regexp-alist
-          '(
-            my-go
-            absoft
-            ;; ada
-            aix
-            ant
-            bash
-            borland
-            python-tracebacks-and-caml
-            comma
-            cucumber
-            msft
-            edg-1
-            edg-2
-            epc
-            ftnchek
-            iar
-            ibm
-            irix
-            java
-            ;; jikes-file
-            ;; maven
-            ;; jikes-line
-            gcc-include
-            ruby-Test::Unit
-            gnu
-            lcc
-            makepp
-            mips-1
-            mips-2
-            msft
-            omake
-            oracle
-            perl
-            php
-            rxp
-            ;; sparc-pascal-file
-            ;; sparc-pascal-line
-            ;; sparc-pascal-example
-            sun
-            ;; sun-ada
-            ;; watcom
-            4bsd
-            gcov-file
-            gcov-header
-            gcov-nomark
-            gcov-called-line
-            gcov-never-called
-            ;; perl--Pod::Checker
-            ;; perl--Test
-            ;; perl--Test2
-            ;; perl--Test::Harness
-            weblint
-            )
-          )
+    (setq compilation-ask-about-save nil)
     (defun my-compilation-mode-hook ()
       ;; (jit-lock-defer-fontification)
       (setq truncate-lines t)
