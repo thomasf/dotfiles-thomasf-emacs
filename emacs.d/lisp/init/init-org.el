@@ -359,7 +359,6 @@ Argument FILENAME File to insert."
      org-startup-folded nil
      org-startup-indented t
      org-startup-with-inline-images (not noninteractive)
-     org-startup-with-inline-images noninteractive
      org-treat-S-cursor-todo-selection-as-state-change nil
      org-use-fast-todo-selection t
      org-use-sub-superscripts '{}

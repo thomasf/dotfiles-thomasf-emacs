@@ -1948,7 +1948,7 @@ Git gutter:
      '("~/\\.cpan/CPAN/MyConfig\\.pm\\'"
        "/\\.git/.*\\(?:[A-Z_]*_EDITMSG\\|MERGE_MSG\\|SQUASH_MSG\\|GHI_ISSUE\\|rebase-merge/git-rebase-todo\\|description\\|hooks/\\|config\\|notes\.txt\\)\\'"
        )
-     hardhat-bof-content-protected-regexps:
+     hardhat-bof-content-protected-regexps
      '((emacs-lisp-mode . "\\`;;;;[^\n]*--- automatically extracted\\>")
        (perl-mode . "^# Changes made here will be lost when autosplit is run again\\>")
        (cperl-mode . "^# Changes made here will be lost when autosplit is run again\\>")
@@ -4385,7 +4385,7 @@ drag the viewpoint on the image buffer that the window displays."
      savehist-file (expand-file-name
                     (workspace-prefix-file-name "savehist" ".el")
                     user-data-directory)
-     savehist-additional-variables '(search ring regexp-search-ring
+     savehist-additional-variables '(search-ring regexp-search-ring
                                             projectile-pt-file-pattern-history
                                             projectile-pt-file-pattern-search-history)
      savehist-autosave-interval 60))

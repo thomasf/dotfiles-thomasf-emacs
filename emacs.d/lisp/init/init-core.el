@@ -91,12 +91,11 @@
   "Directory for Emacs auto saves.")
 (make-directory autosave-dir t)
 
-  abbrev-file-name (expand-file-name
-                    "abbrev_defs.el" user-data-directory)
-
 (setq
  backup-directory-alist (list (cons "." backup-dir))
- auto-save-file-name-transforms `((".*" ,autosave-dir t)))
+ auto-save-file-name-transforms `((".*" ,autosave-dir t))
+ abbrev-file-name (expand-file-name
+                       "abbrev_defs.el" user-data-directory))
 
 
 ;;;; lread.c

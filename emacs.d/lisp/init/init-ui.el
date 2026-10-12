@@ -434,7 +434,7 @@
         (and
          (not my-text-scale-smaller-done)
          (s-starts-with? "*[Django: " bn))
-      (setq-local my-set-text-scale-smaller-done t)
+      (setq-local my-text-scale-smaller-done t)
       (my-set-text-scale-smaller))))
 
 (defvar  my-text-scale-smaller-done nil  "smaller font scale")
@@ -597,7 +597,6 @@
     (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
            (cursor-style (cond
                           ((bound-and-true-p region-bindings-mode) (list "#d33682" '(bar . 10) t))
-                          ((bound-and-true-p god-local-mode) (list "#268bd2" 'box nil))
                           ((bound-and-true-p buffer-read-only) (list "#859900" 'box nil))
                           (t (list cua-normal-cursor-color my-normal-cursor-type t)))))
       (unless (equal (nth 0 cursor-style) current-cursor-color)
@@ -621,9 +620,6 @@
                    window-configuration-change-hook
                    minibuffer-setup-hook
                    minibuffer-exit-hook
-                   god-mode-enabled-hook
-                   god-mode-disabled-hook
-                   god-local-mode-hook
                    read-only-mode-hook
                    after-change-major-mode-hook
                    focus-in-hook
