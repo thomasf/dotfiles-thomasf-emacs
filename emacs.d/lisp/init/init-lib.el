@@ -64,21 +64,7 @@
 ;;;; prog modes
 
 (defvar my-prog-mode-hooks
-  '(prog-mode-hook
-    csharp-mode
-    csharp-ts-mode
-    clojure-mode-hook
-    emacs-lisp-mode-hook
-    go-mode-hook
-    go-ts-mode
-    groovy-mode-hook
-    haskell-mode-hook
-    js-mode-hook
-    js2-mode-hook
-    pyhon-mode-hook
-    ruby-mode-hook
-    typescript-mode-hook
-    typescript-ts-mode-hook))
+  '(prog-mode-hook))
 
 
 ;;;; lisp modes
@@ -109,25 +95,7 @@
     python-ts-mode-hook))
 
 
-;;;; markup modes
-
-(defvar my-markup-mode-hooks-1
-  '(gfm-mode-hook
-    rst-mode-hook))
-
-;; org-mode is a bit special so i dont want it among the other ones.
-(defvar my-markup-mode-hooks-2
-  '(org-mode-hook))
-
-
-;;;; my-html-like-modes
-
-(defvar my-html-like-modes
-  '(handlebars
-    html-mode
-    nxml-mode
-    web-mode))
-
+;;;; html-like mode hooks
 
 (defvar my-html-like-mode-hooks
   '(handlebars-mode-hook
@@ -136,11 +104,7 @@
     web-mode-hook))
 
 
-;;;; my-css-like modes
-
-(defvar my-css-like-modes
-  '(css-mode
-    scss-mode))
+;;;; css-like mode hooks
 
 (defvar my-css-like-mode-hooks
   '(css-mode-hook

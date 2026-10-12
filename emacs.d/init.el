@@ -56,18 +56,6 @@
                             (fullscreen . nil)))
 
 
-;;;; define feature inhibition variable
-
-(defvar degrade-p-minimalism nil
-  "If set to non nil a lighter emacs config is used. ")
-
-
-;;;; emacs version requirement check
-
-(and
- (not noninteractive)
- (< emacs-major-version 25) ;; compat
- (warn "Use a newer version of Emacs for a full featured environment!"))
 
 
 ;;;; load-path
@@ -131,11 +119,6 @@
 
 ;; set up package.el and make sure that some essential packages and features
 ;; are loaded early.
-
-(eval-and-compile
-  (when (and (equal emacs-version "27.2")
-           (eql system-type 'darwin))
-    (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")))
 
 (eval-and-compile (push `("packages-start" ,(current-time)) init-times))
 
@@ -328,21 +311,6 @@ Works for heads without a property :column."
 (blink-cursor-mode)
 
 
-;; this thing just nuges emacs to adjust it's window size, some times it starts
-;; in 80x35. compat
-
-(and load-file-name
-     window-system
-     (eq system-type 'gnu/linux)
-     (not noninteractive)
-     ;; for emacs 24.4
-     (not (message nil))
-     ;; for emacs 25 (2015-06-21)
-     (add-hook 'after-init-hook
-               #'(lambda ()
-                   (run-with-idle-timer
-                    0 nil #'(lambda ()
-                             (tool-bar-mode -1))) nil)))
 
 
 ;;; print start up times to *emacslog*
