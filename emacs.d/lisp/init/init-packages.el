@@ -1777,6 +1777,21 @@ Git gutter:
   :commands go-scratch)
 
 
+;;;;; go-template-mode
+
+(use-package go-template-mode
+  :ensure t
+  :commands go-template-mode
+  :mode ("\\.\\(gotmpl\\|tpl\\|tmpl\\)\\'" . go-template-mode))
+
+
+;;;;; go-template-helper-mode
+
+(use-package go-template-helper-mode
+  :ensure t
+  :commands go-template-helper-mode)
+
+
 ;;;; google-c-style
 
 (use-package google-c-style

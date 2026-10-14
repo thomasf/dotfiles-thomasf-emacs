@@ -56,8 +56,6 @@
                             (fullscreen . nil)))
 
 
-
-
 ;;;; load-path
 
 
@@ -309,8 +307,6 @@ Works for heads without a property :column."
               blink-cursor-interval 0.6
               cursor-type '(bar . 3))
 (blink-cursor-mode)
-
-
 
 
 ;;; print start up times to *emacslog*
