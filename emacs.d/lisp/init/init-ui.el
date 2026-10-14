@@ -408,22 +408,20 @@
       (text-scale-set amount))))
 
 (hook-into-modes 'my-set-text-scale-smaller
-                 '(ag-mode-hook
+                 '(
                    flycheck-error-list-mode-hook
-                   go-traceback-mode-hook
+                   ;; go-traceback-mode-hook
                    ibuffer-mode-hook
-                   magit-commit-mode-hook
-                   python-django-mode-hook
-                   magit-diff-mode-hook
-                   magit-log-mode-hook
-                   magit-status-mode-hook
+                   ;; magit-commit-mode-hook
+                   ;; magit-diff-mode-hook
+                   ;; magit-log-mode-hook
+                   ;; magit-status-mode-hook
                    vc-annotate-mode-hook
-                   pt-search-mode-hook
-                   grep-mode-hook
-                   direx:direx-mode-hook
-                   debugger-mode-hook
+                   ;; grep-mode-hook
+                   ;; direx:direx-mode-hook
+                   ;; debugger-mode-hook
                    docker-images-mode-hook
-                   compilation-mode-hook
+                   ;; compilation-mode-hook
                    docker-containers-mode-hook
                    treemacs-mode-hook))
 
