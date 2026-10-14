@@ -4,6 +4,7 @@ public = true
 match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled", '.log']
 
 [[script]]
+condition = "hostname in ['flam', 'yak']"
 src = '''
 rev=$(git rev-parse HEAD)
 compiled="$(cat .compiled 2>/dev/null || true)"
