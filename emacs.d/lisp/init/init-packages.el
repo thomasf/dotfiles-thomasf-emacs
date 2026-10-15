@@ -316,7 +316,7 @@ LEAF is normally ((BEG . END) . WND)."
   :init
   (progn
     (setq
-     bookmark-default-file (expand-file-name (workspace-prefix-file-name "bookmark" ".emacs.bmk") user-data-directory)
+     bookmark-default-file (expand-file-name (workspace-project-file-name "bookmark" ".emacs.bmk") user-data-directory)
      bookmark-watch-bookmark-file 'silent
      bookmark-save-flag 1
      bookmark-fringe-mark nil)))
@@ -4395,7 +4395,7 @@ drag the viewpoint on the image buffer that the window displays."
   (progn
     (setq
      savehist-file (expand-file-name
-                    (workspace-prefix-file-name "savehist" ".el")
+                    (workspace-project-file-name "savehist" ".el")
                     user-data-directory)
      savehist-additional-variables '(search-ring regexp-search-ring
                                             projectile-pt-file-pattern-history
@@ -5024,11 +5024,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :defer t
   :config
   (progn
-    (setq transient-levels-file (expand-file-name (workspace-prefix-file-name "transient-levels" ".el")
+    (setq transient-levels-file (expand-file-name (workspace-project-file-name "transient-levels" ".el")
                                                   user-data-directory)
-          transient-history-file (expand-file-name (workspace-prefix-file-name "transient-history" ".el")
+          transient-history-file (expand-file-name (workspace-project-file-name "transient-history" ".el")
                                                    user-data-directory)
-          transient-values-file (expand-file-name (workspace-prefix-file-name "transient-values" ".el")
+          transient-values-file (expand-file-name (workspace-project-file-name "transient-values" ".el")
                                                   user-data-directory))))
 
 

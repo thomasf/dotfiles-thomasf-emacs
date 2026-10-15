@@ -112,6 +112,16 @@
 (defun workspace-prefix-file-name (name &optional ext)
   (concat name "." (or workspace-prefix-startup "DEFAULT") (or ext "")))
 
+;; The project of a worktree workspace prefix project@worktree, or the
+;; whole prefix if it has no worktree.
+(defvar workspace-project-startup
+  (and workspace-prefix-startup
+       (car (split-string workspace-prefix-startup "@"))))
+
+(defun workspace-project-file-name (name &optional ext)
+  "Like `workspace-prefix-file-name', but shared by a project's worktrees."
+  (concat name "." (or workspace-project-startup "DEFAULT") (or ext "")))
+
 
 ;;;; package.el + early package install
 
