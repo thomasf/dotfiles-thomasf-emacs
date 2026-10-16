@@ -255,8 +255,6 @@ Titus von der Malsburg."
           (concat subject " " date)))
       (setq org-mu4e-link-desc-func 'my-mu4e-link-descr))
 
-    (setq *orgtrello-log/level* 2)
-    ;; (require 'org-trello)
     (add-hook 'org-mode-hook
               (lambda ()
                 (when (outline-invisible-p)

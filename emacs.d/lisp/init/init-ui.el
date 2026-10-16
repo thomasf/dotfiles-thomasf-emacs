@@ -196,12 +196,6 @@
         dynamic-fonts-preferred-monospace-point-size 15
         dynamic-fonts-preferred-proportional-point-size 15.5))
 
- ((string-prefix-p "fogskum" (system-name))
-  (setq my-monospaced-font "PragmataPro-15"
-        my-variable-pitch-font "Go-15.5"
-        dynamic-fonts-preferred-monospace-point-size 15
-        dynamic-fonts-preferred-proportional-point-size 15.5))
-
  ((string-prefix-p "crangy" (system-name))
   (setq my-monospaced-font "PragmataPro-17"
         my-variable-pitch-font "Go-17"

@@ -3527,15 +3527,6 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'arduino-mode-hook 'platformio-mode)))
 
 
-;;;; poetry
-
-(use-package poetry
-  :ensure t
-  :commands (poetry-venv-workon
-             poetry-venv-deactivate
-             poetry-venv-toggle))
-
-
 ;;;; point-undo
 
 (use-package point-undo
