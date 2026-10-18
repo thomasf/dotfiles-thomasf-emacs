@@ -417,7 +417,8 @@ Argument FILENAME File to insert."
 
 
 
-    (use-package ob-http :ensure t)
+    (with-suppressed-warnings ((obsolete any))
+      (use-package ob-http :ensure t :defer t))
     (use-package ob-go :ensure t)
 
     (org-babel-do-load-languages

@@ -428,7 +428,10 @@ the file does not exist, falls back to `find-file-at-point'."
          (verify-visited-file-modtime it)
          (save-buffer))))))
 
-(add-hook 'focus-out-hook 'silent-save-some-buffers)
+(add-function :after after-focus-change-function
+              (lambda ()
+                (unless (frame-focus-state)
+                  (silent-save-some-buffers))))
 
 
 ;;;;; touch-file

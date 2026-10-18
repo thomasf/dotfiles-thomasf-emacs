@@ -1,5 +1,7 @@
+;;; go-traceback.el --- Fetch traceback from running go program  -*- lexical-binding: t -*-
 
 (require 'request)
+(require 'cl-lib)
 
 (defun go-traceback-refresh ()
   "Refresh traceback buffer"
@@ -23,13 +25,11 @@
 (defun go-traceback (&optional url no-move w-start)
   "Fetch trackback from running go program"
   (interactive)
-  (lexical-let* ((no-move no-move)
-                 (w-start w-start))
-    (request
+  (request
      (or url go-traceback-url)
      :type "GET"
      :parser (lambda ()(buffer-string))
-     :success (function*
+     :success (cl-function
                (lambda (&key data response &allow-other-keys)
                  (let ((inhibit-read-only t)
                        (b (get-buffer-create "*go-traceback*")))
@@ -43,6 +43,6 @@
 
                    (let ((w (display-buffer b)))
                      (when w-start
-                       (set-window-start w w-start)))))))))
+                       (set-window-start w w-start))))))))
 
 (provide 'go-traceback)

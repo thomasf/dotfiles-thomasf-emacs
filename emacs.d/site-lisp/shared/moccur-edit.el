@@ -282,13 +282,15 @@
             (delete-overlay (car moccur-edit-file-overlays))
             (setq moccur-edit-file-overlays (cdr moccur-edit-file-overlays))))))))
 
-(defadvice moccur-quit (before moccur-edit-kill-buffer activate)
+(defun moccur-edit--quit-advice (&rest _)
   (when moccur-edit-remove-overlays
     (moccur-edit-remove-overlays)))
+(advice-add 'moccur-quit :before #'moccur-edit--quit-advice)
 
-(defadvice basic-save-buffer (before moccur-remove-overlays-before-save-buffer activate)
+(defun moccur-edit--basic-save-buffer-advice (&rest _)
   (when moccur-edit-remove-overlays-after-save-buffer
     (moccur-edit-remove-overlays)))
+(advice-add 'basic-save-buffer :before #'moccur-edit--basic-save-buffer-advice)
 
 (defun moccur-edit-finish-edit ()
   "*The changes on the grep buffer apply to the file"
@@ -526,11 +528,10 @@ commands.  This advice only has effect in moccur-edit mode."
         ad-do-it)
       ad-return-value)))
 
-(defadvice moccur-mode (after moccur-edit-set-key activate)
+(defun moccur-edit--set-key-advice (&rest _)
   (moccur-mode-edit-set-key))
-
-(defadvice moccur-grep-mode (after moccur-edit-set-key activate)
-  (moccur-mode-edit-set-key))
+(advice-add 'moccur-mode :after #'moccur-edit--set-key-advice)
+(advice-add 'moccur-grep-mode :after #'moccur-edit--set-key-advice)
 
 (mapcar 'moccur-edit-replace-advice
         '(query-replace query-replace-regexp replace-string))

@@ -60,75 +60,84 @@
       (nth 3 datetime))))               ; Day
 
 (defun org-import-icalendar-get-org-timestring (ical-element)
-""
-  (let* ((dtstart (icalendar--get-event-property e 'DTSTART))
-          (dtstart-zone (icalendar--find-time-zone
-                          (icalendar--get-event-property-attributes e 'DTSTART)
+  ""
+  (with-suppressed-warnings ((obsolete icalendar--get-event-property
+                                       icalendar--find-time-zone
+                                       icalendar--get-event-property-attributes
+                                       icalendar--decode-isodatetime
+                                       icalendar--datetime-to-colontime))
+    (let* ((dtstart (icalendar--get-event-property e 'DTSTART))
+            (dtstart-zone (icalendar--find-time-zone
+                            (icalendar--get-event-property-attributes e 'DTSTART)
+                            zone-map))
+            (dtstart-dec (icalendar--decode-isodatetime dtstart nil dtstart-zone))
+            (start-d (org-import-icalendar-iso dtstart-dec))
+            (start-t (icalendar--datetime-to-colontime dtstart-dec))
+            (dtend (icalendar--get-event-property e 'DTEND))
+            (dtend-zone (icalendar--find-time-zone
+                          (icalendar--get-event-property-attributes e 'DTEND)
                           zone-map))
-          (dtstart-dec (icalendar--decode-isodatetime dtstart nil dtstart-zone))
-          (start-d (org-import-icalendar-iso dtstart-dec))
-          (start-t (icalendar--datetime-to-colontime dtstart-dec))
-          (dtend (icalendar--get-event-property e 'DTEND))
-          (dtend-zone (icalendar--find-time-zone
-                        (icalendar--get-event-property-attributes e 'DTEND)
-                        zone-map))
-          (dtend-dec (icalendar--decode-isodatetime dtend nil dtend-zone))
-          end-d end-t
+            (dtend-dec (icalendar--decode-isodatetime dtend nil dtend-zone))
+            end-d end-t
 
-          (rrule (icalendar--get-event-property e 'RRULE))
-          (rdate (icalendar--get-event-property e 'RDATE))
-          (duration (icalendar--get-event-property e 'DURATION)))
+            (rrule (icalendar--get-event-property e 'RRULE))
+            (rdate (icalendar--get-event-property e 'RDATE))
+            (duration (icalendar--get-event-property e 'DURATION)))
 
-    (setq end-d (if dtend-dec
-                  (org-import-icalendar-iso dtend-dec)
-                  start-d))
-    (setq end-t (if (and
-                      dtend-dec
-                      (not (string=
-                             (cadr
-                               (icalendar--get-event-property-attributes
-                                 e 'DTEND))
-                             "DATE")))
-                  (icalendar--datetime-to-colontime dtend-dec)
-                  start-t))
-    ;; Store in kill-ring
+      (setq end-d (if dtend-dec
+                    (org-import-icalendar-iso dtend-dec)
+                    start-d))
+      (setq end-t (if (and
+                        dtend-dec
+                        (not (string=
+                               (cadr
+                                 (icalendar--get-event-property-attributes
+                                   e 'DTEND))
+                               "DATE")))
+                    (icalendar--datetime-to-colontime dtend-dec)
+                    start-t))
+      ;; Store in kill-ring
       (if (equal start-d end-d)
         (format "<%s %s-%s>" start-d start-t end-t)
         ;; else
-        (format "<%s %s>--<%s %s>" start-d start-t end-d end-t))))
+        (format "<%s %s>--<%s %s>" start-d start-t end-d end-t)))))
 
 
 (defun org-import-icalendar-import-element (ical-element)
-  (let* ((location (icalendar--get-event-property e 'LOCATION))
-          (organizer (icalendar--get-event-property e 'ORGANIZER))
-          (summary (icalendar--convert-string-for-import
-                     (or (icalendar--get-event-property e 'SUMMARY)
-                       "No summary")))
-          (attendees (mapconcat (lambda (a) (format " - %s" a))
-                       (icalendar--get-event-properties e 'ATTENDEE)
-                       "\n"))
-          (org-timestr (org-import-icalendar-get-org-timestring ical-element))
-          ;;
-          (msg (format "** TODO %s\n%s\n Location: %s\nOrganizer: %s\nAttending:\n%s\n\n"
-                 summary org-timestr location (or organizer "n/a") (or attendees "n/a"))))
+  (with-suppressed-warnings ((obsolete icalendar--get-event-property
+                                       icalendar--get-event-properties))
+    (let* ((location (icalendar--get-event-property e 'LOCATION))
+            (organizer (icalendar--get-event-property e 'ORGANIZER))
+            (summary (icalendar--convert-string-for-import
+                       (or (icalendar--get-event-property e 'SUMMARY)
+                         "No summary")))
+            (attendees (mapconcat (lambda (a) (format " - %s" a))
+                         (icalendar--get-event-properties e 'ATTENDEE)
+                         "\n"))
+            (org-timestr (org-import-icalendar-get-org-timestring ical-element))
+            ;;
+            (msg (format "** TODO %s\n%s\n Location: %s\nOrganizer: %s\nAttending:\n%s\n\n"
+                   summary org-timestr location (or organizer "n/a") (or attendees "n/a"))))
 
-    (message "Added to kill-ring:\n %s" msg)
-    (if (not org-import-icalendar-filename)
-      ;; Store in kill-ring
-      (kill-new msg)
-      ;; else: append to file
-      (with-temp-file org-import-icalendar-filename
-        (insert-file-contents org-import-icalendar-filename)
-        (goto-char (point-max))
-        (insert msg)))))
+      (message "Added to kill-ring:\n %s" msg)
+      (if (not org-import-icalendar-filename)
+        ;; Store in kill-ring
+        (kill-new msg)
+        ;; else: append to file
+        (with-temp-file org-import-icalendar-filename
+          (insert-file-contents org-import-icalendar-filename)
+          (goto-char (point-max))
+          (insert msg))))))
 
 (defun org-import-icalendar-import-elements (ical-list)
-  (let* ((ev (icalendar--all-events ical-list))
-          (error-string "")
-          (event-ok t)
-          (found-error nil)
-          (zone-map (icalendar--convert-all-timezones ical-list))
-          e diary-string)
+  (with-suppressed-warnings ((obsolete icalendar--all-events
+                                       icalendar--convert-all-timezones))
+    (let* ((ev (icalendar--all-events ical-list))
+            (error-string "")
+            (event-ok t)
+            (found-error nil)
+            (zone-map (icalendar--convert-all-timezones ical-list))
+            e diary-string)
     (while ev
       (setq e (car ev))
       (setq ev (cdr ev))
@@ -147,27 +156,29 @@
 
 (defun org-icalendar-import-buffer ()
   (interactive)
-  (save-current-buffer
-    ;; prepare ical
-    (message "Preparing icalendar...")
-    (set-buffer (icalendar--get-unfolded-buffer (current-buffer)))
-    (goto-char (point-min))
-    (message "Preparing icalendar...done")
-    (if (re-search-forward "^BEGIN:VCALENDAR\\s-*$" nil t)
-        (let (ical-contents ical-errors)
-          ;; read ical
-          (message "Reading icalendar...")
-          (beginning-of-line)
-          (setq ical-contents (icalendar--read-element nil nil))
-          (message "Reading icalendar...done")
-          ;; convert ical
-          (message "Converting icalendar...")
-          (setq ical-errors (org-import-icalendar-import-elements
-                              ical-contents))
+  (with-suppressed-warnings ((obsolete icalendar--get-unfolded-buffer
+                                       icalendar--read-element))
+    (save-current-buffer
+      ;; prepare ical
+      (message "Preparing icalendar...")
+      (set-buffer (icalendar--get-unfolded-buffer (current-buffer)))
+      (goto-char (point-min))
+      (message "Preparing icalendar...done")
+      (if (re-search-forward "^BEGIN:VCALENDAR\\s-*$" nil t)
+          (let (ical-contents ical-errors)
+            ;; read ical
+            (message "Reading icalendar...")
+            (beginning-of-line)
+            (setq ical-contents (icalendar--read-element nil nil))
+            (message "Reading icalendar...done")
+            ;; convert ical
+            (message "Converting icalendar...")
+            (setq ical-errors (org-import-icalendar-import-elements
+                                ical-contents))
 
-          ;; return t if no error occurred
-          (not ical-errors))
-      (message "Current buffer does not contain icalendar contents!"))))
+            ;; return t if no error occurred
+            (not ical-errors))
+        (message "Current buffer does not contain icalendar contents!")))))
 
 
 (defun org-import-icalendar-gnus-part (handle)

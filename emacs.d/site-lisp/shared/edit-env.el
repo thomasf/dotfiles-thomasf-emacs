@@ -59,7 +59,7 @@
 (require 'widget)
 
 (require 'wid-edit)
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 
 (defvar edit-env-ls nil)
 (defvar edit-env-changed-ls nil)
@@ -131,7 +131,7 @@
 	(val nil)
 	(longest-var 0)
 	(current-widget nil))
-    (setq edit-env-ls (copy-list process-environment))
+    (setq edit-env-ls (cl-copy-list process-environment))
     (setq edit-env-ls (sort edit-env-ls (lambda (a b) (string-lessp a b))))
 
     (widget-create 'push-button

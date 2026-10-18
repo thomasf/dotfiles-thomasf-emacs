@@ -1477,11 +1477,7 @@ An error is a duplicate if its file, line, column and message match."
 
     (defun my-git-gutter:quit-and-deactivate ()
       (interactive)
-      (git-gutter-mode -1)
-      ;; git-gutter-fringe doesn't seem to
-      ;; clear the markup right away
-      (sit-for 0.1)
-      (git-gutter:clear))
+      (git-gutter-mode -1))
 
     (defhydra hydra-git-gutter (:body-pre
                                 #'(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
@@ -4202,7 +4198,7 @@ drag the viewpoint on the image buffer that the window displays."
   ;; :pin "melpa-stable"
   :if (not noninteractive)
   :commands (smartparens-mode smartparens-global-mode turn-on-smartparens-mode
-                              turn-off-smartparens-mode show-smartparens-mode
+                              show-smartparens-mode
                               show-smartparens-global-mode
                               smartparens-global-strict-mode
                               smartparens-strict-mode
@@ -4281,8 +4277,8 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'prog-mode-hook
               (lambda ()
                 (when (> (buffer-size) (* 1 1024 1024))
-                  (turn-off-smartparens-mode)
-                  (turn-off-show-smartparens-mode))))
+                  (smartparens-mode -1)
+                  (show-smartparens-mode -1))))
 
     (show-smartparens-global-mode t)))
 
@@ -4960,8 +4956,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                   'snippet-mode))
 
     (define-advice ac-fallback-command (:around (orig-fn &rest args) no-yasnippet-fallback)
-      (let ((yas-fallback-behavior nil))
-        (apply orig-fn args)))
+      (with-suppressed-warnings ((obsolete yas-fallback-behavior))
+        (let ((yas-fallback-behavior nil))
+          (apply orig-fn args))))
 
     (bind-key "C-x i" 'yas-insert-snippet)
 

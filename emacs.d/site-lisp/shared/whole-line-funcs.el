@@ -92,12 +92,11 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl-lib)
 
 (provide 'whole-line-funcs)
 
-(defun* whole-line-expand-region (&key (move-point nil))
+(cl-defun whole-line-expand-region (&key (move-point nil))
   "Expand point and mark to select whole lines.
 
 This function assumes region is ready to be used.
@@ -155,7 +154,7 @@ Always ensure point is before mark.
             (whole-line-expand-region :move-point 'beginning)
             (forward-line arg))
         (whole-line-expand-region :move-point 'beginning))
-    (goto-char (point-at-bol 2))
+    (goto-char (pos-bol 2))
     (if (fboundp 'cua-set-mark)
         (cua-set-mark)
       (push-mark nil t t))
@@ -177,7 +176,7 @@ Always ensure point is after mark.
             (whole-line-expand-region :move-point 'end)
             (forward-line arg))
         (whole-line-expand-region :move-point 'end))
-    (goto-char (point-at-bol))
+    (goto-char (pos-bol))
     (if (fboundp 'cua-set-mark)
         (cua-set-mark)
       (push-mark nil t t))

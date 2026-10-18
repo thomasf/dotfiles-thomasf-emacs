@@ -91,7 +91,7 @@
 ;;; Code:
 
 (eval-when-compile
-  (require 'cl))
+  (require 'cl-lib))
 
 (define-minor-mode keep-buffers-mode
   "when active, killing protected buffers results in burying them instead.
@@ -123,9 +123,9 @@ If the CDR is nil, then the buffer is only buried."
 ;;;###autoload
 (defun keep-buffers-query ()
   "The query function that disable deletion of buffers we protect."
-  (let ((crit (dolist (crit keep-buffers-protected-alist)
+  (let ((crit (cl-dolist (crit keep-buffers-protected-alist)
                 (when (string-match (car crit) (buffer-name))
-                  (return crit)))))
+                  (cl-return crit)))))
     (if crit
         (progn
           (when (cdr crit)

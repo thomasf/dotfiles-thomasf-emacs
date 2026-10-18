@@ -54,6 +54,7 @@
 (require 'ibuf-ext)
 (require 'projectile)
 (require 'cl-lib)
+(require 'seq)
 
 
 (defgroup ibuffer-projectile nil
@@ -121,14 +122,14 @@ If the file is not under a project root, nil is returned instead."
     "Toggle current view to buffers with projectile root dir QUALIFIER."
   (:description "projectile root dir"
                 :reader (read-from-minibuffer "Filter by projectile root dir (regexp): "))
-  (ibuffer-awhen (ibuffer-projectile-root buf)
+  (when-let* ((it (ibuffer-projectile-root buf)))
     (equal qualifier it)))
 
 ;;;###autoload
 (defun ibuffer-projectile-generate-filter-groups-by-projectile-root ()
   "Create a set of ibuffer filter groups.
 Groups are based on the projectile root dirs of buffers."
-  (let ((roots (ibuffer-remove-duplicates
+  (let ((roots (seq-uniq
                 (delq nil (mapcar 'ibuffer-projectile-root (buffer-list))))))
     (mapcar (lambda (projectile-root)
               (cons (format "%s:%s" (car projectile-root) (cdr projectile-root))

@@ -138,9 +138,10 @@
 
    (mf-mode-theme))
 
-(add-hook 'focus-in-hook
-          #'(lambda ()
-              (mf-mode-theme)))
+(add-function :after after-focus-change-function
+              (lambda ()
+                (when (frame-focus-state)
+                  (mf-mode-theme))))
 
 
 ;;;; simple-modeline
@@ -343,8 +344,11 @@
 (when my-pulse-enabled
   ;; hooks
   (add-hook 'imenu-after-jump-hook 'my-pulse-line nil t)
-  (add-hook 'focus-in-hook 'my-pulse-later)
-  (add-hook 'focus-out-hook 'my-pulse-cancel-timer)
+  (add-function :after after-focus-change-function
+                (lambda ()
+                  (if (frame-focus-state)
+                      (my-pulse-later)
+                    (my-pulse-cancel-timer))))
   (add-hook 'projectile-find-file-hook 'my-pulse-now)
    ;; advices
   (advice-add 'ibuffer-visit-buffer :after 'my-pulse-now)

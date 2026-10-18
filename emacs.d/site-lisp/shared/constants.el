@@ -827,7 +827,7 @@ NAMES.  UNIT-SYSTEM may be nil to use the default, but also `SI' or
         ;; Here comes the insertion stuff for source code editing modes.
         ;; First make sure we start a new line
         (if (string-match
-             "\\S-" (buffer-substring (point-at-bol) (point-at-eol)))
+             "\\S-" (buffer-substring (pos-bol) (pos-eol)))
             ;; non-empty line, insert after this line
             (progn 
               (end-of-line 1) 
@@ -862,7 +862,7 @@ the value into the kill ring."
   (let* ((all-constants (append constants-user-defined constants-defaults))
          (atable (append constants-rename all-constants))
          entry prefix prefix-name pmatch unit factor value ok)
-    (if (interactive-p)
+    (if (called-interactively-p 'interactive)
         ;; Read a constant name
         (let* ((ctable (constants-make-completion-table constants-rename
                                                         all-constants))
@@ -905,8 +905,8 @@ the value into the kill ring."
               (if (string-match "0+[eE]" value)
                   (setq value (replace-match "e" t t value)))))))
     (if (not ok)
-        (and (interactive-p) (error "No such constant: %s" const))
-      (if (or (interactive-p) message)
+        (and (called-interactively-p 'interactive) (error "No such constant: %s" const))
+      (if (or (called-interactively-p 'interactive) message)
           (progn
             (kill-new value)
             (message "Value of `%s'%s is %s %s"

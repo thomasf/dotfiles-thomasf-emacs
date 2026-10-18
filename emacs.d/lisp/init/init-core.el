@@ -69,11 +69,10 @@
     map)
   "Keymap for `initial-mode'.")
 
-(define-derived-mode initial-mode nil "Initial"
+(define-derived-mode initial-mode text-mode "Initial"
   "Major mode for start up buffer.
 \\{initial-mode-map}"
 
-  (setq-local text-mode-variant t)
   (setq-local indent-line-function 'indent-relative))
 
 
