@@ -40,8 +40,6 @@
   (progn))
 
 
-
-
 ;;;; adoc-mode
 
 (use-package adoc-mode
@@ -57,12 +55,6 @@
 
 (eval-and-compile
   (setq magit-last-seen-setup-instructions "1.4.0"))
-
-
-;;;; anchored-transpose
-
-(use-package anchored-transpose
-  :commands anchored-transpose)
 
 
 ;;;; ansi
@@ -350,11 +342,7 @@ LEAF is normally ((BEG . END) . WND)."
          ("\\.cljs\\'" . clojure-mode))
   :init
   (progn
-    (rename-modeline "clojure-mode" clojure-mode "clj")
-
-    (use-package align-cljlet
-      :ensure t
-      :commands (align-cljlet))))
+    (rename-modeline "clojure-mode" clojure-mode "clj")))
 
 
 ;;;; cmake-mode
@@ -388,47 +376,11 @@ LEAF is normally ((BEG . END) . WND)."
           code-library-downcased-org-keywords t)))
 
 
-
-
 ;;;; color-identifiers-mode
 
 (use-package color-identifiers-mode
   :ensure t
   :commands color-identifiers-mode)
-
-
-;;;; color-moccur
-
-(let ((ad-redefinition-action 'accept))
-  (use-package color-moccur
-    :ensure t
-    :if (not noninteractive)
-    :commands (isearch-moccur
-               isearch-moccur-all
-               moccur
-               moccur-grep
-               moccur-grep-find
-               dired-do-moccur
-               occur-by-moccur
-               search-buffers)
-    ;; :bind (("M-s m" . moccur))
-    :init
-    (progn
-      (bind-key "C-o" 'isearch-moccur isearch-mode-map)
-      (bind-key "C-M-o" 'isearch-moccur-all isearch-mode-map))
-    :config
-    (progn
-      (unbind-key "M-O" isearch-mode-map)
-      (unbind-key "M-o" isearch-mode-map)
-
-      (use-package moccur-edit))))
-
-
-;;;; comby
-
-(use-package comby
-  :ensure t
-  :commands (comby))
 
 
 ;;;; command-log-mode
@@ -1490,21 +1442,6 @@ An error is a duplicate if its file, line, column and message match."
   :commands focus-mode)
 
 
-;;;; fold-this
-
-(use-package fold-this
-  :ensure t
-  :commands (fold-this)
-  :bind (("C-c C-f" . fold-this-all)
-         ("C-c C-F" . fold-this)
-         ("C-c M-f" . fold-this-unfold-all))
-  :init
-  (progn
-    (setq
-     ;; fold-this-overlay-text "░▒▓▒░"
-     fold-this-overlay-text "╾━╳━╼")))
-
-
 ;;;; font-utils
 
 (use-package font-utils
@@ -2524,8 +2461,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands interaction-log-mode)
 
 
-
-
 ;;;; ivy
 
 (use-package ivy
@@ -2579,8 +2514,6 @@ drag the viewpoint on the image buffer that the window displays."
       (prettier-js))
 
     (bind-key "C-c C-c" 'js-mode-cccc js-mode-map)))
-
-
 
 
 ;;;; js2-mode
@@ -2728,8 +2661,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (global-launch-mode turn-on-launch-mode launch-file))
 
 
-
-
 ;;;; libmpdee
 
 (use-package libmpdee
@@ -2747,17 +2678,6 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
 
-    (use-package erefactor
-      :ensure t
-      :commands  (erefactor-lint-by-emacsen
-                  erefactor-rename-symbol-in-package
-                  erefactor-add-current-defun
-                  erefactor-change-prefix-in-buffer
-                  erefactor-dehighlight-all-symbol
-                  erefactor-highlight-current-symbol
-                  erefactor-lint
-                  erefactor-rename-symbol-in-buffer
-                  erefactor-eval-current-defun))
 
     (defun emacs-lisp-remove-elc-on-save ()
       "If you're saving an elisp file, likely the .elc is no longer valid."
@@ -3230,8 +3150,6 @@ drag the viewpoint on the image buffer that the window displays."
     (setq multi-term-program "/bin/bash")))
 
 
-
-
 ;;;; multiple-cursors
 
 (use-package multiple-cursors
@@ -3264,11 +3182,7 @@ drag the viewpoint on the image buffer that the window displays."
     (define-key region-bindings-mode-map "a" 'mc/mark-all-like-this)
     (define-key region-bindings-mode-map "p" 'mc/mark-previous-like-this)
     (define-key region-bindings-mode-map "n" 'mc/mark-next-like-this)
-    (define-key region-bindings-mode-map "m" 'mc/mark-more-like-this-extended))
-  :config
-  (progn
-    (bind-key "C-s" 'phi-search mc/keymap)
-    (bind-key "C-r" 'phi-search-backward mc/keymap)))
+    (define-key region-bindings-mode-map "m" 'mc/mark-more-like-this-extended)))
 
 
 ;;;; nginx-mode
@@ -3385,20 +3299,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands persp-mode)
 
 
-;;;; phi-search
-
-(use-package phi-search
-  :ensure t
-  :commands (phi-search phi-search-backwards))
-
-
-;;;; phi-search-dired
-
-(use-package phi-search-dired
-  :ensure t
-  :commands phi-search-dired)
-
-
 ;;;; php-mode
 
 (use-package php-mode
@@ -3494,13 +3394,6 @@ drag the viewpoint on the image buffer that the window displays."
           ("\\.mkd\\'" . poly-gfm-mode)
           ("\\.mkdown\\'" . poly-gfm-mode)
           ("\\.mdtext\\'" . poly-gfm-mode)))
-
-
-;;;; popup-switcher
-
-(use-package popup-switcher
-  :ensure t
-  :commands (psw-switch-buffer))
 
 
 ;;;; popwin
@@ -4084,13 +3977,6 @@ drag the viewpoint on the image buffer that the window displays."
         (message "Aborting")))))
 
 
-;;;; regex-tool
-
-(use-package regex-tool
-  :ensure t
-  :commands (regex-tool))
-
-
 ;;;; region-bindings-mode
 
 (use-package region-bindings-mode
@@ -4145,6 +4031,30 @@ drag the viewpoint on the image buffer that the window displays."
     (define-key region-bindings-mode-map "d" 'er/mark-defun)
     (define-key region-bindings-mode-map "g" 'keyboard-quit)
     (define-key region-bindings-mode-map "s" search-map)))
+
+
+;;;; replace / occur
+
+(use-package replace
+  :ensure nil
+  :init
+  (progn
+    (defun isearch-multi-occur-all-buffers ()
+      "Run `multi-occur' on all file-visiting buffers using the current isearch query."
+      (interactive)
+      (let ((query (if isearch-regexp
+                       isearch-string
+                     (regexp-quote isearch-string)))
+            (buffers (seq-filter #'buffer-file-name (buffer-list))))
+        (isearch-exit)
+        (multi-occur buffers query)))
+
+    (bind-key "C-o" 'isearch-occur isearch-mode-map)
+    (bind-key "C-M-o" 'isearch-multi-occur-all-buffers isearch-mode-map)))
+
+(use-package comby
+  :ensure t
+  :commands (comby))
 
 
 ;;;; request
@@ -4466,8 +4376,6 @@ drag the viewpoint on the image buffer that the window displays."
         (kill-ring-save (region-beginning) (region-end))))))
 
 
-
-
 ;;;; skewer-mode
 
 (use-package skewer-mode
@@ -4769,8 +4677,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
              swiper-isearch-backward))
 
 
-
-
 ;;;; syslog-mode
 
 (use-package syslog-mode
@@ -4910,15 +4816,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     (treemacs-follow-mode 1)
     (treemacs-project-follow-mode 1))
   )
-
-
-;;;; truthy
-
-(use-package truthy
-  :ensure t
-  :commands (truthy
-             truthy-s
-             truthy-l))
 
 
 ;;;; tuareg
@@ -5468,8 +5365,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
             (ruby-mode . "ruby")
             (scala-mode . "scala")
             (vim-mode . "vim")))))
-
-
 
 
 ;;;; zig-ts-mode
