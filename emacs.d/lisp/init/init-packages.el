@@ -1537,13 +1537,6 @@ Git gutter:
   :commands git-timemachine)
 
 
-;;;; gitlab
-
-(use-package gitlab
-  :ensure t
-  :commands (gitlab-version))
-
-
 ;;;; glsl-mode
 
 (use-package glsl-mode
@@ -4200,21 +4193,6 @@ drag the viewpoint on the image buffer that the window displays."
     (setq browse-url-secondary-browser-function 'browse-url-generic)))
 
 
-;;;; simple-httpd
-
-(use-package simple-httpd
-  :ensure t
-  :commands httpd-start
-  :init
-  (progn
-    (setq
-     httpd-servlets t
-     httpd-port 7348))
-  :config
-  (progn
-    (use-package skewer-mode)))
-
-
 ;;;; simpleclip
 
 (use-package simpleclip
@@ -4241,62 +4219,6 @@ drag the viewpoint on the image buffer that the window displays."
           (with-no-warnings
             (kill-ring-save (region-beginning) (region-end) t))
         (kill-ring-save (region-beginning) (region-end))))))
-
-
-;;;; skewer-mode
-
-(use-package skewer-mode
-  :ensure t
-  :commands (skewer-mode skewer-reload-page)
-  :bind (("C-x g" . skewer-reload-page))
-  :init
-  (progn
-    (use-package skewer-repl
-      :commands (skewer-repl)))
-  :config
-  (progn
-
-
-;;;;; skewer-html
-
-    (use-package skewer-html)
-
-
-;;;;; skewer-css
-
-    (use-package skewer-css)
-
-    (defun skewer-reload-page ()
-      "Reloads browser."
-      (interactive)
-      (silent-save-some-buffers)
-      (skewer-eval "window.location = window.location"))
-    (defun skewer-scroll-down ()
-      "Scroll down"
-      (interactive)
-      (skewer-eval "window.scrollBy(0,200);"))
-    (defun skewer-scroll-up ()
-      "Scroll down"
-      (interactive)
-      (skewer-eval "window.scrollBy(0,-200);"))
-    (defun skewer-scroll-left ()
-      "Scroll down"
-      (interactive)
-      (skewer-eval "window.scrollBy(-100,0);"))
-    (defun skewer-scroll-right ()
-      "Scroll down"
-      (interactive)
-      (skewer-eval "window.scrollBy(100,0);"))
-
-    (defun skewer-bind-browser-keys ()
-      "DOCSTRING"
-      (interactive)
-      (bind-key "C-<down>" 'skewer-scroll-down)
-      (bind-key "C-<up>" 'skewer-scroll-up)
-      (bind-key "C-<left>" 'skewer-scroll-left)
-      (bind-key "C-<right>" 'skewer-scroll-right)
-      ;; (bind-key "<f5>" 'skewer-reload-page)
-      )))
 
 
 ;;;; smart-shift
