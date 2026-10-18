@@ -75,18 +75,6 @@
   :diminish "")
 
 
-;;;; apache-mode
-
-(use-package apache-mode
-  :ensure t
-  :commands apache-mode
-  :mode (("\\.htaccess\\'"   . apache-mode)
-         ("apache2?/httpd\\.conf\\'"  . apache-mode)
-         ("apache2?/srm\\.conf\\'"    . apache-mode)
-         ("apache2?/access\\.conf\\'" . apache-mode)
-         ("apache2?//sites-\\(available\\|enabled\\)/" . apache-mode)))
-
-
 ;;;; archive-region
 
 (use-package archive-region
@@ -262,14 +250,6 @@ LEAF is normally ((BEG . END) . WND)."
   :config
   (progn
     (advice-add 'outline-flag-region :after 'backline-update)))
-
-
-;;;; backup-walker
-
-(use-package backup-walker
-  :ensure t
-  :if (not noninteractive)
-  :commands (backup-walker-start))
 
 
 ;;;; bazel
@@ -513,15 +493,6 @@ LEAF is normally ((BEG . END) . WND)."
   :ensure t
   :mode (("\\.cu\\'" . cuda-mode)
          ("\\.cuh\\'" . cuda-mode)))
-
-
-;;;; dart-mode
-
-(use-package dart-mode
-  ;; :disabled t
-  :ensure t
-  :commands (dart-mode)
-  :mode ("\\.dart\\'" . dart-mode))
 
 
 ;;;; deadgrep
@@ -768,13 +739,6 @@ If FILE already exists, signal an error."
       "Creates an __init__.py in the current directory"
       (interactive)
       (my-dired-create-file "__init__.py"))))
-
-
-;;;; dired-k
-
-(use-package dired-k
-  :ensure t
-  :commands dired-k)
 
 
 ;;;; direx
@@ -1196,7 +1160,6 @@ If FILE already exists, signal an error."
     (add-hook 'js-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'json-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'ruby-mode-hook 'flycheck-turn-on-maybe)
-    (add-hook 'php-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'scss-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'go-mode-hook 'flycheck-turn-on-maybe)
     (add-hook 'go-ts-mode-hook 'flycheck-turn-on-maybe)
@@ -1691,14 +1654,6 @@ Git gutter:
   :commands graphviz-dot-mode
   :mode (("\\.dot\\'" . graphviz-dot-mode)
          ("\\.gv\\'" . graphviz-dot-mode)))
-
-
-;;;; groovy-mode
-
-(use-package groovy-mode
-  :ensure t
-  :mode (("\\.groovy\\'" . groovy-mode)
-         ("\\.gradle\\'" . groovy-mode)))
 
 
 ;;;; gtpel
@@ -2951,13 +2906,6 @@ drag the viewpoint on the image buffer that the window displays."
     ))
 
 
-;;;; manage-minor-mode
-
-(use-package manage-minor-mode
-  :ensure t
-  :commands manage-minor-mode)
-
-
 ;;;; markdown-mode
 
 (use-package markdown-mode
@@ -3132,13 +3080,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (outshine-mode))
 
 
-;;;; package-utils
-
-(use-package package-utils
-  :ensure t
-  :commands package-utils-upgrade-all-and-recompile)
-
-
 ;;;; pandoc-mode
 
 (use-package pandoc-mode
@@ -3159,14 +3100,6 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package perspective
   :ensure t
   :commands persp-mode)
-
-
-;;;; php-mode
-
-(use-package php-mode
-  :ensure t
-  :commands php-mode
-  :mode ("\\.php\\'" . php-mode))
 
 
 ;;;; pip-requirements
@@ -3728,19 +3661,6 @@ drag the viewpoint on the image buffer that the window displays."
     (unbind-key "C-c C-j" python-mode-map)
     (unbind-key "C-c C-p" python-ts-mode-map)
     (unbind-key "C-c C-j" python-ts-mode-map)))
-
-
-;;;; quickrun
-
-(use-package quickrun
-  :ensure t
-  :if (not noninteractive)
-  :commands (quickrun
-             quickrun-region
-             quickrun-with-arg
-             quickrun-with-input-file
-             quickrun-compile-only)
-  :bind (("M-o q" . quickrun)))
 
 
 ;;;; rainbow-blocks

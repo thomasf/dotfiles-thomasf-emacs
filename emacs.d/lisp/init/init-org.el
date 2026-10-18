@@ -197,10 +197,7 @@ Titus von der Malsburg."
      org-clock-persist-file (expand-file-name
                              "org-clock-save.el" user-data-directory)
      org-id-locations-file (expand-file-name
-                            "org-id-locations" user-data-directory))
-
-    (use-package org-annotate-file
-      :bind ("C-c C-l" . org-annotate-file)))
+                            "org-id-locations" user-data-directory)))
   :config
   (progn
 
@@ -309,10 +306,6 @@ Argument FILENAME File to insert."
      org-contacts-files (list (f-expand
                                "agenda/contacts.org"
                                user-notes-directory))
-     org-annotate-file-storage-file (f-expand
-                                     "org/file-annotations.org"
-                                     user-notes-directory)
-     ;; org-annotate-file-add-search nil
 
      ;; org-hide-block-startup t
      org-agenda-block-separator nil
