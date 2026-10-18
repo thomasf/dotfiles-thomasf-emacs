@@ -443,9 +443,7 @@ LEAF is normally ((BEG . END) . WND)."
          ("M-o M-i" . counsel-imenu)
          ("C-h r" . counsel-recentf)
          ("C-x f r" . counsel-recentf)
-         ("C-x f L" . counsel-locate)
-         ("C-x f p" . projectile-find-file)
-         )
+         ("C-x f L" . counsel-locate))
   :config (setq ivy-initial-inputs-alist nil)
   :commands (counsel-mode
              counsel-outline
@@ -3525,6 +3523,7 @@ drag the viewpoint on the image buffer that the window displays."
              projectile-sort-by-recentf-first
              projectile-sort-by-recently-active-first)
   :bind (("C-x f <SPC>" . projectile-find-file)
+         ("C-x f p" . projectile-find-file)
          ("C-x f P" . projectile-find-file-ignored)
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
