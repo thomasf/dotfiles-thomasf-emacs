@@ -340,12 +340,12 @@ LEAF is normally ((BEG . END) . WND)."
     (rename-modeline "clojure-mode" clojure-mode "clj")))
 
 
-;;;; cmake-mode
+;;;; cmake-ts-mode
 
-(use-package cmake-mode
-  :ensure t
-  :mode (("CMakeLists\\.txt\\'" . cmake-mode)
-         ("\\.cmake\\'" . cmake-mode)))
+(use-package cmake-ts-mode
+  :ensure nil
+  :mode (("CMakeLists\\.txt\\'" . cmake-ts-mode)
+         ("\\.cmake\\'" . cmake-ts-mode)))
 
 
 ;;;; color-identifiers-mode
@@ -836,11 +836,11 @@ If FILE already exists, signal an error."
   :commands (docker))
 
 
-;;;; dockerfile-mode
+;;;; dockerfile-ts-mode
 
-(use-package dockerfile-mode
-  :ensure t
-  :mode (("Dockerfile" . dockerfile-mode))
+(use-package dockerfile-ts-mode
+  :ensure nil
+  :mode ("\\(?:Dockerfile\\(?:\\..*\\)?\\|\\.[Dd]ockerfile\\)\\'" . dockerfile-ts-mode)
   :init
   (progn
     (setq-default docker-use-sudo nil)))
@@ -2690,6 +2690,7 @@ drag the viewpoint on the image buffer that the window displays."
     (add-hook 'js2-jsx-mode-hook #'lsp)
     (add-hook 'typescript-mode-hook #'lsp)
     (add-hook 'typescript-ts-mode-hook #'lsp)
+    (add-hook 'tsx-ts-mode-hook #'lsp)
     (add-hook 'js-mode-hook #'lsp)
     (add-hook 'go-dot-mod-mode-hook #'lsp)
     (add-hook 'terraform-mode-hook #'lsp)
@@ -2718,7 +2719,8 @@ drag the viewpoint on the image buffer that the window displays."
 
     (when (executable-find* "yaml-language-server"
                             "yarn global add yaml-language-server")
-      (add-hook 'yaml-mode-hook #'lsp))
+      (add-hook 'yaml-mode-hook #'lsp)
+      (add-hook 'yaml-ts-mode-hook #'lsp))
 
     (when (executable-find* "terraform-lsp"
                             "https://github.com/juliosueiras/terraform-lsp")
@@ -4417,11 +4419,11 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     ))
 
 
-;;;; sqlite
+;;;; sqlite-mode
 
-(use-package sqlite
-  :ensure t
-  :defer)
+(use-package sqlite-mode
+  :ensure nil
+  :defer t)
 
 
 ;;;; string-inflection
@@ -4509,12 +4511,12 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :bind ("C-'" . toggle-quotes))
 
 
-;;;; toml-mode
+;;;; toml-ts-mode
 
-(use-package toml-mode
-  :ensure t
-  :mode (("\\.toml\\'" . toml-mode)
-         ("Gopkg\\.lock\\'" . toml-mode)))
+(use-package toml-ts-mode
+  :ensure nil
+  :mode (("\\.toml\\'" . toml-ts-mode)
+         ("Gopkg\\.lock\\'" . toml-ts-mode)))
 
 
 ;;;; tramp
@@ -4605,20 +4607,20 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :mode ("\\.ml[ip]?\\'" . tuareg-mode))
 
 
-;;;; typescript-mode
+;;;; typescript-ts-mode
 
-(use-package typescript-mode
-  :ensure t
-  :commands (typescript-mode)
-  :mode (("\\.ts\\'" . typescript-mode)
-         ("\\.tsx\\'" . typescript-mode))
+(use-package typescript-ts-mode
+  :ensure nil
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.tsx\\'" . tsx-ts-mode))
   :config
   (progn
     (defun typescript-cccc ()
       (interactive)
       (silent-save-some-buffers)
       (prettier-js))
-    (bind-key "C-c C-c" 'typescript-cccc typescript-mode-map)))
+    (bind-key "C-c C-c" 'typescript-cccc typescript-ts-mode-map)
+    (bind-key "C-c C-c" 'typescript-cccc tsx-ts-mode-map)))
 
 
 ;;;; undo-tree
@@ -4944,21 +4946,20 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     (add-hook 'xref-after-return-hook 'my-pulse-xref 99)))
 
 
-;;;; yaml-mode
+;;;; yaml-ts-mode
 
-(use-package yaml-mode
-  :ensure t
-  :commands yaml-mode
-  :mode ("\\.y[a]?ml\\'" . yaml-mode)
+(use-package yaml-ts-mode
+  :ensure nil
+  :mode ("\\.y[a]?ml\\'" . yaml-ts-mode)
   :init
   (progn
     (defun my-yaml-save-hook-fn ()
       (when (and buffer-file-name
-                 (eq major-mode 'yaml-mode))
+                 (derived-mode-p 'yaml-ts-mode 'yaml-mode))
         (whitespace-cleanup-region (point-min) (point-max))))
     (defun my-yaml-mode-hook ()
       (add-hook 'after-save-hook 'my-yaml-save-hook-fn nil t))
-    (add-hook 'yaml-mode-hook 'my-yaml-mode-hook)))
+    (add-hook 'yaml-ts-mode-hook 'my-yaml-mode-hook)))
 
 
 ;;;; yasnippet
