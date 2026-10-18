@@ -47,11 +47,6 @@
   :mode (("\\.adoc\\'" . adoc-mode)))
 
 
-;;;; ahg
-
-(use-package ahg
-  :ensure t
-  :commands (ahg-log ahg-short-log ahg-status))
 
 (eval-and-compile
   (setq magit-last-seen-setup-instructions "1.4.0"))
@@ -351,29 +346,6 @@ LEAF is normally ((BEG . END) . WND)."
   :ensure t
   :mode (("CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'" . cmake-mode)))
-
-
-;;;; code-library
-
-(use-package code-library
-  :ensure t
-  :commands code-library-save-code
-  :config
-  (progn
-    (setq code-library-mode-file-alist '((c++-mode . "cpp.org")
-                                         (emacs-lisp-mode . "elisp.org")
-                                         (python-mode . "python.org")
-                                         (python-ts-mode . "python.org")
-                                         (perl-mode . "perl.org")
-                                         (js2-mode . "javascript.org")
-                                         (js-mode . "javascript.org")
-                                         (js-jsx-mode . "javascript.org")
-                                         (js2-jsx-mode . "javascript.org")
-                                         (web-mode . "html.org")
-                                         (sh-mode . "sh.org"))
-          code-library-directory "~/notes/library/"
-          code-library-use-tags-command nil
-          code-library-downcased-org-keywords t)))
 
 
 ;;;; color-identifiers-mode
@@ -874,13 +846,6 @@ If FILE already exists, signal an error."
     (setq-default docker-use-sudo nil)))
 
 
-;;;; dpaste
-
-(use-package dpaste
-  :commands (dpaste-region dpaste-buffer dpaste-region-or-buffer)
-  :ensure t)
-
-
 ;;;; drag-stuff
 
 (use-package drag-stuff
@@ -1026,34 +991,6 @@ If FILE already exists, signal an error."
   (progn
     (and (not noninteractive)
        (editorconfig-mode 1))))
-
-
-;;;; eimp
-
-(use-package eimp
-  :ensure t
-  :commands (eimp-mode eimp-fit-image-to-window)
-  :init
-  (progn
-
-    (defmacro eimp-with-buffer-modified-unmodified (&rest body)
-      "Run BODY while preserving the buffer's `buffer-modified-p' state."
-      (let ((was-modified (make-symbol "was-modified")))
-        `(let ((,was-modified (buffer-modified-p)))
-           (unwind-protect
-               (progn ,@body)
-             (set-buffer-modified-p ,was-modified)))))
-
-    (defadvice eimp-mogrify-process-sentinel (around do-not-set-modified activate)
-      (eimp-with-buffer-modified-unmodified
-       ad-do-it
-       ))
-
-    (use-package image-mode
-      :defer
-      :config
-      (progn
-        (bind-key "h" 'eimp-fit-image-to-window image-mode-map)))))
 
 
 ;;;; eldoc
@@ -2379,14 +2316,6 @@ Git gutter:
     (setq ielm-prompt "» ")))
 
 
-;;;; ietf-docs
-
-
-(use-package ietf-docs
-  :ensure t
-  :commands ietf-docs-open-at-point)
-
-
 ;;;; image-mode
 
 (use-package image-mode
@@ -2622,16 +2551,6 @@ drag the viewpoint on the image buffer that the window displays."
     (keep-buffers-mode 1)))
 
 
-;;;; know-your-http-well
-
-(use-package know-your-http-well
-  :ensure t
-  :commands (http-header
-             http-method
-             http-relation
-             http-status-code))
-
-
 ;;;; kotlin
 
 (use-package kotlin-mode
@@ -2659,13 +2578,6 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package launch
   :ensure t
   :commands (global-launch-mode turn-on-launch-mode launch-file))
-
-
-;;;; libmpdee
-
-(use-package libmpdee
-  :ensure t
-  :defer)
 
 
 ;;;; lisp-mode
@@ -2711,13 +2623,6 @@ drag the viewpoint on the image buffer that the window displays."
 (use-package logito
   :ensure t
   :commands (logito-log logito-should-log logito-insert-log))
-
-
-;;;; look-mode
-
-(use-package look-mode
-  :ensure t
-  :commands (look-at-files look-at-this-file))
 
 
 ;;;; lorem-ipsum
@@ -3080,48 +2985,10 @@ drag the viewpoint on the image buffer that the window displays."
   :commands memory-usage)
 
 
-;;;; mingus
-
-(use-package mingus
-  :commands (mingus mingus-stop mingus-dired-add mingus-dired-add-and-play)
-  :ensure t
-  :if (not noninteractive)
-  :init
-  (progn
-    (setq
-     mingus-use-mouse-p nil))
-  :config
-  (progn
-    (dolist
-        (m (list mingus-playlist-mode-map mingus-browse-mode-map mingus-help-mode-map))
-      (define-key m "s" 'isearch-forward-regexp)
-      (define-key m "t" 'mingus-toggle)
-      (define-key m "n" 'next-line)
-      (define-key m "p" 'previous-line)
-      (define-key m "h" 'ibuffer))
-    (defun mingus ()
-      "My mingus command"
-      (interactive)
-      (mingus-switch-to-playlist)
-      (mingus-playlist)
-      (mingus-goto-current-song)
-      (recenter))))
-
-
 ;;;; misc
 
 (use-package misc
   :bind (("M-z" . zap-up-to-char)))
-
-
-;;;; mo-git-blame
-
-(use-package mo-git-blame
-  :ensure t
-  :commands mo-git-blame-current
-  :init
-  (progn
-    (setq mo-git-blame-blame-window-width 25)))
 
 
 ;;;; mouse
@@ -4533,15 +4400,6 @@ drag the viewpoint on the image buffer that the window displays."
     (show-smartparens-global-mode t)))
 
 
-;;;; smeargle
-
-(use-package smeargle
-  :ensure t
-  :commands (smeargle
-             smeargle-commits
-             smeargle-clear))
-
-
 ;;;; smerge-mode
 
 (use-package smerge-mode
@@ -4957,15 +4815,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
     (use-package visual-regexp-steroids
       :ensure t)))
-
-
-;;;; vkill
-
-(use-package vkill
-  :commands vkill
-  :if (not noninteractive)
-  :config
-  (setq vkill-show-all-processes t))
 
 
 ;;;; volatile-highlights
