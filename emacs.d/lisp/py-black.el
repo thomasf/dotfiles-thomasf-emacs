@@ -1,4 +1,4 @@
-;;; py-autopep8.el --- Use autopep8 to beautify a Python buffer
+;;; py-black.el --- Use black to beautify a Python buffer  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2015, Friedrich Paetzke <f.paetzke@gmail.com>
 

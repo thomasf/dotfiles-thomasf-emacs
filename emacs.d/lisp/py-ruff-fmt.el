@@ -1,4 +1,4 @@
-;;; py-ruff-fmt.el
+;;; py-ruff-fmt.el --- Use ruff to format a Python buffer  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2015, Friedrich Paetzke <f.paetzke@gmail.com>
 

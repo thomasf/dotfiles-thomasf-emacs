@@ -1,4 +1,4 @@
-;;; org-import-icalendar.el --- Copy snippet to kill-ring for text/calendar part
+;;; org-import-icalendar.el --- Copy snippet to kill-ring for text/calendar part  -*- lexical-binding: nil; -*-
 
 ;; Copyright (C) 2010 Vagn Johansen
 
@@ -152,7 +152,7 @@
           (setq error-string (format "%s\n%s\nCannot handle this event: %s"
                                error-val error-string e))
           (message "%s" error-string))))
-    found-error))
+    found-error)))
 
 (defun org-icalendar-import-buffer ()
   (interactive)

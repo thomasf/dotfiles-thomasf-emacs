@@ -1,4 +1,4 @@
-;;; highlight-tail.el --- draw a colourful "tail" while you write
+;;; highlight-tail.el --- draw a colourful "tail" while you write  -*- lexical-binding: t; -*-
 
 ;; Author: Rafal Jedruszek <necui-emahte@nic-nac-project.net>
 ;; Keywords: highlight tail eye-candy visual-effect light color burn

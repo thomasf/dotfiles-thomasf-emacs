@@ -116,11 +116,10 @@ grayed out.")
 			 (point))))
 	(forward-sexp -1)
 	(setq start (point))
-	(add-to-list
-	 'results
-	 `(,start ,end
-		  ,(benchmark-run
-		    (eval (sexp-at-point)))))
+	(push `(,start ,end
+		       ,(benchmark-run
+			 (eval (sexp-at-point))))
+	      results)
 	(goto-char end))
       (profile-dotemacs-show-results results)
       (switch-to-buffer (current-buffer)))))

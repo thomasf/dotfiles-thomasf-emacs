@@ -1,3 +1,4 @@
+;;; magit-multi-status.el --- Multi-status for Magit  -*- lexical-binding: t; -*-
 ;;;; experimental implementation to assess feature requirements
 
 ;;; example usage: create an interactive function with your repos

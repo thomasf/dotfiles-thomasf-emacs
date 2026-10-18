@@ -1,4 +1,4 @@
-;;; anchored-transpose.el --- Transposes a phrase around an anchor phrase
+;;; anchored-transpose.el --- Transposes a phrase around an anchor phrase  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004 Free Software Foundation, Inc.
 

@@ -1,3 +1,4 @@
+;;; install-common.el --- Common batch package installation helpers -*- lexical-binding: nil; -*-
 (require 'package)
 (package-initialize)
 

@@ -1,4 +1,4 @@
-;;; cl-lib.el --- Properly prefixed CL functions and macros  -*- coding: utf-8 -*-
+;;; cl-lib.el --- Properly prefixed CL functions and macros  -*- coding: utf-8; lexical-binding: t -*-
 
 ;; Copyright (C) 2012  Free Software Foundation, Inc.
 

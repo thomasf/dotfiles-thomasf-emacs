@@ -1,4 +1,4 @@
-;;; Directory Local Variables
+;;; Directory Local Variables            -*- no-byte-compile: t; lexical-binding: nil; -*-
 ;;; See Info node `(emacs) Directory Variables' for more information.
 
 ((nil

@@ -1,4 +1,4 @@
-;;; vkill.el --- view and kill Unix processes from within Emacs
+;;; vkill.el --- view and kill Unix processes from within Emacs  -*- lexical-binding: t; -*-
 ;; Package-Version: 20091203.1022
 
 ;; Copyright (C) 1987, 1989 Kyle E. Jones

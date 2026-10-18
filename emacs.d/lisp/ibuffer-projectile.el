@@ -1,4 +1,4 @@
-;;; ibuffer-projectile.el --- Group ibuffer's list by PROJECTILE project, or show PROJECTILE status
+;;; ibuffer-projectile.el --- Group ibuffer's list by PROJECTILE project, or show PROJECTILE status  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2011-2014 Steve Purcell (ibuffer-vc)
 ;; Copyright (C) 2014 Thomas Frössman
@@ -162,7 +162,7 @@ Groups are based on the projectile root dirs of buffers."
 (defun ibuffer-projectile-find-file ()
   "projectile-find-file using item under point in ibuffer"
   (interactive)
-  (--when-let (get-buffer "*Ibuffer*")
+  (when-let* ((it (get-buffer "*Ibuffer*")))
     (with-current-buffer it
       (let* ((selected-buffer (ibuffer-current-buffer))
              (buffer-path (with-current-buffer

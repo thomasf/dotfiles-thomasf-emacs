@@ -1,5 +1,4 @@
-
-;;; Custom units stored by Calc on Wed Jan 22 18:17:03 2014
+;;; calc.el --- Custom units stored by Calc -*- lexical-binding: t; -*-
 ;;; (no custom units defined)
 ;;; End of custom units
 
