@@ -126,7 +126,8 @@ If the file is not under a project root, nil is returned instead."
 
 ;;;###autoload
 (defun ibuffer-projectile-generate-filter-groups-by-projectile-root ()
-  "Create a set of ibuffer filter groups based on the projectile root dirs of buffers."
+  "Create a set of ibuffer filter groups.
+Groups are based on the projectile root dirs of buffers."
   (let ((roots (ibuffer-remove-duplicates
                 (delq nil (mapcar 'ibuffer-projectile-root (buffer-list))))))
     (mapcar (lambda (projectile-root)

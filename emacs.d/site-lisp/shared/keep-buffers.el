@@ -109,7 +109,7 @@ Some may also be erased, which is undo-able."
 (defcustom keep-buffers-protected-alist
   '(("\\`\\*scratch\\*\\'" . erase)
     ("\\`\\*Messages\\*\\'" . nil))
-  "an alist '((\"regex1\" . 'erase) (\"regex2\" . nil))
+  "an alist \\='((\"regex1\" . \\='erase) (\"regex2\" . nil))
 
 CAR of each cons cell is the buffer matching regexp.  If CDR is
 not nil then the matching buffer is erased then buried.

@@ -1193,18 +1193,30 @@ If FILE already exists, signal an error."
     ;;     )
     ;;   )
 
+    (defun my-flycheck-level-error ()
+      (interactive)
+      (setq flycheck-navigation-minimum-level 'error)
+      (message "level: error"))
+
+    (defun my-flycheck-level-warning ()
+      (interactive)
+      (setq flycheck-navigation-minimum-level 'warning)
+      (message "level: warning"))
+
+    (defun my-flycheck-level-info ()
+      (interactive)
+      (setq flycheck-navigation-minimum-level 'info)
+      (message "leve: info"))
+
     (defhydra hydra-next-flycheck-error (flycheck-mode-map "C-c")
       "next-error"
       ("n" my-flycheck-next-error "next")
       ("p" my-flycheck-previous-error "prev" :bind nil)
       ("j" my-flycheck-next-error "next" :bind nil)
       ("k" my-flycheck-previous-error "prev" :bind nil)
-      ("e" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'error) (message "level: error"))
-       "l:error"  :bind nil)
-      ("w" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'warning) (message "level: warning"))
-       "l:warning" :bind nil)
-      ("i" (lambda () (interactive) (setq flycheck-navigation-minimum-level 'info) (message "leve: info"))
-       "l:info" :bind nil))
+      ("e" my-flycheck-level-error "l:error" :bind nil)
+      ("w" my-flycheck-level-warning "l:warning" :bind nil)
+      ("i" my-flycheck-level-info "l:info" :bind nil))
 
     (defun flycheck-node_modules-executable-find (executable)
       (or
@@ -1427,10 +1439,54 @@ An error is a duplicate if its file, line, column and message match."
         (interactive)
         (my-git-gutter:next-hunk -1))
 
-      (defhydra hydra-git-gutter (:body-pre
-                                  #'(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
+    (defun my-git-gutter:first-hunk ()
+      (interactive)
+      (goto-char (point-min))
+      (git-gutter:next-hunk 1))
 
-                                  :hint nil)
+    (defun my-git-gutter:last-hunk ()
+      (interactive)
+      (goto-char (point-min))
+      (git-gutter:previous-hunk 1))
+
+    (defun my-git-gutter:set-start-revision ()
+      (interactive)
+      (call-interactively 'git-gutter:set-start-revision)
+      (git-gutter:update-all-windows))
+
+    (defun my-git-gutter:set-start-revision-default ()
+      (interactive)
+      (let ((rev (nth 1 (magit--get-default-branch))))
+        (git-gutter:set-start-revision rev)
+        (message "set start revision to: %s " rev)))
+
+    (defun my-git-gutter:diff-head ()
+      (interactive)
+      (setq git-gutter:diff-option "HEAD")
+      (git-gutter:update-all-windows))
+
+    (defun my-git-gutter:diff-cached ()
+      (interactive)
+      (setq git-gutter:diff-option "--cached")
+      (git-gutter:update-all-windows))
+
+    (defun my-git-gutter:diff-clear ()
+      (interactive)
+      (setq git-gutter:diff-option "")
+      (git-gutter:update-all-windows))
+
+    (defun my-git-gutter:quit-and-deactivate ()
+      (interactive)
+      (git-gutter-mode -1)
+      ;; git-gutter-fringe doesn't seem to
+      ;; clear the markup right away
+      (sit-for 0.1)
+      (git-gutter:clear))
+
+    (defhydra hydra-git-gutter (:body-pre
+                                #'(lambda () (git-gutter-mode 1) (git-gutter:update-all-windows))
+
+                                :hint nil)
   "
 Git gutter:
   _j_: next hunk        _s_tage hunk         (_1_) diff option HEAD         _q_uit
@@ -1441,33 +1497,20 @@ Git gutter:
 "
   ("j" my-git-gutter:next-hunk)
   ("k" my-git-gutter:previous-hunk)
-  ("h" (progn (goto-char (point-min))
-              (git-gutter:next-hunk 1)))
-  ("l" (progn (goto-char (point-min))
-              (git-gutter:previous-hunk 1)))
+  ("h" my-git-gutter:first-hunk)
+  ("l" my-git-gutter:last-hunk)
   ("s" git-gutter:stage-hunk)
   ("r" git-gutter:revert-hunk)
   ("p" git-gutter:popup-hunk)
 
-  ("R" (progn (call-interactively 'git-gutter:set-start-revision)
-              (git-gutter:update-all-windows)))
-  ("D" (progn (let ((rev (nth 1 (magit--get-default-branch))))
-                (git-gutter:set-start-revision rev)
-                (message "set start revision to: %s " rev))))
-  ("1" (progn (setq git-gutter:diff-option "HEAD")
-              (git-gutter:update-all-windows)))
-  ("2" (progn (setq git-gutter:diff-option "--cached")
-              (git-gutter:update-all-windows)))
-  ("3" (progn (setq git-gutter:diff-option "")
-              (git-gutter:update-all-windows)))
+  ("R" my-git-gutter:set-start-revision)
+  ("D" my-git-gutter:set-start-revision-default)
+  ("1" my-git-gutter:diff-head)
+  ("2" my-git-gutter:diff-cached)
+  ("3" my-git-gutter:diff-clear)
 
   ("q" nil :color blue)
-  ("Q" (progn (git-gutter-mode -1)
-              ;; git-gutter-fringe doesn't seem to
-              ;; clear the markup right away
-              (sit-for 0.1)
-              (git-gutter:clear))
-       :color blue))))
+  ("Q" my-git-gutter:quit-and-deactivate :color blue))))
 
 
 ;;;; git-modes
@@ -4266,7 +4309,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     ("l" smerge-keep-lower)
     ("a" smerge-keep-all)
     ("RET" smerge-keep-current)
-    ("\C-m" smerge-keep-current)
     ("<" smerge-diff-base-upper)
     ("=" smerge-diff-upper-lower)
     (">" smerge-diff-base-lower)

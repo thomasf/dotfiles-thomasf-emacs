@@ -221,7 +221,7 @@
 (defun org-import-icalendar-gnus ()
   "Import ics part stored as second part of alternative.
 
- (define-key gnus-summary-mode-map [?K ?I] 'org-import-icalendar-gnus)
+ (define-key gnus-summary-mode-map [?K ?I] \\='org-import-icalendar-gnus)
 "
   (interactive)
   (save-current-buffer

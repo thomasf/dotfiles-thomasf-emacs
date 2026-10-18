@@ -102,7 +102,7 @@
 
 This function assumes region is ready to be used.
 
-:MOVE-POINT can be 'beginning or 'end, or nil to keep point/mark order.
+:MOVE-POINT can be \\='beginning or \\='end, or nil to keep point/mark order.
 "
   (let ((point-first (= (point) (region-beginning)))
         (r-beg (region-beginning))

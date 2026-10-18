@@ -707,7 +707,7 @@ case the comma-separated list of names should be given as argument
 NAMES.  UNIT-SYSTEM may be nil to use the default, but also `SI' or
 `cgs' may be specified directly.  For example
 
-     (constants-insert 'SI \"hplanck,c,M*pc\")"
+     (constants-insert \\='SI \"hplanck,c,M*pc\")"
   (interactive "P")
   (let* ((constants-unit-system
           (cond ((and unit-system (symbolp unit-system)) unit-system)
@@ -1130,7 +1130,7 @@ The following ambiguities are resolved by ignoring the unit prefix
 
 (defun constants-test (names)
   "Test constants-insert for several different modes.
-To try it out, type '(constants-test)' into a buffer, put the cursor after
+To try it out, type `(constants-test)' into a buffer, put the cursor after
 the closing parenthesis and execute \\[eval-last-sexp]."
   (let ((modes '(fortran-mode c-mode emacs-lisp-mode lisp-interaction-mode
                               idlwave-mode perl-mode cperl-mode))

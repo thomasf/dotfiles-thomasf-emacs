@@ -236,14 +236,14 @@ The argument for every color is a percent at which this color
 will have greatest intensity.
 
 For instance:
-'((\"#c1e156\" . 0)
+\\='((\"#c1e156\" . 0)
   (\"#b8ff07\" . 25)
   (\"#00c377\" . 60)))
 
 Verbal color names are possible.  These names are case independent.
 
 For instance:
-'((\"Black\" . 0)
+\\='((\"Black\" . 0)
   (\"white\" . 100))")
 
 (defvar highlight-tail-steps 80
@@ -256,7 +256,7 @@ It can be sth like this: 0.2 or maybe better 0.02")
 
 (defvar highlight-tail-const-width 10
   "*Number of chars to highlight when constant highlighting.
-Makes sense only when `highlight-tail-posterior-type' is 'const.")
+Makes sense only when `highlight-tail-posterior-type' is \\='const.")
 
 (defvar highlight-tail-posterior-type t
   "*Type of highlighting.
@@ -274,7 +274,7 @@ Please do not change this variable.")
 
 If `highlight-tail-colors' ends at 100% then this variable is
 identical.  If not, then this variable is `highlight-tail-colors' +
-'(null . 100).
+\\='(null . 100).
 
 Please do not change this variable.")
 
@@ -285,19 +285,19 @@ This variable is a association list, which means it contains lists
 like (key . value).
 
 Key could be: 
-- 'start
-- 'default
+- \\='start
+- \\='default
 - hex value
 
 And value is a list of colors for fading out in hex format.
 
-- 'start list
+- \\='start list
 
 This list of colors is used to build the others. It contains fade
 table from the first color to the last one (from `highlight-tail-colors'
 variable).
 
-- 'default list
+- \\='default list
 
 This list is used to fade out to the default background color. By
 default background color I mean that there are no overlays nor text
@@ -315,10 +315,10 @@ This list is automatically computed.
 Please do not change this variable.")
 
 (defvar highlight-tail-overlays-hash nil
-  "Hash of actually being displayed highlight-tail's overlays.
+  "Hash of actually being displayed highlight-tail\\='s overlays.
 
 Hash is indexed by overlays.  Values contains:
- - background color hex or 'default
+ - background color hex or \\='default
  - face number (the step of fading out)
 
 This hash is changed on every `highlight-tail-fade-out-step'.
@@ -328,7 +328,7 @@ Please do not change this variable.")
 (defvar highlight-tail-const-overlays-list nil
   "Vector of lists containing overlays and their step at fading out.
 
-Only when 'const highlighting is on.
+Only when \\='const highlighting is on.
 
 The vector consists of lists like this one: (overlay . step).  Step is
 a number from which parser will build a face name.  For example color
@@ -494,8 +494,8 @@ For example: 0 255 0 will result in #00FF00."
 (defun highlight-tail-get-bgcolor-hex (point)
   "Get the background color of point.
 
-Do not take highlight-tail's overlays into consideration.  This means
-that if there is ht's overlay at at the top then return 'default"
+Do not take highlight-tail\\='s overlays into consideration.  This means
+that if there is ht\\='s overlay at at the top then return \\='default"
   (let ((point-face (get-char-property point 'face))
         point-face-from-cache
         point-face-bgcolor
@@ -591,7 +591,7 @@ that if there is ht's overlay at at the top then return 'default"
   "Make constant overlays list, that will be later operated on.
 \(by `highlight-tail-fade-out-step')
 
-It is executed only when `highlight-tail-posterior-type' is 'const."
+It is executed only when `highlight-tail-posterior-type' is \\='const."
   ;; we are going from end
   (let ((iterator (1- highlight-tail-const-width))
         ;; difference between neighbouring elements of
@@ -631,7 +631,7 @@ It is executed only when `highlight-tail-posterior-type' is 'const."
 (defun highlight-tail-update-const-overlays-list ()
   "Update constant overlays list (colors, positions etc.)
 
-It only occurs when `highlight-tail-posterior-type' is 'const."
+It only occurs when `highlight-tail-posterior-type' is \\='const."
   (let ((iterator 0))
     ;; iterate through `highlight-tail-const-overlays-list'
     (while (< iterator (length highlight-tail-const-overlays-list))
@@ -737,12 +737,12 @@ This is called every `highlight-tail-timer' amount of time."
   "Compute list of colors that will smoothly change from one to another.
 The list is stored in variable `highlight-tail-colors-fade-list'.
 
-If FOR-WHAT is 'start then the list is computed for all colors from
-`highlight-tail-colors'.  If FOR-WHAT is a hex color or 'default then
-the list is a join of 'start fade-table and a fade-table computed from
+If FOR-WHAT is \\='start then the list is computed for all colors from
+`highlight-tail-colors'.  If FOR-WHAT is a hex color or \\='default then
+the list is a join of \\='start fade-table and a fade-table computed from
 the last color in `highlight-tail-colors' to the given one.
 
-Where 'default is `highlight-tail-default-background-color'"
+Where \\='default is `highlight-tail-default-background-color'"
   (let ((colors-fade-elem (highlight-tail-get-colors-fade-table-with-key
                            for-what)))
     ;; preper colors-fade-elem
