@@ -267,9 +267,9 @@
 
 ;;;;; silence successful auto saving
 
-(defadvice do-auto-save (around do-auto-save-silent activate)
-  (ad-set-arg 0 t)
-  ad-do-it)
+(define-advice do-auto-save (:around (orig-fn &optional _no-message current-only) silent)
+  "Silence successful auto saving."
+  (funcall orig-fn t current-only))
 
 
 ;;;;; simple

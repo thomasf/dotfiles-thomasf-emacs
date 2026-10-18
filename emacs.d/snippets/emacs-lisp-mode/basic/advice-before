@@ -3,6 +3,6 @@
 # binding: 
 # expand-env: ()
 # --
-(defadvice ${1:advised-function} (before ${2:advice-name} activate)
+(define-advice ${1:advised-function} (:before (${2:&rest args}) ${3:advice-name})
    $0
 )

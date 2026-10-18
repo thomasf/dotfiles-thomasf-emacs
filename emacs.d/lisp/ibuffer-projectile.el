@@ -103,7 +103,7 @@ This option can be used to exclude certain files from the grouping mechanism."
         (puthash cache-key (or value 'no-project-root) ibuffer-projectile-project-root-cache)
         value))))
 
-(defadvice projectile-invalidate-cache (after clear-ibuffer-cache activate)
+(define-advice projectile-invalidate-cache (:after (&rest _args) clear-ibuffer-cache)
   (setq ibuffer-projectile-project-root-cache (make-hash-table :test 'equal)))
 
 (defun ibuffer-projectile-root (buf)

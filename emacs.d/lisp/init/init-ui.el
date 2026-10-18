@@ -618,7 +618,7 @@
                    focus-out-hook
                    ))
 
-(defadvice hardhat-local-hook (after cursor-style-update activate)
+(define-advice hardhat-local-hook (:after (&rest _args) cursor-style-update)
   (cursor-style-update))
 
 

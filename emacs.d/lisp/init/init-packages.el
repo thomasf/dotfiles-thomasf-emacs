@@ -1884,10 +1884,10 @@ Git gutter:
       :commands (ibuffer-tramp-generate-filter-groups-by-tramp-connection
                  ibuffer-tramp-set-filter-groups-by-tramp-connection))
     ;; Switching to ibuffer puts the cursor on the most recent buffer
-    (defadvice ibuffer (around ibuffer-point-to-most-recent activate)
-      "Open ibuffer with cursor pointed to most recent buffer name"
+    (define-advice ibuffer (:around (orig-fn &rest args) ibuffer-point-to-most-recent)
+      "Open ibuffer with cursor pointed to most recent buffer name."
       (let ((recent-buffer-name (buffer-name)))
-        ad-do-it
+        (apply orig-fn args)
         (ibuffer-update nil t)
         (unless (string= recent-buffer-name "*Ibuffer*")
           (ibuffer-jump-to-buffer recent-buffer-name)))))
@@ -2102,23 +2102,23 @@ Git gutter:
 
     (bind-key "H" 'set-categorized-ibuffer-filter-group ibuffer-mode-map)
 
-    (defadvice ibuffer-invert-sorting (around ibuffer-point-to-same activate)
-      "TODO"
+    (define-advice ibuffer-invert-sorting (:around (orig-fn &rest args) ibuffer-point-to-same)
+      "Keep point on the same buffer after inverting sorting."
       (let ((ibuf (get-buffer "*Ibuffer*")))
         (when ibuf
           (with-current-buffer ibuf
             (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+              (apply orig-fn args)
+              (ibuffer-jump-to-buffer (buffer-name selected-buffer)))))))
 
-    (defadvice ibuffer-toggle-sorting-mode (around ibuffer-point-to-same activate)
-      "TODO"
+    (define-advice ibuffer-toggle-sorting-mode (:around (orig-fn &rest args) ibuffer-point-to-same)
+      "Keep point on the same buffer after toggling sorting mode."
       (let ((ibuf (get-buffer "*Ibuffer*")))
         (when ibuf
           (with-current-buffer ibuf
             (let ((selected-buffer (ibuffer-current-buffer)))
-              ad-do-it
-              (ibuffer-jump-to-buffer (buffer-name selected-buffer )))))))
+              (apply orig-fn args)
+              (ibuffer-jump-to-buffer (buffer-name selected-buffer)))))))
 
     (setq
      ibuffer-default-sorting-mode 'recency
@@ -2843,7 +2843,7 @@ drag the viewpoint on the image buffer that the window displays."
      magit-revision-insert-related-refs t
      magit-revision-insert-related-refs-display-alist '((contained . nil) (merged . nil)))
 
-    ;; (defadvice magit-version (around skipit activate)
+    ;; (define-advice magit-version (:override (&rest _args) skipit)
     ;;   "900000000")
 
     (use-package magit-blame
@@ -3570,7 +3570,7 @@ drag the viewpoint on the image buffer that the window displays."
      )
     (bind-key "A" 'projectile-pt-file-pattern region-bindings-mode-map)
 
-    (defadvice projectile-mode (before maybe-use-cache activate)
+    (define-advice projectile-mode (:before (&rest _args) maybe-use-cache)
       (when
           (--any? (and it (file-remote-p it))
                   (list
@@ -4136,7 +4136,7 @@ drag the viewpoint on the image buffer that the window displays."
       (simpleclip-mode 1)))
   :config
   (progn
-    (defadvice simpleclip-copy (after clipboard activate)
+    (define-advice simpleclip-copy (:after (&rest _args) clipboard)
       (if (use-region-p)
           (with-no-warnings
             (kill-ring-save (region-beginning) (region-end) t))
@@ -4562,14 +4562,15 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
 
     (global-undo-tree-mode)
 
-    (defadvice undo-tree-insert (around pretty activate)
-      (ad-set-arg 0 (cond
-                     ((equal ?| (ad-get-arg 0)) ?│)
-                     ((equal ?\\ (ad-get-arg 0)) ?╲)
-                     ((equal ?/ (ad-get-arg 0)) ?╱)
-                     ((equal ?- (ad-get-arg 0)) ?─)
-                     (t (ad-get-arg 0)))())
-      ad-do-it))
+    (define-advice undo-tree-insert (:around (orig-fn str &optional arg) pretty)
+      (funcall orig-fn
+               (cond
+                ((equal ?| str) ?│)
+                ((equal ?\\ str) ?╲)
+                ((equal ?/ str) ?╱)
+                ((equal ?- str) ?─)
+                (t str))
+               arg)))
 
   :config
   (progn
@@ -4916,9 +4917,9 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
                                          my-yas-snippets-dir)) ".*\\'")
                   'snippet-mode))
 
-    (defadvice ac-fallback-command (around no-yasnippet-fallback activate)
+    (define-advice ac-fallback-command (:around (orig-fn &rest args) no-yasnippet-fallback)
       (let ((yas-fallback-behavior nil))
-        ad-do-it))
+        (apply orig-fn args)))
 
     (bind-key "C-x i" 'yas-insert-snippet)
 

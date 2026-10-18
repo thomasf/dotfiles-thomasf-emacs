@@ -3,7 +3,7 @@
 # binding: 
 # expand-env: ()
 # --
-(defadvice ${1:advised-function} (around ${2:advice-name} activate)
+(define-advice ${1:advised-function} (:around (${2:orig-fn} ${3:&rest args}) ${4:advice-name})
    $0
-   ad-do-it
+   (apply $2 $3)
 )

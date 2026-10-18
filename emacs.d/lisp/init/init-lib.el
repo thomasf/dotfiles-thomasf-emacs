@@ -116,9 +116,11 @@
 ;;;; rename-modeline
 
 (defmacro rename-modeline (package-name mode new-name)
-  `(eval-after-load ,package-name
-     '(defadvice ,mode (after rename-modeline activate)
-        (setq mode-name ,new-name))))
+  `(with-eval-after-load ,package-name
+     (advice-add ',mode :after
+                 (lambda (&rest _)
+                   (setq mode-name ,new-name))
+                 '((name . rename-modeline)))))
 
 
 

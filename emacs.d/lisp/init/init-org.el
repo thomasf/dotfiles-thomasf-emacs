@@ -569,31 +569,25 @@ otherwise use the subtree title."
           (org-mode)
           (yank))))
 
-    (defun my-org-agenda-quit-restore-window-configuration ()
+    (defun my-org-agenda-quit-restore-window-configuration (&rest _args)
       (when (get-register :org-agenda-fullscreen)
         (jump-to-register :org-agenda-fullscreen)
         (set-register :org-agenda-fullscreen nil)))
 
-    (defadvice org-agenda-quit (after restore-window-configuration activate)
-      (my-org-agenda-quit-restore-window-configuration))
-
-    (defadvice org-agenda-Quit (after restore-window-configuration activate)
-      (my-org-agenda-quit-restore-window-configuration))
+    (advice-add 'org-agenda-quit :after #'my-org-agenda-quit-restore-window-configuration)
+    (advice-add 'org-agenda-Quit :after #'my-org-agenda-quit-restore-window-configuration)
 
     ;; (run-with-idle-timer 300 t 'jump-to-org-agenda)
 
-    (defun myorg-update-parent-cookie ()
+    (defun myorg-update-parent-cookie (&rest _args)
       (when (equal major-mode 'org-mode)
         (save-excursion
           (ignore-errors
             (org-back-to-heading)
             (org-update-parent-todo-statistics)))))
 
-    (defadvice org-kill-line (after fix-cookies activate)
-      (myorg-update-parent-cookie))
-
-    (defadvice kill-whole-line (after fix-cookies activate)
-      (myorg-update-parent-cookie))
+    (advice-add 'org-kill-line :after #'myorg-update-parent-cookie)
+    (advice-add 'kill-whole-line :after #'myorg-update-parent-cookie)
 
     ))
 

@@ -96,31 +96,27 @@
            "Höstdagjämningen" "Vintersolståndet")))
 
 ;; Månfaser
-(defadvice lunar-phase-name (around sv-lunar-phase-name activate)
+(define-advice lunar-phase-name (:override (phase) sv-lunar-phase-name)
   "Månfasernas namn på svenska."
-  (setq ad-return-value
-	(let ((phase (ad-get-arg 0)))
-	  (cond ((= 0 phase) "Nymåne")
-		((= 1 phase) "Växande halvmåne")
-		((= 2 phase) "Fullmåne")
-		((= 3 phase) "Avtagande halvmåne")))))
+  (cond ((= 0 phase) "Nymåne")
+	((= 1 phase) "Växande halvmåne")
+	((= 2 phase) "Fullmåne")
+	((= 3 phase) "Avtagande halvmåne")))
 
 ;; Soluppgång och -nedgång
-(defadvice solar-sunrise-sunset-string (around sv-solar-sunrise-sunset-string
-                                               activate)
+(define-advice solar-sunrise-sunset-string (:override (date &optional _nolocation) sv-solar-sunrise-sunset-string)
   "Soluppgång och solnedgång på svenska."
-  (setq ad-return-value
-        (let ((l (solar-sunrise-sunset date)))
-          (format
-           "%s, %s vid %s (%s timmar dagsljus)"
-           (if (car l)
-               (concat "Sol upp " (apply 'solar-time-string (car l)))
-             "Ingen soluppgång")
-           (if (car (cdr l))
-               (concat "ned " (apply 'solar-time-string (car (cdr l))))
-             "ingen solnedgång")
-           (eval calendar-location-name)
-           (car (cdr (cdr l)))))))
+  (let ((l (solar-sunrise-sunset date)))
+    (format
+     "%s, %s vid %s (%s timmar dagsljus)"
+     (if (car l)
+         (concat "Sol upp " (apply 'solar-time-string (car l)))
+       "Ingen soluppgång")
+     (if (car (cdr l))
+         (concat "ned " (apply 'solar-time-string (car (cdr l))))
+       "ingen solnedgång")
+     (eval calendar-location-name)
+     (car (cdr (cdr l))))))
 
 ;; Göm vissa helgdagar?
 (defvar sv-hide-some-holidays nil
