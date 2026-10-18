@@ -40,15 +40,6 @@
   (progn))
 
 
-;;;; ac-slime
-
-(use-package ac-slime
-  :ensure t
-  :commands (set-up-slime-ac)
-  :init
-  (progn
-    (add-hook 'slime-mode-hook 'set-up-slime-ac)
-    (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)))
 
 
 ;;;; adoc-mode
@@ -397,19 +388,6 @@ LEAF is normally ((BEG . END) . WND)."
           code-library-downcased-org-keywords t)))
 
 
-;;;; coffee-mode
-
-(use-package coffee-mode
-  :ensure t
-  :commands coffee-mode
-  :mode (("\\.coffee\\'" . coffee-mode)
-         ("Cakefile\\'" . coffee-mode))
-  :init
-  (progn
-    (setq
-     coffee-cleanup-whitespace nil
-     coffee-tab-width 2
-     coffe-js-mode 'js2-mode)))
 
 
 ;;;; color-identifiers-mode
@@ -2546,27 +2524,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands interaction-log-mode)
 
 
-;;;; irony
-
-(use-package irony
-  :ensure t
-  :commands (irony-mode)
-  :defer t
-  :diminish irony-mode
-  :init
-  (progn
-    (setq irony-user-dir (expand-file-name "irony" user-data-directory))
-    (add-hook 'arduino-mode-hook 'irony-mode))
-  :config
-  (progn
-    (add-to-list 'irony-supported-major-modes 'arduino-mode)
-    (add-to-list 'irony-lang-compile-option-alist '(arduino-mode . "c++"))
-
-    (use-package irony-cdb
-      :commands (irony-cdb-autosetup-compile-options)
-      :init
-      (progn
-        (add-hook 'arduino-mode-hook 'irony-cdb-autosetup-compile-options)))))
 
 
 ;;;; ivy
@@ -2624,14 +2581,6 @@ drag the viewpoint on the image buffer that the window displays."
     (bind-key "C-c C-c" 'js-mode-cccc js-mode-map)))
 
 
-;;;; js-comint
-
-(use-package js-comint
-  :commands inferior-js-mode
-  :ensure t
-  :init
-  (progn
-    (setq inferior-js-program-command "nodejs")))
 
 
 ;;;; js2-mode
@@ -2686,11 +2635,6 @@ drag the viewpoint on the image buffer that the window displays."
 
     (bind-key "C-<tab>" 'web-mode js2-jsx-mode-map)
 
-
-    (use-package js2-imenu-extras
-      :config
-      (progn
-        (js2-imenu-extras-setup)))
 
     (font-lock-add-keywords
      ;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
@@ -2784,11 +2728,6 @@ drag the viewpoint on the image buffer that the window displays."
   :commands (global-launch-mode turn-on-launch-mode launch-file))
 
 
-;;;; less-css-mode
-
-(use-package less-css-mode
-  :ensure t
-  :mode "\\.less\\'")
 
 
 ;;;; libmpdee
@@ -3291,11 +3230,6 @@ drag the viewpoint on the image buffer that the window displays."
     (setq multi-term-program "/bin/bash")))
 
 
-;;;; multi-web-mode
-
-(use-package multi-web-mode
-  :ensure t
-  :commands (multi-web-global-mode))
 
 
 ;;;; multiple-cursors
@@ -4005,26 +3939,6 @@ drag the viewpoint on the image buffer that the window displays."
   :config
   (progn
 
-    (use-package importmagic
-      :ensure t
-      :init
-      (progn
-        (setq importmagic-be-quiet t))
-      :config
-      (progn
-        (add-hook 'python-mode-hook 'importmagic-mode)
-        (add-hook 'python-ts-mode-hook 'importmagic-mode)
-        ))
-
-    (use-package py-autopep8
-      :ensure t
-      :commands (py-autopep8-buffer))
-
-
-    (use-package py-isort
-      :ensure t
-      :commands (py-isort-buffer))
-
 
     (use-package py-black
       :commands (py-black-buffer))
@@ -4059,35 +3973,6 @@ drag the viewpoint on the image buffer that the window displays."
     (unbind-key "C-c C-j" python-mode-map)
     (unbind-key "C-c C-p" python-ts-mode-map)
     (unbind-key "C-c C-j" python-ts-mode-map)))
-
-
-;;;; python-django
-
-(use-package python-django
-  :ensure t
-  :commands (python-django-open-project)
-  :bind (("C-x j" . python-django-open-project))
-  :init
-  (progn
-    (setq
-     python-django-ui-ignored-dirs
-     '("." ".." ".bzr" ".cdv" "~.dep" "~.dot" "~.nib" "~.plst" ".git" ".hg"
-       ".pc" ".svn" "_MTN" "blib" "CVS" "RCS" "SCCS" "_darcs" "_sgbak"
-       "autom4te.cache" "cover_db" "_build" ".ropeproject")
-     python-django-ui-allowed-extensions
-     '("css" "gif" "htm" "html" "jpg" "js" "json" "mo" "png" "po" "py"
-       "txt" "xml" "yaml" "scss" "less"))))
-
-
-;;;; python-environment
-
-(use-package python-environment
-  :ensure t
-  :defer
-  :init
-  (progn
-    (setq python-environment-directory "~/.virtualenvs/"
-          python-environment-default-root-name "emacs-default")))
 
 
 ;;;; quickrun
@@ -4581,11 +4466,6 @@ drag the viewpoint on the image buffer that the window displays."
         (kill-ring-save (region-beginning) (region-end))))))
 
 
-;;;; simplezen
-
-(use-package simplezen
-  :ensure t
-  :commands (simplezen-expand))
 
 
 ;;;; skewer-mode
@@ -4889,11 +4769,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
              swiper-isearch-backward))
 
 
-;;;; sws-mode
-
-(use-package sws-mode
-  :ensure t
-  :commands sws-mode)
 
 
 ;;;; syslog-mode
@@ -4954,26 +4829,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
   :ensure t
   :mode (("\\.toml\\'" . toml-mode)
          ("Gopkg\\.lock\\'" . toml-mode)))
-
-
-;;;; traad
-
-(use-package traad
-  :ensure t
-  :commands (
-             traad-install-server
-             traad-rename
-             traad-rename-current-file
-             traad-normalize-arguments
-             traad-remove-argument
-             traad-add-argument
-             traad-extract-method
-             traad-extract-variable
-
-             )
-  :init
-  (progn
-    (setq traad-save-unsaved-buffers 'always)))
 
 
 ;;;; tramp
@@ -5615,19 +5470,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
             (vim-mode . "vim")))))
 
 
-;;;; zencoding-mode
-
-(use-package zencoding-mode
-  :ensure t
-  :commands zencoding-mode
-  :diminish ((zencoding-mode . "zen"))
-  :init
-  (progn
-    (hook-into-modes #'zencoding-mode my-html-like-mode-hooks))
-  :config
-  (progn
-    (bind-key "C-c C-c" 'zencoding-expand-line zencoding-mode-keymap)
-    (unbind-key "C-j" zencoding-mode-keymap)))
 
 
 ;;;; zig-ts-mode
