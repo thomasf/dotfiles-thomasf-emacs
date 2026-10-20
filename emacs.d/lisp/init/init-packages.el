@@ -3533,11 +3533,11 @@ drag the viewpoint on the image buffer that the window displays."
              projectile-sort-by-recentf-first
              projectile-sort-by-recently-active-first)
   :bind (("C-x f <SPC>" . projectile-find-file)
-         ("C-x f p" . projectile-find-file)
          ("C-x f P" . projectile-find-file-ignored)
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
-         ("C-x b <SPC>" . projectile-switch-to-buffer))
+         ("C-x b <SPC>" . projectile-switch-to-buffer)
+         ("C-x f j" . projectile-toggle-module-root))
   :diminish ""
   :init
   (progn
@@ -3564,6 +3564,29 @@ drag the viewpoint on the image buffer that the window displays."
               dir)
           (or list projectile-project-root-files-child-of (list))))))
 
+    (defvar projectile-module-root-files '("go.mod" "pyproject.toml" "Cargo.toml"
+                                            "package.json" "build.zig")
+      "Files marking a module root inside a mono repo.")
+
+    (defvar projectile-module-root nil
+
+      "Non-nil means the nearest module root wins over the vcs root.")
+
+    (defun projectile-root-module (dir)
+      "Return the nearest parent of DIR containing a module root file.
+Only active while `projectile-module-root' is non-nil."
+      (when projectile-module-root
+        (projectile-root-bottom-up dir projectile-module-root-files)))
+
+    (defun projectile-toggle-module-root ()
+      "Toggle between using the vcs root and the nearest module root."
+      (interactive)
+      (setq projectile-module-root (not projectile-module-root))
+      (projectile-discard-root-cache)
+      (message "projectile root: %s (%s)"
+               (if projectile-module-root "module" "vcs")
+               (abbreviate-file-name (or (projectile-project-root) "none"))))
+
     (setq
      projectile-sort-order 'recently-active
      projectile-require-project-root t
@@ -3581,7 +3604,8 @@ drag the viewpoint on the image buffer that the window displays."
      projectile-file-exists-local-cache-expire nil
      projectile-file-exists-remote-cache-expire (* 15 60)
      projectile-project-root-functions
-     '(projectile-root-bottom-up
+     '(projectile-root-module
+       projectile-root-bottom-up
        projectile-root-top-down
        projectile-root-top-down-recurring
        projectile-root-child-of)
