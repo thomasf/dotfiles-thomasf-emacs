@@ -2756,6 +2756,16 @@ drag the viewpoint on the image buffer that the window displays."
     (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more not-newline))
                  )
 
+    ;; gopls >= 0.24 runs govulncheck and prompts whenever go.mod/go.work changes
+    (lsp-register-custom-settings '(("gopls.vulncheck" "Off")))
+
+    ;; gopls only reads session level options (like vulncheck) from
+    ;; initializationOptions or didChangeConfiguration and lsp-go sends neither.
+    (defun lsp-gopls-push-configuration ()
+      (when (eq (lsp--client-server-id (lsp--workspace-client lsp--cur-workspace)) 'gopls)
+        (lsp--set-configuration (lsp-configuration-section "gopls"))))
+    (add-hook 'lsp-after-initialize-hook #'lsp-gopls-push-configuration)
+
     (use-package lsp-headerline
       :defer
       :config
