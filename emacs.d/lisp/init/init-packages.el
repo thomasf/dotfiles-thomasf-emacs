@@ -3538,7 +3538,8 @@ drag the viewpoint on the image buffer that the window displays."
          ("C-x d <SPC>" . projectile-find-dir)
          ("C-x d p" . projectile-switch-project)
          ("C-x b <SPC>" . projectile-switch-to-buffer)
-         ("C-x f j" . projectile-toggle-module-root))
+         ("C-x f j" . projectile-toggle-module-root)
+         ("C-x f m" . projectile-toggle-manual-root))
   :diminish ""
   :init
   (progn
@@ -3588,6 +3589,34 @@ Only active while `projectile-module-root' is non-nil."
                (if projectile-module-root "module" "vcs")
                (abbreviate-file-name (or (projectile-project-root) "none"))))
 
+    (defvar projectile-manual-roots nil
+      "Directories marked as project roots at run time.
+A manual root containing the directory wins over all other root functions.")
+
+    (defun projectile-root-manual (dir)
+      "Return the deepest directory in `projectile-manual-roots' containing DIR."
+      (let ((dir (file-name-as-directory (expand-file-name dir))))
+        (--max-by (> (length it) (length other))
+                  (--filter (string-prefix-p it dir) projectile-manual-roots))))
+
+    (defun projectile-toggle-manual-root (dir)
+      "Toggle DIR as a manual project root.
+Defaults to the active manual root, so repeating the command unmarks it."
+      (interactive
+       (list (read-directory-name
+              "Toggle project root: "
+              (or (projectile-root-manual default-directory) default-directory)
+              nil t)))
+      (let ((dir (file-name-as-directory (expand-file-name dir))))
+        (setq projectile-manual-roots
+              (if (member dir projectile-manual-roots)
+                  (delete dir projectile-manual-roots)
+                (cons dir projectile-manual-roots)))
+        (projectile-discard-root-cache)
+        (message "projectile manual root %s: %s"
+                 (if (member dir projectile-manual-roots) "added" "removed")
+                 (abbreviate-file-name dir))))
+
     (setq
      projectile-sort-order 'recently-active
      projectile-require-project-root t
@@ -3605,7 +3634,8 @@ Only active while `projectile-module-root' is non-nil."
      projectile-file-exists-local-cache-expire nil
      projectile-file-exists-remote-cache-expire (* 15 60)
      projectile-project-root-functions
-     '(projectile-root-module
+     '(projectile-root-manual
+       projectile-root-module
        projectile-root-bottom-up
        projectile-root-top-down
        projectile-root-top-down-recurring
