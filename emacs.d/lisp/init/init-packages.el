@@ -3530,6 +3530,7 @@ drag the viewpoint on the image buffer that the window displays."
   :ensure t
   :commands (projectile-mode
              projectile-project-p
+             projectile-discard-root-cache
              projectile-sort-by-recentf-first
              projectile-sort-by-recently-active-first)
   :bind (("C-x f <SPC>" . projectile-find-file)
