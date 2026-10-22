@@ -120,6 +120,7 @@
 (mapc (lambda (f)
         (byte-compile-file f nil))
       (append '("early-init.el") (f-glob "init*.el")))
+(use-package yasnippet)
 (yas-recompile-all)
 
 
