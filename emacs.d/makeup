@@ -43,4 +43,4 @@ export elpadir="elpa.$suffix"
 ) || true
 
 ./clean
-exec "$emacs" --no-site -batch -l makeup.el
+exec "$emacs" --no-site-file -batch -l makeup.el

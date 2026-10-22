@@ -12,5 +12,5 @@ export ELPA_MIRROR=1
 ./clean
 rm -rf elpa/*
 
-emacs --no-site -batch -l install.el
-emacs --no-site -batch -l makeup.el
+emacs --no-site-file -batch -l install.el
+emacs --no-site-file -batch -l makeup.el
