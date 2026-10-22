@@ -3539,7 +3539,8 @@ drag the viewpoint on the image buffer that the window displays."
          ("C-x d p" . projectile-switch-project)
          ("C-x b <SPC>" . projectile-switch-to-buffer)
          ("C-x f j" . projectile-toggle-module-root)
-         ("C-x f m" . projectile-toggle-manual-root))
+         ("C-x f m" . projectile-toggle-manual-root)
+         ("C-x f M" . projectile-clear-manual-roots))
   :diminish ""
   :init
   (progn
@@ -3590,14 +3591,17 @@ Only active while `projectile-module-root' is non-nil."
                (abbreviate-file-name (or (projectile-project-root) "none"))))
 
     (defvar projectile-manual-roots nil
-      "Directories marked as project roots at run time.
+      "Directories marked as project roots at run time, most recent first.
 A manual root containing the directory wins over all other root functions.")
 
+    (defun projectile--manual-root-key (dir)
+      "Return DIR spelled like the directories projectile passes to root functions."
+      (file-truename (file-name-as-directory (expand-file-name dir))))
+
     (defun projectile-root-manual (dir)
-      "Return the deepest directory in `projectile-manual-roots' containing DIR."
-      (let ((dir (file-name-as-directory (expand-file-name dir))))
-        (--max-by (> (length it) (length other))
-                  (--filter (string-prefix-p it dir) projectile-manual-roots))))
+      "Return the most recently added directory in `projectile-manual-roots' containing DIR."
+      (let ((dir (projectile--manual-root-key dir)))
+        (--first (string-prefix-p it dir) projectile-manual-roots)))
 
     (defun projectile-toggle-manual-root (dir)
       "Toggle DIR as a manual project root.
@@ -3607,7 +3611,7 @@ Defaults to the active manual root, so repeating the command unmarks it."
               "Toggle project root: "
               (or (projectile-root-manual default-directory) default-directory)
               nil t)))
-      (let ((dir (file-name-as-directory (expand-file-name dir))))
+      (let ((dir (projectile--manual-root-key dir)))
         (setq projectile-manual-roots
               (if (member dir projectile-manual-roots)
                   (delete dir projectile-manual-roots)
@@ -3616,6 +3620,13 @@ Defaults to the active manual root, so repeating the command unmarks it."
         (message "projectile manual root %s: %s"
                  (if (member dir projectile-manual-roots) "added" "removed")
                  (abbreviate-file-name dir))))
+
+    (defun projectile-clear-manual-roots ()
+      "Remove all manual project roots."
+      (interactive)
+      (setq projectile-manual-roots nil)
+      (projectile-discard-root-cache)
+      (message "projectile manual roots cleared"))
 
     (setq
      projectile-sort-order 'recently-active
