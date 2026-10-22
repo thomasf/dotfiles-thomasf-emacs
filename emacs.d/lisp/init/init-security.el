@@ -6,6 +6,7 @@
 ;;
 ;; - where credentials and tokens are stored (auth-source, oauth2)
 ;; - the TLS certificate/trust database (nsm)
+;; - the gpg passphrase prompt (epg)
 ;; - OpenPGP signing and encryption of mail (mml2015)
 ;; - password generation (aes)
 ;;
@@ -52,6 +53,18 @@
   (progn
     (setq ;; auth.el
      auth-sources '("~/.authinfo.gpg"))))
+
+
+;;;; epg
+
+(use-package epg
+  :defer
+  :init
+  (progn
+    ;; In ssh sessions pinentry-auto (base/bin) would ask with curses on the
+    ;; terminal this Emacs is drawing on, so ask in the minibuffer instead.
+    (when (equal (getenv "PINENTRY_USER_DATA") "tty")
+      (setq epg-pinentry-mode 'loopback))))
 
 
 ;;;; mml2015
