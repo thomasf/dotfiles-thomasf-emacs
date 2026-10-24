@@ -76,13 +76,6 @@ See also `locate-user-emacs-file'.")
                       (expand-file-name (car cl-p))))
         (setq cl-p (cdr cl-p))))
 
-    (when
-        (or (not (boundp 'emacs-version))
-           (string< emacs-version "24.3"))
-      (add-to-load-path
-       (expand-file-name "site-lisp/cl-lib" user-emacs-directory)))
-
-
     (delete-dups
      (delq nil (mapcar #'(lambda (x)
                          (if (file-directory-p x)
