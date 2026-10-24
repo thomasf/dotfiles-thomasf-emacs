@@ -29,10 +29,7 @@ See also `locate-user-emacs-file'.")
 (make-directory user-data-directory t)
 (make-directory user-cache-directory t)
 
-;; emacs23 compat
-(if (boundp 'custom-theme-load-path)
-    (add-to-list 'custom-theme-load-path user-themes-directory)
-  (add-to-list 'load-path user-themes-directory))
+(add-to-list 'custom-theme-load-path user-themes-directory)
 
 (defun add-to-load-path (path &optional dir)
   (setq load-path

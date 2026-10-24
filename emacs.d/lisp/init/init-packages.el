@@ -665,10 +665,9 @@ LEAF is normally ((BEG . END) . WND)."
                  dired-open-guess-shell-alistv))
 
 
-    (when (boundp 'dired-hide-details-mode)
-      (setq dired-hide-details-hide-symlink-targets nil
-            dired-hide-details-hide-information-lines t)
-      (add-hook 'dired-mode-hook 'dired-hide-details-mode))
+    (setq dired-hide-details-hide-symlink-targets nil
+          dired-hide-details-hide-information-lines t)
+    (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
     (defun dired-sort-size ()
       "Dired sort by size."

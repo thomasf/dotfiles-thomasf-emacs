@@ -244,9 +244,8 @@
 
 ;;;;; minibuffer
 
-(when (boundp 'completion-styles)
-  (add-to-list ;; add initials to complete list
-   'completion-styles 'initials t))
+(add-to-list ;; add initials to complete list
+ 'completion-styles 'initials t)
 
 
 ;;;;; mule / conding.c
@@ -281,11 +280,6 @@
       next-error-recenter '(4)
       next-error-verbose nil
       )
-
-(and (fboundp 'x-cut-buffer-or-selection-value)
-     (eq system-type 'gnu/linux)
-     (setq interprogram-paste-function
-           'x-cut-buffer-or-selection-value))
 
 
 ;;;;; subr
