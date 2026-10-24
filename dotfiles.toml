@@ -1,7 +1,7 @@
 public = true
 
 [[ignore]]
-match = ['Dockerfile', '.dockerignore',  "NOTES.org", ".compiled", '.log']
+match = ["NOTES.org", ".compiled", '.log']
 
 [[script]]
 condition = "hostname in ['flam', 'yak']"
