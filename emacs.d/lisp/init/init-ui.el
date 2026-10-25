@@ -110,6 +110,47 @@ An alist of (NAME . \"#rrggbb\"), such as (magenta . \"#ca4898\").")
 
 (defvar mf-current nil "The last loaded theme.")
 
+(require 'filenotify)
+
+(defvar mf-theme-watch-descriptor nil
+  "The file notification descriptor watching `mf-theme-file'.")
+
+(defvar mf-theme-watch-failed nil
+  "Non-nil if setting up a watch on `mf-theme-file' failed or is unavailable.")
+
+(defun mf-theme-file-notify-handler (event)
+  "Switch theme when `mf-theme-file' changes on disk.
+EVENT is the file notification event."
+  (if (eq (nth 1 event) 'stopped)
+      (setq mf-theme-watch-descriptor nil)
+    (mf-mode-theme)))
+
+(defun mf-watch-theme-file ()
+  "Watch `mf-theme-file' for changes so theme switches even when unfocused."
+  (unless (or noninteractive mf-theme-watch-descriptor mf-theme-watch-failed)
+    (if (not file-notify--library)
+        (progn
+          (setq mf-theme-watch-failed t)
+          (display-warning
+           'mf-theme
+           "File notification is not available; theme will only update on focus."
+           :warning))
+      (condition-case err
+          (let ((file (expand-file-name mf-theme-file)))
+            (make-directory (file-name-directory file) t)
+            (setq mf-theme-watch-descriptor
+                  (file-notify-add-watch
+                   file
+                   '(change attribute-change)
+                   #'mf-theme-file-notify-handler)))
+        (error
+         (setq mf-theme-watch-failed t)
+         (display-warning
+          'mf-theme
+          (format "Failed to watch `%s': %s"
+                  mf-theme-file (error-message-string err))
+          :warning))))))
+
 (defun mf-read-theme-file ()
   "Load `mf-theme-file' if it changed since it was last loaded."
   (let ((time (file-attribute-modification-time
@@ -193,7 +234,9 @@ Emacs follows when dotfiles has written `mf-theme-file'."
 (and (not mf-current)
    (not noninteractive)
 
-   (mf-mode-theme))
+   (progn
+     (mf-mode-theme)
+     (mf-watch-theme-file)))
 
 (add-function :after after-focus-change-function
               (lambda ()
