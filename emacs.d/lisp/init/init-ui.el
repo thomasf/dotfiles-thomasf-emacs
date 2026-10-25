@@ -97,6 +97,14 @@ It sets `mf-theme' and `mf-theme-mode'.")
 (defvar mf-theme-mode nil
   "The mode of the theme in use, dark or light, from `mf-theme-file', or nil.")
 
+(defvar mf-theme-colors nil
+  "The colors of the theme in use, from `mf-theme-file'.
+An alist of (NAME . \"#rrggbb\"), such as (magenta . \"#ca4898\").")
+
+(defun mf-color (name)
+  "The color NAME of the theme in use, or nil without the theme from dotfiles."
+  (alist-get name mf-theme-colors))
+
 (defvar mf-theme-file-time nil
   "The modification time of `mf-theme-file' when it was last loaded.")
 
@@ -624,8 +632,10 @@ Emacs follows when dotfiles has written `mf-theme-file'."
   (when (bound-and-true-p cua-normal-cursor-color)
     (let* ((current-cursor-color (cdr (assq 'cursor-color (frame-parameters))))
            (cursor-style (cond
-                          ((bound-and-true-p region-bindings-mode) (list "#d33682" '(bar . 10) t))
-                          ((bound-and-true-p buffer-read-only) (list "#859900" 'box nil))
+                          ((bound-and-true-p region-bindings-mode)
+                           (list (or (mf-color 'magenta) cua-normal-cursor-color) '(bar . 10) t))
+                          ((bound-and-true-p buffer-read-only)
+                           (list (or (mf-color 'green) cua-normal-cursor-color) 'box nil))
                           (t (list cua-normal-cursor-color my-normal-cursor-type t)))))
       (unless (equal (nth 0 cursor-style) current-cursor-color)
         (set-cursor-color (nth 0 cursor-style)))
