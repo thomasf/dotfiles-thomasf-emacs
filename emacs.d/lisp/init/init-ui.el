@@ -120,13 +120,30 @@ An alist of (NAME . \"#rrggbb\"), such as (magenta . \"#ca4898\").")
 
 (defun mf-mode-theme (&optional force)
   "Load the emacs theme of the theme in use, if it changed or with FORCE.
-It is `mf-theme' from `mf-theme-file', which dotfiles writes, or
-`mf-theme-light' without it."
+It is `mf-theme' from `mf-theme-file', which dotfiles writes. A theme
+without an emacs theme, or with one that is not installed or fails to
+load, gets `mf-theme-dark' or `mf-theme-light' for its mode, and so does
+emacs without the file."
   (mf-read-theme-file)
-  (let ((theme (or mf-theme mf-theme-light)))
-    (when (and theme (or force (not (eq mf-current theme))))
-      (load-theme theme t)
-      (setq mf-current theme)
+  (let* ((fallback (if (eq mf-theme-mode 'dark) mf-theme-dark mf-theme-light))
+         (wanted (or mf-theme fallback))
+         (theme wanted))
+    (when (and wanted (or force (not (eq mf-current wanted))))
+      (unless (memq theme (custom-available-themes))
+        (setq theme fallback))
+      ;; A theme can be installed but fail to load, such as a wrapper whose
+      ;; palette the installed solarized-theme does not have yet.
+      (condition-case err
+          (load-theme theme t)
+        (error
+         (message "mf-mode-theme: %s: %s; using %s"
+                  theme (error-message-string err) fallback)
+         (disable-theme theme)
+         (when fallback
+           (load-theme fallback t))))
+      ;; The theme asked for, even if a fallback was loaded, so that it is
+      ;; not tried again on every focus change.
+      (setq mf-current wanted)
       (post-change-theme))))
 
 (defun mf-dotfiles-theme (&rest args)
