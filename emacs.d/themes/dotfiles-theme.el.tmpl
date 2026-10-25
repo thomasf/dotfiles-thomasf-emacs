@@ -1,0 +1,5 @@
+;;; -*- lexical-binding: t -*-
+;;; Written by dotfiles for the theme {{.theme.name}}:{{.theme.variant}}; init-ui.el
+;;; loads it (see mf-mode-theme).
+(setq mf-theme {{with index .theme.apps "emacs"}}(intern {{printf "%q" .}}){{else}}nil{{end}}
+      mf-theme-mode '{{.theme.mode}})

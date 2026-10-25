@@ -45,8 +45,8 @@
 
 ;;;;; define theme-bright / theme-dark
 
-(defvar mf-theme-light nil "A light theme.")
-(defvar mf-theme-dark nil "A dark theme.")
+(defvar mf-theme-light nil "A light theme, without the theme from dotfiles.")
+(defvar mf-theme-dark nil "A dark theme, without the theme from dotfiles.")
 
 
 ;;;;; install solarized-theme
@@ -85,53 +85,89 @@
   (set-face-background 'vertical-border (face-background 'default)))
 
 
+;;;;; theme from dotfiles
+
+(defvar mf-theme-file "~/.config/theme/emacs.el"
+  "The file that dotfiles writes for the theme in use.
+It sets `mf-theme' and `mf-theme-mode'.")
+
+(defvar mf-theme nil
+  "The emacs theme of the theme in use, from `mf-theme-file', or nil.")
+
+(defvar mf-theme-mode nil
+  "The mode of the theme in use, dark or light, from `mf-theme-file', or nil.")
+
+(defvar mf-theme-file-time nil
+  "The modification time of `mf-theme-file' when it was last loaded.")
+
+(defvar mf-current nil "The last loaded theme.")
+
+(defun mf-read-theme-file ()
+  "Load `mf-theme-file' if it changed since it was last loaded."
+  (let ((time (file-attribute-modification-time
+               (file-attributes mf-theme-file))))
+    (when (and time (not (equal time mf-theme-file-time)))
+      (setq mf-theme-file-time time)
+      (load mf-theme-file t t t))))
+
+(defun mf-mode-theme (&optional force)
+  "Load the emacs theme of the theme in use, if it changed or with FORCE.
+It is `mf-theme' from `mf-theme-file', which dotfiles writes. Without
+it, it is `mf-theme-dark' if ~/.config/darkmode exists, else
+`mf-theme-light'."
+  (mf-read-theme-file)
+  (let ((theme (or mf-theme
+                   (if (file-exists-p "~/.config/darkmode")
+                       mf-theme-dark
+                     mf-theme-light))))
+    (when (and theme (or force (not (eq mf-current theme))))
+      (load-theme theme t)
+      (setq mf-current theme)
+      (post-change-theme))))
+
+(defun mf-dotfiles-theme (&rest args)
+  "Switch the theme of the whole desktop with dotfiles theme ARGS.
+Emacs follows when dotfiles has written `mf-theme-file'."
+  (if (not (executable-find "dotfiles"))
+      (user-error "dotfiles is not installed")
+    (make-process
+     :name "dotfiles-theme"
+     :buffer " *dotfiles theme*"
+     :command (append '("dotfiles" "theme") args)
+     ;; init-ui.el is not lexically bound: the sentinel takes the command
+     ;; from the process, not from args.
+     :sentinel (lambda (process event)
+                 (if (string= event "finished\n")
+                     (mf-mode-theme)
+                   (message "%s: %s" (string-join (process-command process) " ")
+                            (string-trim event)))))))
+
+
 ;;;;; mf-dark-theme
 
-
-(defvar mf-current nil "last loaded theme")
-
 (defun mf-dark-theme ()
-  "Switch to dark mode (dark color theme)."
+  "Switch to dark mode, everywhere, with dotfiles theme."
   (interactive)
-  (when mf-theme-dark
-    (load-theme mf-theme-dark t)
-    (setq mf-current 'dark)
-    (post-change-theme)))
+  (mf-dotfiles-theme "set" "dark"))
 
 
 ;;;;; mf-light-theme
 
 (defun mf-light-theme ()
-  "Switch to light mode (light color theme)."
+  "Switch to light mode, everywhere, with dotfiles theme."
   (interactive)
-  (when mf-theme-light
-    (load-theme mf-theme-light t)
-    (setq mf-current 'light)
-    (post-change-theme)))
+  (mf-dotfiles-theme "set" "light"))
 
 
 ;;;;; mf-toggle-theme
 
 (defun mf-toggle-theme ()
-  "Toggle between light and dark modes."
+  "Toggle between light and dark mode, everywhere, with dotfiles theme."
   (interactive)
-  (if (eq mf-current 'light)
-      (mf-dark-theme)
-    (mf-light-theme))
-  (post-change-theme))
+  (mf-dotfiles-theme "toggle"))
 
 
 ;;;;; global darkmode
-
-(defun mf-mode-theme (&optional force)
-  (let ((m (if (dark-mode-p) 'dark 'light)))
-    (if (or force (not (eq mf-current m)))
-        (if  (eq m 'dark)
-            (mf-dark-theme)
-          (mf-light-theme)))))
-
-(defun dark-mode-p ()
-  (file-exists-p "~/.config/darkmode"))
 
 (and (not mf-current)
    (not noninteractive)

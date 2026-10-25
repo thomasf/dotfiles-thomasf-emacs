@@ -15,3 +15,8 @@ if ! [[ $rev == $compiled ]]; then
   echo $rev > .compiled
 fi
 '''
+# The emacs theme of the theme in use, which init-ui.el loads (see
+# mf-mode-theme).
+[[template]]
+src = 'emacs.d/themes/dotfiles-theme.el.tmpl'
+dst = '.config/theme/emacs.el'
