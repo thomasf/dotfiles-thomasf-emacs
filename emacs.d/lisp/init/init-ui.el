@@ -112,14 +112,10 @@ It sets `mf-theme' and `mf-theme-mode'.")
 
 (defun mf-mode-theme (&optional force)
   "Load the emacs theme of the theme in use, if it changed or with FORCE.
-It is `mf-theme' from `mf-theme-file', which dotfiles writes. Without
-it, it is `mf-theme-dark' if ~/.config/darkmode exists, else
-`mf-theme-light'."
+It is `mf-theme' from `mf-theme-file', which dotfiles writes, or
+`mf-theme-light' without it."
   (mf-read-theme-file)
-  (let ((theme (or mf-theme
-                   (if (file-exists-p "~/.config/darkmode")
-                       mf-theme-dark
-                     mf-theme-light))))
+  (let ((theme (or mf-theme mf-theme-light)))
     (when (and theme (or force (not (eq mf-current theme))))
       (load-theme theme t)
       (setq mf-current theme)
