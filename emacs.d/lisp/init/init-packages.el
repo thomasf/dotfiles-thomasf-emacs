@@ -2744,14 +2744,16 @@ drag the viewpoint on the image buffer that the window displays."
       :after cc-mode
       :init
       (progn
-        (add-hook 'java-mode-hook #'lsp)))
-
-    )
+        (add-hook 'java-mode-hook #'lsp))))
 
 
 
   :config
   (progn
+    (lsp-dependency 'typescript
+                    '(:system "tsserver")
+                    '(:npm :package "typescript@6"
+                           :path "tsserver"))
     (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more not-newline))
                  )
 
