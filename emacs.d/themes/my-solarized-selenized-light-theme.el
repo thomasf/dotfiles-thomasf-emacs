@@ -10,7 +10,7 @@
   "The light variant of the Solarized colour theme")
 
 (with-suppressed-warnings ((obsolete font-lock-warning-face))
-  (solarized-with-color-variables 'dark 'my-solarized-selenized-light
+  (solarized-with-color-variables 'light 'my-solarized-selenized-light
    solarized-selenized-light-color-palette-alist my-solarized-faces))
 
 (provide-theme 'my-solarized-selenized-light)

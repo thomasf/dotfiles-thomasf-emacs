@@ -9,6 +9,6 @@
 (deftheme my-solarized-selenized-white "The white Selenized variant of the Solarized colour theme")
 (with-suppressed-warnings ((obsolete font-lock-warning-face))
   (solarized-with-color-variables
-    'dark 'my-solarized-selenized-white solarized-selenized-white-color-palette-alist my-solarized-faces))
+    'light 'my-solarized-selenized-white solarized-selenized-white-color-palette-alist my-solarized-faces))
 
 (provide-theme 'my-solarized-selenized-white)

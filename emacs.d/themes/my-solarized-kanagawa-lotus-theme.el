@@ -9,6 +9,6 @@
 (deftheme my-solarized-kanagawa-lotus "The Solarized colour theme with the Kanagawa lotus palette")
 (with-suppressed-warnings ((obsolete font-lock-warning-face))
   (solarized-with-color-variables
-    'dark 'my-solarized-kanagawa-lotus solarized-kanagawa-lotus-color-palette-alist my-solarized-faces))
+    'light 'my-solarized-kanagawa-lotus solarized-kanagawa-lotus-color-palette-alist my-solarized-faces))
 
 (provide-theme 'my-solarized-kanagawa-lotus)
