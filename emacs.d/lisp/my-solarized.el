@@ -5,6 +5,26 @@
       '("Personal solarized theme customization"
         (custom-theme-set-faces
          theme-name
+
+         ;; candidates for upstream
+         `(child-frame-border ((,class (:background ,s-line))))
+         `(minibuffer-nonselected ((,class (:background ,yellow-2bg :foreground ,yellow-2fg :weight bold))))
+         `(mode-line-highlight ((,class (:box (:line-width (-1 . -1) :color ,base01)))))
+         `(separator-line ((,class (:background ,s-line :height 0.1))))
+         `(transient-key-stay            ((t (:inherit transient-key :foreground ,green))))
+         `(transient-key-return          ((t (:inherit transient-key :foreground ,yellow))))
+         `(transient-key-exit            ((t (:inherit transient-key :foreground ,red))))
+         `(transient-key-recurse         ((t (:inherit transient-key :foreground ,blue))))
+         `(transient-key-stack           ((t (:inherit transient-key :foreground ,magenta))))
+         `(transient-key-noop            ((t (:inherit transient-key :foreground ,base01))))
+         `(transient-higher-level        ((t (:box (:line-width (-1 . -1) :color ,s-line)))))
+         `(diff-changed-unspecified ((,class (:background ,s-diff-C-bg :foreground ,s-diff-C-fg :extend t))))
+         `(diff-error ((,class (:background ,red-2bg :foreground ,red-2fg :weight bold))))
+         `(smerge-refined-changed ((,class (:background ,s-diff-fine-C-bg :foreground ,s-diff-fine-C-fg))))
+         `(tab-bar-tab-highlight ((,class (:background ,base02 :foreground ,base1))))
+
+         ;;;
+
          `(rainbow-delimiters-depth-1-face ((,class (:foreground ,base02))))
          `(hydra-face-red ((,class (:foreground ,base1 :weight bold)))) ;; upstreamed
 
