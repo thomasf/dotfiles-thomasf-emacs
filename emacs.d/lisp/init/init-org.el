@@ -283,6 +283,103 @@ Argument FILENAME File to insert."
              (end (+ start (nth 1 (insert-file-contents filename)))))
         (org-table-convert-region start end)))
 
+    (defun my/org-format-spacing ()
+      "Normalize spacing around Org headlines and blocks in the current buffer:
+- 2 blank lines before level 1 and level 2 headlines
+- 1 blank line before level 3+ headlines
+- 0 blank lines after a headline if followed by prose
+- 1 blank line between a headline and a code/example block
+- 1 blank line before and after #+begin_ ... #+end_ blocks
+- Preserves :PROPERTIES: drawers flush under headlines
+- Skips lines inside code and example blocks."
+      (interactive)
+      (require 'cl-lib)
+      (save-excursion
+        (let (blocks headlines)
+          ;; 1. Collect block boundaries
+          (goto-char (point-min))
+          (while (re-search-forward "^[ \t]*#[+]begin_" nil t)
+            (let ((beg (line-beginning-position)))
+              (when (re-search-forward "^[ \t]*#[+]end_" nil t)
+                (push (cons (copy-marker beg) (copy-marker (line-end-position))) blocks))))
+          (setq blocks (nreverse blocks))
+
+          ;; 2. Collect genuine headlines
+          (goto-char (point-min))
+          (while (re-search-forward "^\\(\\*+\\) " nil t)
+            (let ((pt (match-beginning 0))
+                  (level (length (match-string 1))))
+              (unless (cl-some (lambda (b) (and (>= pt (car b)) (<= pt (cdr b)))) blocks)
+                (push (cons (copy-marker pt) level) headlines))))
+          (setq headlines (nreverse headlines))
+
+          ;; 3. Format around blocks (from bottom to top)
+          (dolist (b (reverse blocks))
+            (let ((b-beg (car b))
+                  (b-end (cdr b)))
+              ;; Spacing after block
+              (goto-char b-end)
+              (forward-line 1)
+              (while (looking-at "^[ \t]*$")
+                (delete-region (point) (line-beginning-position 2)))
+              (unless (or (looking-at "^\\*+ ") (eobp))
+                (insert "\n"))
+
+              ;; Spacing before block
+              (goto-char b-beg)
+              (unless (bobp)
+                (save-excursion
+                  (while (and (not (bobp))
+                              (progn (forward-line -1) (looking-at "^[ \t]*$")))
+                    (delete-region (point) (line-beginning-position 2))))
+                (unless (bobp)
+                  (save-excursion
+                    (insert "\n"))))
+              (set-marker b-beg nil)
+              (set-marker b-end nil)))
+
+          ;; 4. Format around headlines (from bottom to top)
+          (dolist (hl (reverse headlines))
+            (let* ((marker (car hl))
+                   (level (cdr hl))
+                   (needed-before (if (<= level 2) 2 1)))
+
+              ;; Spacing after headline / drawer
+              (goto-char marker)
+              (forward-line 1)
+              (when (looking-at "^[ \t]*:PROPERTIES:")
+                (when (re-search-forward "^[ \t]*:END:[ \t]*$" nil t)
+                  (forward-line 1)))
+              (while (looking-at "^[ \t]*$")
+                (delete-region (point) (line-beginning-position 2)))
+              (cond
+               ((looking-at "^[ \t]*#[+]begin_")
+                (insert "\n"))
+               ((looking-at "^\\(\\*+\\) ")
+                (let ((next-level (length (match-string 1))))
+                  (dotimes (_ (if (<= next-level 2) 2 1))
+                    (insert "\n"))))
+               (t nil))
+
+              ;; Spacing before headline
+              (goto-char marker)
+              (unless (bobp)
+                (save-excursion
+                  (while (and (not (bobp))
+                              (progn (forward-line -1) (looking-at "^[ \t]*$")))
+                    (delete-region (point) (line-beginning-position 2))))
+                (unless (bobp)
+                  (save-excursion
+                    (forward-line -1)
+                    (unless (looking-at "^\\*+ ")
+                      (goto-char marker)
+                      (dotimes (_ needed-before)
+                        (insert "\n"))))))
+              (set-marker marker nil)))))
+      (message "Formatted Org spacing."))
+
+    (defalias 'org-format-spacing #'my/org-format-spacing)
+
     (let*
         ((agenda-dir (f-expand "agenda" user-notes-directory))
          (org-dir (f-expand "agenda" user-notes-directory))
