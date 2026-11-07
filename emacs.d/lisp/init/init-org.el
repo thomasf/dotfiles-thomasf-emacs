@@ -696,6 +696,9 @@ otherwise use the subtree title."
 
     (use-package toc-org
       :ensure t
+      :config
+      (progn
+        (setq toc-org-max-depth 3))
       :hook (org-mode . toc-org-mode))))
 
 
