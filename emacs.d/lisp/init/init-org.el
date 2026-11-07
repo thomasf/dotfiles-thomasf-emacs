@@ -225,8 +225,15 @@ Titus von der Malsburg."
 
     (unbind-key "M-h" org-mode-map)
     (bind-key "C-c h" 'org-todo org-mode-map )
-    (setq org-modules '(org-bbdb org-bibtex org-docview org-habit
-                                 org-id org-info org-man org-w3m))
+
+    (setq org-modules '(ol-bbdb
+                    ol-bibtex
+                    ol-docview
+                    ol-info
+                    ol-man
+                    ol-w3m
+                    org-habit
+                    org-id))
     ;; org-git-link
     ;; (require 'ox-reveal)
 
