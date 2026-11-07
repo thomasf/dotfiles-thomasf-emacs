@@ -597,7 +597,9 @@ otherwise use the subtree title."
     (advice-add 'org-kill-line :after #'myorg-update-parent-cookie)
     (advice-add 'kill-whole-line :after #'myorg-update-parent-cookie)
 
-    ))
+    (use-package toc-org
+      :ensure t
+      :hook (org-mode . toc-org-mode))))
 
 
 ;;;; org-import-icalendar
