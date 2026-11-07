@@ -2750,10 +2750,76 @@ drag the viewpoint on the image buffer that the window displays."
 
   :config
   (progn
-    (lsp-dependency 'typescript
-                    '(:system "tsserver")
-                    '(:npm :package "typescript@6"
-                           :path "tsserver"))
+
+    (progn ;; temporary patch for ts7+
+      (with-eval-after-load 'lsp-javascript
+        (defcustom lsp-clients-typescript7-path "tsc"
+          "Path to the TypeScript 7 native binary (supports `tsc --lsp --stdio`)."
+          :group 'lsp-typescript
+          :type 'string)
+
+        (defun lsp-clients-typescript7-find-binary ()
+          "Prefer the project-local TS7 binary, fall back to PATH."
+          (or (when-let* ((root (locate-dominating-file default-directory "node_modules")))
+               (let ((local (expand-file-name "node_modules/.bin/tsc" root)))
+                 (when (file-executable-p local) local)))
+             (executable-find lsp-clients-typescript7-path)))
+
+        (lsp-register-client
+         (make-lsp-client
+          :new-connection (lsp-stdio-connection
+                           (lambda ()
+                             (list (or (lsp-clients-typescript7-find-binary) "tsc")
+                                   "--lsp" "--stdio")))
+          :activation-fn 'lsp-typescript-javascript-tsx-jsx-activate-p
+          :priority -2
+          :initialization-options (lambda () (list :supportsHoverVerbosity t))
+          :server-id 'ts7-ls)))
+
+      ;; Fixes bug in lsp-mode that crashes ts7's lsp
+      (defun my/lsp--strip-null-values (data)
+        "Recursively remove plist/hash-table/alist keys whose value is nil."
+        (cond
+         ((hash-table-p data)
+          (let ((new (make-hash-table :test 'equal)))
+            (maphash (lambda (k v)
+                       (unless (null v)
+                         (puthash k (my/lsp--strip-null-values v) new)))
+                     data)
+            new))
+         ;; plist: (:key val :key val ...)
+         ((and (consp data) (keywordp (car data)))
+          (let (result)
+            (cl-loop for (k v) on data by #'cddr
+                     unless (null v)
+                     do (push k result) (push (my/lsp--strip-null-values v) result))
+            (nreverse result)))
+         ;; alist: ((key . val) (key . val) ...)
+         ((and (consp data) (consp (car data)) (not (listp (caar data))))
+          (--keep (unless (null (cdr it)) (cons (car it) (my/lsp--strip-null-values (cdr it)))) data))
+         ((vectorp data) (cl-map 'vector #'my/lsp--strip-null-values data))
+         (t data)))
+
+      (defvar my/lsp--strip-null-server-ids '(ts7-ls)
+        "Server IDs whose outgoing LSP messages should have null values stripped.")
+
+      (defun my/lsp--should-strip-nulls-p ()
+        "Non-nil if the in-flight LSP message is destined for a server
+in `my/lsp--strip-null-server-ids'."
+        (and (boundp 'lsp--cur-workspace)
+           lsp--cur-workspace
+           (memq (lsp--client-server-id (lsp--workspace-client lsp--cur-workspace))
+                 my/lsp--strip-null-server-ids)))
+
+      (defun my/lsp--make-message-strip-nulls (args)
+        (if (my/lsp--should-strip-nulls-p)
+            (list (my/lsp--strip-null-values (car args)))
+          args))
+
+      (with-eval-after-load 'lsp-mode
+        (advice-add 'lsp--make-message :filter-args #'my/lsp--make-message-strip-nulls)))
+
+
     (add-to-list 'lsp-file-watch-ignored-directories (rx line-start (literal backup-dir) (zero-or-more not-newline))
                  )
 
