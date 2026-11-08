@@ -295,6 +295,61 @@
     (when (not (equal virtual-env 'nil))
       (dired virtual-env))))
 
+(defvar find-directory-ghq-history nil
+  "History for `find-directory-ghq'.")
+
+(defun find-directory-ghq (&optional arg)
+  "Find and open a repository directory managed by `ghq'.
+Opens the selected directory in `dired'.  With prefix ARG, prompts
+to find a file in the chosen repository directory instead."
+  (interactive "P")
+  (unless (executable-find "ghq")
+    (user-error "Command `ghq' not found in PATH"))
+  (let* ((paths (condition-case err
+                    (process-lines "ghq" "list" "-p")
+                  (error
+                   (user-error "Error running `ghq list -p': %s"
+                               (error-message-string err))))))
+    (unless paths
+      (user-error "No repositories returned by `ghq list -p'"))
+    (let* ((roots (mapcar (lambda (r) (file-name-as-directory (expand-file-name r)))
+                          (or (ignore-errors (process-lines "ghq" "root" "--all"))
+                              (list (expand-file-name "~/src")))))
+           (seen (make-hash-table :test 'equal))
+           (candidates nil))
+      (dolist (path paths)
+        (let ((rel nil))
+          (dolist (root roots)
+            (when (and (not rel) (string-prefix-p root path))
+              (setq rel (substring path (length root)))))
+          (let* ((key (or rel (abbreviate-file-name path)))
+                 (disp (if (gethash key seen)
+                           (abbreviate-file-name path)
+                         key)))
+            (puthash disp t seen)
+            (push (cons disp path) candidates))))
+      (setq candidates (nreverse candidates))
+      (let* ((choice (completing-read "Find ghq directory: " candidates nil t nil 'find-directory-ghq-history))
+             (dir (or (cdr (assoc choice candidates))
+                      (expand-file-name choice))))
+        (if (and dir (file-directory-p dir))
+            (progn
+              (when (fboundp 'projectile-add-known-project)
+                (ignore-errors (projectile-add-known-project dir)))
+              (if arg
+                  (let ((default-directory (file-name-as-directory dir)))
+                    (call-interactively
+                     (if (fboundp 'projectile-find-file)
+                         #'projectile-find-file
+                       #'find-file)))
+                (dired dir)))
+          (user-error "Directory does not exist: %s" dir))))))
+
+(defalias 'dired-ghq 'find-directory-ghq)
+(defalias 'ghq-find-directory 'find-directory-ghq)
+(bind-key "C-x f g" 'find-directory-ghq)
+(bind-key "C-x d g" 'find-directory-ghq)
+
 
 ;;;;; file jump commands
 
