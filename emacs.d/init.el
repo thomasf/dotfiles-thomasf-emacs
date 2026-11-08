@@ -71,7 +71,8 @@
 
 (when load-file-name
   (load (expand-file-name
-         "load-path" (file-name-directory load-file-name)) nil t))
+         "load-path" (file-name-directory load-file-name))
+        nil t))
 
 
 ;;;; init-lib
