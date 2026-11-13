@@ -558,11 +558,13 @@ the file does not exist, falls back to `find-file-at-point'."
 (bind-key "C-s-v" 'yank-selection)
 
 
-;;;;; yank-all-visible-text
+;;;;; visible and marked text
+;;
+;; ws emacs region and ws emacs visible print these through emacsclient.
 
-(defun yank-all-visible-text ()
-  "Yank all visible text from all frames and windows into the kill ring."
-  (interactive)
+(defun my-visible-text ()
+  "Return the text of the windows on the visible frames.
+Each follows a line naming its buffer."
   (let ((text ""))
     (dolist (frame (visible-frame-list))
       (dolist (window (window-list frame 'no-minibuffer))
@@ -572,9 +574,75 @@ the file does not exist, falls back to `find-file-at-point'."
                              (buffer-substring-no-properties
                               (window-start window)
                               (window-end window)))))))
+    text))
+
+(defun yank-all-visible-text ()
+  "Yank all visible text from all frames and windows into the kill ring."
+  (interactive)
+  (let ((text (my-visible-text)))
     (when (string< "" text)
       (kill-new text)
       (message "Yanked %d characters from all visible windows." (length text)))))
+
+(defun my-region-window ()
+  "Return the first window with an active, non-empty region, or nil.
+The selected window comes first, then those on the visible frames."
+  (seq-find
+   (lambda (window)
+     (with-current-buffer (window-buffer window)
+       (and mark-active
+            (mark t)
+            (/= (mark t) (window-point window)))))
+   (cons (selected-window)
+         (seq-mapcat (lambda (frame) (window-list frame 'no-minibuffer))
+                     (visible-frame-list)))))
+
+(defun my-region-text (&optional no-header)
+  "Return the region of `my-region-window'; signal an error if none.
+Unless NO-HEADER, it follows a line naming its file and lines, and
+ends in a newline."
+  (let ((window (my-region-window)))
+    (unless window
+      (user-error "No marked text"))
+    (with-current-buffer (window-buffer window)
+      (let* ((beg (min (mark t) (window-point window)))
+             (end (max (mark t) (window-point window)))
+             (text (buffer-substring-no-properties beg end))
+             (last (if (eq (char-before end) ?\n) (1- end) end)))
+        (if no-header
+            text
+          (format "--- %s:%d-%d ---\n%s%s"
+                  (if buffer-file-name
+                      (abbreviate-file-name buffer-file-name)
+                    (buffer-name))
+                  (line-number-at-pos beg t)
+                  (line-number-at-pos last t)
+                  text
+                  (if (string-suffix-p "\n" text) "" "\n")))))))
+
+(defun send-region-to-bot (&optional target)
+  "Paste the marked text into the .bot terminal of the workspace.
+The text from `my-region-text', between newlines, goes with
+ws rc send -paste, which does not press Enter. With a prefix argument,
+read another TARGET of ws rc, such as .logs or +2."
+  (interactive
+   (list (and current-prefix-arg (read-string "Send to: " ".bot"))))
+  (let ((text (concat "\n" (string-trim-right (my-region-text) "\n+") "\n"))
+        (target (or target ".bot"))
+        (process-environment
+         (if workspace-prefix-startup
+             (cons (concat "WS_WORKSPACE=" workspace-prefix-startup)
+                   process-environment)
+           process-environment)))
+    (with-temp-buffer
+      (let ((status (call-process-region text nil "ws" nil t nil
+                                         "rc" "send" "-paste" target)))
+        (unless (eql status 0)
+          (user-error "ws rc send: %s" (string-trim (buffer-string))))))
+    (deactivate-mark)
+    (message "Sent %d characters to %s" (length text) target)))
+
+(bind-key "t" 'send-region-to-bot region-bindings-mode-map)
 
 
 ;;;;; enable "regular" backspace behaviour in isearch
