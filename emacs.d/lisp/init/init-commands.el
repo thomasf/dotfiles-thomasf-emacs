@@ -620,29 +620,66 @@ ends in a newline."
                   text
                   (if (string-suffix-p "\n" text) "" "\n")))))))
 
-(defun send-region-to-bot (&optional target)
-  "Paste the marked text into the .bot terminal of the workspace.
-The text from `my-region-text', between newlines, goes with
-ws rc send -paste, which does not press Enter. With a prefix argument,
-read another TARGET of ws rc, such as .logs or +2."
-  (interactive
-   (list (and current-prefix-arg (read-string "Send to: " ".bot"))))
-  (let ((text (concat "\n" (string-trim-right (my-region-text) "\n+") "\n"))
-        (target (or target ".bot"))
-        (process-environment
+(defun my-ws-call (input &rest args)
+  "Run ws with ARGS and INPUT, if non-nil, as its standard input.
+Return its output; signal an error with it if ws fails. ws runs in the
+workspace of this Emacs, `workspace-prefix-startup'."
+  (let ((process-environment
          (if workspace-prefix-startup
              (cons (concat "WS_WORKSPACE=" workspace-prefix-startup)
                    process-environment)
            process-environment)))
     (with-temp-buffer
-      (let ((status (call-process-region text nil "ws" nil t nil
-                                         "rc" "send" "-paste" target)))
+      (let ((status (if input
+                        (apply #'call-process-region input nil "ws" nil t nil args)
+                      (apply #'call-process "ws" nil t nil args))))
         (unless (eql status 0)
-          (user-error "ws rc send: %s" (string-trim (buffer-string))))))
-    (deactivate-mark)
+          (user-error "ws %s: %s" (string-join (seq-take args 2) " ")
+                      (string-trim (buffer-string))))
+        (buffer-string)))))
+
+(defun my-send-to-bot (text target)
+  "Paste TEXT into the terminal TARGET of ws rc, .bot if nil.
+TEXT goes between newlines, with ws rc send -paste, which does not
+press Enter."
+  (let ((text (concat "\n" (string-trim text "\n+" "\n+") "\n"))
+        (target (or target ".bot")))
+    (my-ws-call text "rc" "send" "-paste" target)
     (message "Sent %d characters to %s" (length text) target)))
 
+(defun my-read-bot-target ()
+  "Read a target of ws rc with a prefix argument, else return nil."
+  (and current-prefix-arg (read-string "Send to: " ".bot")))
+
+(defun send-region-to-bot (&optional target)
+  "Paste the marked text into the .bot terminal of the workspace.
+The text from `my-region-text' goes with `my-send-to-bot'. With a
+prefix argument, read another TARGET of ws rc, such as .logs or +2."
+  (interactive (list (my-read-bot-target)))
+  (my-send-to-bot (my-region-text) target)
+  (deactivate-mark))
+
+(defun send-visible-to-bot (&optional target)
+  "Paste the text of the visible Emacs windows into the .bot terminal.
+The text from `my-visible-text' goes with `my-send-to-bot'. With a
+prefix argument, read another TARGET of ws rc, such as .logs or +2."
+  (interactive (list (my-read-bot-target)))
+  (my-send-to-bot (my-visible-text) target))
+
+(defun send-screen-to-bot (&optional target)
+  "Paste the visible Emacs windows and terminals into the .bot terminal.
+The text of `my-visible-text' is followed by that of ws rc read
+-visible, leaving out the terminals on the workspace of TARGET, which
+the text goes to with `my-send-to-bot'. With a prefix argument, read
+another TARGET of ws rc, such as .logs or +2."
+  (interactive (list (my-read-bot-target)))
+  (let* ((target (or target ".bot"))
+         (terminals (my-ws-call nil "rc" "read" "-visible" "-except" target)))
+    (my-send-to-bot (concat (my-visible-text) "\n" terminals) target)))
+
 (bind-key "t" 'send-region-to-bot region-bindings-mode-map)
+(bind-key "b" 'send-visible-to-bot my-other-map)
+(bind-key "B" 'send-screen-to-bot my-other-map)
 
 
 ;;;;; enable "regular" backspace behaviour in isearch
