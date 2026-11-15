@@ -576,13 +576,33 @@ Each follows a line naming its buffer."
                               (window-end window)))))))
     text))
 
-(defun yank-all-visible-text ()
-  "Yank all visible text from all frames and windows into the kill ring."
-  (interactive)
-  (let ((text (my-visible-text)))
+(defun my-delemark-filter (text)
+  "Filter TEXT through delemark if installed, returning the redacted text.
+If delemark is not installed or fails, return TEXT unmodified."
+  (if (and (stringp text)
+           (not (string-empty-p text))
+           (executable-find "delemark"))
+      (with-temp-buffer
+        (insert text)
+        (if (eql (call-process-region (point-min) (point-max) "delemark" t t nil) 0)
+            (buffer-string)
+          text))
+    text))
+
+(defun yank-all-visible-text (&optional no-redact)
+  "Yank all visible text from all frames and windows into the kill ring.
+Filter through delemark if installed, unless NO-REDACT (e.g. called
+with a universal prefix argument)."
+  (interactive "P")
+  (let* ((raw (my-visible-text))
+         (text (if no-redact raw (my-delemark-filter raw))))
     (when (string< "" text)
       (kill-new text)
-      (message "Yanked %d characters from all visible windows." (length text)))))
+      (message "Yanked %d characters from all visible windows%s."
+               (length text)
+               (if (and (not no-redact) (executable-find "delemark"))
+                   " (redacted)"
+                 "")))))
 
 (defun my-region-window ()
   "Return the first window with an active, non-empty region, or nil.
@@ -638,44 +658,56 @@ workspace of this Emacs, `workspace-prefix-startup'."
                       (string-trim (buffer-string))))
         (buffer-string)))))
 
-(defun my-send-to-bot (text target)
+(defun my-send-to-bot (text target &optional no-redact)
   "Paste TEXT into the terminal TARGET of ws rc, .bot if nil.
 TEXT goes between newlines, with ws rc send -paste, which does not
-press Enter."
-  (let ((text (concat "\n" (string-trim text "\n+" "\n+") "\n"))
-        (target (or target ".bot")))
+press Enter. Unless NO-REDACT, filter TEXT through delemark if installed."
+  (let* ((filtered (if no-redact text (my-delemark-filter text)))
+         (text (concat "\n" (string-trim filtered "\n+" "\n+") "\n"))
+         (target (or target ".bot")))
     (my-ws-call text "rc" "send" "-paste" target)
-    (message "Sent %d characters to %s" (length text) target)))
+    (message "Sent %d characters to %s%s"
+             (length text)
+             target
+             (if (and (not no-redact) (executable-find "delemark"))
+                 " (redacted)"
+               ""))))
 
 (defun my-read-bot-target ()
   "Read a target of ws rc with a prefix argument, else return nil."
   (and current-prefix-arg (read-string "Send to: " ".bot")))
 
-(defun send-region-to-bot (&optional target)
+(defun send-region-to-bot (&optional target no-redact)
   "Paste the marked text into the .bot terminal of the workspace.
 The text from `my-region-text' goes with `my-send-to-bot'. With a
-prefix argument, read another TARGET of ws rc, such as .logs or +2."
-  (interactive (list (my-read-bot-target)))
-  (my-send-to-bot (my-region-text) target)
+prefix argument, read another TARGET of ws rc, such as .logs or +2,
+and do not filter through delemark."
+  (interactive (list (my-read-bot-target) current-prefix-arg))
+  (my-send-to-bot (my-region-text) target no-redact)
   (deactivate-mark))
 
-(defun send-visible-to-bot (&optional target)
+(defun send-visible-to-bot (&optional target no-redact)
   "Paste the text of the visible Emacs windows into the .bot terminal.
 The text from `my-visible-text' goes with `my-send-to-bot'. With a
-prefix argument, read another TARGET of ws rc, such as .logs or +2."
-  (interactive (list (my-read-bot-target)))
-  (my-send-to-bot (my-visible-text) target))
+prefix argument, read another TARGET of ws rc, such as .logs or +2,
+and do not filter through delemark."
+  (interactive (list (my-read-bot-target) current-prefix-arg))
+  (my-send-to-bot (my-visible-text) target no-redact))
 
-(defun send-screen-to-bot (&optional target)
+(defun send-screen-to-bot (&optional target no-redact)
   "Paste the visible Emacs windows and terminals into the .bot terminal.
 The text of `my-visible-text' is followed by that of ws rc read
 -visible, leaving out the terminals on the workspace of TARGET, which
 the text goes to with `my-send-to-bot'. With a prefix argument, read
-another TARGET of ws rc, such as .logs or +2."
-  (interactive (list (my-read-bot-target)))
+another TARGET of ws rc, such as .logs or +2, and do not filter
+through delemark."
+  (interactive (list (my-read-bot-target) current-prefix-arg))
   (let* ((target (or target ".bot"))
-         (terminals (my-ws-call nil "rc" "read" "-visible" "-except" target)))
-    (my-send-to-bot (concat (my-visible-text) "\n" terminals) target)))
+         (args (if no-redact
+                   (list "rc" "read" "-noredact" "-visible" "-except" target)
+                 (list "rc" "read" "-visible" "-except" target)))
+         (terminals (apply #'my-ws-call nil args)))
+    (my-send-to-bot (concat (my-visible-text) "\n" terminals) target no-redact)))
 
 (bind-key "t" 'send-region-to-bot region-bindings-mode-map)
 (bind-key "b" 'send-visible-to-bot my-other-map)
