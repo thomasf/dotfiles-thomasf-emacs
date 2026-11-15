@@ -560,7 +560,7 @@ the file does not exist, falls back to `find-file-at-point'."
 
 ;;;;; visible and marked text
 ;;
-;; ws emacs region and ws emacs visible print these through emacsclient.
+;; ws emacs read -region and ws emacs read print these through emacsclient.
 
 (defun my-visible-text ()
   "Return the text of the windows on the visible frames.
