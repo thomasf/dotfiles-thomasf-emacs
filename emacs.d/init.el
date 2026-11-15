@@ -94,8 +94,8 @@
 (defun workspace-prefix ()
   (let ((res (if (and
                   (eq window-system 'x)
-                  (executable-find* "wsname"))
-                 (shell-command-to-string "wsname -p"))))
+                  (executable-find* "ws"))
+                 (shell-command-to-string "ws name -p"))))
     (and res
        (not
         (or
