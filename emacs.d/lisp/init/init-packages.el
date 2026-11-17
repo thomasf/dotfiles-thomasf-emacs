@@ -1546,6 +1546,12 @@ Git gutter:
          ("\\.geom\\'" . glsl-mode)))
 
 
+;;;; glow-view
+
+(use-package glow-view
+  :commands glow-view)
+
+
 ;;;; gnuplot-mode
 
 (use-package gnuplot-mode
@@ -3032,7 +3038,8 @@ in `my/lsp--strip-null-server-ids'."
           markdown-fontify-code-blocks-natively nil))
   :config
   (progn
-    (unbind-key "`" gfm-mode-map)))
+    (unbind-key "`" gfm-mode-map)
+    (bind-key "C-c C-c g" 'glow-view markdown-mode-map)))
 
 
 ;;;; memory-usage
