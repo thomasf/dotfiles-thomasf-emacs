@@ -704,7 +704,7 @@ through delemark."
   (interactive (list (my-read-bot-target) current-prefix-arg))
   (let* ((target (or target ".bot"))
          (args (if no-redact
-                   (list "rc" "read" "-noredact" "-visible" "-except" target)
+                   (list "rc" "read" "-no-redact" "-visible" "-except" target)
                  (list "rc" "read" "-visible" "-except" target)))
          (terminals (apply #'my-ws-call nil args)))
     (my-send-to-bot (concat (my-visible-text) "\n" terminals) target no-redact)))
